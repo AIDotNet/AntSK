@@ -7,10 +7,8 @@ namespace Xzy.KnowledgeBase.Pages.Account.Settings
     {
         private readonly Dictionary<string, string> _menuMap = new Dictionary<string, string>
         {
-            {"base", "Basic Settings"},
-            {"security", "Security Settings"},
-            {"binding", "Account Binding"},
-            {"notification", "New Message Notification"},
+            {"base", "Basic Settings"}
+
         };
 
         private string _selectKey = "base";
