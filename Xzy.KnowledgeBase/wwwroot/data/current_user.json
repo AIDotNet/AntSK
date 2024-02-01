@@ -1,35 +1,35 @@
 {
-  "name": "Serati Ma",
+  "name": "许泽宇",
   "avatar": "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png",
   "userid": "00000001",
-  "email": "antdesign@alipay.com",
-  "signature": "Be tolerant to diversity, tolerance is a virtue",
-  "title": "Interaction Expert",
-  "group": "Ant Financial Services-XX Business Group-XX Platform Department-XX Technology Department-UED",
+  "email": "286513187@qq.com",
+  "signature": "大家好，我是许泽宇，欢迎你与我进行交流",
+  "title": "公众号【许泽宇的技术分享】",
+  "group": "希望通过这个项目给大家分享AIGC相关知识",
   "tags": [
     {
       "key": "0",
-      "label": "Very thoughtful"
+      "label": "微服务"
     },
     {
       "key": "1",
-      "label": "Focus on Design"
+      "label": "云原生"
     },
     {
       "key": "2",
-      "label": "Spicy ~"
+      "label": "资深.Net开发"
     },
     {
       "key": "3",
-      "label": "Long legs"
+      "label": "架构师"
     },
     {
       "key": "4",
-      "label": "Chuan Meizi"
+      "label": "AIGC"
     },
     {
       "key": "5",
-      "label": "Have inclusive of all rivers"
+      "label": "热爱交流"
     }
   ],
   "notifyCount": 12,
@@ -37,14 +37,14 @@
   "country": "China",
   "geographic": {
     "province": {
-      "label": "Zhejiang Province",
-      "key": "330000"
+      "label": "湖北省",
+      "key": "430000"
     },
     "city": {
-      "label": "Hangzhou City",
-      "key": "330100"
+      "label": "武汉市",
+      "key": "430001"
     }
   },
-  "address": "77 Gongzhuan Road, Xihu District",
-  "phone": "0752-268888888"
+  "address":"目前居住在湖北武汉",
+  "phone": ""
 }
