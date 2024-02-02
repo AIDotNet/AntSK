@@ -17,5 +17,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Xzy.KnowledgeBase.Domain\Xzy.KnowledgeBase.Domain.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Chat\" />
+    <Folder Include="Pages\App\" />
+    <Folder Include="Pages\Kms\" />
+    <Folder Include="Pages\Setting\" />
+  </ItemGroup>
   
 </Project>
