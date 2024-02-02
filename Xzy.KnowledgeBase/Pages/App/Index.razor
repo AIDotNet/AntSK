@@ -1,0 +1,58 @@
+﻿@namespace Xzy.KnowledgeBase.Pages
+@page "/App"
+@attribute [ReuseTabsPage(Title ="Home", Pin =true, Closable =false, Order =0)]
+
+<GridContent>
+    <Row Type="flex" Gutter="24">
+        <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+            <AppCard Title="Blazor知识库"
+                     Desc="Blazor的一些相关知识"
+                       ContentHeight="46">
+               
+                <Footer>
+                    <Field Label="Daily Sale" Value="$12,423" />
+                </Footer>
+            </AppCard>
+        </AntDesign.Col>
+        <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+            <AppCard Title="Avalonia知识库"
+                       Desc="Avalonia是一个跨平台的UI框架"
+                       ContentHeight="46">
+              
+                <Footer>
+                    <Field Label="Daily Visits" Value="1243" />
+                </Footer>
+            </AppCard>
+        </AntDesign.Col>
+        <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+            <AppCard Title="Semantic Kernel知识库"
+                       Desc="Semantic Kernel是微软在2023年推出的语义内核"
+                       ContentHeight="46">
+               
+                <Footer>
+                    <Field Label="Conversion Rate" Value="60%" />
+                </Footer>
+            </AppCard>
+        </AntDesign.Col>
+        <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+            <AppCard Title="测试知识库"
+                       Desc="测试相关技巧及知识"
+                       ContentHeight="46">
+               
+                <Footer>
+                    <Field Label="Conversion Rate" Value="60%" />
+                </Footer>
+            </AppCard>
+        </AntDesign.Col>
+        <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+            <AppCard Title="运维知识库"
+                     Desc="运维相关技巧及知识"
+                     ContentHeight="46">
+
+                <Footer>
+                    <Field Label="Conversion Rate" Value="60%" />
+                </Footer>
+            </AppCard>
+        </AntDesign.Col>
+    </Row>
+</GridContent>
