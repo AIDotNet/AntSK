@@ -1,4 +1,4 @@
-# Xzy.AntSK.KnowledgeBase
+# AntSK
 ## 基于.Net8+AntBlazor+SemanticKernel 打造的AI知识库/智能体
 
 ## 核心功能
