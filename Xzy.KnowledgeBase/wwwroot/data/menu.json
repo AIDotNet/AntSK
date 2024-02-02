@@ -6,7 +6,7 @@
     "icon": "wechat"
   },
   {
-    "path": "/app",
+    "path": "/applist",
     "name": "应用",
     "key": "app",
     "icon": "windows"

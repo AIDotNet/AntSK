@@ -1,0 +1,60 @@
+﻿@namespace Xzy.KnowledgeBase.Pages
+@page "/AppList"
+
+<PageContainer Title="应用列表">
+    <Content>
+        <div style="text-align: center;">
+            <Search Placeholder="输入回车"
+                    EnterButton="@("搜索")"
+                    Size="large"
+                    Style="max-width: 522px; width: 100%;" />
+        </div>
+    </Content>
+    <ChildContent>
+        <div class="cardList">
+            <AntList TItem="ListItemDataType"
+                     DataSource="_data"
+                     ItemLayout="ListItemLayout.Horizontal"
+                     Grid="_listGridType">
+                <ListItem NoFlex>
+                    @if (string.IsNullOrEmpty(context.Id))
+                    {
+                        <Button Type="dashed" class="newButton">
+                            <Icon Type="plus" Theme="outline" /> Add Product
+                        </Button>
+                    }
+                    else
+                    {
+                        <Card Hoverable Bordered Class="card" Actions="_actions">
+                             <CardMeta>
+                                 <AvatarTemplate>
+                                     <img alt="" class="cardAvatar" src="@context.Avatar" />
+                                 </AvatarTemplate>
+                                 <TitleTemplate>
+                                     <a>@context.Title</a>
+                                </TitleTemplate>
+                                <DescriptionTemplate>
+                                    <Paragraph class="item" Ellipsis>
+                                     <!--todo: Ellipsis not working-->
+                                     @context.Description
+                                    </Paragraph>
+                                </DescriptionTemplate>
+                            </CardMeta>
+                        </Card>
+                    }
+                </ListItem>
+            </AntList>
+        </div>
+    </ChildContent>
+</PageContainer>
+
+@code
+{
+    private static readonly RenderFragment Operate = @<a key="option1">Operation one</a>;
+
+    private readonly RenderFragment[] _actions =
+    {
+        Operate,
+    @<a key="option2">Operation two</a>,
+    };
+}
