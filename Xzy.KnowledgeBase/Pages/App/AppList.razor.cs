@@ -1,5 +1,6 @@
 ﻿using AntDesign;
 using Microsoft.AspNetCore.Components;
+using Xzy.KnowledgeBase.Domain.Repositories;
 using Xzy.KnowledgeBase.Models;
 using Xzy.KnowledgeBase.Services;
 
@@ -18,15 +19,16 @@ namespace Xzy.KnowledgeBase.Pages
             Xxl = 4
         };
 
-        private ListItemDataType[] _data = { };
+        private Apps [] _data = { };
 
-        [Inject] protected IProjectService ProjectService { get; set; }
+        [Inject] 
+        protected IApps_Repositories _apps_Repositories { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            var list = new List<ListItemDataType> { new ListItemDataType() };
-            var data = await ProjectService.GetFakeListAsync(8);
+            var list = new List<Apps> { new Apps() };
+            var data = await _apps_Repositories.GetListAsync();
             list.AddRange(data);
             _data = list.ToArray();
         }

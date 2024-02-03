@@ -22,5 +22,7 @@ namespace Xzy.KnowledgeBase.Domain.Repositories
         /// 描述
         /// </summary>
         public string Describe { get; set; }
+
+        public string Image { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@namespace Xzy.KnowledgeBase.Pages
+@using Xzy.KnowledgeBase.Domain.Repositories
 @page "/AppList"
 
 <PageContainer Title="应用列表">
@@ -12,7 +13,7 @@
     </Content>
     <ChildContent>
         <div class="cardList">
-            <AntList TItem="ListItemDataType"
+            <AntList TItem="Apps"
                      DataSource="_data"
                      ItemLayout="ListItemLayout.Horizontal"
                      Grid="_listGridType">
@@ -20,23 +21,23 @@
                     @if (string.IsNullOrEmpty(context.Id))
                     {
                         <Button Type="dashed" class="newButton">
-                            <Icon Type="plus" Theme="outline" /> Add Product
+                            <Icon Type="plus" Theme="outline" /> 创建应用
                         </Button>
                     }
                     else
                     {
-                        <Card Hoverable Bordered Class="card" Actions="_actions">
+                        <Card Hoverable Bordered Class="card" Actions="_actions" Style="max-height:247px;">
                              <CardMeta>
                                  <AvatarTemplate>
-                                     <img alt="" class="cardAvatar" src="@context.Avatar" />
+                                     <img alt="" class="cardAvatar" src="" />
                                  </AvatarTemplate>
                                  <TitleTemplate>
-                                     <a>@context.Title</a>
+                                     <a>@context.Name</a>
                                 </TitleTemplate>
                                 <DescriptionTemplate>
                                     <Paragraph class="item" Ellipsis>
                                      <!--todo: Ellipsis not working-->
-                                     @context.Description
+                                     @context.Describe
                                     </Paragraph>
                                 </DescriptionTemplate>
                             </CardMeta>
@@ -50,11 +51,12 @@
 
 @code
 {
-    private static readonly RenderFragment Operate = @<a key="option1">Operation one</a>;
+    private static readonly RenderFragment Operate1 = @<a key="option1">查看</a>;
+    private static readonly RenderFragment Operate2 = @<a key="option2">删除</a>;
 
     private readonly RenderFragment[] _actions =
     {
-        Operate,
-    @<a key="option2">Operation two</a>,
+        Operate1,
+        Operate2,
     };
 }
