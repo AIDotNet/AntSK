@@ -12,7 +12,7 @@
     "icon": "windows"
   },
   {
-    "path": "/kms",
+    "path": "/kmslist",
     "name": "知识库",
     "key": "kms",
     "icon": "database"
