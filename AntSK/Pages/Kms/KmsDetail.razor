@@ -10,20 +10,23 @@
                       Title="知识库文档"
                       Style="margin-top: 24px;"
                       BodyStyle="padding: 0 32px 40px 32px">
+
                     <Extra>
-                        <div class="extraContent">
+                        <Dropdown Style="position: absolute; right: 20px; margin-bottom: 8px;">
+                            <Overlay>
+                                @_overlayMenu
+                            </Overlay>
+                            <ChildContent>
+                                <Button>导入 <Icon Type="down" /></Button>
+                            </ChildContent>
+                        </Dropdown>
+                        <div class="extraContent" style="margin-right:100px;">
                             <Search Class="extraContentSearch" Placeholder="搜索文档" @bind-Value="_model.Id" />
                          </div>
+                  
                      </Extra>
-                     <ChildContent>
-                         <Button Type="dashed"
-                                 Style="width: 100%; margin-bottom: 8px;"
-                                 OnClick="ShowModal">
-                             <Icon Type="plus" Theme="outline" />
-                             导入
-                         </Button>
-
-                        <AntList TItem="KmsDetails"
+                    <ChildContent style=" position: relative;">
+                        <AntList TItem="KmsDetails" 
                                   DataSource="_data"
                                   ItemLayout="ListItemLayout.Horizontal">
                                 <ListItem Actions="_actions">
@@ -53,6 +56,18 @@
 </div>
 
 @code {
+    private RenderFragment _overlayMenu =@<Menu>
+        <MenuItem>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+                文件上传
+            </a>
+        </MenuItem>
+        <MenuItem>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+                链接读取
+            </a>
+        </MenuItem>
+    </Menu>;
     private static readonly RenderFragment Detail = @<a key="detail">详情</a>;
     private static readonly RenderFragment Delete = @<a key="edit">删除</a>;
 

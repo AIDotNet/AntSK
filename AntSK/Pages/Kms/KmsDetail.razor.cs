@@ -26,9 +26,6 @@ namespace AntSK.Pages.Kms
         [Inject]
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
 
-        private void ShowModal()
-        {
-        }
 
         protected override async Task OnInitializedAsync()
         {
