@@ -23,6 +23,6 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         public string Describe { get; set; }
 
-        public string Image { get; set; }
+        public string Icon { get; set; }
     }
 }

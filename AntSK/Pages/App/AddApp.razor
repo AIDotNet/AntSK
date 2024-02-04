@@ -1,0 +1,38 @@
+﻿@namespace AntSK.Pages.Kms
+@using AntSK.Domain.Repositories
+@page "/App/Add"
+@inject IMessageService _message
+
+<PageContainer Title="新增应用">
+    <ChildContent>
+        <Card>
+            <Form Model="@_appModel"
+                  Style="margin-top: 8px;"
+                  OnFinish="HandleSubmit">
+                <FormItem Label="知识库名称" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入知识库名称" @bind-Value="@context.Name" />
+                </FormItem>
+                <FormItem Label="图标" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入图标" @bind-Value="@context.Icon" />
+                    <a href="https://antblazor.com/zh-CN/components/icon" target="_blank">图标库</a>
+                </FormItem>
+                <FormItem Label="描述" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入描述" @bind-Value="@context.Describe" />
+                </FormItem>
+                <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                    <Button Type="primary" HtmlType="submit">
+                        保存
+                    </Button>
+                </FormItem>
+            </Form>
+        </Card>
+    </ChildContent>
+</PageContainer>
+
+
+<style>
+    .avatar-uploader > .ant-upload {
+        width: 128px;
+        height: 128px;
+    }
+</style>

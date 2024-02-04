@@ -1,6 +1,7 @@
 ﻿@namespace AntSK.Pages
 @using AntSK.Domain.Repositories
 @page "/AppList"
+@inject NavigationManager NavigationManager
 
 <PageContainer Title="应用列表">
     <Content>
@@ -20,7 +21,7 @@
                 <ListItem NoFlex>
                     @if (string.IsNullOrEmpty(context.Id))
                     {
-                        <Button Type="dashed" class="newButton">
+                        <Button Type="dashed" class="newButton" @onclick="NavigateToKmsDetail">
                             <Icon Type="plus" Theme="outline" /> 创建应用
                         </Button>
                     }
@@ -29,7 +30,7 @@
                         <Card Hoverable Bordered Class="card" Actions="_actions" Style="max-height:247px;">
                              <CardMeta>
                                  <AvatarTemplate>
-                                     <img alt="" class="cardAvatar" src="" />
+                                     <Avatar Icon="@context.Icon" Style="background-color: #1890ff" />
                                  </AvatarTemplate>
                                  <TitleTemplate>
                                      <a>@context.Name</a>
@@ -59,4 +60,9 @@
         Operate1,
         Operate2,
     };
+
+    private void NavigateToKmsDetail()
+    {
+        NavigationManager.NavigateTo("/app/add");
+    }
 }
