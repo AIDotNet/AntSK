@@ -19,9 +19,9 @@ namespace AntSK.Pages
             Xxl = 4
         };
 
-        private Kmss [] _data = { };
+        private Kmss[] _data = { };
 
-        [Inject] 
+        [Inject]
         protected IKmss_Repositories _kmss_Repositories { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -31,6 +31,15 @@ namespace AntSK.Pages
             var data = await _kmss_Repositories.GetListAsync();
             list.AddRange(data);
             _data = list.ToArray();
+        }
+
+        private void NavigateToAddKms()
+        {
+            NavigationManager.NavigateTo("/kms/add");
+        }
+
+        private void Search(string searchKey)
+        {
         }
     }
 }

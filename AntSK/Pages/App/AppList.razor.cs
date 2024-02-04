@@ -32,5 +32,10 @@ namespace AntSK.Pages
             list.AddRange(data);
             _data = list.ToArray();
         }
+
+        private void NavigateToAddApp()
+        {
+            NavigationManager.NavigateTo("/app/add");
+        }
     }
 }
