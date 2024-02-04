@@ -1,0 +1,65 @@
+﻿@namespace AntSK.Pages
+@using AntSK.Domain.Repositories
+@page "/KmsList"
+
+<PageContainer Title="应用列表">
+    <Content>
+        <div style="text-align: center;">
+            <Search Placeholder="输入回车"
+                    EnterButton="@("搜索")"
+                    Size="large"
+                    Style="max-width: 522px; width: 100%;" />
+        </div>
+    </Content>
+    <ChildContent>
+        <div class="cardList">
+            <AntList TItem="Kmss"
+                     DataSource="_data"
+                     ItemLayout="ListItemLayout.Horizontal"
+                     Grid="_listGridType">
+                <ListItem NoFlex>
+                    @if (string.IsNullOrEmpty(context.Id))
+                    {
+                        <Button Type="dashed" class="newButton">
+                            <Icon Type="plus" Theme="outline" /> 创建应用
+                        </Button>
+                    }
+                    else
+                    {
+                        <Card Hoverable Bordered Class="card" Actions="_actions" Style="max-height:247px;">
+                             <CardMeta>
+                                 <AvatarTemplate>
+                                     <img alt="" class="cardAvatar" src="" />
+                                 </AvatarTemplate>
+                                 <TitleTemplate>
+                                     <a>@context.Name</a>
+                                </TitleTemplate>
+                                <DescriptionTemplate>
+                                    <Paragraph class="item" Ellipsis>
+                                     <!--todo: Ellipsis not working-->
+                                     @context.ChatModel
+                                    </Paragraph> <Paragraph class="item" Ellipsis>
+                                     <!--todo: Ellipsis not working-->
+                                     @context.EmbeddingModel
+                                    </Paragraph>
+                                </DescriptionTemplate>
+                            </CardMeta>
+                        </Card>
+                    }
+                </ListItem>
+            </AntList>
+        </div>
+    </ChildContent>
+</PageContainer>
+
+@code
+{
+    private static readonly RenderFragment Operate1 = @<a key="option1">查看</a>;
+    private static readonly RenderFragment Operate2 = @<a key="option2">删除</a>;
+
+    private readonly RenderFragment[] _actions =
+    {
+        Operate1,
+        Operate2,
+    };
+}

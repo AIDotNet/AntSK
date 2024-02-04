@@ -1,0 +1,43 @@
+﻿@namespace AntSK
+@using OneOf
+@inherits LayoutComponentBase
+
+<div class="container__b__0">
+    <div class="lang">
+        <!--todo: selectLang-->
+    </div>
+    <div class="content">
+        <div class="top">
+            <div class="header">
+                <a>
+                    <img alt="logo" class="logo" src="assets/logo.svg" />
+                    <span class="title">Ant Design</span>
+                </a>
+            </div>
+            <div class="desc">Ant Design Blazor</div>
+        </div>
+        @Body
+    </div>
+    <FooterView Copyright="2021 Ant Design Blazor" Links="Links"></FooterView>
+</div>
+
+@code
+{
+    public LinkItem[] Links { get; set; } =
+    {
+        new LinkItem
+        {
+            Key = "许泽宇的技术分享",
+            Title = "许泽宇的技术分享",
+            Href = "http://studiogpt.cn/",
+            BlankTarget = true,
+        },
+        new LinkItem
+        {
+            Key = "github",
+            Title = (RenderFragment)(@<Icon Type="github" />),
+            Href = "https://github.com/xuzeyu91/Xzy.AntSK.KnowledgeBase",
+            BlankTarget = true,
+        }
+    };
+}

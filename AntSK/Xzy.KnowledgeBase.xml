@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AntSK</name>
+    </assembly>
+    <members>
+        <member name="M:AntSK.Controllers.InitController.InitTable">
+            <summary>
+            初始化DB 和表
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -3,11 +3,11 @@ WORKDIR /service
 EXPOSE 5000
 
 WORKDIR /app
-COPY ["Xzy.KnowledgeBase/bin/Release/net8.0/publish", "publish"]
+COPY ["AntSK/bin/Release/net8.0/publish", "publish"]
 
 WORKDIR /app/publish
 
 FROM base AS final
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo 'Asia/Shanghai' >/etc/timezone
-ENTRYPOINT ["dotnet", "Xzy.KnowledgeBase.dll"]
+ENTRYPOINT ["dotnet", "AntSK.dll"]
