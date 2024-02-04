@@ -1,0 +1,30 @@
+﻿@namespace AntSK.Pages.Kms
+@using AntSK.Domain.Repositories
+@page "/Kms/Add"
+
+<PageContainer Title="新增知识库">
+    <ChildContent>
+        <Card>
+            <Form 
+                  Model="@_kmsModel"
+                  Style="margin-top: 8px;"
+                  OnFinish="HandleSubmit">
+                <FormItem Label="知识库名称" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入知识库名称" @bind-Value="@context.Name" />
+                </FormItem>            
+                <FormItem Label="会话模型" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入会话模型称" @bind-Value="@context.ChatModel" />
+                </FormItem>
+                <FormItem Label="Embedding模型" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入Embedding模型" @bind-Value="@context.EmbeddingModel" />
+                </FormItem>
+                <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                    <Button Type="primary" HtmlType="submit">
+                        保存
+                    </Button>
+                </FormItem>
+            </Form>
+        </Card>
+    </ChildContent>
+</PageContainer>
+
