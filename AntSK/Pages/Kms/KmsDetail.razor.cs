@@ -4,7 +4,9 @@ using AntSK.Models;
 using AntSK.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.KernelMemory;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Policy;
 
 namespace AntSK.Pages.Kms
 {
@@ -32,7 +34,8 @@ namespace AntSK.Pages.Kms
 
         [Inject]
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
-
+        [Inject]
+        protected MemoryServerless _memory { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -42,7 +45,7 @@ namespace AntSK.Pages.Kms
 
         private async Task FileUpload()
         {
-       
+           
         }
 
         public class UrlModel
@@ -52,7 +55,18 @@ namespace AntSK.Pages.Kms
         }
         private async Task UrlHandleOk(MouseEventArgs e)
         {
-            
+            string fileid = Guid.NewGuid().ToString();
+            await _memory.ImportWebPageAsync(urlModel.Url, fileid, new TagCollection() { { "kmsid", KmsId } }
+                 , index: "kms");
+            KmsDetails detial = new KmsDetails()
+            {
+                Id = fileid,
+                KmsId = KmsId,
+                Type = "url",
+                Url = urlModel.Url
+            };
+            await _kmsDetails_Repositories.InsertAsync(detial);
+            _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
         }
 
         private void ShowUrlModal()

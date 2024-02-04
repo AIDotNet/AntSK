@@ -16,6 +16,7 @@ namespace AntSK.Domain.Repositories
         /// <summary>
         /// 图标
         /// </summary>
+        [Required]
         public string Icon { get; set; }
         /// <summary>
         /// 名称
