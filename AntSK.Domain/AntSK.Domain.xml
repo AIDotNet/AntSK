@@ -107,6 +107,11 @@
             创建时间
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Kmss.Name">
             <summary>
             名称

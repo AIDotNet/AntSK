@@ -12,7 +12,10 @@ namespace AntSK.Domain.Repositories
     {
         [SugarColumn(IsPrimaryKey = true)]
         public string Id { get; set; }
-
+        /// <summary>
+        /// 图标
+        /// </summary>
+        public string Icon { get; set; }
         /// <summary>
         /// 名称
         /// </summary>
