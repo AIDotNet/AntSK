@@ -28,6 +28,14 @@
                         保存
                     </Button>
                 </FormItem>
+                @if ( !string.IsNullOrEmpty(_errorMsg))
+                {
+                    <Alert Type="@AlertType.Error"
+                       Message="错误"
+                       Description="@_errorMsg"
+                       ShowIcon="true"
+                        />
+                }
             </Form>
         </Card>
     </ChildContent>

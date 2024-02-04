@@ -38,8 +38,12 @@ namespace AntSK.Pages
             NavigationManager.NavigateTo("/kms/add");
         }
 
-        private void Search(string searchKey)
+        private async Task Search(string searchKey)
         {
+            var list = new List<Kmss> { new Kmss() };
+            var data = await _kmss_Repositories.GetListAsync(p=>p.Name.Contains(searchKey));
+            list.AddRange(data);
+            _data = list.ToArray();
         }
     }
 }

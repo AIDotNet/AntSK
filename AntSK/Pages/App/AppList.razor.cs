@@ -37,5 +37,13 @@ namespace AntSK.Pages
         {
             NavigationManager.NavigateTo("/app/add");
         }
+
+        private async Task Search(string searchKey)
+        {
+            var list = new List<Apps> { new Apps() };
+            var data = await _apps_Repositories.GetListAsync(p => p.Name.Contains(searchKey));
+            list.AddRange(data);
+            _data = list.ToArray();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,14 +20,17 @@ namespace AntSK.Domain.Repositories
         /// <summary>
         /// 名称
         /// </summary>
+        [Required]
         public string Name { get; set; }
         /// <summary>
         /// 会话模型
         /// </summary>
+        [Required]
         public string ChatModel { get; set; }
         /// <summary>
         /// 向量模型
         /// </summary>
+        [Required]
         public string EmbeddingModel { get; set; }
     }
 }

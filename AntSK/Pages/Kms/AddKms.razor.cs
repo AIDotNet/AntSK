@@ -18,6 +18,8 @@ namespace AntSK.Pages.Kms
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
 
+        private string _errorMsg { get; set; }
+
         private readonly Kmss _kmsModel = new Kmss() {  ChatModel="gpt4-turbo",EmbeddingModel= "text-embedding-ada-002" };
 
         private readonly FormItemLayout _formItemLayout = new FormItemLayout
@@ -47,12 +49,16 @@ namespace AntSK.Pages.Kms
         private void HandleSubmit()
         {
             _kmsModel.Id = Guid.NewGuid().ToString();
+            if (_kmss_Repositories.IsAny(p => p.Name == _kmsModel.Name))
+            {
+                _errorMsg = "名称已存在！";
+                return;
+            }
+
             _kmss_Repositories.Insert(_kmsModel);
 
             NavigationManager.NavigateTo("/kmslist");
-        }
 
-    
-    }
-    
+        }
+    }    
 }

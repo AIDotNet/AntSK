@@ -14,6 +14,7 @@ namespace AntSK.Pages.Kms
         protected NavigationManager NavigationManager { get; set; }
 
         private readonly Apps _appModel = new Apps() ;
+        private string _errorMsg { get; set; }
 
         private readonly FormItemLayout _formItemLayout = new FormItemLayout
         {
@@ -42,12 +43,17 @@ namespace AntSK.Pages.Kms
         private void HandleSubmit()
         {
             _appModel.Id = Guid.NewGuid().ToString();
+            if (apps_Repositories.IsAny(p => p.Name == _appModel.Name))
+            {
+                _errorMsg = "名称已存在！";
+                return;
+            }
+
             apps_Repositories.Insert(_appModel);
 
             NavigationManager.NavigateTo("/applist");
-        }
 
-    
+        }
     }
     
 }
