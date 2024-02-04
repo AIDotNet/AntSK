@@ -1,0 +1,75 @@
+﻿@namespace AntSK.Pages.Kms
+@using AntSK.Domain.Repositories
+@page "/Kms/Detail/{KmsID}"
+
+<div>
+    <PageContainer Title="知识库文档">
+        <ChildContent>
+            <div class="standardList">
+                <Card Class="listCard"
+                      Title="知识库文档"
+                      Style="margin-top: 24px;"
+                      BodyStyle="padding: 0 32px 40px 32px">
+                    <Extra>
+                        <div class="extraContent">
+                            <Search Class="extraContentSearch" Placeholder="搜索文档" @bind-Value="_model.Id" />
+                         </div>
+                     </Extra>
+                     <ChildContent>
+                         <Button Type="dashed"
+                                 Style="width: 100%; margin-bottom: 8px;"
+                                 OnClick="ShowModal">
+                             <Icon Type="plus" Theme="outline" />
+                             导入
+                         </Button>
+
+                        <AntList TItem="KmsDetails"
+                                  DataSource="_data"
+                                  ItemLayout="ListItemLayout.Horizontal">
+                                <ListItem Actions="_actions">
+                                <ListItemMeta Description="@context.Id">
+                                    <TitleTemplate>
+                                        <div >文件ID</div>
+                                    </TitleTemplate>
+                                </ListItemMeta>
+                                <ListItemMeta Avatar="" Description="@context.FileName">
+                                     <TitleTemplate>
+                                        <a href="">文件名称</a>
+                                    </TitleTemplate>
+                                </ListItemMeta>
+                                <div class="listContent">
+                                    <div class="listContentItem">
+                                        <span>创建时间</span>
+                                        <p>@context.CreateTime.ToString("yyyy-MM-dd HH:mm")</p>
+                                    </div>
+                                </div>
+                            </ListItem>
+                        </AntList>
+                    </ChildContent>
+                </Card>
+            </div>
+        </ChildContent>
+    </PageContainer>
+</div>
+
+@code {
+    private static readonly RenderFragment Detail = @<a key="detail">详情</a>;
+    private static readonly RenderFragment Delete = @<a key="edit">删除</a>;
+
+    private readonly RenderFragment[] _actions =
+        {
+            Detail,
+            Delete
+        };
+
+    private RenderFragment Info(string title, string value, bool bordered = false)
+    {
+        return @<div class="headerInfo">
+        <span>@title</span>
+        <p>@value</p>
+        @if (bordered) {
+        <em />
+    }
+    </div>;
+    }
+}

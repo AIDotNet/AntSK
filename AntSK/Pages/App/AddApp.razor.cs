@@ -4,7 +4,7 @@ using AntSK.Domain.Repositories;
 using AntSK.Models;
 using System.IO;
 
-namespace AntSK.Pages.Kms
+namespace AntSK.Pages
 {
     public partial class AddApp
     {

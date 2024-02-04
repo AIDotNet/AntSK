@@ -92,14 +92,19 @@
             文件名称
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Url">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Type">
+            <summary>
+            类型 file，url
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.KmsDetails.DataCount">
             <summary>
             数据数量
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.Status">
-            <summary>
-            状态
             </summary>
         </member>
         <member name="P:AntSK.Domain.Repositories.KmsDetails.CreateTime">

@@ -69,7 +69,7 @@ namespace AntSK.Pages
 
         private async Task Delete(string id)
         {
-            var content = "是否确认删除此知识库，删除知识库会一起删除导入的知识文档";
+            var content = "是否确认删除此应用";
             var title = "删除";
             var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
             if (result == ConfirmResult.Yes)

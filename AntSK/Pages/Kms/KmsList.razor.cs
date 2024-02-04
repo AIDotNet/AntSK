@@ -68,7 +68,7 @@ namespace AntSK.Pages
 
         private void Info(string id)
         {
-
+            NavigationManager.NavigateTo($"/kms/detail/{id}");
         }
 
   
