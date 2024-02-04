@@ -339,3 +339,4 @@ ASALocalRun/
 /Xzy.KnowledgeBase/XzyAgent.db
 /Xzy.KnowledgeBase/AntSK.db
 /AntSK/AntSK.db
+/AntSK/appsettings.Development.json
