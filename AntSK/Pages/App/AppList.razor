@@ -28,7 +28,10 @@
                     }
                     else
                     {
-                        <Card Hoverable Bordered Class="card" Actions="_actions" Style="max-height:247px;">
+                        <Card Hoverable Bordered Class="card" Actions="@(new[] {
+                            info(()=> Info(context.Id)) ,
+                            delete(async ()=>await Delete(context.Id)) ,
+                             })" Style="max-height:247px;">
                              <CardMeta>
                                  <AvatarTemplate>
                                      <Avatar Icon="@context.Icon" Style="background-color: #1890ff" />
@@ -53,14 +56,6 @@
 
 @code
 {
-    private static readonly RenderFragment Operate1 = @<a key="option1">查看</a>;
-    private static readonly RenderFragment Operate2 = @<a key="option2">删除</a>;
-
-    private readonly RenderFragment[] _actions =
-    {
-        Operate1,
-        Operate2,
-    };
-
-   
+    RenderFragment info(Action clickAction) =>@<a key="info" @onclick="@clickAction">查看</a>;
+    RenderFragment delete(Action clickAction) => @<a key="delete" @onclick="@clickAction">删除</a> ;
 }

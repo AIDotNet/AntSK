@@ -23,14 +23,31 @@ namespace AntSK.Pages
 
         [Inject] 
         protected IApps_Repositories _apps_Repositories { get; set; }
+        [Inject]
+        IConfirmService _confirmService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
+            await InitData("");
+        }
+
+        private async Task InitData(string searchKey)
+        {
             var list = new List<Apps> { new Apps() };
-            var data = await _apps_Repositories.GetListAsync();
+            List<Apps> data;
+            if (string.IsNullOrEmpty(searchKey))
+            {
+                data = await _apps_Repositories.GetListAsync();
+            }
+            else
+            {
+                data = await _apps_Repositories.GetListAsync(p => p.Name.Contains(searchKey));
+            }
+          
             list.AddRange(data);
             _data = list.ToArray();
+            await InvokeAsync(StateHasChanged);
         }
 
         private void NavigateToAddApp()
@@ -40,10 +57,26 @@ namespace AntSK.Pages
 
         private async Task Search(string searchKey)
         {
-            var list = new List<Apps> { new Apps() };
-            var data = await _apps_Repositories.GetListAsync(p => p.Name.Contains(searchKey));
-            list.AddRange(data);
-            _data = list.ToArray();
+            await InitData(searchKey);
+        }
+
+        private void Info(string id)
+        {
+
+        }
+
+
+
+        private async Task Delete(string id)
+        {
+            var content = "是否确认删除此知识库，删除知识库会一起删除导入的知识文档";
+            var title = "删除";
+            var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
+            if (result == ConfirmResult.Yes)
+            {
+                await _apps_Repositories.DeleteAsync(id);
+                await InitData("");       
+            }
         }
     }
 }

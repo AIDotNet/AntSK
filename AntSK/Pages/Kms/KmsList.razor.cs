@@ -5,6 +5,7 @@ using AntSK.Models;
 using AntSK.Services;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using System.Collections.Generic;
 
 namespace AntSK.Pages
 {
@@ -34,15 +35,25 @@ namespace AntSK.Pages
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            await InitData();
+            await InitData("");
         }
 
-        private async Task InitData()
+        private async Task InitData(string searchKey)
         {
             var list = new List<Kmss> { new Kmss() };
-            var data = await _kmss_Repositories.GetListAsync();
+            List<Kmss> data;
+            if (string.IsNullOrEmpty(searchKey))
+            {
+                data = await _kmss_Repositories.GetListAsync();
+            }
+            else 
+            {
+                data = await _kmss_Repositories.GetListAsync(p => p.Name.Contains(searchKey));
+            }
+    
             list.AddRange(data);
             _data = list.ToArray();
+            await InvokeAsync(StateHasChanged);
         }
 
         private void NavigateToAddKms()
@@ -52,10 +63,7 @@ namespace AntSK.Pages
 
         private async Task Search(string searchKey)
         {
-            var list = new List<Kmss> { new Kmss() };
-            var data = await _kmss_Repositories.GetListAsync(p=>p.Name.Contains(searchKey));
-            list.AddRange(data);
-            _data = list.ToArray();
+            await InitData(searchKey);
         }
 
         private void Info(string id)
@@ -73,8 +81,7 @@ namespace AntSK.Pages
             if (result == ConfirmResult.Yes)
             {
                 await _kmss_Repositories.DeleteAsync(id);
-                await InitData();
-                await InvokeAsync(StateHasChanged);
+                await InitData("");
             }  
         }
     }
