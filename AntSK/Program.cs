@@ -9,6 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using AntSK.Domain.Options;
+using Microsoft.KernelMemory.ContentStorage.DevTools;
+using Microsoft.KernelMemory.FileSystem.DevTools;
+using Microsoft.KernelMemory;
+using Microsoft.SemanticKernel;
+using System.Configuration;
+using Microsoft.KernelMemory.Postgres;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -63,8 +69,9 @@ builder.Services.AddSwaggerGen(c =>
 // 读取连接字符串配置
 {
     builder.Configuration.GetSection("ConnectionStrings").Get<ConnectionOption>();
-    builder.Configuration.GetSection("AIModelList").Get<AIModelOption>();
+    builder.Configuration.GetSection("OpenAIOption").Get<OpenAIOption>();
 }
+InitSK(builder);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -95,3 +102,50 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
+ void InitSK(WebApplicationBuilder builder)
+{
+    var services = builder.Services;
+    var handler = new OpenAIHttpClientHandler();
+    services.AddScoped<Kernel>((serviceProvider) =>
+    {
+        var kernel = Kernel.CreateBuilder()
+         .AddOpenAIChatCompletion(
+          modelId: OpenAIOption.Model,
+          apiKey: OpenAIOption.Key,
+          httpClient: new HttpClient(handler))
+          .Build();
+        return kernel;
+    });
+    //Kernel Memory
+    var searchClientConfig = new SearchClientConfig
+    {
+        MaxAskPromptSize = 128000,
+        MaxMatchesCount = 3,
+        AnswerTokens = 1000,
+        EmptyAnswer = "知识库未搜索到相关内容"
+    };
+
+    var postgresConfig = builder.Configuration.GetSection("Postgres").Get<PostgresConfig>()!;
+    services.AddScoped<MemoryServerless>(serviceProvider =>
+    {
+        var memory = new KernelMemoryBuilder()
+           .WithPostgresMemoryDb(postgresConfig)
+           .WithSimpleFileStorage(new SimpleFileStorageConfig { StorageType = FileSystemTypes.Volatile, Directory = "_files" })
+           .WithSearchClientConfig(searchClientConfig)
+           .WithOpenAITextGeneration(new OpenAIConfig()
+           {
+               APIKey = OpenAIOption.Key,
+               TextModel = OpenAIOption.Model
+
+           }, null, new HttpClient(handler))
+           .WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
+           {
+               APIKey = OpenAIOption.Key,
+               EmbeddingModel = OpenAIOption.EmbeddingModel
+
+           }, null, false, new HttpClient(handler))
+           .Build<MemoryServerless>();
+        return memory;
+    });
+}
+

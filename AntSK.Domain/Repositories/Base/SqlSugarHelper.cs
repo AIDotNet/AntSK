@@ -16,8 +16,8 @@ namespace AntSK.Domain.Repositories.Base
         /// </summary>
         public static SqlSugarScope Sqlite = new SqlSugarScope(new ConnectionConfig()
         {
-            ConnectionString = ConnectionOption.Sqlite,
-            DbType = DbType.Sqlite,
+            ConnectionString = ConnectionOption.Postgres,
+            DbType = DbType.PostgreSQL,
             InitKeyType = InitKeyType.Attribute,//从特性读取主键和自增列信息
             IsAutoCloseConnection = true
         }, Db =>

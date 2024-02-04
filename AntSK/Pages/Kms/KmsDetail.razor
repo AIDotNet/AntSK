@@ -1,5 +1,6 @@
 ﻿@namespace AntSK.Pages.Kms
 @using AntSK.Domain.Repositories
+@using System.ComponentModel.DataAnnotations
 @page "/Kms/Detail/{KmsID}"
 
 <div>
@@ -16,7 +17,7 @@
                             <Overlay>
                                 <Menu>
                                     @( _fileUpload(async () => await FileUpload()))
-                                    @(  _urlUpload(async () => await UrlUpload()))
+                                    @(_urlUpload(() => ShowUrlModal()))
                                 </Menu>
                             </Overlay>
                             <ChildContent>
@@ -58,11 +59,25 @@
     </PageContainer>
 </div>
 
+<Modal Title="链接读取"
+       @bind-Visible="@_urlVisible"
+       OnOk="@UrlHandleOk"
+       >
+    <Form Model="@urlModel"
+          LabelColSpan="8"
+          WrapperColSpan="16"
+          @ref="@_urlForm">
+        <FormItem Label="URL地址">
+            <Input @bind-Value="@context.Url" />
+        </FormItem>
+    </Form>
+</Modal>
+
 @code {
-   
+
     RenderFragment _fileUpload(Action clickAction) =>@<MenuItem>
             <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
-                文件上传
+                文件导入
             </a>
         </MenuItem>;
 
@@ -80,15 +95,4 @@
             Detail,
             Delete
         };
-
-    private RenderFragment Info(string title, string value, bool bordered = false)
-    {
-        return @<div class="headerInfo">
-        <span>@title</span>
-        <p>@value</p>
-        @if (bordered) {
-        <em />
-    }
-    </div>;
-    }
 }

@@ -3,6 +3,8 @@ using AntSK.Domain.Repositories;
 using AntSK.Models;
 using AntSK.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace AntSK.Pages.Kms
 {
@@ -12,6 +14,11 @@ namespace AntSK.Pages.Kms
         public string KmsId { get; set; }
 
         private readonly KmsDetails _model = new KmsDetails();
+
+        bool _urlVisible = false;
+
+        private Form<UrlModel> _urlForm;
+        private UrlModel urlModel = new UrlModel();
 
         private readonly IDictionary<string, ProgressStatus> _pStatus = new Dictionary<string, ProgressStatus>
         {
@@ -38,9 +45,19 @@ namespace AntSK.Pages.Kms
        
         }
 
-        private async Task UrlUpload()
+        public class UrlModel
         {
+            [Required]
+            public string Url { get; set; }
+        }
+        private async Task UrlHandleOk(MouseEventArgs e)
+        {
+            
+        }
 
+        private void ShowUrlModal()
+        {
+            _urlVisible = true;
         }
     }
 }

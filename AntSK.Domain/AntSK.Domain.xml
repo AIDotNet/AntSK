@@ -77,6 +77,11 @@
             sqlite连接字符串
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Options.ConnectionOption.Postgres">
+            <summary>
+            pg链接字符串
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Apps.Name">
             <summary>
             名称
