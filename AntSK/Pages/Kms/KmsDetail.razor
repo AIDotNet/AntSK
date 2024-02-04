@@ -14,7 +14,10 @@
                     <Extra>
                         <Dropdown Style="position: absolute; right: 20px; margin-bottom: 8px;">
                             <Overlay>
-                                @_overlayMenu
+                                <Menu>
+                                    @( _fileUpload(async () => await FileUpload()))
+                                    @(  _urlUpload(async () => await UrlUpload()))
+                                </Menu>
                             </Overlay>
                             <ChildContent>
                                 <Button>导入 <Icon Type="down" /></Button>
@@ -56,18 +59,19 @@
 </div>
 
 @code {
-    private RenderFragment _overlayMenu =@<Menu>
-        <MenuItem>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+   
+    RenderFragment _fileUpload(Action clickAction) =>@<MenuItem>
+            <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
                 文件上传
             </a>
-        </MenuItem>
-        <MenuItem>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+        </MenuItem>;
+
+    RenderFragment _urlUpload(Action clickAction) =>@<MenuItem>
+            <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
                 链接读取
             </a>
-        </MenuItem>
-    </Menu>;
+        </MenuItem>;
+
     private static readonly RenderFragment Detail = @<a key="detail">详情</a>;
     private static readonly RenderFragment Delete = @<a key="edit">删除</a>;
 

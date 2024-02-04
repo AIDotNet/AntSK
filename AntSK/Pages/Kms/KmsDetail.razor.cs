@@ -32,5 +32,15 @@ namespace AntSK.Pages.Kms
             await base.OnInitializedAsync();
             _data =await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
         }
+
+        private async Task FileUpload()
+        {
+       
+        }
+
+        private async Task UrlUpload()
+        {
+
+        }
     }
 }
