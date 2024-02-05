@@ -25,7 +25,10 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         [Required]
         public string Describe { get; set; }
-
+        [Required]
         public string Icon { get; set; }
+
+        [Required]
+        public string Type { get; set; }
     }
 }
