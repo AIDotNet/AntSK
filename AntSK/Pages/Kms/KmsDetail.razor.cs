@@ -170,7 +170,7 @@ namespace AntSK.Pages.Kms
 
         private void FileDetail(string fileid)
         {
-            NavigationManager.NavigateTo($"/kms/detaillist/{fileid}");
+            NavigationManager.NavigateTo($"/kms/detaillist/{KmsId}/{fileid}");
         }
 
         private async Task DeleteFile(string fileid)

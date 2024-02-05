@@ -1,14 +1,16 @@
 ﻿@namespace AntSK.Pages.Kms
 @using AntSK.Domain.Repositories
 @using AntSK.Domain.Domain.Dto
-@page "/Kms/DetailList/{FileID}"
+@page "/Kms/DetailList/{KmsID}/{FileId}"
 @inject NavigationManager NavigationManager
 
+
+<Button Type="@ButtonType.Primary" OnClick="NavigateBack">返回</Button>
 <AntList DataSource="@_data" TItem="KMFile">
     <ListItem  >
         <ListItemMeta   Description="@context.Text">
             <TitleTemplate>
-                <a>@context.File</a>
+                <a>@context.LastUpdate</a>
             </TitleTemplate>
         </ListItemMeta>
     </ListItem>
