@@ -121,6 +121,7 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
+                _fileConfirmLoading = true;
                 string fileid = Guid.NewGuid().ToString();
                 //上传文档
                 await _memory.ImportDocumentAsync(new Document(fileid)
