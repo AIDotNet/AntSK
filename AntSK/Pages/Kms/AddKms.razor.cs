@@ -16,7 +16,7 @@ namespace AntSK.Pages.Kms
 
         private string _errorMsg { get; set; }
 
-        private readonly Kmss _kmsModel = new Kmss() {  ChatModel="gpt4-turbo",EmbeddingModel= "text-embedding-ada-002" };
+        private readonly Kmss _kmsModel = new Kmss() ;
 
         private readonly FormItemLayout _formItemLayout = new FormItemLayout
         {

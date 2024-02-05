@@ -27,11 +27,6 @@ namespace AntSK.Domain.Repositories
         /// 会话模型
         /// </summary>
         [Required]
-        public string ChatModel { get; set; }
-        /// <summary>
-        /// 向量模型
-        /// </summary>
-        [Required]
-        public string EmbeddingModel { get; set; }
+        public string Describe { get; set; }
     }
 }

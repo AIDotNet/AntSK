@@ -127,14 +127,9 @@
             名称
             </summary>
         </member>
-        <member name="P:AntSK.Domain.Repositories.Kmss.ChatModel">
+        <member name="P:AntSK.Domain.Repositories.Kmss.Describe">
             <summary>
             会话模型
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.Kmss.EmbeddingModel">
-            <summary>
-            向量模型
             </summary>
         </member>
         <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetList">
