@@ -39,6 +39,11 @@
                                         <div >文件ID</div>
                                     </TitleTemplate>
                                 </ListItemMeta>
+                                <ListItemMeta Description="@context.Type">
+                                    <TitleTemplate>
+                                        <div>文件类型</div>
+                                    </TitleTemplate>
+                                </ListItemMeta>
                                 @if(@context.Type=="file")
                                 {
                                 <ListItemMeta Avatar="" Description="@context.FileName">
