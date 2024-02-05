@@ -39,9 +39,26 @@
                                         <div >文件ID</div>
                                     </TitleTemplate>
                                 </ListItemMeta>
+                                @if(@context.Type=="file")
+                                {
                                 <ListItemMeta Avatar="" Description="@context.FileName">
-                                     <TitleTemplate>
-                                        <a href="">文件名称</a>
+                                    <TitleTemplate>
+                                        <a >文件名称</a>
+                                    </TitleTemplate>
+                                </ListItemMeta>
+                                }
+                                else
+                                {
+                                    <ListItemMeta Avatar="" Description="@context.Url">
+                                        <TitleTemplate>
+                                            <a href="@context.Url" target="_blank">Url</a>
+                                        </TitleTemplate>
+                                    </ListItemMeta>
+                                }
+                              
+                                <ListItemMeta Avatar="" Description="@context.DataCount.ToString()">
+                                    <TitleTemplate>
+                                        <a >文件数量</a>
                                     </TitleTemplate>
                                 </ListItemMeta>
                                 <div class="listContent">

@@ -102,7 +102,9 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
- void InitSK(WebApplicationBuilder builder)
+
+//初始化SK
+void InitSK(WebApplicationBuilder builder)
 {
     var services = builder.Services;
     var handler = new OpenAIHttpClientHandler();

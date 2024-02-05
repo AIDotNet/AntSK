@@ -16,11 +16,11 @@ namespace AntSK.Domain.Repositories
         /// <summary>
         /// 文件名称
         /// </summary>
-        public string? FileName { get; set; }
+        public string FileName { get; set; } = "";
         /// <summary>
         /// 地址
         /// </summary>
-        public string? Url { get; set; }
+        public string Url { get; set; } = "";
         /// <summary>
         /// 类型 file，url
         /// </summary>
