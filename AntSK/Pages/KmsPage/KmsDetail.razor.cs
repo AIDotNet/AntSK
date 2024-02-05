@@ -14,7 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Security.Policy;
 
-namespace AntSK.Pages.Kms
+namespace AntSK.Pages.KmsPage
 {
     public partial class KmsDetail
     {

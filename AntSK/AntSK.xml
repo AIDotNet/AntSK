@@ -16,7 +16,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:AntSK.Pages.Kms.KmsDetail.UrlModel">
+        <member name="T:AntSK.Pages.KmsPage.KmsDetail.UrlModel">
             <summary>
             根据文档ID获取文档
             </summary>

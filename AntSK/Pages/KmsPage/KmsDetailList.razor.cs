@@ -3,7 +3,7 @@ using AntSK.Domain.Domain.Interface;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Components;
 
-namespace AntSK.Pages.Kms
+namespace AntSK.Pages.KmsPage
 {
     public partial class KmsDetailList
     {
