@@ -44,7 +44,35 @@ namespace AntSK.Pages.Kms
             await base.OnInitializedAsync();
             _data =await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
         }
+        /// <summary>
+        /// 根据文档ID获取文档
+        /// </summary>
+        /// <param name="fileid"></param>
+        /// <returns></returns>
+        private async Task<List<string>> GetDocumentByFileID(string fileid)
+        {
+            var memories = await _memory.ListIndexesAsync();
+            var memoryDbs = _memory.Orchestrator.GetMemoryDbs();
+            List<string> docTextList = new List<string>();
 
+            foreach (var memoryIndex in memories)
+            {
+                foreach (var memoryDb in memoryDbs)
+                {
+                    var list = memoryDb.GetListAsync(memoryIndex.Name, null, 100, true);
+
+                    await foreach (var item in list)
+                    {
+                        if (item.Id.Contains(fileid))
+                        {
+                            var test = item.Payload.FirstOrDefault(p => p.Key == "text");
+                            docTextList.Add(test.Value.ConvertToString());
+                        }
+                    }
+                }
+            }
+            return docTextList;
+        }
         private async Task FileUpload()
         {
            
@@ -80,31 +108,6 @@ namespace AntSK.Pages.Kms
             {
                 Console.WriteLine(ex.Message+" ---- "+ex.StackTrace);
             }
-        }
-
-        private async Task<List<string>> GetDocumentByFileID(string fileid)
-        {
-            var memories = await _memory.ListIndexesAsync();
-            var memoryDbs = _memory.Orchestrator.GetMemoryDbs();
-            List<string> docTextList = new List<string>();
-
-            foreach (var memoryIndex in memories)
-            {
-                foreach (var memoryDb in memoryDbs)
-                {
-                    var list = memoryDb.GetListAsync(memoryIndex.Name, null, 100, true);
-
-                    await foreach (var item in list)
-                    {
-                        if (item.Id.Contains(fileid))
-                        {
-                            var test = item.Payload.FirstOrDefault(p => p.Key == "text");
-                            docTextList.Add(test.Value.ConvertToString());
-                        }
-                    }
-                }
-            }
-            return docTextList;
         }
 
         private void ShowUrlModal()
