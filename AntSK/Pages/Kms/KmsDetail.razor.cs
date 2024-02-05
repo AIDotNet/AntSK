@@ -1,4 +1,5 @@
 ﻿using AntDesign;
+using AntSK.Domain.Domain.Dto;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
@@ -80,7 +81,7 @@ namespace AntSK.Pages.Kms
                 await _memory.ImportWebPageAsync(urlModel.Url, fileid, new TagCollection() { { "kmsid", KmsId } }
                      , index: "kms");
                 //查询文档数量
-                List<string> docTextList =await iKMService.GetDocumentByFileID(fileid);
+                var docTextList =await iKMService.GetDocumentByFileID(fileid);
 
                 KmsDetails detial = new KmsDetails()
                 {
@@ -127,7 +128,7 @@ namespace AntSK.Pages.Kms
                      .AddTag("kmsid", KmsId)
                      , index: "kms");
                 //查询文档数量
-                List<string> docTextList = await iKMService.GetDocumentByFileID(fileid);
+                var docTextList = await iKMService.GetDocumentByFileID(fileid);
 
                 KmsDetails detial = new KmsDetails()
                 {
