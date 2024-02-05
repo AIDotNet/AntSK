@@ -17,8 +17,5 @@
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.26.240121.1" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.26.240121.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Domain\" />
-  </ItemGroup>
 
 </Project>

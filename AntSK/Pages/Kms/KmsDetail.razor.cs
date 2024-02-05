@@ -1,4 +1,5 @@
 ﻿using AntDesign;
+using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using AntSK.Models;
@@ -49,6 +50,8 @@ namespace AntSK.Pages.Kms
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
         [Inject]
         protected MemoryServerless _memory { get; set; }
+        [Inject]
+        protected IKMService iKMService { get; set; }
 
 
         protected override async Task OnInitializedAsync()
@@ -61,34 +64,6 @@ namespace AntSK.Pages.Kms
         /// </summary>
         /// <param name="fileid"></param>
         /// <returns></returns>
-        private async Task<List<string>> GetDocumentByFileID(string fileid)
-        {
-            var memories = await _memory.ListIndexesAsync();
-            var memoryDbs = _memory.Orchestrator.GetMemoryDbs();
-            List<string> docTextList = new List<string>();
-
-            foreach (var memoryIndex in memories)
-            {
-                foreach (var memoryDb in memoryDbs)
-                {
-                    var list = memoryDb.GetListAsync(memoryIndex.Name, null, 100, true);
-
-                    await foreach (var item in list)
-                    {
-                        if (item.Id.Contains(fileid))
-                        {
-                            var test = item.Payload.FirstOrDefault(p => p.Key == "text");
-                            docTextList.Add(test.Value.ConvertToString());
-                        }
-                    }
-                }
-            }
-            return docTextList;
-        }
-        private async Task FileUpload()
-        {
-           
-        }
 
         #region Url
         public class UrlModel
@@ -105,7 +80,7 @@ namespace AntSK.Pages.Kms
                 await _memory.ImportWebPageAsync(urlModel.Url, fileid, new TagCollection() { { "kmsid", KmsId } }
                      , index: "kms");
                 //查询文档数量
-                List<string> docTextList =await GetDocumentByFileID(fileid);
+                List<string> docTextList =await iKMService.GetDocumentByFileID(fileid);
 
                 KmsDetails detial = new KmsDetails()
                 {
@@ -152,7 +127,7 @@ namespace AntSK.Pages.Kms
                      .AddTag("kmsid", KmsId)
                      , index: "kms");
                 //查询文档数量
-                List<string> docTextList = await GetDocumentByFileID(fileid);
+                List<string> docTextList = await iKMService.GetDocumentByFileID(fileid);
 
                 KmsDetails detial = new KmsDetails()
                 {
@@ -190,12 +165,11 @@ namespace AntSK.Pages.Kms
                 filePath=fileinfo.File.Url = fileinfo.File.Response;
                 fileName= fileinfo.File.FileName;
             }
-
         }
 
         private void FileDetail(string fileid)
         {
-
+            NavigationManager.NavigateTo($"/kms/detaillist/{fileid}");
         }
 
         private async Task DeleteFile(string fileid)
