@@ -4,6 +4,12 @@
         <name>AntSK</name>
     </assembly>
     <members>
+        <member name="M:AntSK.Controllers.FileController.UploadFile(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Upload FileName
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AntSK.Controllers.InitController.InitTable">
             <summary>
             初始化DB 和表

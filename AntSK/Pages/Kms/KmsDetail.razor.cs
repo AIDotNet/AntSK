@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.KernelMemory;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Security.Policy;
 
 namespace AntSK.Pages.Kms
@@ -22,6 +23,12 @@ namespace AntSK.Pages.Kms
 
         bool _urlVisible = false;
         bool _urlConfirmLoading = false;
+
+        bool _fileVisible = false;
+        bool _fileConfirmLoading = false;
+
+        string filePath;
+        string fileName;
 
         private Form<UrlModel> _urlForm;
         private UrlModel urlModel = new UrlModel();
@@ -80,6 +87,7 @@ namespace AntSK.Pages.Kms
            
         }
 
+        #region Url
         public class UrlModel
         {
             [Required]
@@ -120,9 +128,68 @@ namespace AntSK.Pages.Kms
         {
             _urlVisible = false;
         }
-        private void ShowUrlModal()
+        private void UrlShowModal()
         {
             _urlVisible = true;
         }
+        #endregion
+
+
+        #region File
+
+      
+        private async Task FileHandleOk(MouseEventArgs e)
+        {
+            try
+            {
+                string fileid = Guid.NewGuid().ToString();
+                //上传文档
+                await _memory.ImportDocumentAsync(new Document(fileid)
+                     .AddFile(filePath)
+                     .AddTag("kmsid", KmsId)
+                     , index: "kms");
+                //查询文档数量
+                List<string> docTextList = await GetDocumentByFileID(fileid);
+
+                KmsDetails detial = new KmsDetails()
+                {
+                    Id = fileid,
+                    KmsId = KmsId,
+                    Type = "file",
+                    FileName = fileName,
+                    DataCount = docTextList.Count,
+                    CreateTime = DateTime.Now
+                };
+                await _kmsDetails_Repositories.InsertAsync(detial);
+                _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
+
+                _fileVisible = false;
+                _fileConfirmLoading = false;
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+            }
+        }
+        private void FileHandleCancel(MouseEventArgs e)
+        {
+            _fileVisible = false;
+        }
+        private void FileShowModal()
+        {
+            _fileVisible = true;
+        }
+        private void OnSingleCompleted(UploadInfo fileinfo)
+        {
+
+            if (fileinfo.File.State == UploadState.Success)
+            {
+                filePath=fileinfo.File.Url = fileinfo.File.Response;
+                fileName= fileinfo.File.FileName;
+            }
+
+        }
+
+        #endregion
     }
 }
