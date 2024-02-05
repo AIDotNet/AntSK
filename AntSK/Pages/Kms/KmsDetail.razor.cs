@@ -4,6 +4,7 @@ using AntSK.Domain.Utils;
 using AntSK.Models;
 using AntSK.Services;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.KernelMemory;
@@ -20,6 +21,7 @@ namespace AntSK.Pages.Kms
         private readonly KmsDetails _model = new KmsDetails();
 
         bool _urlVisible = false;
+        bool _urlConfirmLoading = false;
 
         private Form<UrlModel> _urlForm;
         private UrlModel urlModel = new UrlModel();
@@ -87,6 +89,7 @@ namespace AntSK.Pages.Kms
         {
             try
             {
+                _urlConfirmLoading = true;
                 string fileid = Guid.NewGuid().ToString();
                 await _memory.ImportWebPageAsync(urlModel.Url, fileid, new TagCollection() { { "kmsid", KmsId } }
                      , index: "kms");
@@ -99,17 +102,24 @@ namespace AntSK.Pages.Kms
                     KmsId = KmsId,
                     Type = "url",
                     Url = urlModel.Url,
-                    DataCount= docTextList.Count
+                    DataCount= docTextList.Count,
+                    CreateTime=DateTime.Now
                 };
                 await _kmsDetails_Repositories.InsertAsync(detial);
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
+
+                _urlVisible = false;
+                _urlConfirmLoading = false;
             }
             catch (System.Exception ex)
             {
                 Console.WriteLine(ex.Message+" ---- "+ex.StackTrace);
             }
         }
-
+        private void UrlHandleCancel(MouseEventArgs e)
+        {
+            _urlVisible = false;
+        }
         private void ShowUrlModal()
         {
             _urlVisible = true;

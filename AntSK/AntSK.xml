@@ -10,5 +10,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AntSK.Pages.Kms.KmsDetail.GetDocumentByFileID(System.String)">
+            <summary>
+            根据文档ID获取文档
+            </summary>
+            <param name="fileid"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

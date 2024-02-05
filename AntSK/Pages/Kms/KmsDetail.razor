@@ -77,9 +77,10 @@
 </div>
 
 <Modal Title="链接读取"
-       @bind-Visible="@_urlVisible"
+       Visible="@_urlVisible"
        OnOk="@UrlHandleOk"
-       >
+       OnCancel="@UrlHandleCancel"
+       ConfirmLoading="@_urlConfirmLoading">
     <Form Model="@urlModel"
           LabelColSpan="8"
           WrapperColSpan="16"
