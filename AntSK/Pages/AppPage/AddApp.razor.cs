@@ -4,7 +4,7 @@ using AntSK.Domain.Repositories;
 using AntSK.Models;
 using System.IO;
 
-namespace AntSK.Pages
+namespace AntSK.Pages.AppPage
 {
     public partial class AddApp
     {
@@ -51,7 +51,7 @@ namespace AntSK.Pages
 
             apps_Repositories.Insert(_appModel);
 
-            NavigationManager.NavigateTo("/applist");
+            NavigationManager.NavigateTo($"/app/detail/{_appModel.Id}");
 
         }
     }
