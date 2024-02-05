@@ -33,7 +33,10 @@
                         <AntList TItem="KmsDetails" 
                                   DataSource="_data"
                                   ItemLayout="ListItemLayout.Horizontal">
-                                <ListItem Actions="_actions">
+                                <ListItem Actions="@(new[] {
+                            detail(()=> FileDetail(context.Id)) ,
+                            delete(async ()=>await DeleteFile(context.Id)) ,
+                             })">
                                 <ListItemMeta Description="@context.Id">
                                     <TitleTemplate>
                                         <div >文件ID</div>
@@ -131,12 +134,6 @@
             </a>
         </MenuItem>;
 
-    private static readonly RenderFragment Detail = @<a key="detail">详情</a>;
-    private static readonly RenderFragment Delete = @<a key="edit">删除</a>;
-
-    private readonly RenderFragment[] _actions =
-        {
-            Detail,
-            Delete
-        };
+    RenderFragment detail(Action clickAction) => @<a key="detail" @onclick="@clickAction">详情</a>;
+    RenderFragment delete(Action clickAction) => @<a key="edit" @onclick="@clickAction">删除</a>;
 }

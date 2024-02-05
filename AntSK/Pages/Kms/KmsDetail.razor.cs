@@ -44,9 +44,12 @@ namespace AntSK.Pages.Kms
         private List<KmsDetails> _data =new List<KmsDetails>();
 
         [Inject]
+        protected IConfirmService _confirmService { get; set; }
+        [Inject]
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
         [Inject]
         protected MemoryServerless _memory { get; set; }
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -188,6 +191,38 @@ namespace AntSK.Pages.Kms
                 fileName= fileinfo.File.FileName;
             }
 
+        }
+
+        private void FileDetail(string fileid)
+        {
+
+        }
+
+        private async Task DeleteFile(string fileid)
+        {   
+            try
+            {
+                var content = "是否确认删除此文档?";
+                var title = "删除";
+                var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
+                if (result == ConfirmResult.Yes)
+                {
+                    var flag = await _kmsDetails_Repositories.DeleteAsync(fileid);
+                    if (flag)
+                    {
+                        await _memory.DeleteDocumentAsync(index: "kms", documentId: fileid);
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+            }
+            finally
+            {
+                _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
+                await InvokeAsync(StateHasChanged);
+            }
         }
 
         #endregion
