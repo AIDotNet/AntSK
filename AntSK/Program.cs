@@ -15,6 +15,8 @@ using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
 using System.Configuration;
 using Microsoft.KernelMemory.Postgres;
+using AntSK.Domain.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -86,6 +88,8 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+InitDB(app);
+
 app.UseRouting();
 
 app.MapBlazorHub();
@@ -100,8 +104,19 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
-
 app.Run();
+void InitDB(WebApplication app) 
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        //codefirst 创建表
+        var _repository = scope.ServiceProvider.GetRequiredService<IApps_Repositories>();
+        _repository.GetDB().DbMaintenance.CreateDatabase();
+        _repository.GetDB().CodeFirst.InitTables(typeof(Apps));
+        _repository.GetDB().CodeFirst.InitTables(typeof(Kmss));
+        _repository.GetDB().CodeFirst.InitTables(typeof(KmsDetails));
+    }
+}
 
 //初始化SK
 void InitSK(WebApplicationBuilder builder)
