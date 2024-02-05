@@ -106,6 +106,16 @@
        OnCancel="@FileHandleCancel"
        ConfirmLoading="@_fileConfirmLoading">
     <Upload Action="@("api/File/UploadFile")"
+            Accept="text/plain,
+application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+application/vnd.openxmlformats-officedocument.presentationml.presentation
+application/pdf,
+application/vnd.ms-powerpoint,
+application/vnd.ms-excel,
+application/msword,
+
+"
             Name="file"
             Drag
             Multiple
@@ -115,7 +125,7 @@
          </p>
          <p class="ant-upload-text">单击或拖动文件到此区域进行上传</p>
          <p class="ant-upload-hint">
-             支持word、pdf、excel、ppt等文件。
+             支持txt、word、pdf、excel、ppt等文件。
          </p>
      </Upload>
 </Modal>
