@@ -29,12 +29,31 @@
                  <FormItem Label="开场白" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
                      <TextArea MinRows="2" Placeholder="请输入开场白" @bind-Value="@context.Prologue" />
                  </FormItem>
-                 @if (@context.Type == "chat")
+                @if (@context.Type == "chat")
                 {
                     <FormItem Label="提示词" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
                         <TextArea MinRows="4" Placeholder="请输入提示词" @bind-Value="@context.Prompt" />
                     </FormItem>     
-                }            
+                }
+                @if (@context.Type == "kms")
+                {
+                    <FormItem Label="知识库" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                        <Select Mode="multiple"
+                                @bind-Values="kmsIds"
+                                Placeholder="选择知识库"
+                                TItemValue="string"
+                                TItem="string"
+                                Size="@AntSizeLDSType.Default"
+                                OnSelectedItemChanged="OnSelectedItemChangedHandler">
+                            <SelectOptions>
+                                @foreach (var kms in _kmsList)
+                                {
+                                    <SelectOption TItem="string" TItemValue="string" Value="@kms.Id" Label="@kms.Name" />
+                                }
+                            </SelectOptions>
+                        </Select>
+                    </FormItem>
+                }
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
                     <Button Type="primary" HtmlType="submit">
                         保存
