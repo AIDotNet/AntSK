@@ -62,7 +62,7 @@ namespace AntSK.Pages
 
         private void Info(string id)
         {
-
+            NavigationManager.NavigateTo($"/app/add/{id}");
         }
 
 

@@ -56,8 +56,10 @@ namespace AntSK.Pages.AppPage
             await base.OnInitializedAsync();
             _kmsList = _kmss_Repositories.GetList();
             if (!string.IsNullOrEmpty(AppId))
-            { 
+            {
                 //查看
+                _appModel= _apps_Repositories.GetFirst(p => p.Id == AppId);
+                kmsIds = _appModel.KmsIdList.Split(",");
             }
         }
         private void HandleSubmit()
