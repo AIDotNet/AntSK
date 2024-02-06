@@ -29,11 +29,17 @@ AntSK 适用于多种业务场景，例如：
 - 其他有意思的AI App
 
 ## 功能示例
+首先需要创建知识库
 ![知识库](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93.png)
+在知识库里可以使用文档或者url进行导入
 ![知识库详情](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93%E8%AF%A6%E6%83%85.png)
+点击查看可以查看知识库的文档切片情况
 ![文档切片](https://github.com/xuzeyu91/AntSK/blob/main/images/%E6%96%87%E6%A1%A3%E5%88%87%E7%89%87.png)
+然后我们需要创建应用，可以创建对话应用和知识库。
 ![应用](https://github.com/xuzeyu91/AntSK/blob/main/images/%E5%BA%94%E7%94%A8.png)
+知识库应用需要选择已有的知识库，可以选多个
 ![应用配置](https://github.com/xuzeyu91/AntSK/blob/main/images/%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE.png)
+然后再对话中可以对知识库的文档进行提问
 ![问答](https://github.com/xuzeyu91/AntSK/blob/main/images/%E9%97%AE%E7%AD%94.png)
 
 ## 如何开始？
