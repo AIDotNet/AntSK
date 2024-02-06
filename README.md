@@ -28,10 +28,38 @@ AntSK 适用于多种业务场景，例如：
 - 教育与在线学习平台
 - 其他有意思的AI App
 
+## 功能示例
+![知识库](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93.png)
+![知识库详情](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93%E8%AF%A6%E6%83%85.png)
+![文档切片](https://github.com/xuzeyu91/AntSK/blob/main/images/%E6%96%87%E6%A1%A3%E5%88%87%E7%89%87.png)
+![应用](https://github.com/xuzeyu91/AntSK/blob/main/images/%E5%BA%94%E7%94%A8.png)
+![应用配置](https://github.com/xuzeyu91/AntSK/blob/main/images/%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE.png)
+![问答](https://github.com/xuzeyu91/AntSK/blob/main/images/%E9%97%AE%E7%AD%94.png)
 
 ## 如何开始？
 
-想了解更多信息或开始使用 **AntSK**，敬请访问我们的[官方文档页面](#)或加入我们的[开发者社区](#)以获取技术支持和与同行交流。
+在这里我使用的是Postgres 作为数据存储和向量存储，因为Semantic Kernel和Kernel Memory都支持他，当然你也可以换成其他的。
+模型默认支持openai,如果需要使用azure openai需要调整SK的依赖注入，也可以使用one-api进行集成。
+需要配置如下的配置文件
+```
+  "ConnectionStrings": {
+    "Postgres": "Host=;Port=;Database=antsk;Username=;Password="
+  },
+  "OpenAIOption": {
+    "EndPoint": "",
+    "Key": "",
+    "Model": "",
+    "EmbeddingModel": ""
+  },
+  "Postgres": {
+    "ConnectionString": "Host=;Port=;Database=antsk;Username=;Password=",
+    "TableNamePrefix": "km-"
+  }
+```
+
+
+
+想了解更多信息或开始使用 **AntSK**，可以关注我的公众号以及加入交流群。
 
 ## 联系我
 如有任何问题或建议，请通过以下方式关注我的公众号，发消息与我联系，我们也有交流群，可以发送进群等消息，然后我会拉你进交流群
