@@ -29,7 +29,7 @@
                 @if (@context.Type == "chat")
                 {
                     <FormItem Label="提示词" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                        <TextArea MinRows="4" Placeholder="请输入提示词" @bind-Value="@context.Prompt" />
+                        <TextArea MinRows="4" Placeholder="请输入提示词,用户输入使用{{$input}} 来做占位符" @bind-Value="@context.Prompt" />
                     </FormItem>     
                 }
                 @if (@context.Type == "kms")

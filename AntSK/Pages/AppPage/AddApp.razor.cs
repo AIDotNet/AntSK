@@ -59,24 +59,38 @@ namespace AntSK.Pages.AppPage
             {
                 //查看
                 _appModel= _apps_Repositories.GetFirst(p => p.Id == AppId);
-                kmsIds = _appModel.KmsIdList.Split(",");
+                kmsIds = _appModel.KmsIdList?.Split(",");
             }
         }
         private void HandleSubmit()
         {
-            _appModel.Id = Guid.NewGuid().ToString();
-            if (_apps_Repositories.IsAny(p => p.Name == _appModel.Name))
+            if (string.IsNullOrEmpty(AppId))
             {
-                _errorMsg = "名称已存在！";
-                return;
-            }
+                //新增
+                _appModel.Id = Guid.NewGuid().ToString();
+                if (_apps_Repositories.IsAny(p => p.Name == _appModel.Name))
+                {
+                    _errorMsg = "名称已存在！";
+                    return;
+                }
 
-            if (kmsIds.Count() > 0)
-            {
-                _appModel.KmsIdList = string.Join(",", kmsIds);
-            }
+                if (kmsIds != null && kmsIds.Count() > 0)
+                {
+                    _appModel.KmsIdList = string.Join(",", kmsIds);
+                }
 
-            _apps_Repositories.Insert(_appModel);
+                _apps_Repositories.Insert(_appModel);
+            }
+            else {
+                //修改
+                if (kmsIds != null && kmsIds.Count() > 0)
+                {
+                    _appModel.KmsIdList = string.Join(",", kmsIds);
+                }
+
+                _apps_Repositories.Update(_appModel);
+            }
+          
 
             //NavigationManager.NavigateTo($"/app/detail/{_appModel.Id}");
             NavigationManager.NavigateTo($"/applist");

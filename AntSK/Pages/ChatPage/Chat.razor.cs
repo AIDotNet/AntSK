@@ -2,11 +2,14 @@
 using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
+using Azure.AI.OpenAI;
 using Azure.Core;
 using MarkdownSharp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.KernelMemory;
 using Microsoft.OpenApi.Models;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
 using SqlSugar;
 using System;
@@ -27,6 +30,8 @@ namespace AntSK.Pages.ChatPage
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
         [Inject]
         protected MemoryServerless _memory { get; set; }
+        [Inject]
+        protected Kernel _kernel { get; set; }
 
         protected bool _loading = false;
         protected List<MessageInfo> MessageList = [];
@@ -81,8 +86,32 @@ namespace AntSK.Pages.ChatPage
             switch (app.Type)
             {
                 case "chat":
+                    //普通会话
+                    var promptTemplateFactory = new KernelPromptTemplateFactory();
+                    var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
+                    var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
+
+                    var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings() );
+                    var chatResult = await _kernel.InvokeAsync(func,new KernelArguments() { ["input"]=questions});
+                    if (chatResult.IsNotNull())
+                    {
+                        string answers = chatResult.GetValue<string>();
+                        var markdown = new Markdown();
+                        string htmlAnswers = markdown.Transform(answers);
+                        var info = new MessageInfo()
+                        {
+                            ID = Guid.NewGuid().ToString(),
+                            Questions = questions,
+                            Answers = answers,
+                            HtmlAnswers = htmlAnswers,
+                            CreateTime = DateTime.Now,
+                        };
+                        MessageList.Add(info);
+                    }
+
                     break;
                 case "kms":
+                    //知识库问答
                     var filters = new List<MemoryFilter>();
 
                     var kmsidList = app.KmsIdList.Split(",");
@@ -91,12 +120,12 @@ namespace AntSK.Pages.ChatPage
                         filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
                     }
 
-                    var result = await _memory.AskAsync(questions, index: "kms", filters: filters);
-                    if (result!=null)
+                    var kmsResult = await _memory.AskAsync(questions, index: "kms", filters: filters);
+                    if (kmsResult != null)
                     {
-                        if (!string.IsNullOrEmpty(result.Result))
+                        if (!string.IsNullOrEmpty(kmsResult.Result))
                         {
-                            string answers = result.Result;
+                            string answers = kmsResult.Result;
                             var markdown = new Markdown();
                             string htmlAnswers = markdown.Transform(answers);
                             var info = new MessageInfo()
@@ -110,7 +139,7 @@ namespace AntSK.Pages.ChatPage
                             MessageList.Add(info);
                         }
      
-                        foreach (var x in result.RelevantSources)
+                        foreach (var x in kmsResult.RelevantSources)
                         {
                             foreach (var xsd in x.Partitions)
                             {
