@@ -51,8 +51,8 @@ namespace AntSK.Pages.AppPage
 
             apps_Repositories.Insert(_appModel);
 
-            NavigationManager.NavigateTo($"/app/detail/{_appModel.Id}");
-
+            //NavigationManager.NavigateTo($"/app/detail/{_appModel.Id}");
+            NavigationManager.NavigateTo($"/applist");
         }
     }
     

@@ -92,6 +92,16 @@
             描述
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Prologue">
+            <summary>
+            开场白
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Prompt">
+            <summary>
+            提示词
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.KmsDetails.FileName">
             <summary>
             文件名称
