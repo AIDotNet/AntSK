@@ -6,12 +6,14 @@ using AntSK.Domain.Utils;
 using AntSK.Models;
 using AntSK.Services;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.KernelMemory;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Security.Claims;
 using System.Security.Policy;
 
 namespace AntSK.Pages.KmsPage
@@ -53,6 +55,8 @@ namespace AntSK.Pages.KmsPage
         protected MemoryServerless _memory { get; set; }
         [Inject]
         protected IKMService iKMService { get; set; }
+        [Inject]
+        protected MessageService? _message { get; set; }
 
 
         protected override async Task OnInitializedAsync()
@@ -159,6 +163,33 @@ namespace AntSK.Pages.KmsPage
         private void FileShowModal()
         {
             _fileVisible = true;
+        }
+
+        bool BeforeUpload(UploadFileItem file)
+        {
+            List<string> types = new List<string>() {
+                "text/plain",
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "application/vnd.ms-excel",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "application/vnd.ms-powerpoint",
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                "application/pdf",
+                "text/markdown"
+            };
+            var IsType = types.Contains( file.Type );
+            if (!IsType)
+            {
+                _message.Error("文件格式错误,请重新选择!");
+            }
+            var IsLt500K = file.Size < 1024 *1024* 100;
+            if (!IsLt500K)
+            {
+                _message.Error("文件需不大于100MB!");
+            }
+          
+            return IsType && IsLt500K;
         }
         private void OnSingleCompleted(UploadInfo fileinfo)
         {
