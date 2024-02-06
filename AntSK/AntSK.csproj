@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Chat\" />
     <Folder Include="Pages\Setting\" />
   </ItemGroup>
   

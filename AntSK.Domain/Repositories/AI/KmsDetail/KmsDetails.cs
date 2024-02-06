@@ -17,6 +17,8 @@ namespace AntSK.Domain.Repositories
         /// 文件名称
         /// </summary>
         public string FileName { get; set; } = "";
+
+        public string FileGuidName { get; set; } = "";
         /// <summary>
         /// 地址
         /// </summary>

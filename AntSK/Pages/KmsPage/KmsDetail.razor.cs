@@ -130,13 +130,14 @@ namespace AntSK.Pages.KmsPage
                      , index: "kms");
                 //查询文档数量
                 var docTextList = await iKMService.GetDocumentByFileID(fileid);
-
+                string fileGuidName = Path.GetFileName(filePath);
                 KmsDetails detial = new KmsDetails()
                 {
                     Id = fileid,
                     KmsId = KmsId,
                     Type = "file",
                     FileName = fileName,
+                    FileGuidName= fileGuidName,
                     DataCount = docTextList.Count,
                     CreateTime = DateTime.Now
                 };
