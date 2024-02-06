@@ -92,11 +92,6 @@
             描述
             </summary>
         </member>
-        <member name="P:AntSK.Domain.Repositories.Apps.Prologue">
-            <summary>
-            开场白
-            </summary>
-        </member>
         <member name="P:AntSK.Domain.Repositories.Apps.Prompt">
             <summary>
             提示词

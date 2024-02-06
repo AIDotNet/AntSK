@@ -26,9 +26,6 @@
                 <FormItem Label="描述" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
                     <Input Placeholder="请输入描述" @bind-Value="@context.Describe" />
                 </FormItem>
-                 <FormItem Label="开场白" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                     <TextArea MinRows="2" Placeholder="请输入开场白" @bind-Value="@context.Prologue" />
-                 </FormItem>
                 @if (@context.Type == "chat")
                 {
                     <FormItem Label="提示词" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">

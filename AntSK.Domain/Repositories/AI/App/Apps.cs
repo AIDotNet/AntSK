@@ -32,10 +32,6 @@ namespace AntSK.Domain.Repositories
         public string Type { get; set; }
 
         /// <summary>
-        /// 开场白
-        /// </summary>
-        public string? Prologue { get; set; }
-        /// <summary>
         /// 提示词
         /// </summary>
         public string? Prompt { get; set; }
