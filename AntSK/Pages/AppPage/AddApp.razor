@@ -2,7 +2,7 @@
 @using AntSK.Domain.Repositories
 @using AntSK.Models
 @page "/App/Add"
-@inject IMessageService _message
+@page "/App/Add/{AppId}"
 
 <PageContainer Title="新增应用">
     <ChildContent>
@@ -44,7 +44,7 @@
                                 TItemValue="string"
                                 TItem="string"
                                 Size="@AntSizeLDSType.Default"
-                                OnSelectedItemChanged="OnSelectedItemChangedHandler">
+                                >
                             <SelectOptions>
                                 @foreach (var kms in _kmsList)
                                 {
@@ -57,6 +57,9 @@
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
                     <Button Type="primary" HtmlType="submit">
                         保存
+                    </Button>
+                    <Button  OnClick="Back">
+                        返回
                     </Button>
                 </FormItem>
                 @if (!string.IsNullOrEmpty(_errorMsg))

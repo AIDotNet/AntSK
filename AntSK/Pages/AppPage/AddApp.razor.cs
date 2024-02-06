@@ -8,6 +8,9 @@ namespace AntSK.Pages.AppPage
 {
     public partial class AddApp
     {
+        [Parameter]
+        public string AppId { get; set; }
+
         [Inject]
         protected IApps_Repositories _apps_Repositories { get; set; }
 
@@ -52,6 +55,10 @@ namespace AntSK.Pages.AppPage
         {
             await base.OnInitializedAsync();
             _kmsList = _kmss_Repositories.GetList();
+            if (!string.IsNullOrEmpty(AppId))
+            { 
+                //查看
+            }
         }
         private void HandleSubmit()
         {
@@ -73,11 +80,10 @@ namespace AntSK.Pages.AppPage
             NavigationManager.NavigateTo($"/applist");
         }
 
-        private void OnSelectedItemChangedHandler(string value)
-        {
-            Console.WriteLine($"selected: ${value}");
-        }
 
+        private void Back() {
+            NavigationManager.NavigateTo("/applist");
+        }
     }
 
 }
