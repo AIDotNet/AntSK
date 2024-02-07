@@ -1,3 +1,4 @@
+[简体中文](./README.md) | English
 # AntSK
 
 ## Based on AI knowledge base/agent created by Net8+AntBlazor+SemanticKernel
