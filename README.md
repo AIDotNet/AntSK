@@ -1,3 +1,4 @@
+中文|[English](https://github.com/xuzeyu91/AntSK/blob/main/README.en.md)
 # AntSK
 ## 基于.Net8+AntBlazor+SemanticKernel 打造的AI知识库/智能体
 
