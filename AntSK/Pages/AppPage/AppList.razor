@@ -44,6 +44,15 @@
                                      <!--todo: Ellipsis not working-->
                                      @context.Describe
                                     </Paragraph>
+                                    @if (context.Type == "chat")
+                                    {
+                                        <Tag Color="@PresetColor.Yellow.ToString()">会话应用</Tag>
+                                    }
+                                    else if (context.Type == "kms")
+                                    {
+                                        <Tag Color="@PresetColor.Green.ToString()">知识库</Tag>
+                                        
+                                    }
                                 </DescriptionTemplate>
                             </CardMeta>
                         </Card>
