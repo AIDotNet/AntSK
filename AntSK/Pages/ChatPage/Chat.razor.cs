@@ -92,107 +92,140 @@ namespace AntSK.Pages.ChatPage
             //处理多轮会话
             if (MessageList.Count > 0)
             {
-                StringBuilder history =new StringBuilder();
-                foreach (var item in MessageList)
-                {
-                    history.Append($"user:{item.Questions}{Environment.NewLine}");
-                    history.Append($"assistant:{item.Answers}{Environment.NewLine}");
-                }
-
-                KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
-                var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
-                string his= summary.GetValue<string>();
-                msg = $"历史对话:{his}{Environment.NewLine}{questions}";;
+                msg = await HistorySummarize(questions, msg);
             }
 
             Apps app=_apps_Repositories.GetFirst(p => p.Id == AppId);
             switch (app.Type)
             {
                 case "chat":
-                    {
-                        //普通会话
-                        var promptTemplateFactory = new KernelPromptTemplateFactory();
-                        var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
-                        var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
-
-                        var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings());
-                        var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
-                        MessageInfo info = null;
-                        var markdown = new Markdown();
-                        await foreach (var content in chatResult)
-                        {
-                            if (info == null)
-                            {
-                                info = new MessageInfo();
-                                info.ID = Guid.NewGuid().ToString();
-                                info.Questions = questions;
-                                info.Answers = content.Content!;
-                                info.HtmlAnswers = content.Content!;
-                                info.CreateTime = DateTime.Now;
-
-                                MessageList.Add(info);
-                            }
-                            else
-                            {
-                                info.HtmlAnswers += content.Content;
-                            }
-                            await InvokeAsync(StateHasChanged);
-                        }
-                        //全部处理完后再处理一次Markdown
-                        info!.HtmlAnswers = markdown.Transform(info.HtmlAnswers);
-                        await InvokeAsync(StateHasChanged);
-                    }
+                    //普通会话
+                    await SendChat(questions, msg, app);
                     break;
                 case "kms":
-                    {
-                        //知识库问答
-                        var filters = new List<MemoryFilter>();
-
-                        var kmsidList = app.KmsIdList.Split(",");
-                        foreach (var kmsid in kmsidList)
-                        {
-                            filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
-                        }
-
-                        var kmsResult = await _memory.AskAsync(msg, index: "kms", filters: filters);
-                        if (kmsResult != null)
-                        {
-                            if (!string.IsNullOrEmpty(kmsResult.Result))
-                            {
-                                string answers = kmsResult.Result;
-                                var markdown = new Markdown();
-                                string htmlAnswers = markdown.Transform(answers);
-                                var info1 = new MessageInfo()
-                                {
-                                    ID = Guid.NewGuid().ToString(),
-                                    Questions = questions,
-                                    Answers = answers,
-                                    HtmlAnswers = htmlAnswers,
-                                    CreateTime = DateTime.Now,
-                                };
-                                MessageList.Add(info1);
-                            }
-
-                            foreach (var x in kmsResult.RelevantSources)
-                            {
-                                foreach (var xsd in x.Partitions)
-                                {
-                                    var markdown = new Markdown();
-                                    string sourceName = x.SourceName;
-                                    var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == x.SourceName);
-                                    if (fileDetail.IsNotNull())
-                                    {
-                                        sourceName = fileDetail.FileName;
-                                    }
-                                    RelevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = markdown.Transform(xsd.Text), Relevance = xsd.Relevance });
-                                }
-                            }
-                        }
-                    }
+                    //知识库问答
+                    await SendKms(questions, msg, app);
                     break;
             }
 
             return await Task.FromResult(true);
+        }
+
+        /// <summary>
+        /// 发送知识库问答
+        /// </summary>
+        /// <param name="questions"></param>
+        /// <param name="msg"></param>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        private async Task SendKms(string questions, string msg, Apps app)
+        {
+            //知识库问答
+            var filters = new List<MemoryFilter>();
+
+            var kmsidList = app.KmsIdList.Split(",");
+            foreach (var kmsid in kmsidList)
+            {
+                filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
+            }
+
+            var kmsResult = await _memory.AskAsync(msg, index: "kms", filters: filters);
+            if (kmsResult != null)
+            {
+                if (!string.IsNullOrEmpty(kmsResult.Result))
+                {
+                    string answers = kmsResult.Result;
+                    var markdown = new Markdown();
+                    string htmlAnswers = markdown.Transform(answers);
+                    var info1 = new MessageInfo()
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        Questions = questions,
+                        Answers = answers,
+                        HtmlAnswers = htmlAnswers,
+                        CreateTime = DateTime.Now,
+                    };
+                    MessageList.Add(info1);
+                }
+
+                foreach (var x in kmsResult.RelevantSources)
+                {
+                    foreach (var xsd in x.Partitions)
+                    {
+                        var markdown = new Markdown();
+                        string sourceName = x.SourceName;
+                        var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == x.SourceName);
+                        if (fileDetail.IsNotNull())
+                        {
+                            sourceName = fileDetail.FileName;
+                        }
+                        RelevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = markdown.Transform(xsd.Text), Relevance = xsd.Relevance });
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 发送普通对话
+        /// </summary>
+        /// <param name="questions"></param>
+        /// <param name="msg"></param>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        private async Task SendChat(string questions, string msg, Apps app)
+        {
+            var promptTemplateFactory = new KernelPromptTemplateFactory();
+            var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
+            var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
+
+            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings());
+            var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
+            MessageInfo info = null;
+            var markdown = new Markdown();
+            await foreach (var content in chatResult)
+            {
+                if (info == null)
+                {
+                    info = new MessageInfo();
+                    info.ID = Guid.NewGuid().ToString();
+                    info.Questions = questions;
+                    info.Answers = content.Content!;
+                    info.HtmlAnswers = content.Content!;
+                    info.CreateTime = DateTime.Now;
+
+                    MessageList.Add(info);
+                }
+                else
+                {
+                    info.HtmlAnswers += content.Content;
+                }
+                await InvokeAsync(StateHasChanged);
+            }
+            //全部处理完后再处理一次Markdown
+            info!.HtmlAnswers = markdown.Transform(info.HtmlAnswers);
+            await InvokeAsync(StateHasChanged);
+        }
+
+        /// <summary>
+        /// 历史会话的会话总结
+        /// </summary>
+        /// <param name="questions"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        private async Task<string> HistorySummarize(string questions, string msg)
+        {
+            StringBuilder history = new StringBuilder();
+            foreach (var item in MessageList)
+            {
+                history.Append($"user:{item.Questions}{Environment.NewLine}");
+                history.Append($"assistant:{item.Answers}{Environment.NewLine}");
+            }
+
+            KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
+            var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
+            string his = summary.GetValue<string>();
+            msg = $"历史对话:{his}{Environment.NewLine}{questions}"; ;
+            return msg;
         }
     }
 
