@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.KernelMemory;
 using Microsoft.OpenApi.Models;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
 using SqlSugar;
@@ -37,6 +38,7 @@ namespace AntSK.Pages.ChatPage
         protected List<MessageInfo> MessageList = [];
         protected string? _messageInput;
         protected string _json = "";
+        protected bool Sendding = false;
 
         List<RelevantSource> RelevantSources = new List<RelevantSource>();
 
@@ -60,8 +62,10 @@ namespace AntSK.Pages.ChatPage
                 return;
             }
 
+            Sendding = true;
             await SendAsync(_messageInput);
             _messageInput = "";
+            Sendding = false;
 
         }
         protected async Task OnCopyAsync(MessageInfo item)
@@ -86,70 +90,82 @@ namespace AntSK.Pages.ChatPage
             switch (app.Type)
             {
                 case "chat":
-                    //普通会话
-                    var promptTemplateFactory = new KernelPromptTemplateFactory();
-                    var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
-                    var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
-
-                    var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings() );
-                    var chatResult = await _kernel.InvokeAsync(func,new KernelArguments() { ["input"]=questions});
-                    if (chatResult.IsNotNull())
                     {
-                        string answers = chatResult.GetValue<string>();
-                        var markdown = new Markdown();
-                        string htmlAnswers = markdown.Transform(answers);
-                        var info = new MessageInfo()
-                        {
-                            ID = Guid.NewGuid().ToString(),
-                            Questions = questions,
-                            Answers = answers,
-                            HtmlAnswers = htmlAnswers,
-                            CreateTime = DateTime.Now,
-                        };
-                        MessageList.Add(info);
-                    }
+                        //普通会话
+                        var promptTemplateFactory = new KernelPromptTemplateFactory();
+                        var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
+                        var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
 
+                        var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings());
+                        var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = questions });
+                        MessageInfo info = null;
+                        var markdown = new Markdown();
+                        await foreach (var content in chatResult)
+                        {
+                            if (info == null)
+                            {
+                                info = new MessageInfo();
+                                info.ID = Guid.NewGuid().ToString();
+                                info.Questions = questions;
+                                info.Answers = content.Content!;
+                                info.HtmlAnswers = content.Content!;
+                                info.CreateTime = DateTime.Now;
+
+                                MessageList.Add(info);
+                            }
+                            else
+                            {
+                                info.HtmlAnswers += content.Content;
+                            }
+                            await InvokeAsync(StateHasChanged);
+                        }
+                        //全部处理完后再处理一次Markdown
+                        info!.HtmlAnswers = markdown.Transform(info.HtmlAnswers);
+                        await InvokeAsync(StateHasChanged);
+                    }
                     break;
                 case "kms":
-                    //知识库问答
-                    var filters = new List<MemoryFilter>();
-
-                    var kmsidList = app.KmsIdList.Split(",");
-                    foreach (var kmsid in kmsidList)
                     {
-                        filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
-                    }
+                        //知识库问答
+                        var filters = new List<MemoryFilter>();
 
-                    var kmsResult = await _memory.AskAsync(questions, index: "kms", filters: filters);
-                    if (kmsResult != null)
-                    {
-                        if (!string.IsNullOrEmpty(kmsResult.Result))
+                        var kmsidList = app.KmsIdList.Split(",");
+                        foreach (var kmsid in kmsidList)
                         {
-                            string answers = kmsResult.Result;
-                            var markdown = new Markdown();
-                            string htmlAnswers = markdown.Transform(answers);
-                            var info = new MessageInfo()
-                            {
-                                ID = Guid.NewGuid().ToString(),
-                                Questions = questions,
-                                Answers = answers,
-                                HtmlAnswers = htmlAnswers,
-                                CreateTime = DateTime.Now,
-                            };
-                            MessageList.Add(info);
+                            filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
                         }
-     
-                        foreach (var x in kmsResult.RelevantSources)
+
+                        var kmsResult = await _memory.AskAsync(questions, index: "kms", filters: filters);
+                        if (kmsResult != null)
                         {
-                            foreach (var xsd in x.Partitions)
+                            if (!string.IsNullOrEmpty(kmsResult.Result))
                             {
-                                string sourceName = x.SourceName;
-                                var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == x.SourceName);
-                                if (fileDetail.IsNotNull())
+                                string answers = kmsResult.Result;
+                                var markdown = new Markdown();
+                                string htmlAnswers = markdown.Transform(answers);
+                                var info1 = new MessageInfo()
                                 {
-                                    sourceName = fileDetail.FileName;
+                                    ID = Guid.NewGuid().ToString(),
+                                    Questions = questions,
+                                    Answers = answers,
+                                    HtmlAnswers = htmlAnswers,
+                                    CreateTime = DateTime.Now,
+                                };
+                                MessageList.Add(info1);
+                            }
+
+                            foreach (var x in kmsResult.RelevantSources)
+                            {
+                                foreach (var xsd in x.Partitions)
+                                {
+                                    string sourceName = x.SourceName;
+                                    var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == x.SourceName);
+                                    if (fileDetail.IsNotNull())
+                                    {
+                                        sourceName = fileDetail.FileName;
+                                    }
+                                    RelevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = xsd.Text, Relevance = xsd.Relevance });
                                 }
-                                RelevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = xsd.Text, Relevance = xsd.Relevance });
                             }
                         }
                     }

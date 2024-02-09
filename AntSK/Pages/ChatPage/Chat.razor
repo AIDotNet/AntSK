@@ -47,10 +47,10 @@
                             </GridRow>
                         </div>
                         <div style="height: 10px;"></div>
-                        <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())">
-                            <Suffix>
-                                <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())"></Button>
-                            </Suffix>
+                        <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding">
+                                <Suffix>
+                                <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
+                                </Suffix>
                         </AntDesign.Input>
                     </Body>
                 </Card>
