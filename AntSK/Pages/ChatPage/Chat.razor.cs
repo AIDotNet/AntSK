@@ -4,6 +4,7 @@ using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using Azure.AI.OpenAI;
 using Azure.Core;
+using DocumentFormat.OpenXml.EMMA;
 using MarkdownSharp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.KernelMemory;
@@ -158,13 +159,14 @@ namespace AntSK.Pages.ChatPage
                             {
                                 foreach (var xsd in x.Partitions)
                                 {
+                                    var markdown = new Markdown();
                                     string sourceName = x.SourceName;
                                     var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == x.SourceName);
                                     if (fileDetail.IsNotNull())
                                     {
                                         sourceName = fileDetail.FileName;
                                     }
-                                    RelevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = xsd.Text, Relevance = xsd.Relevance });
+                                    RelevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = markdown.Transform(xsd.Text), Relevance = xsd.Relevance });
                                 }
                             }
                         }

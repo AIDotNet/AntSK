@@ -68,9 +68,9 @@
                 <AntList Bordered DataSource="@RelevantSources">
                      <ChildContent Context="item">
                         <span> <b>@item.SourceName </b>  相似度：<Text Mark> @item.Relevance</Text></span>
-                         <ListItem>
-                            @item.Text
-                        </ListItem>
+                        <Body>
+                            @((MarkupString)(@item.Text))
+                        </Body>
                     </ChildContent>
                 </AntList>
                 </Body>
