@@ -13,10 +13,9 @@ using Microsoft.KernelMemory.ContentStorage.DevTools;
 using Microsoft.KernelMemory.FileSystem.DevTools;
 using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
-using System.Configuration;
 using Microsoft.KernelMemory.Postgres;
 using AntSK.Domain.Repositories;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.SemanticKernel.Plugins.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -131,6 +130,7 @@ void InitSK(WebApplicationBuilder builder)
           apiKey: OpenAIOption.Key,
           httpClient: new HttpClient(handler))
           .Build();
+        RegisterPluginsWithKernel(kernel);
         return kernel;
     });
     //Kernel Memory
@@ -164,5 +164,10 @@ void InitSK(WebApplicationBuilder builder)
            .Build<MemoryServerless>();
         return memory;
     });
+}
+ void RegisterPluginsWithKernel(Kernel kernel)
+{
+    kernel.ImportPluginFromObject(new ConversationSummaryPlugin(), "ConversationSummaryPlugin");
+    kernel.ImportPluginFromObject(new TimePlugin(), "TimePlugin");
 }
 

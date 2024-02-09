@@ -15,6 +15,7 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
 using SqlSugar;
 using System;
+using System.Text;
 
 namespace AntSK.Pages.ChatPage
 {
@@ -87,6 +88,23 @@ namespace AntSK.Pages.ChatPage
 
         protected async Task<bool> SendAsync(string questions)
         {
+            string msg = questions;
+            //处理多轮会话
+            if (MessageList.Count > 0)
+            {
+                StringBuilder history =new StringBuilder();
+                foreach (var item in MessageList)
+                {
+                    history.Append($"user:{item.Questions}{Environment.NewLine}");
+                    history.Append($"assistant:{item.Answers}{Environment.NewLine}");
+                }
+
+                KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
+                var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
+                string his= summary.GetValue<string>();
+                msg = $"历史对话:{his}{Environment.NewLine}{questions}";;
+            }
+
             Apps app=_apps_Repositories.GetFirst(p => p.Id == AppId);
             switch (app.Type)
             {
@@ -98,7 +116,7 @@ namespace AntSK.Pages.ChatPage
                         var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
 
                         var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings());
-                        var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = questions });
+                        var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
                         MessageInfo info = null;
                         var markdown = new Markdown();
                         await foreach (var content in chatResult)
@@ -136,7 +154,7 @@ namespace AntSK.Pages.ChatPage
                             filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
                         }
 
-                        var kmsResult = await _memory.AskAsync(questions, index: "kms", filters: filters);
+                        var kmsResult = await _memory.AskAsync(msg, index: "kms", filters: filters);
                         if (kmsResult != null)
                         {
                             if (!string.IsNullOrEmpty(kmsResult.Result))
