@@ -31,6 +31,8 @@ AntSK 适用于多种业务场景，例如：
 
 ## 功能示例
 
+[视频示例](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
+
 首先需要创建知识库
 ![知识库](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93.png)
 
