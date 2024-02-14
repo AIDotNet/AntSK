@@ -174,6 +174,11 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task SendChat(string questions, string msg, Apps app)
         {
+            if (string.IsNullOrEmpty(app.Prompt))
+            {
+                //如果模板为空，给默认提示词
+                app.Prompt = "{{$input}}";
+            }
             var promptTemplateFactory = new KernelPromptTemplateFactory();
             var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
             var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
