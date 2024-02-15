@@ -113,7 +113,7 @@ Let's see the effect
 
 ## How do I get started?
 
-
+Login is the default login account and password
 
 Here I use Postgres as data storage and vector storage, because both the Semantic Kernel and Kernel Memory support it. Of course, you can switch to other ones.
 
@@ -147,6 +147,10 @@ Postgres:{
 
 "TableNamePrefix": "km -"
 
+},
+"Login": {
+  "User": "admin",
+  "Password": "xuzeyu"
 }
 
 ```
