@@ -3,6 +3,8 @@
 @using System.ComponentModel.DataAnnotations
 @page "/Kms/Detail/{KmsID}"
 @inject NavigationManager NavigationManager
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
 
 <div>
     <PageContainer Title="知识库文档">

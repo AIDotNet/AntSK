@@ -1,13 +1,32 @@
-<Router AppAssembly="@typeof(Program).Assembly">
-    <Found Context="routeData">
-        <CascadingValue Value="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)" />
-        </CascadingValue>
-    </Found>
-    <NotFound>
-        <LayoutView Layout="@typeof(BasicLayout)">
-            <p>Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
-<AntContainer />
+@inject NavigationManager NavigationManager
+@using Microsoft.AspNetCore.Components.Authorization 
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <CascadingValue Value="routeData">
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)" />
+            </CascadingValue>
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(BasicLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+    <AntContainer />
+</CascadingAuthenticationState>
+
+@code {
+    private RenderFragment RedirectToLogin => builder =>
+    {
+        var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        if (string.IsNullOrWhiteSpace(returnUrl))
+        {
+            NavigationManager.NavigateTo("user/login");
+        }
+        else
+        {
+            NavigationManager.NavigateTo($"user/login?returnUrl={Uri.EscapeDataString(returnUrl)}", true);
+        }
+    };
+}

@@ -1,6 +1,8 @@
 ﻿@namespace AntSK.Pages
 @using MarkdownSharp
 @page "/"
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
 
 <Body>
     @((MarkupString)(body))

@@ -16,6 +16,8 @@ using Microsoft.SemanticKernel;
 using Microsoft.KernelMemory.Postgres;
 using AntSK.Domain.Repositories;
 using Microsoft.SemanticKernel.Plugins.Core;
+using Microsoft.AspNetCore.Components.Authorization;
+using AntSK.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -31,6 +33,10 @@ builder.Services.AddControllers().AddJsonOptions(config =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddAntDesign();
+
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, AntSKAuthProvider>();
+
 builder.Services.AddScoped(sp => new HttpClient
 {
     BaseAddress = new Uri(sp.GetService<NavigationManager>()!.BaseUri)
@@ -42,6 +48,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddServicesFromAssemblies("AntSK.Domain");
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "AntSK.Api", Version = "v1" });
@@ -71,6 +78,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     builder.Configuration.GetSection("ConnectionStrings").Get<ConnectionOption>();
     builder.Configuration.GetSection("OpenAIOption").Get<OpenAIOption>();
+    builder.Configuration.GetSection("Login").Get<LoginOption>();
 }
 InitSK(builder);
 var app = builder.Build();

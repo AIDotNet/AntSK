@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using AntSK.Models;
 using AntSK.Services;
+using AntSK.Domain.Options;
+using SqlSugar;
+using AntSK.Services.Auth;
 
 namespace AntSK.Pages.User
 {
@@ -16,21 +19,18 @@ namespace AntSK.Pages.User
 
         [Inject] public MessageService Message { get; set; }
 
-        public void HandleSubmit()
+        public async Task HandleSubmit()
         {
-            if (_model.UserName == "admin" && _model.Password == "ant.design")
+            var loginFailed = await((AntSKAuthProvider)AuthenticationStateProvider).SignIn(_model.UserName, _model.Password);
+            if (loginFailed)
             {
                 NavigationManager.NavigateTo("/");
                 return;
             }
-
-            if (_model.UserName == "user" && _model.Password == "ant.design") NavigationManager.NavigateTo("/");
-        }
-
-        public async Task GetCaptcha()
-        {
-            var captcha = await AccountService.GetCaptchaAsync(_model.Mobile);
-            await Message.Success($"Verification code validated successfully! The verification code is: {captcha}");
-        }
+            else
+            {
+                Message.Error("账号密码错误", 2);
+            }
+        }  
     }
 }

@@ -3,6 +3,8 @@
 @using AntSK.Domain.Domain.Dto
 @page "/Kms/DetailList/{KmsID}/{FileId}"
 @inject NavigationManager NavigationManager
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
 
 
 <Button Type="@ButtonType.Primary" OnClick="NavigateBack">返回</Button>
