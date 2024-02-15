@@ -61,7 +61,7 @@ AntSK 适用于多种业务场景，例如：
 
 在这里我使用的是Postgres 作为数据存储和向量存储，因为Semantic Kernel和Kernel Memory都支持他，当然你也可以换成其他的。
 模型默认支持openai,如果需要使用azure openai需要调整SK的依赖注入，也可以使用one-api进行集成。
-user是默认的登陆账号和密码
+Login是默认的登陆账号和密码
 需要配置如下的配置文件
 ```
   "ConnectionStrings": {
