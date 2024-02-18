@@ -92,7 +92,7 @@ namespace AntSK.Pages.ChatPage
             //处理多轮会话
             if (MessageList.Count > 0)
             {
-                msg = await HistorySummarize(questions, msg);
+                msg = await HistorySummarize(questions);
             }
 
             Apps app=_apps_Repositories.GetFirst(p => p.Id == AppId);
@@ -216,9 +216,8 @@ namespace AntSK.Pages.ChatPage
         /// 历史会话的会话总结
         /// </summary>
         /// <param name="questions"></param>
-        /// <param name="msg"></param>
         /// <returns></returns>
-        private async Task<string> HistorySummarize(string questions, string msg)
+        private async Task<string> HistorySummarize(string questions)
         {
             StringBuilder history = new StringBuilder();
             foreach (var item in MessageList)
@@ -230,7 +229,7 @@ namespace AntSK.Pages.ChatPage
             KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
             var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
             string his = summary.GetValue<string>();
-            msg = $"历史对话:{his}{Environment.NewLine}{questions}"; ;
+            var msg = $"历史对话：{his}{Environment.NewLine} 用户问题：{Environment.NewLine}{questions}"; ;
             return msg;
         }
     }

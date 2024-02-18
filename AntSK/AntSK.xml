@@ -21,7 +21,12 @@
             对外接口
             </summary>
         </member>
-        <member name="M:AntSK.Controllers.OpenController.chat(AntSK.Domain.Model.OpenAIModel)">
+        <member name="M:AntSK.Controllers.OpenController.#ctor(AntSK.Services.OpenApi.IOpenApiService)">
+            <summary>
+            对外接口
+            </summary>
+        </member>
+        <member name="M:AntSK.Controllers.OpenController.chat(AntSK.Models.OpenAIModel)">
             <summary>
             对话接口
             </summary>
@@ -45,12 +50,11 @@
             <param name="app"></param>
             <returns></returns>
         </member>
-        <member name="M:AntSK.Pages.ChatPage.Chat.HistorySummarize(System.String,System.String)">
+        <member name="M:AntSK.Pages.ChatPage.Chat.HistorySummarize(System.String)">
             <summary>
             历史会话的会话总结
             </summary>
             <param name="questions"></param>
-            <param name="msg"></param>
             <returns></returns>
         </member>
         <member name="T:AntSK.Pages.KmsPage.KmsDetail.UrlModel">
@@ -58,6 +62,32 @@
             根据文档ID获取文档
             </summary>
             <param name="fileid"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Services.OpenApi.OpenApiService.SendKms(System.String,AntSK.Domain.Repositories.Apps)">
+            <summary>
+            发送知识库问答
+            </summary>
+            <param name="questions"></param>
+            <param name="msg"></param>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Services.OpenApi.OpenApiService.SendChat(System.String,AntSK.Domain.Repositories.Apps)">
+            <summary>
+            发送普通对话
+            </summary>
+            <param name="questions"></param>
+            <param name="msg"></param>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Services.OpenApi.OpenApiService.HistorySummarize(AntSK.Models.OpenAIModel)">
+            <summary>
+            历史会话的会话总结
+            </summary>
+            <param name="questions"></param>
+            <param name="msg"></param>
             <returns></returns>
         </member>
     </members>

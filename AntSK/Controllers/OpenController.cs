@@ -1,5 +1,9 @@
 ﻿using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
+using AntSK.Domain.Utils;
+using AntSK.Models;
+using AntSK.Models.OpenAPI;
+using AntSK.Services.OpenApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +13,8 @@ namespace AntSK.Controllers
     /// <summary>
     /// 对外接口
     /// </summary>
-    [Route("api/[controller]")]
     [ApiController]
-    public class OpenController : ControllerBase
+    public class OpenController(IOpenApiService _openApiService) : ControllerBase
     {
         /// <summary>
         /// 对话接口
@@ -19,10 +22,11 @@ namespace AntSK.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/v1/chat/completions")]
-        public IActionResult chat(OpenAIModel model)
+        public async Task<IActionResult> chat(OpenAIModel model)
         {
-            
-            return Ok();
+            string sk = HttpContext.Request.Headers["Authorization"].ConvertToString();
+            var result=await _openApiService.Chat(model,sk);
+            return Ok(result);
         }
     }
 }
