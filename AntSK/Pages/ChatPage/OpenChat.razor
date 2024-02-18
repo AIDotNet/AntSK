@@ -1,0 +1,45 @@
+﻿@namespace AntSK.Pages.ChatPage
+@using AntSK.Domain.Repositories
+@using AntSK.Models
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@page "/OpenChat/{AppId}"
+@layout OpenLayout
+
+<div id="chat" style="display:flex; flex-direction:column; height:100%; overflow-x:hidden;">
+    <PageHeader Class="site-page-header" Title="@app.Name" Subtitle="@app.Describe" />
+    <div id="scrollDiv" style="flex:1; width:100%; overflow-y:auto; overflow-x:hidden;padding:10px;">
+        <Virtualize Items="@(MessageList.OrderByDescending(o => o.CreateTime).ToList())" Context="item">
+            <GridCol Span="24">
+                <Card>
+                    <TitleTemplate>
+                        <Text Strong><Icon Type="bulb" />@(item.Questions)</Text>
+                    </TitleTemplate>
+                    <Extra>
+                        <Space>
+                            <SpaceItem>
+                                <a style="color: gray;" @onclick="@(() => OnCopyAsync(item))"><Icon Type="copy" /></a>
+                            </SpaceItem>
+                            <SpaceItem>
+                                <a style="color: gray;" @onclick="@(() => OnClearAsync(item.ID))"><Icon Type="rest" /></a>
+                            </SpaceItem>
+                        </Space>
+                    </Extra>
+                    <Body>
+                        @((MarkupString)(item.HtmlAnswers))
+                    </Body>
+                </Card>
+            </GridCol>
+        </Virtualize>
+    </div>
+    <div style="flex-shrink:0;margin:10px;">
+        <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding">
+            <Suffix>
+                <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
+            </Suffix>
+        </AntDesign.Input>
+    </div>
+</div>
+
+@code {
+
+}
