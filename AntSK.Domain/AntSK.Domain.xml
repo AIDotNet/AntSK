@@ -102,6 +102,11 @@
             知识库ID列表
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.SecretKey">
+            <summary>
+            API调用秘钥
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.KmsDetails.FileName">
             <summary>
             文件名称

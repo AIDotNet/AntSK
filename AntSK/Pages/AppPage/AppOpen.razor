@@ -1,0 +1,46 @@
+﻿@namespace AntSK.Pages.AppPage
+@page "/App/Open/{AppID}"
+
+
+ <AntDesign.Col Lg="24" Md="24">
+    <Card Class="tabsCard">
+        <CardTabs>
+            <Tabs DefaultActiveKey="1">
+                <TabPane Key="1">
+                    <TabTemplate>Api访问</TabTemplate>
+                    <ChildContent>
+                        <Card>
+                            <Form Model="@_appModel"
+                                  Style="margin-top: 8px;"
+                                  >
+                                <FormItem Label="接口地址" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@_openApiUrl" ReadOnly="true" />
+                                    
+                                </FormItem>
+                                <FormItem Label="秘钥" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <Input @bind-Value="@context.SecretKey" ReadOnly="true" />
+                                    <Button OnClick="Reset" Style="margin-top:5px;">
+                                        重置
+                                    </Button>
+                                </FormItem>
+                                 <FormItem Label="使用方法" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                    <TextArea @bind-Value="@_desc" ReadOnly="true" Rows="10" />
+                                </FormItem>
+                            </Form>
+                        </Card>
+                    </ChildContent>
+                </TabPane>
+                <TabPane Key="2">
+                    <TabTemplate>免登录窗口</TabTemplate>
+                    <ChildContent>
+
+                    </ChildContent>
+                </TabPane>                 
+            </Tabs>
+        </CardTabs>
+    </Card>
+</AntDesign.Col>
+
+@code {
+
+}

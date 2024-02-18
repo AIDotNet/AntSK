@@ -16,6 +16,17 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:AntSK.Controllers.OpenController">
+            <summary>
+            对外接口
+            </summary>
+        </member>
+        <member name="M:AntSK.Controllers.OpenController.chat">
+            <summary>
+            对话接口
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AntSK.Pages.ChatPage.Chat.SendKms(System.String,System.String,AntSK.Domain.Repositories.Apps)">
             <summary>
             发送知识库问答

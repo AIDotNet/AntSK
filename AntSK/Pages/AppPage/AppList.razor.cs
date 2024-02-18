@@ -65,6 +65,10 @@ namespace AntSK.Pages
             NavigationManager.NavigateTo($"/app/add/{id}");
         }
 
+        private void Open(string id)
+        {
+            NavigationManager.NavigateTo($"/app/open/{id}");
+        }
 
 
         private async Task Delete(string id)

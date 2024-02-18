@@ -32,7 +32,9 @@
                     {
                         <Card Hoverable Bordered Class="card" Actions="@(new[] {
                             info(()=> Info(context.Id)) ,
+                            open(()=> Open(context.Id)),
                             delete(async ()=>await Delete(context.Id)) ,
+                       
                              })" Style="max-height:247px;">
                              <CardMeta>
                                  <AvatarTemplate>
@@ -68,5 +70,6 @@
 @code
 {
     RenderFragment info(Action clickAction) =>@<a key="info" @onclick="@clickAction">查看</a>;
+    RenderFragment open(Action clickAction) =>@<a key="info" @onclick="@clickAction">外部使用</a>;
     RenderFragment delete(Action clickAction) => @<a key="delete" @onclick="@clickAction">删除</a> ;
 }

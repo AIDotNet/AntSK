@@ -39,5 +39,9 @@ namespace AntSK.Domain.Repositories
         /// 知识库ID列表
         /// </summary>
         public string? KmsIdList { get; set; }
+        /// <summary>
+        /// API调用秘钥
+        /// </summary>
+        public string? SecretKey { get; set; }
     }
 }

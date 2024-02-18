@@ -68,6 +68,8 @@ namespace AntSK.Pages.AppPage
             {
                 //新增
                 _appModel.Id = Guid.NewGuid().ToString();
+                //秘钥
+                _appModel.SecretKey="sk-"+ Guid.NewGuid().ToString();
                 if (_apps_Repositories.IsAny(p => p.Name == _appModel.Name))
                 {
                     _errorMsg = "名称已存在！";
