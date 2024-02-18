@@ -57,6 +57,31 @@
             <param name="questions"></param>
             <returns></returns>
         </member>
+        <member name="M:AntSK.Pages.ChatPage.OpenChat.SendKms(System.String,System.String,AntSK.Domain.Repositories.Apps)">
+            <summary>
+            发送知识库问答
+            </summary>
+            <param name="questions"></param>
+            <param name="msg"></param>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Pages.ChatPage.OpenChat.SendChat(System.String,System.String,AntSK.Domain.Repositories.Apps)">
+            <summary>
+            发送普通对话
+            </summary>
+            <param name="questions"></param>
+            <param name="msg"></param>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Pages.ChatPage.OpenChat.HistorySummarize(System.String)">
+            <summary>
+            历史会话的会话总结
+            </summary>
+            <param name="questions"></param>
+            <returns></returns>
+        </member>
         <member name="T:AntSK.Pages.KmsPage.KmsDetail.UrlModel">
             <summary>
             根据文档ID获取文档

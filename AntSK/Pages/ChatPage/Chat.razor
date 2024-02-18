@@ -7,12 +7,12 @@
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
 
- <GridRow Gutter="(16, 16)">
-        <GridCol Span="12">
-            <Spin Size="large" Tip="请稍等..." Spinning="@(_loading)">
-                <Card Style="height:800px;overflow: auto;">
-                    <TitleTemplate>
-                        <Icon Type="setting" /> 选择应用
+<GridRow Gutter="(16, 16)">
+    <GridCol Span="12">
+        <Spin Size="large" Tip="请稍等..." Spinning="@(_loading)">
+            <Card Style="height:800px;overflow: auto;">
+                <TitleTemplate>
+                    <Icon Type="setting" /> 选择应用
                     <Select DataSource="@_list"
                             @bind-Value="@AppId"
                             DefaultValue="@("lucy")"
@@ -20,67 +20,67 @@
                             LabelProperty="c=>c.Name"
                             Style="width:200px">
                     </Select>
-                    </TitleTemplate>
-                     <Body>
-                         <div id="scrollDiv" style="height: 530px; overflow-y: auto; overflow-x: hidden;">
-                             <GridRow Gutter="(8, 8)">
-                                 <Virtualize Items="@(MessageList.OrderByDescending(o => o.CreateTime).ToList())" Context="item">
-                                     <GridCol Span="24">
-                                         <Card Size="small">
-                                             <TitleTemplate>
-                                                 <Text Strong><Icon Type="bulb" /> @(item.Questions)</Text>
-                                            </TitleTemplate>
-                                            <Extra>
-                                                <Space>
-                                                    <SpaceItem>
-                                                        <a style="color: gray;" @onclick="@(() => OnCopyAsync(item))"><Icon Type="copy" /></a>
-                                                    </SpaceItem>
-                                                    <SpaceItem>
-                                                        <a style="color: gray;" @onclick="@(() => OnClearAsync(item.ID))"><Icon Type="rest" /></a>
-                                                    </SpaceItem>
-                                                </Space>
-                                            </Extra>
-                                            <Body>
-                                                @((MarkupString)(item.HtmlAnswers)) 
-                                            </Body>
-                                        </Card>
-                                    </GridCol>
-                                 </Virtualize>
-                            </GridRow>
-                        </div>
-                        <div style="height: 10px;"></div>
-                        <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding">
-                                <Suffix>
-                                <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
-                                </Suffix>
-                        </AntDesign.Input>
-                    </Body>
-                </Card>
-            </Spin>
-        </GridCol>
-        <GridCol Span="12">
-        <Card Style="height: 800px;overflow: auto;">
-                <TitleTemplate>
-                    <Icon Type="search" /> 调试结果
                 </TitleTemplate>
-                <Extra>
-
-                </Extra>
                 <Body>
+                    <div id="scrollDiv" style="height: 530px; overflow-y: auto; overflow-x: hidden;">
+                        <GridRow Gutter="(8, 8)">
+                            <Virtualize Items="@(MessageList.OrderByDescending(o => o.CreateTime).ToList())" Context="item">
+                                <GridCol Span="24">
+                                    <Card Size="small">
+                                        <TitleTemplate>
+                                            <Text Strong><Icon Type="bulb" /> @(item.Questions)</Text>
+                                        </TitleTemplate>
+                                        <Extra>
+                                            <Space>
+                                                <SpaceItem>
+                                                    <a style="color: gray;" @onclick="@(() => OnCopyAsync(item))"><Icon Type="copy" /></a>
+                                                </SpaceItem>
+                                                <SpaceItem>
+                                                    <a style="color: gray;" @onclick="@(() => OnClearAsync(item.ID))"><Icon Type="rest" /></a>
+                                                </SpaceItem>
+                                            </Space>
+                                        </Extra>
+                                        <Body>
+                                            @((MarkupString)(item.HtmlAnswers))
+                                        </Body>
+                                    </Card>
+                                </GridCol>
+                            </Virtualize>
+                        </GridRow>
+                    </div>
+                    <div style="height: 10px;"></div>
+                    <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding">
+                        <Suffix>
+                            <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
+                        </Suffix>
+                    </AntDesign.Input>
+                </Body>
+            </Card>
+        </Spin>
+    </GridCol>
+    <GridCol Span="12">
+        <Card Style="height: 800px;overflow: auto;">
+            <TitleTemplate>
+                <Icon Type="search" /> 调试结果
+            </TitleTemplate>
+            <Extra>
+
+            </Extra>
+            <Body>
                 <AntList Bordered DataSource="@RelevantSources">
                      <ChildContent Context="item">
-                        <span> <b>@item.SourceName </b>  相似度：<Text Mark> @item.Relevance</Text></span>
-                        <Body>
-                            @((MarkupString)(@item.Text))
-                        </Body>
-                    </ChildContent>
-                </AntList>
+                         <span> <b>@item.SourceName </b>  相似度：<Text Mark> @item.Relevance</Text></span>
+                            <Body>
+                                @((MarkupString)(@item.Text))
+                            </Body>
+                        </ChildContent>
+                    </AntList>
                 </Body>
             </Card>
         </GridCol>
     </GridRow>
 
 
-@code {
+    @code {
 
 }

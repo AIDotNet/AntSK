@@ -1,21 +1,19 @@
 ﻿@namespace AntSK.Pages.AppPage
 @page "/App/Open/{AppID}"
 
-
- <AntDesign.Col Lg="24" Md="24">
+<AntDesign.Col Lg="24" Md="24">
     <Card Class="tabsCard">
         <CardTabs>
             <Tabs DefaultActiveKey="1">
                 <TabPane Key="1">
-                    <TabTemplate>Api访问</TabTemplate>
+                    <TabTemplate>Api接入</TabTemplate>
                     <ChildContent>
                         <Card>
                             <Form Model="@_appModel"
-                                  Style="margin-top: 8px;"
-                                  >
+                                  Style="margin-top: 8px;">
                                 <FormItem Label="接口地址" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
                                     <Input @bind-Value="@_openApiUrl" ReadOnly="true" />
-                                    
+
                                 </FormItem>
                                 <FormItem Label="秘钥" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
                                     <Input @bind-Value="@context.SecretKey" ReadOnly="true" />
@@ -23,7 +21,7 @@
                                         重置
                                     </Button>
                                 </FormItem>
-                                 <FormItem Label="使用方法" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                <FormItem Label="使用方法" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
                                     <TextArea @bind-Value="@_desc" ReadOnly="true" Rows="15" />
                                 </FormItem>
                             </Form>
@@ -31,11 +29,27 @@
                     </ChildContent>
                 </TabPane>
                 <TabPane Key="2">
-                    <TabTemplate>免登录窗口</TabTemplate>
+                    <TabTemplate>页面嵌入</TabTemplate>
                     <ChildContent>
-
+                        <Form Model="@_appModel"
+                              Style="margin-top: 8px;">
+                            <FormItem Label="页面地址" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                <Input @bind-Value="@_openChatUrl" ReadOnly="true" />
+                                <a href="@_openChatUrl" target="_blank">打开</a>
+                            </FormItem>
+                            <FormItem Label="嵌入脚本" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                                <TextArea @bind-Value="@_script" ReadOnly="true" Rows="5" />
+                                <span>
+                                    将上述代码添加到站点的 body 中<br/>
+                                    data-width：宽度，默认 30rem<br />
+                                    data-height：高度，默认 50rem<br />
+                                    data-message-icon-url:嵌入消息图标地址，默认不设置<br />
+                                    data-color：消息图标颜色，默认 #4e83fd<br />
+                                </span>
+                            </FormItem>
+                        </Form>
                     </ChildContent>
-                </TabPane>                 
+                </TabPane>
             </Tabs>
         </CardTabs>
     </Card>
