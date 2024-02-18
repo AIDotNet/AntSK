@@ -21,7 +21,7 @@
             对外接口
             </summary>
         </member>
-        <member name="M:AntSK.Controllers.OpenController.chat">
+        <member name="M:AntSK.Controllers.OpenController.chat(AntSK.Domain.Model.OpenAIModel)">
             <summary>
             对话接口
             </summary>

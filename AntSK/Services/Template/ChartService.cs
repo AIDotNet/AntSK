@@ -1,7 +1,9 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Models;
+using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 
 namespace AntSK.Services
 {
@@ -12,7 +14,7 @@ namespace AntSK.Services
         Task<ChartDataItem[]> GetSalesDataAsync();
         Task<RadarDataItem[]> GetRadarDataAsync();
     }
-
+    [ServiceDescription(typeof(IChartService), ServiceLifetime.Scoped)]
     public class ChartService : IChartService
     {
         private readonly HttpClient _httpClient;

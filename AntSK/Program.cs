@@ -42,11 +42,7 @@ builder.Services.AddScoped(sp => new HttpClient
     BaseAddress = new Uri(sp.GetService<NavigationManager>()!.BaseUri)
 });
 builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSettings"));
-builder.Services.AddScoped<IChartService, ChartService>();
-builder.Services.AddScoped<IProjectService, ProjectService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddServicesFromAssemblies("AntSK");
 builder.Services.AddServicesFromAssemblies("AntSK.Domain");
 
 builder.Services.AddSwaggerGen(c =>

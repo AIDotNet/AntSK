@@ -1,4 +1,5 @@
-﻿using AntSK.Domain.Repositories;
+﻿using AntSK.Domain.Model;
+using AntSK.Domain.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +19,9 @@ namespace AntSK.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/v1/chat/completions")]
-        public IActionResult chat()
+        public IActionResult chat(OpenAIModel model)
         {
-         
+            
             return Ok();
         }
     }

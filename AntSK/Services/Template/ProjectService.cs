@@ -2,7 +2,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Models;
+using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 
 namespace AntSK.Services
 {
@@ -13,7 +15,7 @@ namespace AntSK.Services
         Task<ListItemDataType[]> GetFakeListAsync(int count = 0);
         Task<NoticeItem[]> GetNoticesAsync();
     }
-
+    [ServiceDescription(typeof(IProjectService), ServiceLifetime.Scoped)]
     public class ProjectService : IProjectService
     {
         private readonly HttpClient _httpClient;

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AntSK.Domain.Common.DependencyInjection;
+using AntSK.Domain.Repositories;
 using AntSK.Models;
+using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 
 namespace AntSK.Services
 {
@@ -10,6 +13,7 @@ namespace AntSK.Services
         Task<string> GetCaptchaAsync(string modile);
     }
 
+    [ServiceDescription(typeof(IAccountService), ServiceLifetime.Scoped)]
     public class AccountService : IAccountService
     {
         private readonly Random _random = new Random();
