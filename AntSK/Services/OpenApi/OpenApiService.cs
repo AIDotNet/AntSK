@@ -83,8 +83,7 @@ namespace AntSK.Services.OpenApi
                 if (!string.IsNullOrEmpty(kmsResult.Result))
                 {
                     string answers = kmsResult.Result;
-                    var markdown = new Markdown();
-                    result = markdown.Transform(answers);     
+                    result = answers;     
                 }
             }
             return result;
@@ -114,8 +113,7 @@ namespace AntSK.Services.OpenApi
             if (chatResult.IsNotNull())
             {
                 string answers = chatResult.GetValue<string>();
-                var markdown = new Markdown();
-                result = markdown.Transform(answers);
+                result = answers;
             }
             return result;
         }
