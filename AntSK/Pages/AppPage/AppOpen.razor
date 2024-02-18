@@ -6,7 +6,7 @@
         <CardTabs>
             <Tabs DefaultActiveKey="1">
                 <TabPane Key="1">
-                    <TabTemplate>Api访问</TabTemplate>
+                    <TabTemplate>Api接入</TabTemplate>
                     <ChildContent>
                         <Card>
                             <Form Model="@_appModel"
@@ -29,7 +29,7 @@
                     </ChildContent>
                 </TabPane>
                 <TabPane Key="2">
-                    <TabTemplate>免登录窗口</TabTemplate>
+                    <TabTemplate>页面嵌入</TabTemplate>
                     <ChildContent>
                         <Form Model="@_appModel"
                               Style="margin-top: 8px;">
@@ -38,7 +38,14 @@
                                 <a href="@_openChatUrl" target="_blank">打开</a>
                             </FormItem>
                             <FormItem Label="嵌入脚本" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                                <TextArea @bind-Value="@_desc" ReadOnly="true" Rows="15" />
+                                <TextArea @bind-Value="@_script" ReadOnly="true" Rows="5" />
+                                <span>
+                                    将上述代码添加到站点的 body 中<br/>
+                                    data-width：宽度，默认 30rem<br />
+                                    data-height：高度，默认 50rem<br />
+                                    data-message-icon-url:嵌入消息图标地址，默认不设置<br />
+                                    data-color：消息图标颜色，默认 #4e83fd<br />
+                                </span>
                             </FormItem>
                         </Form>
                     </ChildContent>
