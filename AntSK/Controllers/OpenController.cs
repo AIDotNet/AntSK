@@ -22,11 +22,10 @@ namespace AntSK.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/v1/chat/completions")]
-        public async Task<IActionResult> chat(OpenAIModel model)
+        public async Task chat(OpenAIModel model)
         {
             string sk = HttpContext.Request.Headers["Authorization"].ConvertToString();
-            var result=await _openApiService.Chat(model,sk, HttpContext);
-            return Ok(result);
+            await _openApiService.Chat(model,sk, HttpContext);
         }
     }
 }

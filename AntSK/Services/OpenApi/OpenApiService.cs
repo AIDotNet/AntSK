@@ -19,12 +19,13 @@ using Azure.Core;
 using Microsoft.AspNetCore.Http.HttpResults;
 using AntDesign;
 using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace AntSK.Services.OpenApi
 {
     public interface IOpenApiService
     {
-        Task<OpenAIResult> Chat(OpenAIModel model, string sk, HttpContext HttpContext);
+        Task Chat(OpenAIModel model, string sk, HttpContext HttpContext);
     }
 
     [ServiceDescription(typeof(IOpenApiService), ServiceLifetime.Scoped)]
@@ -36,7 +37,7 @@ namespace AntSK.Services.OpenApi
         MemoryServerless _memory
         ) : IOpenApiService
     {
-        public async Task<OpenAIResult> Chat(OpenAIModel model,string sk, HttpContext HttpContext)
+        public async Task Chat(OpenAIModel model,string sk, HttpContext HttpContext)
         {
             OpenAIResult result = new OpenAIResult();
             result.created= DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -53,6 +54,7 @@ namespace AntSK.Services.OpenApi
                         if (model.stream)
                         {
                             await SendChatStream( HttpContext, result, app, msg);
+                            return;
                         }
                         else 
                         {
@@ -65,12 +67,14 @@ namespace AntSK.Services.OpenApi
                         break;
                 }
             }
-            return result;
+            await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
+            await HttpContext.Response.CompleteAsync();
         }
 
         private async Task SendChatStream( HttpContext HttpContext, OpenAIResult result, Apps app, string msg)
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
+
             if (string.IsNullOrEmpty(app.Prompt))
             {
                 //如果模板为空，给默认提示词
@@ -86,7 +90,7 @@ namespace AntSK.Services.OpenApi
 
             await foreach (var content in chatResult)
             {
-                result.choices[0].message.content = content.Content;
+                result.choices[0].message.content = content.Content.ConvertToString();
                 string message = $"data: {JsonConvert.SerializeObject(result)}\n\n";
                 await HttpContext.Response.WriteAsync(message, Encoding.UTF8);
                 await HttpContext.Response.Body.FlushAsync();
@@ -95,6 +99,7 @@ namespace AntSK.Services.OpenApi
             }
 
             await HttpContext.Response.WriteAsync("data: [DONE]");
+            await HttpContext.Response.Body.FlushAsync();
 
             await HttpContext.Response.CompleteAsync();
         }
