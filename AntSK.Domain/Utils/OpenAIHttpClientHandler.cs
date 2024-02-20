@@ -13,7 +13,7 @@ namespace AntSK.Domain.Utils
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             UriBuilder uriBuilder;
-            Regex regex = new Regex(@"(https?)://([^/]+)/(.*)");
+            Regex regex = new Regex(@"(https?)://([^/:]+)(:\d+)?/(.*)");
             Match match = regex.Match(OpenAIOption.EndPoint);
             string xieyi = match.Groups[1].Value;
             string host = match.Groups[2].Value;
