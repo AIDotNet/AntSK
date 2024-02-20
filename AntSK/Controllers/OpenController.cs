@@ -25,7 +25,7 @@ namespace AntSK.Controllers
         public async Task<IActionResult> chat(OpenAIModel model)
         {
             string sk = HttpContext.Request.Headers["Authorization"].ConvertToString();
-            var result=await _openApiService.Chat(model,sk);
+            var result=await _openApiService.Chat(model,sk, HttpContext);
             return Ok(result);
         }
     }

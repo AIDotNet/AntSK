@@ -9,6 +9,7 @@ namespace AntSK.Models
 {
     public class OpenAIModel
     {
+        public bool stream { get; set; } = false;
         public List<OpenAIMessage> messages { get; set; }
     }
 

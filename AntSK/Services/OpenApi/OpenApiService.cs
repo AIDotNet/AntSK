@@ -14,12 +14,17 @@ using System;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 using AntDesign.Core.Extensions;
 using Azure.AI.OpenAI;
+using Azure;
+using Azure.Core;
+using Microsoft.AspNetCore.Http.HttpResults;
+using AntDesign;
+using Newtonsoft.Json;
 
 namespace AntSK.Services.OpenApi
 {
     public interface IOpenApiService
     {
-        Task<OpenAIResult> Chat(OpenAIModel model, string sk);
+        Task<OpenAIResult> Chat(OpenAIModel model, string sk, HttpContext HttpContext);
     }
 
     [ServiceDescription(typeof(IOpenApiService), ServiceLifetime.Scoped)]
@@ -31,14 +36,12 @@ namespace AntSK.Services.OpenApi
         MemoryServerless _memory
         ) : IOpenApiService
     {
-        public async Task<OpenAIResult> Chat(OpenAIModel model,string sk)
+        public async Task<OpenAIResult> Chat(OpenAIModel model,string sk, HttpContext HttpContext)
         {
             OpenAIResult result = new OpenAIResult();
             result.created= DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             result.choices=new List<ChoicesModel>() { new ChoicesModel() { message=new OpenAIMessage() { role= "assistant" } } };
             Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == sk);
-
-
 
             if (app.IsNotNull())
             {
@@ -47,7 +50,14 @@ namespace AntSK.Services.OpenApi
                 {
                     case "chat":
                         //普通会话
-                        result.choices[0].message.content= await SendChat( msg, app);
+                        if (model.stream)
+                        {
+                            await SendChatStream( HttpContext, result, app, msg);
+                        }
+                        else 
+                        {
+                            result.choices[0].message.content = await SendChat(msg, app);
+                        }
                         break;
                     case "kms":
                         //知识库问答
@@ -57,6 +67,38 @@ namespace AntSK.Services.OpenApi
             }
             return result;
         }
+
+        private async Task SendChatStream( HttpContext HttpContext, OpenAIResult result, Apps app, string msg)
+        {
+            HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
+            if (string.IsNullOrEmpty(app.Prompt))
+            {
+                //如果模板为空，给默认提示词
+                app.Prompt = "{{$input}}";
+            }
+            var promptTemplateFactory = new KernelPromptTemplateFactory();
+            var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
+            var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
+
+            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings());
+            var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
+            int i = 0;
+
+            await foreach (var content in chatResult)
+            {
+                result.choices[0].message.content = content.Content;
+                string message = $"data: {JsonConvert.SerializeObject(result)}\n\n";
+                await HttpContext.Response.WriteAsync(message, Encoding.UTF8);
+                await HttpContext.Response.Body.FlushAsync();
+                //模拟延迟。
+                await Task.Delay(TimeSpan.FromMilliseconds(50));
+            }
+
+            await HttpContext.Response.WriteAsync("data: [DONE]");
+
+            await HttpContext.Response.CompleteAsync();
+        }
+
 
         /// <summary>
         /// 发送知识库问答
@@ -88,6 +130,8 @@ namespace AntSK.Services.OpenApi
             }
             return result;
         }
+
+
 
         /// <summary>
         /// 发送普通对话
