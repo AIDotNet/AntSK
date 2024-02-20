@@ -67,6 +67,7 @@ namespace AntSK.Services.OpenApi
                         break;
                 }
             }
+            HttpContext.Response.ContentType = "application/json";
             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
             await HttpContext.Response.CompleteAsync();
         }
