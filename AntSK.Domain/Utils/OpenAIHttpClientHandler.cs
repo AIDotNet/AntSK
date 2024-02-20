@@ -15,11 +15,18 @@ namespace AntSK.Domain.Utils
             UriBuilder uriBuilder;
             Regex regex = new Regex(@"(https?)://([^/:]+)(:\d+)?/(.*)");
             Match match = regex.Match(OpenAIOption.EndPoint);
-            string xieyi = match.Groups[1].Value;
-            string host = match.Groups[2].Value;
-            string route = match.Groups[3].Value;
+
             if (match.Success)
             {
+                string xieyi = match.Groups[1].Value;
+                string host = match.Groups[2].Value;
+                string port = match.Groups[3].Value; // 可选的端口号
+                string route = match.Groups[3].Value;
+                // 如果port不为空，它将包含冒号，所以你可能需要去除它
+                port = string.IsNullOrEmpty(port) ? port : port.Substring(1);
+                // 拼接host和端口号
+                host = string.IsNullOrEmpty(port) ? host : $"{host}:{port}";
+
                 switch (request.RequestUri.LocalPath)
                 {
                     case "/v1/chat/completions":
