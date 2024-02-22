@@ -63,6 +63,8 @@ AntSK 适用于多种业务场景，例如：
 模型默认支持openai,如果需要使用azure openai需要调整SK的依赖注入，也可以使用one-api进行集成。
 Login是默认的登陆账号和密码
 需要配置如下的配置文件
+### 需要注意的是PostgreSQL需要安装扩展vector 
+
 ```
   "ConnectionStrings": {
     "Postgres": "Host=;Port=;Database=antsk;Username=;Password="
