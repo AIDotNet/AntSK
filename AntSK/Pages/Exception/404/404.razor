@@ -1,10 +1,25 @@
 ﻿@namespace AntSK.Pages.Exception
 @page "/exception/404"
 
-<Result Status="404"
-        Title="404"
-        SubTitle="Sorry, the page you visited does not exist.">
-    <Extra>
-        <Button Type="primary">Back Home</Button>
-    </Extra>
-</Result>
+<div class="rail">
+    @for (var i = 0; i < StampCount; i++)
+    {
+        <div class="@((i % 2 == 0) ? "stamp zero" : "stamp four")">
+            @(i % 2 == 0 ? "4" : "0")
+        </div>
+    }
+    <div class="world">
+        <div class="forward">
+            <div class="box">
+                @for (var i = 0; i < 6; i++)
+                {
+                    <div class="wall"></div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int StampCount { get; set; } = 20; // 初始的循环次数
+}
