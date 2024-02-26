@@ -16,6 +16,19 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AntSK.Controllers.LLamaSharpController.chat(AntSK.Models.OpenAIModel)">
+            <summary>
+            本地会话接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Controllers.LLamaSharpController.embedding(AntSK.Models.OpenAIEmbeddingModel)">
+            <summary>
+            本地嵌入接口
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="T:AntSK.Controllers.OpenController">
             <summary>
             对外接口

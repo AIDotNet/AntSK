@@ -15,8 +15,14 @@ namespace AntSK.Models
 
     public class OpenAIMessage
     {
-        public string role { get; set; } 
+        public string role { get; set; }
 
         public string content { get; set; }
     }
+
+    public class OpenAIEmbeddingModel
+    {
+        public List<string> input { get; set; }
+    }
+
 }

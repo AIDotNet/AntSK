@@ -75,6 +75,7 @@ builder.Services.AddSwaggerGen(c =>
     builder.Configuration.GetSection("ConnectionStrings").Get<ConnectionOption>();
     builder.Configuration.GetSection("OpenAIOption").Get<OpenAIOption>();
     builder.Configuration.GetSection("Login").Get<LoginOption>();
+    builder.Configuration.GetSection("LLamaSharp").Get<LLamaSharpOption>();
 }
 InitSK(builder);
 var app = builder.Build();
