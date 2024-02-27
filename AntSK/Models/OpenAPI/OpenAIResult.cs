@@ -28,7 +28,7 @@ namespace AntSK.Models.OpenAPI
 
         public UsageModel usage { get; set; } = new UsageModel();
 
-        public DataModel data { get; set; } = new DataModel();
+        public  List<DataModel> data { get; set; } = new List<DataModel>() { new DataModel() };
     }
 
     public class UsageModel 

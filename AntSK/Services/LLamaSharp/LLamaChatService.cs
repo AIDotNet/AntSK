@@ -18,7 +18,7 @@ namespace AntSK.Services.LLamaSharp
     /// <summary>
     /// 
     /// </summary>
-    [ServiceDescription(typeof(ILLamaChatService), Domain.Common.DependencyInjection.ServiceLifetime.Scoped)]
+    [ServiceDescription(typeof(ILLamaChatService), Domain.Common.DependencyInjection.ServiceLifetime.Singleton)]
     public class LLamaChatService : IDisposable, ILLamaChatService
     {
         private readonly ChatSession _session;

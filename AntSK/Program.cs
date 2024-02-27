@@ -124,16 +124,18 @@ void InitDB(WebApplication app)
 
 //初始化SK
 void InitSK(WebApplicationBuilder builder)
-{
+{  
     var services = builder.Services;
     var handler = new OpenAIHttpClientHandler();
+    var httpClient = new HttpClient(handler);
+    httpClient.Timeout= TimeSpan.FromMinutes(5);
     services.AddScoped<Kernel>((serviceProvider) =>
     {
         var kernel = Kernel.CreateBuilder()
          .AddOpenAIChatCompletion(
           modelId: OpenAIOption.Model,
           apiKey: OpenAIOption.Key,
-          httpClient: new HttpClient(handler))
+          httpClient: httpClient)
           .Build();
         RegisterPluginsWithKernel(kernel);
         return kernel;
@@ -158,7 +160,7 @@ void InitSK(WebApplicationBuilder builder)
            .WithCustomTextPartitioningOptions(new Microsoft.KernelMemory.Configuration.TextPartitioningOptions
            {
                MaxTokensPerLine=99,
-               MaxTokensPerParagraph=299,
+               MaxTokensPerParagraph=99,
                OverlappingTokens=47
            })
            .WithOpenAITextGeneration(new OpenAIConfig()
@@ -166,13 +168,13 @@ void InitSK(WebApplicationBuilder builder)
                APIKey = OpenAIOption.Key,
                TextModel = OpenAIOption.Model
 
-           }, null, new HttpClient(handler))
+           }, null, httpClient)
            .WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
            {
                APIKey = OpenAIOption.Key,
                EmbeddingModel = OpenAIOption.EmbeddingModel
 
-           }, null, false, new HttpClient(handler))
+           }, null, false, httpClient)
            .Build<MemoryServerless>();
         return memory;
     });

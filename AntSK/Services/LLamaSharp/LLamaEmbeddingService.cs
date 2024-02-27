@@ -16,7 +16,7 @@ namespace AntSK.Services.LLamaSharp
     /// <summary>
     /// 本地Embedding
     /// </summary>
-    [ServiceDescription(typeof(ILLamaEmbeddingService), Domain.Common.DependencyInjection.ServiceLifetime.Scoped)]
+    [ServiceDescription(typeof(ILLamaEmbeddingService), Domain.Common.DependencyInjection.ServiceLifetime.Singleton)]
     public class LLamaEmbeddingService : IDisposable, ILLamaEmbeddingService
     {
         private LLamaEmbedder _embedder;
@@ -35,7 +35,6 @@ namespace AntSK.Services.LLamaSharp
         public async Task<List<float>> Embedding(string text)
         {
             float[] embeddings = _embedder.GetEmbeddings(text).Result;
-            var result = new OpenAIEmbeddingResult();
             return embeddings.ToList();      
         }
     }

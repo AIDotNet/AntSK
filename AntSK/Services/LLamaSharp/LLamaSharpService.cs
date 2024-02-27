@@ -65,7 +65,7 @@ namespace AntSK.Services.LLamaSharp
         public async Task Embedding(OpenAIEmbeddingModel model, HttpContext HttpContext)
         {
             var result = new OpenAIEmbeddingResult();
-            result.data.embedding = await _lLamaEmbeddingService.Embedding(model.input[0]);
+            result.data[0].embedding = await _lLamaEmbeddingService.Embedding(model.input[0]);
             HttpContext.Response.ContentType = "application/json";
             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
             await HttpContext.Response.CompleteAsync();
