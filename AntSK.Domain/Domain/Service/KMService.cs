@@ -20,17 +20,19 @@ namespace AntSK.Domain.Domain.Service
                 foreach (var memoryDb in memoryDbs)
                 {
 
-                    var item = await memoryDb.GetListAsync(memoryIndex.Name, new List<MemoryFilter>() { new MemoryFilter().ByDocument(fileid) }, 100, true).FirstOrDefaultAsync();
-
-                    KMFile file = new KMFile()
+                    var items = await memoryDb.GetListAsync(memoryIndex.Name, new List<MemoryFilter>() { new MemoryFilter().ByDocument(fileid) }, 100, true).ToListAsync();
+                    foreach (var item in items)
                     {
-                        Text = item.Payload.FirstOrDefault(p => p.Key == "text").Value.ConvertToString(),
-                        Url = item.Payload.FirstOrDefault(p => p.Key == "url").Value.ConvertToString(),
-                        LastUpdate = item.Payload.FirstOrDefault(p => p.Key == "last_update").Value.ConvertToString(),
-                        Schema = item.Payload.FirstOrDefault(p => p.Key == "schema").Value.ConvertToString(),
-                        File = item.Payload.FirstOrDefault(p => p.Key == "file").Value.ConvertToString(),
-                    };
-                    docTextList.Add(file);
+                        KMFile file = new KMFile()
+                        {
+                            Text = item.Payload.FirstOrDefault(p => p.Key == "text").Value.ConvertToString(),
+                            Url = item.Payload.FirstOrDefault(p => p.Key == "url").Value.ConvertToString(),
+                            LastUpdate = item.Payload.FirstOrDefault(p => p.Key == "last_update").Value.ConvertToString(),
+                            Schema = item.Payload.FirstOrDefault(p => p.Key == "schema").Value.ConvertToString(),
+                            File = item.Payload.FirstOrDefault(p => p.Key == "file").Value.ConvertToString(),
+                        };
+                        docTextList.Add(file);
+                    }
                 }
             }
             return docTextList;
