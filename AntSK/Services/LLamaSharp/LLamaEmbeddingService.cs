@@ -34,8 +34,9 @@ namespace AntSK.Services.LLamaSharp
 
         public async Task<List<float>> Embedding(string text)
         {
-            float[] embeddings = _embedder.GetEmbeddings(text).Result;
-            return embeddings.ToList();      
+            float[] embeddings =await _embedder.GetEmbeddings(text);
+            //PG只有1536维
+            return embeddings.ToList().Take(1536).ToList();      
         }
     }
 }
