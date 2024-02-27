@@ -1,11 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace AntSK.Models.OpenAPI
 {
     public class OpenAIResult
     {
         public string id { get; set; } = Guid.NewGuid().ToString();
-        [JsonPropertyName("object")]
+        [JsonProperty("object")]
         public string obj { get; set; } = "chat.completion";
         public List<ChoicesModel> choices { get; set; }
         public long created { get; set; }
@@ -21,7 +22,7 @@ namespace AntSK.Models.OpenAPI
 
     public class OpenAIEmbeddingResult 
     {
-        [JsonPropertyName("object")]
+        [JsonProperty("object")]
         public string obj { get; set; } = "list";
         public string model { get; set; } = "ada";
 
@@ -39,7 +40,7 @@ namespace AntSK.Models.OpenAPI
 
     public class DataModel 
     {
-        [JsonPropertyName("object")]
+        [JsonProperty("object")]
         public string obj { get; set; } = "embedding";
         public int index { get; set; } = 0;
 

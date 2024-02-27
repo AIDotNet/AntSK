@@ -102,6 +102,16 @@
             <param name="fileid"></param>
             <returns></returns>
         </member>
+        <member name="T:AntSK.Services.LLamaSharp.LLamaChatService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:AntSK.Services.LLamaSharp.LLamaEmbeddingService">
+            <summary>
+            本地Embedding
+            </summary>
+        </member>
         <member name="M:AntSK.Services.OpenApi.OpenApiService.SendKms(System.String,AntSK.Domain.Repositories.Apps)">
             <summary>
             发送知识库问答

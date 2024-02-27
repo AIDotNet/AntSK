@@ -141,7 +141,7 @@ void InitSK(WebApplicationBuilder builder)
     //Kernel Memory
     var searchClientConfig = new SearchClientConfig
     {
-        MaxAskPromptSize = 128000,
+        MaxAskPromptSize = 8000,
         MaxMatchesCount = 3,
         AnswerTokens = 1000,
         EmptyAnswer = "知识库未搜索到相关内容"
@@ -154,6 +154,13 @@ void InitSK(WebApplicationBuilder builder)
            .WithPostgresMemoryDb(postgresConfig)
            .WithSimpleFileStorage(new SimpleFileStorageConfig { StorageType = FileSystemTypes.Volatile, Directory = "_files" })
            .WithSearchClientConfig(searchClientConfig)
+           //本地模型需要设置token小一点。
+           .WithCustomTextPartitioningOptions(new Microsoft.KernelMemory.Configuration.TextPartitioningOptions
+           {
+               MaxTokensPerLine=99,
+               MaxTokensPerParagraph=299,
+               OverlappingTokens=47
+           })
            .WithOpenAITextGeneration(new OpenAIConfig()
            {
                APIKey = OpenAIOption.Key,
