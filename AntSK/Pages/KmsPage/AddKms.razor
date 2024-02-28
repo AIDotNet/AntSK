@@ -13,29 +13,21 @@
                   Model="@_kmsModel"
                   Style="margin-top: 8px;"
                   OnFinish="HandleSubmit">
-                <FormItem Label="知识库名称" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                <FormItem Label="知识库名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入知识库名称" @bind-Value="@context.Name" />
                 </FormItem>
-                <FormItem Label="图标" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                <FormItem Label="图标" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入图标" @bind-Value="@context.Icon" />
                     <a href="https://antblazor.com/zh-CN/components/icon" target="_blank">图标库</a>
                 </FormItem>
-                <FormItem Label="描述" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                <FormItem Label="描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入描述" @bind-Value="@context.Describe" />
                 </FormItem>
-                <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
                     <Button Type="primary" HtmlType="submit">
                         保存
                     </Button>
                 </FormItem>
-                @if ( !string.IsNullOrEmpty(_errorMsg))
-                {
-                    <Alert Type="@AlertType.Error"
-                       Message="错误"
-                       Description="@_errorMsg"
-                       ShowIcon="true"
-                        />
-                }
             </Form>
         </Card>
     </ChildContent>

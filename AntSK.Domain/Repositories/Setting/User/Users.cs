@@ -35,8 +35,7 @@ namespace AntSK.Domain.Repositories
         /// <summary>
         /// 备注
         /// </summary>
-        [Required]
-        public string Describe { get; set; }
+        public string? Describe { get; set; }
 
     }
 }

@@ -18,6 +18,8 @@ namespace AntSK.Pages.AppPage
         protected IKmss_Repositories _kmss_Repositories { get; set; }
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
+        [Inject]
+        protected MessageService? Message { get; set; }
 
         private Apps _appModel = new Apps() ;
 
@@ -26,31 +28,6 @@ namespace AntSK.Pages.AppPage
         private List<Kmss> _kmsList = new List<Kmss>();
 
 
-        private string _errorMsg { get; set; }
-
-        private readonly FormItemLayout _formItemLayout = new FormItemLayout
-        {
-            LabelCol = new ColLayoutParam
-            {
-                Xs = new EmbeddedProperty { Span = 24 },
-                Sm = new EmbeddedProperty { Span = 7 },
-            },
-
-            WrapperCol = new ColLayoutParam
-            {
-                Xs = new EmbeddedProperty { Span = 24 },
-                Sm = new EmbeddedProperty { Span = 12 },
-                Md = new EmbeddedProperty { Span = 10 },
-            }
-        };
-        private readonly FormItemLayout _submitFormLayout = new FormItemLayout
-        {
-            WrapperCol = new ColLayoutParam
-            {
-                Xs = new EmbeddedProperty { Span = 24, Offset = 0 },
-                Sm = new EmbeddedProperty { Span = 10, Offset = 7 },
-            }
-        };
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -72,7 +49,7 @@ namespace AntSK.Pages.AppPage
                 _appModel.SecretKey="sk-"+ Guid.NewGuid().ToString();
                 if (_apps_Repositories.IsAny(p => p.Name == _appModel.Name))
                 {
-                    _errorMsg = "名称已存在！";
+                    _ = Message.Info("名称已存在！", 2);
                     return;
                 }
 

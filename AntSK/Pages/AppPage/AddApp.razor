@@ -12,31 +12,31 @@
             <Form Model="@_appModel"
                   Style="margin-top: 8px;"
                   OnFinish="HandleSubmit">
-                <FormItem Label="知识库名称" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                <FormItem Label="知识库名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入知识库名称" @bind-Value="@context.Name" />
                 </FormItem>
-                <FormItem Label="图标" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                <FormItem Label="图标" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入图标" @bind-Value="@context.Icon" />
                     <a href="https://antblazor.com/zh-CN/components/icon" target="_blank">图标库</a>
                 </FormItem>
-                <FormItem Label="类型" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                <FormItem Label="类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.Type">
                         <Radio RadioButton Value="@("chat")">简单对话</Radio>
                         <Radio RadioButton Value="@("kms")" >知识库</Radio>
                      </RadioGroup>
                  </FormItem>
-                <FormItem Label="描述" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                 <FormItem Label="描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入描述" @bind-Value="@context.Describe" />
                 </FormItem>
                 @if (@context.Type == "chat")
                 {
-                    <FormItem Label="提示词" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <FormItem Label="提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <TextArea MinRows="4" Placeholder="请输入提示词,用户输入使用{{$input}} 来做占位符" @bind-Value="@context.Prompt" />
                     </FormItem>     
                 }
                 @if (@context.Type == "kms")
                 {
-                    <FormItem Label="知识库" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
+                    <FormItem Label="知识库" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Select Mode="multiple"
                                 @bind-Values="kmsIds"
                                 Placeholder="选择知识库"
@@ -53,7 +53,7 @@
                         </Select>
                     </FormItem>
                 }
-                <FormItem Label=" " Style="margin-top:32px" WrapperCol="_submitFormLayout.WrapperCol">
+                <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
                     <Button Type="primary" HtmlType="submit">
                         保存
                     </Button>
@@ -61,13 +61,6 @@
                         返回
                     </Button>
                 </FormItem>
-                @if (!string.IsNullOrEmpty(_errorMsg))
-                {
-                    <Alert Type="@AlertType.Error"
-                           Message="错误"
-                           Description="@_errorMsg"
-                           ShowIcon="true" />
-                }
             </Form>
         </Card>
     </ChildContent>

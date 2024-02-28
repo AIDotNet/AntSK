@@ -2,12 +2,42 @@
 @using AntSK.Domain.Repositories
 @using AntSK.Models
 @page "/setting/user/add"
+@page "/setting/user/add/{UserId}"
 @inject IMessageService _message
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
 
 
-<h3>AddUser</h3>
+<PageContainer Title="新增用户">
+    <ChildContent>
+        <Card>
+            <Form Model="@_userModel"
+                  Style="margin-top: 8px;"
+                  OnFinish="HandleSubmit">
+                <FormItem Label="工号" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入用户工号" @bind-Value="@context.No" />
+                </FormItem>
+                <FormItem Label="用户名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入用户名称" @bind-Value="@context.Name" />
+                </FormItem>
+                <FormItem Label="用户密码" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <InputPassword Placeholder="请输入用户密码" @bind-Value="@context.Password" />
+                </FormItem>
+                <FormItem Label="用户备注" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入用户备注" @bind-Value="@context.Describe" />
+                </FormItem>
+                <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
+                    <Button Type="primary" HtmlType="submit">
+                        保存
+                    </Button>
+                    <Button OnClick="Back">
+                        返回
+                    </Button>
+                </FormItem>            
+            </Form>
+        </Card>
+    </ChildContent>
+</PageContainer>
 
 @code {
 
