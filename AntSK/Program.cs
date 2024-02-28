@@ -160,7 +160,7 @@ void InitSK(WebApplicationBuilder builder)
            .WithCustomTextPartitioningOptions(new Microsoft.KernelMemory.Configuration.TextPartitioningOptions
            {
                MaxTokensPerLine=99,
-               MaxTokensPerParagraph=99,
+               MaxTokensPerParagraph=299,
                OverlappingTokens=47
            })
            .WithOpenAITextGeneration(new OpenAIConfig()
