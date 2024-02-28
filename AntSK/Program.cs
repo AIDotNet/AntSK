@@ -157,13 +157,13 @@ void InitSK(WebApplicationBuilder builder)
            .WithPostgresMemoryDb(postgresConfig)
            .WithSimpleFileStorage(new SimpleFileStorageConfig { StorageType = FileSystemTypes.Volatile, Directory = "_files" })
            .WithSearchClientConfig(searchClientConfig)
-           //本地模型需要设置token小一点。
-           .WithCustomTextPartitioningOptions(new Microsoft.KernelMemory.Configuration.TextPartitioningOptions
-           {
-               MaxTokensPerLine=99,
-               MaxTokensPerParagraph=299,
-               OverlappingTokens=47
-           })
+           //如果用本地模型需要设置token小一点。
+           //.WithCustomTextPartitioningOptions(new Microsoft.KernelMemory.Configuration.TextPartitioningOptions
+           //{
+           //    MaxTokensPerLine=99,
+           //    MaxTokensPerParagraph=299,
+           //    OverlappingTokens=47
+           //})
            .WithOpenAITextGeneration(new OpenAIConfig()
            {
                APIKey = OpenAIOption.Key,
