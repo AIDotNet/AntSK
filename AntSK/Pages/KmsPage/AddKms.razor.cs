@@ -23,7 +23,7 @@ namespace AntSK.Pages.KmsPage
             _kmsModel.Id = Guid.NewGuid().ToString();
             if (_kmss_Repositories.IsAny(p => p.Name == _kmsModel.Name))
             {
-                _ = Message.Info("名称已存在！", 2);
+                _ = Message.Error("名称已存在！", 2);
                 return;
             }
 

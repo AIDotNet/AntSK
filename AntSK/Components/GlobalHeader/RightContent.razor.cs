@@ -9,6 +9,7 @@ using AntSK.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using AntSK.Services.Auth;
+using AntSK.Domain.Options;
 
 namespace AntSK.Components
 {
@@ -41,7 +42,6 @@ namespace AntSK.Components
 
         public AvatarMenuItem[] AvatarMenuItems { get; set; } = new AvatarMenuItem[]
         {
-            new() { Key = "center", IconType = "user", Option = "个人中心"},
             new() { Key = "setting", IconType = "setting", Option = "个人设置"},
             new() { IsDivider = true },
             new() { Key = "logout", IconType = "logout", Option = "退出登录"}
@@ -53,8 +53,8 @@ namespace AntSK.Components
         [Inject] protected IProjectService ProjectService { get; set; }
         [Inject] protected MessageService MessageService { get; set; }
 
-        [Inject]
-        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        [Inject] public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        [Inject] protected MessageService? Message { get; set; }
 
         private ClaimsPrincipal context  => ((AntSKAuthProvider)AuthenticationStateProvider).GetCurrentUser();
 
@@ -81,11 +81,15 @@ namespace AntSK.Components
         {
             switch (item.Key)
             {
-                case "center":
-                    NavigationManager.NavigateTo("/account/center");
-                    break;
                 case "setting":
-                    NavigationManager.NavigateTo("/account/settings");
+                    if (context.Identity.Name != LoginOption.User)
+                    {
+                        NavigationManager.NavigateTo("/setting/user/info/" + context.Identity.Name);
+                    }
+                    else 
+                    {
+                        _ = Message.Info("管理员无需设置", 2);
+                    }
                     break;
                 case "logout":
                     NavigationManager.NavigateTo("/user/login");

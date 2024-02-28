@@ -1,6 +1,8 @@
 ﻿using AntDesign;
+using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
+using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Components;
 
@@ -34,9 +36,15 @@ namespace AntSK.Pages.Setting.User
             {
                 //新增
                 _userModel.Id = Guid.NewGuid().ToString();
+
+                if (_userModel.No == LoginOption.User)
+                {
+                    _ = Message.Error("工号不能为管理员账号！", 2);
+                    return;
+                }
                 if (_users_Repositories.IsAny(p => p.No == _userModel.No))
                 {
-                    _ = Message.Info("工号已存在！", 2);
+                    _ = Message.Error("工号已存在！", 2);
                     return;
                 }
 
@@ -53,7 +61,7 @@ namespace AntSK.Pages.Setting.User
                 _users_Repositories.Update(_userModel);
             }
 
-            NavigationManager.NavigateTo("/setting/userlist");
+            Back();
         }
 
         private void Back() 

@@ -1,0 +1,44 @@
+﻿@namespace AntSK.Pages.Setting.User
+@using AntSK.Domain.Repositories
+@using AntSK.Models
+@page "/setting/user/info/{UserNo}"
+@inject IMessageService _message
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
+
+
+<PageContainer Title="个人设置">
+    <ChildContent>
+        <Card>
+            <Form Model="@_userModel"
+                  Style="margin-top: 8px;"
+                  OnFinish="HandleSubmit">
+                <FormItem Label="工号" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入用户工号" @bind-Value="@context.No" Disabled="true" />
+                </FormItem>
+                <FormItem Label="用户名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入用户名称" @bind-Value="@context.Name" />
+                </FormItem>
+                <FormItem Label="用户密码" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Type="password" Placeholder="请输入用户密码" @bind-Value="@context.Password" />
+                </FormItem>
+                <FormItem Label="用户备注" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入用户备注" @bind-Value="@context.Describe" />
+                </FormItem>
+                <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
+                    <Button Type="primary" HtmlType="submit">
+                        保存
+                    </Button>
+                    <Button OnClick="Back">
+                        返回
+                    </Button>
+                </FormItem>            
+            </Form>
+        </Card>
+    </ChildContent>
+</PageContainer>
+
+
+@code {
+
+}
