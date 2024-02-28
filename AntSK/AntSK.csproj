@@ -20,9 +20,5 @@
   <ItemGroup>
     <ProjectReference Include="..\AntSK.Domain\AntSK.Domain.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Setting\" />
-  </ItemGroup>
   
 </Project>

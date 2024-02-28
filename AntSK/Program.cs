@@ -119,6 +119,7 @@ void InitDB(WebApplication app)
         _repository.GetDB().CodeFirst.InitTables(typeof(Apps));
         _repository.GetDB().CodeFirst.InitTables(typeof(Kmss));
         _repository.GetDB().CodeFirst.InitTables(typeof(KmsDetails));
+        _repository.GetDB().CodeFirst.InitTables(typeof(Users));
     }
 }
 

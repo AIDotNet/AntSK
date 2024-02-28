@@ -21,6 +21,13 @@
     "path": "/setting",
     "name": "设置",
     "key": "setting",
-    "icon": "setting" 
+    "icon": "setting",
+    "children": [
+      {
+        "path": "/setting/userlist",
+        "name": "用户管理",
+        "key": "setting.user"
+      }
+    ]
   }
 ]

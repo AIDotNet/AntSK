@@ -404,6 +404,26 @@
             sqlserver连接
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Users.No">
+            <summary>
+            工号，用于登陆
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Users.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Users.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Users.Describe">
+            <summary>
+            备注
+            </summary>
+        </member>
         <member name="M:AntSK.Domain.Utils.ConvertUtils.IsNull(System.Object)">
             <summary>
             判断是否为空，为空返回true

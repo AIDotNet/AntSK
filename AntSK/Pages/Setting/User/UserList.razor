@@ -1,0 +1,79 @@
+﻿@namespace AntSK.Pages.Setting.User
+@using AntSK.Domain.Repositories
+@page "/setting/userlist"
+@inject NavigationManager NavigationManager
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
+
+<div>
+    <PageContainer Title="用户管理">
+        <ChildContent>
+            <div class="standardList">
+
+                <Card Class="listCard"
+                      Title="用户列表"
+                      Style="margin-top: 24px;"
+                      BodyStyle="padding: 0 32px 40px 32px">
+                    <Extra>
+                        <div class="extraContent">
+
+                            <Search Class="extraContentSearch" Placeholder="查询" @bind-Value="_searchKeyword" />
+                        </div>
+                    </Extra>
+                    <ChildContent>
+                        <Button Type="dashed"
+                                Style="width: 100%; margin-bottom: 8px;"
+                                OnClick="AddUser">
+                            <Icon Type="plus" Theme="outline" />
+                            新增用户
+                        </Button>
+
+                        <AntList TItem="Users"
+                                 DataSource="_data"
+                                 ItemLayout="ListItemLayout.Horizontal">
+                            <ListItem Actions="_actions">
+                                <div class="listContent">
+                                    <div class="listContentItem">
+                                        <span>工号</span>
+                                        <p>@context.No</p>
+                                    </div>
+                                    <div class="listContentItem">
+                                        <span>姓名</span>
+                                        <p>@context.Name</p>
+                                    </div>
+                                    <div class="listContentItem">
+                                        <span>备注</span>
+                                        <p>@context.Describe</p>
+                                    </div>
+                                </div>
+                            </ListItem>
+                        </AntList>
+                    </ChildContent>
+                </Card>
+            </div>
+        </ChildContent>
+    </PageContainer>
+</div>
+
+@code
+{
+    private static readonly RenderFragment Edit = @<a key="edit">
+        Edit
+    </a>;
+
+    private readonly RenderFragment[] _actions =
+    {
+        Edit
+            };
+
+    private RenderFragment Info(string title, string value, bool bordered = false)
+    {
+        return @<div class="headerInfo">
+        <span>@title</span>
+        <p>@value</p>
+        @if (bordered) {
+        <em />
+    }
+    </div>;
+    }
+}
