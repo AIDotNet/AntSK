@@ -1,11 +1,13 @@
 ﻿@namespace AntSK.Components
+@using Microsoft.AspNetCore.Authorization
 @inherits AntDomComponentBase
 
 <Space Class="@ClassMapper.Class" Size="@("24")">
     <SpaceItem>
-        <AvatarDropdown Name="@_currentUser.Name"
+        <AvatarDropdown Name="@context.Identity.Name"
                         Avatar="@_currentUser.Avatar"
                         MenuItems="@AvatarMenuItems"
                         OnItemSelected="HandleSelectUser" />
+
     </SpaceItem>
 </Space>

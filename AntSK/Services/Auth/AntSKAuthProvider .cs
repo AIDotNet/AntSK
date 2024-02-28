@@ -3,6 +3,7 @@ using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
+using System.Security.Principal;
 
 namespace AntSK.Services.Auth
 {
@@ -39,6 +40,12 @@ namespace AntSK.Services.Auth
                 NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
                 return true;
             }
+        }
+
+        public  ClaimsPrincipal GetCurrentUser()
+        {
+            var user = new ClaimsPrincipal(identity);
+            return user;
         }
         public override Task<AuthenticationState> GetAuthenticationStateAsync()
         {

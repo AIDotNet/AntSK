@@ -6,6 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AntSK.Models;
 using AntSK.Services;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
+using AntSK.Services.Auth;
 
 namespace AntSK.Components
 {
@@ -49,6 +52,11 @@ namespace AntSK.Components
         [Inject] protected IUserService UserService { get; set; }
         [Inject] protected IProjectService ProjectService { get; set; }
         [Inject] protected MessageService MessageService { get; set; }
+
+        [Inject]
+        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+        private ClaimsPrincipal context  => ((AntSKAuthProvider)AuthenticationStateProvider).GetCurrentUser();
 
         protected override async Task OnInitializedAsync()
         {
