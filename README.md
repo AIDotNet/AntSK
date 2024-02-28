@@ -86,6 +86,24 @@ Login是默认的登陆账号和密码
 ```
 我使用的是CodeFirst模式，只要配置好数据库链接，表结构是自动创建的
 
+如果想使用LLamaSharp运行本地模型还需要设置如下配置：
+```
+  "LLamaSharp": {
+    "Chat": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf",
+    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf"
+  },
+```
+
+需要配置Chat和Embedding模型的地址，然后修改EndPoint为本地：
+```
+ "OpenAIOption": {
+    "EndPoint": "https://ip:port/llama/",
+    "Key": "",
+    "Model": "",
+    "EmbeddingModel": ""
+  },
+```
+
 
 想了解更多信息或开始使用 **AntSK**，可以关注我的公众号以及加入交流群。
 
