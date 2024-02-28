@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="LLamaSharp.kernel-memory" Version="0.10.0" />
     <PackageReference Include="LLamaSharp.semantic-kernel" Version="0.10.0" />
     <PackageReference Include="MarkdownSharp" Version="2.0.5" />

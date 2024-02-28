@@ -31,18 +31,18 @@
                         <AntList TItem="Users"
                                  DataSource="_data"
                                  ItemLayout="ListItemLayout.Horizontal">
-                            <ListItem Actions="_actions">
-                                <div class="listContent">
-                                    <div class="listContentItem">
-                                        <span>工号</span>
+                            <ListItem Actions="_actions" Style="width:100%">
+                                <div class="listContent" style="width:100%">
+                                    <div class="listContentItem" style="width:20%">
+                                        <b>工号</b>
                                         <p>@context.No</p>
                                     </div>
-                                    <div class="listContentItem">
-                                        <span>姓名</span>
+                                    <div class="listContentItem" style="width:20%">
+                                        <b>姓名</b>
                                         <p>@context.Name</p>
                                     </div>
-                                    <div class="listContentItem">
-                                        <span>备注</span>
+                                    <div class="listContentItem" style="width:20%">
+                                        <b>备注</b>
                                         <p>@context.Describe</p>
                                     </div>
                                 </div>
@@ -64,16 +64,6 @@
     private readonly RenderFragment[] _actions =
     {
         Edit
-            };
+     };
 
-    private RenderFragment Info(string title, string value, bool bordered = false)
-    {
-        return @<div class="headerInfo">
-        <span>@title</span>
-        <p>@value</p>
-        @if (bordered) {
-        <em />
-    }
-    </div>;
-    }
 }
