@@ -31,7 +31,9 @@
                         <AntList TItem="Users"
                                  DataSource="_data"
                                  ItemLayout="ListItemLayout.Horizontal">
-                            <ListItem Actions="_actions" Style="width:100%">
+                            <ListItem Actions="new[] {
+                            edit(()=> Edit(context.Id)
+                             )}" Style="width:100%">
                                 <div class="listContent" style="width:100%">
                                     <div class="listContentItem" style="width:20%">
                                         <b>工号</b>
@@ -57,13 +59,6 @@
 
 @code
 {
-    private static readonly RenderFragment Edit = @<a key="edit">
-        Edit
-    </a>;
-
-    private readonly RenderFragment[] _actions =
-    {
-        Edit
-     };
-
+    RenderFragment edit(Action clickAction) =>@<a key="edit" @onclick="@clickAction">修改</a>;
+   
 }

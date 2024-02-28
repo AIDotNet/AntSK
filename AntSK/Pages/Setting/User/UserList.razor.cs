@@ -35,5 +35,10 @@ namespace AntSK.Pages.Setting.User
         public void AddUser() {
             NavigationManager.NavigateTo("/setting/user/add");
         }
+
+        public void Edit(string userid)
+        {
+            NavigationManager.NavigateTo("/setting/user/add/"+userid);
+        }
     }
 }

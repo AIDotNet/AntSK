@@ -21,7 +21,11 @@ namespace AntSK.Pages.Setting.User
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-
+            if (!string.IsNullOrEmpty(UserId))
+            {
+                _userModel= _users_Repositories.GetFirst(p => p.Id == UserId);
+                _password= _userModel.Password;
+            }
         }
 
         private void HandleSubmit()
@@ -42,7 +46,10 @@ namespace AntSK.Pages.Setting.User
             else
             {
                 //修改
-                _userModel.Password = PasswordUtil.HashPassword(_userModel.Password);
+                if (_userModel.Password!=_password)
+                {
+                    _userModel.Password = PasswordUtil.HashPassword(_userModel.Password);
+                }
                 _users_Repositories.Update(_userModel);
             }
 
