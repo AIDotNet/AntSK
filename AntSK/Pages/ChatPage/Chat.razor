@@ -23,28 +23,36 @@
                 </TitleTemplate>
                 <Body>
                     <div id="scrollDiv" style="height: 530px; overflow-y: auto; overflow-x: hidden;">
-                        <GridRow Gutter="(8, 8)">
-                            <Virtualize Items="@(MessageList.OrderByDescending(o => o.CreateTime).ToList())" Context="item">
-                                <GridCol Span="24">
-                                    <Card Size="small">
-                                        <TitleTemplate>
-                                            <Text Strong><Icon Type="bulb" /> @(item.Questions)</Text>
-                                        </TitleTemplate>
-                                        <Extra>
-                                            <Space>
-                                                <SpaceItem>
-                                                    <a style="color: gray;" @onclick="@(() => OnCopyAsync(item))"><Icon Type="copy" /></a>
-                                                </SpaceItem>
-                                                <SpaceItem>
-                                                    <a style="color: gray;" @onclick="@(() => OnClearAsync(item.ID))"><Icon Type="rest" /></a>
-                                                </SpaceItem>
-                                            </Space>
-                                        </Extra>
-                                        <Body>
-                                            @((MarkupString)(item.HtmlAnswers))
-                                        </Body>
-                                    </Card>
-                                </GridCol>
+                        <GridRow Gutter="(8, 8)" Style="margin:0">
+                            <Virtualize Items="@(MessageList.OrderBy(o => o.CreateTime).ToList())" Context="item">
+                                @if (item.IsSend)
+                                {
+                                    <GridRow Style="width:100%">
+                                        <GridCol Span="23">
+                                            <div class="chat-bubble sent">
+                                                @(item.Questions)
+                                                @* <span class="timestamp">@item.CreateTime</span> *@
+                                            </div>
+                                        </GridCol>
+                                        <GridCol Span="1">
+                                            <Image Width="100%" Style="margin-top:10px;" Src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+                                        </GridCol>
+                                    </GridRow>
+                                }
+                                else
+                                {
+                                    <GridRow Style="width:100%">
+                                        <GridCol Span="1">
+                                            <Image Width="100%" Style="margin-top:10px;" Src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
+                                        </GridCol>
+                                        <GridCol Span="23">
+                                            <div class="chat-bubble received">
+                                                @((MarkupString)(item.HtmlAnswers))
+                                                @* <span class="timestamp">@item.CreateTime</span> *@
+                                            </div>
+                                        </GridCol>
+                                    </GridRow>
+                                }
                             </Virtualize>
                         </GridRow>
                     </div>
@@ -80,7 +88,65 @@
         </GridCol>
     </GridRow>
 
+    <style>
 
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+
+        .chat-container {
+            width: 350px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            padding-bottom: 15px;
+        }
+
+        .chat-bubble {
+            padding: 10px;
+            margin: 10px;
+            margin-bottom: 0;
+            border-radius: 5px;
+            max-width: 70%;
+            position: relative;
+        }
+
+        .received {
+            background-color: #f0f0f0;
+            align-self: flex-start;
+            float: left;
+        }
+
+        .sent {
+            background-color: #daf8cb;
+            align-self: flex-end;
+            float: right;
+        }
+
+        .timestamp {
+            display: block;
+            font-size: 0.75em;
+            margin-top: 5px;
+        }
+
+        .received .timestamp {
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .sent .timestamp {
+            text-align: left;
+            margin-left: 10px;
+        }
+    </style>
     @code {
 
 }

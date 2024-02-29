@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using SqlSugar;
 using System;
 using System.Text;
+using AntSK.Domain.Utils;
 
 namespace AntSK.Pages.ChatPage
 {
@@ -178,8 +179,8 @@ namespace AntSK.Pages.ChatPage
                 {
                     info = new MessageInfo();
                     info.ID = Guid.NewGuid().ToString();
-                    info.Answers = content.Content!;
-                    info.HtmlAnswers = content.Content!;
+                    info.Answers = content?.Content?.ConvertToString(); 
+                    info.HtmlAnswers = content?.Content?.ConvertToString();
                     info.CreateTime = DateTime.Now;
 
                     MessageList.Add(info);
