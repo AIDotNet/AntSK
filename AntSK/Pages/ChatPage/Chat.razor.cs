@@ -201,7 +201,6 @@ namespace AntSK.Pages.ChatPage
                 {
                     info = new MessageInfo();
                     info.ID = Guid.NewGuid().ToString();
-                    info.Questions = questions;
                     info.Answers = content?.Content?.ConvertToString();
                     info.HtmlAnswers = content?.Content?.ConvertToString();
                     info.CreateTime = DateTime.Now;

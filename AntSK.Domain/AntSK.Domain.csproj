@@ -16,9 +16,9 @@
     <PackageReference Include="SqlSugarCore" Version="5.1.4.143" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
 
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.5.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.5.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.5.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.4.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.4.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.4.0-alpha" />
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.30.240227.1" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.30.240227.1" />
 
