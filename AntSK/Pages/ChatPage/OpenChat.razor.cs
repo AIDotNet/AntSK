@@ -59,7 +59,7 @@ namespace AntSK.Pages.ChatPage
 
             MessageList.Add(new MessageInfo() { 
                 ID=Guid.NewGuid().ToString(),
-                Questions=_messageInput,
+                Context=_messageInput,
                 CreateTime=DateTime.Now,
                 IsSend=true
             });
@@ -75,7 +75,7 @@ namespace AntSK.Pages.ChatPage
         {
             await Task.Run(() =>
             {
-                _messageInput = item.Questions;
+                _messageInput = item.Context;
             });
         }
 
@@ -141,8 +141,7 @@ namespace AntSK.Pages.ChatPage
                     var info1 = new MessageInfo()
                     {
                         ID = Guid.NewGuid().ToString(),
-                        Questions = questions,
-                        Answers = answers,
+                        Context = answers,
                         HtmlAnswers = htmlAnswers,
                         CreateTime = DateTime.Now,
                     };
@@ -179,7 +178,7 @@ namespace AntSK.Pages.ChatPage
                 {
                     info = new MessageInfo();
                     info.ID = Guid.NewGuid().ToString();
-                    info.Answers = content?.Content?.ConvertToString(); 
+                    info.Context = content?.Content?.ConvertToString(); 
                     info.HtmlAnswers = content?.Content?.ConvertToString();
                     info.CreateTime = DateTime.Now;
 
@@ -209,11 +208,11 @@ namespace AntSK.Pages.ChatPage
             {
                 if (item.IsSend)
                 {
-                    history.Append($"user:{item.Questions}{Environment.NewLine}");
+                    history.Append($"user:{item.Context}{Environment.NewLine}");
                 }
                 else 
                 {
-                    history.Append($"assistant:{item.Answers}{Environment.NewLine}");
+                    history.Append($"assistant:{item.Context}{Environment.NewLine}");
                 }    
             }
 

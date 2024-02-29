@@ -57,6 +57,11 @@
             <param name="result"></param>
             <returns></returns>
         </member>
+        <member name="P:AntSK.Domain.Model.MessageInfo.IsSend">
+            <summary>
+            发送是true  接收是false
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Model.PageList`1.PageIndex">
             <summary>
             当前页，从1开始
