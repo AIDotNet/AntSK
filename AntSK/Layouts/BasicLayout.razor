@@ -35,15 +35,18 @@
         await base.OnInitializedAsync();
         //菜单权限控制
         var menuList  = await HttpClient.GetFromJsonAsync<MenuDataItem[]>("data/menu.json");
-        if (context.Identity.Name == LoginOption.User)
+        if ((bool)context?.Identity.IsAuthenticated)
         {
-            _menuData = menuList;
-        }
-        else
-        {
-            var userMenuList = _users_Repositories.GetFirst(p => p.No == context.Identity.Name).MenuRole.Split(",").ToList();
-            //非管理员用户不允许操作系统设置
-            _menuData = menuList.Where(p => p.Key != "setting"&&userMenuList.Contains(p.Key)).ToArray();
+            if (context.Identity.Name == LoginOption.User)
+            {
+                _menuData = menuList;
+            }
+            else
+            {
+                var userMenuList = _users_Repositories.GetFirst(p => p.No == context.Identity.Name).MenuRole.Split(",").ToList();
+                //非管理员用户不允许操作系统设置
+                _menuData = menuList.Where(p => p.Key != "setting" && userMenuList.Contains(p.Key)).ToArray();
+            }
         }
     }
 
