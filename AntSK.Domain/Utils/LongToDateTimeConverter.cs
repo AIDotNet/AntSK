@@ -3,7 +3,7 @@ using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AntSK.Utils
+namespace AntSK.Domain.Utils
 {
     public class LongToDateTimeConverter : JsonConverter<DateTime>
     {
