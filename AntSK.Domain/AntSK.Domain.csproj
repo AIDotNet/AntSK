@@ -13,14 +13,14 @@
     <PackageReference Include="LLamaSharp.semantic-kernel" Version="0.10.0" />
     <PackageReference Include="MarkdownSharp" Version="2.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SqlSugarCore" Version="5.1.4.137" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.143" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
 
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.4.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.4.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.4.0-alpha" />
-    <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.29.240219.2" />
-    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.29.240219.2" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.5.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.5.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.5.0-alpha" />
+    <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.30.240227.1" />
+    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.30.240227.1" />
 
     <PackageReference Include="LLamaSharp" Version="0.10.0" />
     <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.10.0" />
