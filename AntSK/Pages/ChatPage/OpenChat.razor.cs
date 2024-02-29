@@ -56,6 +56,14 @@ namespace AntSK.Pages.ChatPage
                 return;
             }
 
+            MessageList.Add(new MessageInfo() { 
+                ID=Guid.NewGuid().ToString(),
+                Questions=_messageInput,
+                CreateTime=DateTime.Now,
+                IsSend=true
+            });
+
+
             Sendding = true;
             await SendAsync(_messageInput);
             _messageInput = "";
@@ -170,7 +178,6 @@ namespace AntSK.Pages.ChatPage
                 {
                     info = new MessageInfo();
                     info.ID = Guid.NewGuid().ToString();
-                    info.Questions = questions;
                     info.Answers = content.Content!;
                     info.HtmlAnswers = content.Content!;
                     info.CreateTime = DateTime.Now;
@@ -199,8 +206,14 @@ namespace AntSK.Pages.ChatPage
             StringBuilder history = new StringBuilder();
             foreach (var item in MessageList)
             {
-                history.Append($"user:{item.Questions}{Environment.NewLine}");
-                history.Append($"assistant:{item.Answers}{Environment.NewLine}");
+                if (item.IsSend)
+                {
+                    history.Append($"user:{item.Questions}{Environment.NewLine}");
+                }
+                else 
+                {
+                    history.Append($"assistant:{item.Answers}{Environment.NewLine}");
+                }    
             }
 
             KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");

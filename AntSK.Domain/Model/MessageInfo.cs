@@ -12,6 +12,8 @@ namespace AntSK.Domain.Model
         public string Questions { get; set; } = "";
         public string Answers { get; set; } = "";
         public string HtmlAnswers { get; set; } = "";
+
+        public bool IsSend { get; set; } = false;
         public DateTime CreateTime { get; set; }
 
     }

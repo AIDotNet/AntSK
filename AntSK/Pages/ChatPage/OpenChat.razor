@@ -8,27 +8,37 @@
 <div id="chat" style="display:flex; flex-direction:column; height:100%; overflow-x:hidden;">
     <PageHeader Class="site-page-header" Title="@app.Name" Subtitle="@app.Describe" />
     <div id="scrollDiv" style="flex:1; width:100%; overflow-y:auto; overflow-x:hidden;padding:10px;">
-        <Virtualize Items="@(MessageList.OrderByDescending(o => o.CreateTime).ToList())" Context="item">
-            <GridCol Span="24">
-                <Card>
-                    <TitleTemplate>
-                        <Text Strong><Icon Type="bulb" />@(item.Questions)</Text>
-                    </TitleTemplate>
-                    <Extra>
-                        <Space>
-                            <SpaceItem>
-                                <a style="color: gray;" @onclick="@(() => OnCopyAsync(item))"><Icon Type="copy" /></a>
-                            </SpaceItem>
-                            <SpaceItem>
-                                <a style="color: gray;" @onclick="@(() => OnClearAsync(item.ID))"><Icon Type="rest" /></a>
-                            </SpaceItem>
-                        </Space>
-                    </Extra>
-                    <Body>
-                        @((MarkupString)(item.HtmlAnswers))
-                    </Body>
-                </Card>
-            </GridCol>
+        <Virtualize Items="@(MessageList.OrderBy(o => o.CreateTime).ToList())" Context="item">
+
+            @if (item.IsSend)
+            {
+                <GridRow>
+                    <GridCol Span="23">
+                        <div class="chat-bubble sent">
+                            @(item.Questions)
+                            @* <span class="timestamp">@item.CreateTime</span> *@
+                        </div>
+                    </GridCol>
+                    <GridCol Span="1">
+                        <Image Width="100%" Style="margin-top:10px;" Src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+                    </GridCol>
+                </GridRow>
+            }
+            else
+            {
+                <GridRow>
+                    <GridCol Span="1">
+                        <Image Width="100%" Style="margin-top:10px;" Src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
+                    </GridCol>
+                    <GridCol Span="23">
+                        <div class="chat-bubble received">
+                            @((MarkupString)(item.HtmlAnswers))
+                            @* <span class="timestamp">@item.CreateTime</span> *@
+                        </div>
+                    </GridCol>
+                </GridRow>
+            }
+
         </Virtualize>
     </div>
     <div style="flex-shrink:0;margin:10px;">
@@ -39,6 +49,66 @@
         </AntDesign.Input>
     </div>
 </div>
+
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 10px;
+        justify-content: center;
+        align-items: flex-start;
+        height: 100vh;
+    }
+
+    .chat-container {
+        width: 350px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        padding-bottom: 15px;
+    }
+
+    .chat-bubble {
+        padding: 10px;
+        margin: 10px;
+        margin-bottom: 0;
+        border-radius: 5px;
+        max-width: 70%;
+        position: relative;
+    }
+
+    .received {
+        background-color: #f0f0f0;
+        align-self: flex-start;
+        float: left;
+    }
+
+    .sent {
+        background-color: #daf8cb;
+        align-self: flex-end;
+        float: right;
+    }
+
+    .timestamp {
+        display: block;
+        font-size: 0.75em;
+        margin-top: 5px;
+    }
+
+    .received .timestamp {
+        text-align: right;
+        margin-right: 10px;
+    }
+
+    .sent .timestamp {
+        text-align: left;
+        margin-left: 10px;
+    }
+</style>
 
 @code {
 
