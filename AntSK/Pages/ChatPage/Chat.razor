@@ -75,8 +75,8 @@
 
             </Extra>
             <Body>
-                <AntList Bordered DataSource="@RelevantSources">
-                     <ChildContent Context="item">
+                <AntList Bordered DataSource="@RelevantSources" Style="padding:10px;">
+                     <ChildContent Context="item" >
                          <span> <b>@item.SourceName </b>  相似度：<Text Mark> @item.Relevance</Text></span>
                             <Body>
                                 @((MarkupString)(@item.Text))
