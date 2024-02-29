@@ -424,6 +424,11 @@
             备注
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Users.MenuRole">
+            <summary>
+            菜单权限
+            </summary>
+        </member>
         <member name="M:AntSK.Domain.Utils.ConvertUtils.IsNull(System.Object)">
             <summary>
             判断是否为空，为空返回true

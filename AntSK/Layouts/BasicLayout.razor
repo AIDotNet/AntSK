@@ -3,6 +3,7 @@
 @using AntSK.Services.Auth
 @using Microsoft.AspNetCore.Components.Authorization
 @using AntSK.Domain.Options
+@using AntSK.Domain.Repositories
 @inherits LayoutComponentBase
 
 <AntDesign.ProLayout.BasicLayout 
@@ -26,6 +27,7 @@
 
     [Inject] public HttpClient HttpClient { get; set; }
     [Inject] public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    [Inject] protected IUsers_Repositories _users_Repositories { get; set; }
     private ClaimsPrincipal context => ((AntSKAuthProvider)AuthenticationStateProvider).GetCurrentUser();
 
     protected override async Task OnInitializedAsync()
@@ -39,10 +41,10 @@
         }
         else
         {
+            var userMenuList = _users_Repositories.GetFirst(p => p.No == context.Identity.Name).MenuRole.Split(",").ToList();
             //非管理员用户不允许操作系统设置
-            _menuData = menuList.Where(p => !p.Key.Contains("setting") ).ToArray();
+            _menuData = menuList.Where(p => p.Key != "setting"&&userMenuList.Contains(p.Key)).ToArray();
         }
-
     }
 
 

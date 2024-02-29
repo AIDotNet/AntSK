@@ -3,7 +3,6 @@
 @using AntSK.Models
 @page "/setting/user/add"
 @page "/setting/user/add/{UserId}"
-@inject IMessageService _message
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
 
@@ -26,14 +25,31 @@
                 <FormItem Label="用户备注" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入用户备注" @bind-Value="@context.Describe" />
                 </FormItem>
+
+                <FormItem Label="菜单权限" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Select Mode="multiple"
+                            @bind-Values="_menuKeys"
+                            Placeholder="选择菜单权限"
+                            TItemValue="string"
+                            TItem="string"
+                            Size="@AntSizeLDSType.Default">
+                        <SelectOptions>
+                            @foreach (var menu in menuList)
+                            {
+                                <SelectOption TItem="string" TItemValue="string" Value="@menu.Key" Label="@menu.Name" />
+                            }
+                        </SelectOptions>
+                    </Select>
+                </FormItem>
+
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
-                    <Button Type="primary" HtmlType="submit">
+                    <Button Type="primary" OnClick="HandleSubmit">
                         保存
                     </Button>
                     <Button OnClick="Back">
                         返回
                     </Button>
-                </FormItem>            
+                </FormItem>
             </Form>
         </Card>
     </ChildContent>

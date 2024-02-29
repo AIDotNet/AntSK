@@ -37,6 +37,11 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         [Required]
         public string Describe { get; set; }
+        /// <summary>
+        /// 菜单权限
+        /// </summary>
+        [Required]
+        public string MenuRole { get; set; }
 
     }
 }
