@@ -1,4 +1,8 @@
 ﻿@namespace AntSK
+@using System.Security.Claims
+@using AntSK.Services.Auth
+@using Microsoft.AspNetCore.Components.Authorization
+@using AntSK.Domain.Options
 @inherits LayoutComponentBase
 
 <AntDesign.ProLayout.BasicLayout 
@@ -21,11 +25,24 @@
     private MenuDataItem[] _menuData = { };
 
     [Inject] public HttpClient HttpClient { get; set; }
+    [Inject] public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    private ClaimsPrincipal context => ((AntSKAuthProvider)AuthenticationStateProvider).GetCurrentUser();
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _menuData = await HttpClient.GetFromJsonAsync<MenuDataItem[]>("data/menu.json");
+        //菜单权限控制
+        var menuList  = await HttpClient.GetFromJsonAsync<MenuDataItem[]>("data/menu.json");
+        if (context.Identity.Name == LoginOption.User)
+        {
+            _menuData = menuList;
+        }
+        else
+        {
+            //非管理员用户不允许操作系统设置
+            _menuData = menuList.Where(p => !p.Key.Contains("setting") ).ToArray();
+        }
+
     }
 
 
