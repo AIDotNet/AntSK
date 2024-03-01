@@ -36,7 +36,7 @@ namespace AntSK.Services.LLamaSharp
         {
             float[] embeddings =await _embedder.GetEmbeddings(text);
             //PG只有1536维
-            return embeddings.ToList().Take(1536).ToList();      
+            return embeddings.ToList(); 
         }
     }
 }

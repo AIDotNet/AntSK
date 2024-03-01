@@ -32,7 +32,7 @@ namespace AntSK.Services.LLamaSharp
         {
             var @params = new ModelParams(LLamaSharpOption.Chat)
             {
-                ContextSize = 512,
+                ContextSize = 2048,
             };
 
             // todo: share weights from a central service
