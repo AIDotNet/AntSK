@@ -203,24 +203,31 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task<string> HistorySummarize(string questions)
         {
-            StringBuilder history = new StringBuilder();
-            foreach (var item in MessageList)
+            if (MessageList.Count > 1)
             {
-                if (item.IsSend)
+                StringBuilder history = new StringBuilder();
+                foreach (var item in MessageList)
                 {
-                    history.Append($"user:{item.Context}{Environment.NewLine}");
+                    if (item.IsSend)
+                    {
+                        history.Append($"user:{item.Context}{Environment.NewLine}");
+                    }
+                    else
+                    {
+                        history.Append($"assistant:{item.Context}{Environment.NewLine}");
+                    }
                 }
-                else 
-                {
-                    history.Append($"assistant:{item.Context}{Environment.NewLine}");
-                }    
-            }
 
-            KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
-            var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
-            string his = summary.GetValue<string>();
-            var msg = $"历史对话：{his}{Environment.NewLine} 用户问题：{Environment.NewLine}{questions}"; ;
-            return msg;
+                KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
+                var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
+                string his = summary.GetValue<string>();
+                var msg = $"历史对话：{his}{Environment.NewLine} 用户问题：{Environment.NewLine}{questions}"; ;
+                return msg;
+            }
+            else 
+            {
+                return questions;
+            }
         }
     }
 }

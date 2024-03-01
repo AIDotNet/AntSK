@@ -39,9 +39,8 @@ namespace AntSK.Services.OpenApi
     {
         public async Task Chat(OpenAIModel model,string sk, HttpContext HttpContext)
         {
-            OpenAIResult result = new OpenAIResult();
-            result.created= DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            result.choices=new List<ChoicesModel>() { new ChoicesModel() { message=new OpenAIMessage() { role= "assistant" } } };
+
+
             Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == sk);
 
             if (app.IsNotNull())
@@ -53,26 +52,42 @@ namespace AntSK.Services.OpenApi
                         //普通会话
                         if (model.stream)
                         {
-                            await SendChatStream( HttpContext, result, app, msg);
+                            OpenAIStreamResult result1 = new OpenAIStreamResult();
+                            result1.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                            result1.choices = new List<StreamChoicesModel>() { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
+                            await SendChatStream( HttpContext, result1, app, msg);
+                            HttpContext.Response.ContentType = "application/json";
+                            await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result1));
+                            await HttpContext.Response.CompleteAsync();
                             return;
                         }
                         else 
                         {
-                            result.choices[0].message.content = await SendChat(msg, app);
+                            OpenAIResult result2 = new OpenAIResult();
+                            result2.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                            result2.choices = new List<ChoicesModel>() { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
+                            result2.choices[0].message.content = await SendChat(msg, app);
+                            HttpContext.Response.ContentType = "application/json";
+                            await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result2));
+                            await HttpContext.Response.CompleteAsync();
                         }
                         break;
                     case "kms":
                         //知识库问答
-                        result.choices[0].message.content = await SendKms( msg, app);
+                        OpenAIResult result3 = new OpenAIResult();
+                        result3.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                        result3.choices = new List<ChoicesModel>() { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
+                        result3.choices[0].message.content = await SendKms( msg, app);
+                        HttpContext.Response.ContentType = "application/json";
+                        await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result3));
+                        await HttpContext.Response.CompleteAsync();
                         break;
                 }
             }
-            HttpContext.Response.ContentType = "application/json";
-            await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
-            await HttpContext.Response.CompleteAsync();
+    
         }
 
-        private async Task SendChatStream( HttpContext HttpContext, OpenAIResult result, Apps app, string msg)
+        private async Task SendChatStream( HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
 
@@ -91,7 +106,7 @@ namespace AntSK.Services.OpenApi
 
             await foreach (var content in chatResult)
             {
-                result.choices[0].message.content = content.Content.ConvertToString();
+                result.choices[0].delta.content = content.Content.ConvertToString();
                 string message = $"data: {JsonConvert.SerializeObject(result)}\n\n";
                 await HttpContext.Response.WriteAsync(message, Encoding.UTF8);
                 await HttpContext.Response.Body.FlushAsync();

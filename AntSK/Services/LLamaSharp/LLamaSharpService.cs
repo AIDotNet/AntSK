@@ -35,12 +35,17 @@ namespace AntSK.Services.LLamaSharp
    
         public async Task ChatStream(OpenAIModel model, HttpContext HttpContext)
         {
-            HttpContext.Response.ContentType = "text/event-stream";
+            HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
+            OpenAIStreamResult result = new OpenAIStreamResult();
+            result.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            result.choices = new List<StreamChoicesModel>() { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
             string questions = model.messages.LastOrDefault().content;
+
             await foreach (var r in _lLamaChatService.ChatStreamAsync(questions))
             {
-                Console.Write(r);
-                await HttpContext.Response.WriteAsync("data:" + r + "\n\n");
+                result.choices[0].delta.content = r.ConvertToString();
+                string message = $"data: {JsonConvert.SerializeObject(result)}\n\n";
+                await HttpContext.Response.WriteAsync(message, Encoding.UTF8);
                 await HttpContext.Response.Body.FlushAsync();
             }
             await HttpContext.Response.WriteAsync("data: [DONE]");

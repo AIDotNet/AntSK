@@ -12,6 +12,7 @@ namespace AntSK.Models.OpenAPI
         public long created { get; set; }
     }
 
+
     public class ChoicesModel
     {
         public string finish_reason { get; set; } = "stop";
@@ -46,4 +47,21 @@ namespace AntSK.Models.OpenAPI
 
         public List<float> embedding { get; set; }
     }
+
+
+    public class OpenAIStreamResult
+    {
+        public string id { get; set; } = Guid.NewGuid().ToString();
+        [JsonProperty("object")]
+        public string obj { get; set; } = "chat.completion";
+        public List<StreamChoicesModel> choices { get; set; }
+        public long created { get; set; }
+    }
+    public class StreamChoicesModel
+    {
+        public int index { get; set; } = 0;
+
+        public OpenAIMessage delta { get; set; }
+    }
+
 }
