@@ -177,10 +177,11 @@ namespace AntSK.Pages.KmsPage
                 "application/vnd.openxmlformats-officedocument.presentationml.presentation",
                 "application/pdf",
                 "application/json",
+                "text/x-markdown",
                 "text/markdown"
             };
             var IsType = types.Contains( file.Type );
-            if (!IsType)
+            if (!IsType&& file.Ext != ".md")
             {
                 _message.Error("文件格式错误,请重新选择!");
             }
