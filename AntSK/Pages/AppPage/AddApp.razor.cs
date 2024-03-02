@@ -68,7 +68,10 @@ namespace AntSK.Pages.AppPage
                 {
                     _appModel.KmsIdList = string.Join(",", kmsIds);
                 }
-
+                if (apiIds != null && apiIds.Count() > 0)
+                {
+                    _appModel.ApiFunctionList = string.Join(",", apiIds);
+                }
                 _apps_Repositories.Insert(_appModel);
             }
             else {
@@ -77,7 +80,10 @@ namespace AntSK.Pages.AppPage
                 {
                     _appModel.KmsIdList = string.Join(",", kmsIds);
                 }
-
+                if (apiIds != null && apiIds.Count() > 0)
+                {
+                    _appModel.ApiFunctionList = string.Join(",", apiIds);
+                }
                 _apps_Repositories.Update(_appModel);
             }
           

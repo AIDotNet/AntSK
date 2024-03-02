@@ -5,6 +5,7 @@ using AntSK.Domain.Utils;
 using Azure.AI.OpenAI;
 using Azure.Core;
 using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Wordprocessing;
 using MarkdownSharp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.KernelMemory;
@@ -13,6 +14,7 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
+using RestSharp;
 using SqlSugar;
 using System;
 using System.Text;
@@ -27,6 +29,8 @@ namespace AntSK.Pages.ChatPage
         protected MessageService? Message { get; set; }
         [Inject]
         protected IApps_Repositories _apps_Repositories { get; set; }
+        [Inject]
+        protected IApis_Repositories _apis_Repositories { get; set; }
         [Inject]
         protected IKmss_Repositories _kmss_Repositories { get; set; }
         [Inject]
@@ -187,11 +191,16 @@ namespace AntSK.Pages.ChatPage
                 //如果模板为空，给默认提示词
                 app.Prompt = "{{$input}}";
             }
+            if (!string.IsNullOrEmpty(app.ApiFunctionList))
+            {
+                ImportFunctions(app,_kernel);
+            }
+            OpenAIPromptExecutionSettings settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
             var promptTemplateFactory = new KernelPromptTemplateFactory();
             var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
             var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
 
-            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings());
+            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
             var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
             MessageInfo info = null;
             var markdown = new Markdown();
@@ -221,6 +230,97 @@ namespace AntSK.Pages.ChatPage
             }
      
             await InvokeAsync(StateHasChanged);
+        }
+
+        private void ImportFunctions(Apps app,Kernel _kernel)
+        {
+            //开启自动插件调用
+            var apiIdList = app.ApiFunctionList.Split(",");
+            var apiList = _apis_Repositories.GetList(p => apiIdList.Contains(p.Id));
+            List<KernelFunction> functions = new List<KernelFunction>();
+            var plugin = _kernel.Plugins.FirstOrDefault(p => p.Name == "ApiFunctions");
+
+            if (plugin.IsNotNull())
+            {
+                return;
+            }
+            else {
+                foreach (var api in apiList)
+                {
+                    if (plugin.IsNotNull() && plugin.TryGetFunction(api.Name, out KernelFunction kf))
+                    {
+                        //插件已经添加,变重复注册
+                        continue;
+                    }
+
+                    switch (api.Method)
+                    {
+                        case HttpMethodType.Get:
+                            functions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
+                            {
+                                try
+                                {
+                                    Console.WriteLine(msg);
+                                    RestClient client = new RestClient();
+                                    RestRequest request = new RestRequest(api.Url, Method.Get);
+                                    foreach (var header in api.Header.Split("\r\n"))
+                                    {
+                                        var headerArray = header.Split(":");
+                                        if (headerArray.Length == 2)
+                                        {
+                                            request.AddHeader(headerArray[0], headerArray[1]);
+                                        }
+                                    }
+                                    //这里应该还要处理一次参数提取，等后面再迭代
+                                    foreach (var query in api.Query.Split("\r\n"))
+                                    {
+                                        var queryArray = query.Split("=");
+                                        if (queryArray.Length == 2)
+                                        {
+                                            request.AddQueryParameter(queryArray[0], queryArray[1]);
+                                        }
+                                    }
+                                    var result = client.Execute(request);
+                                    return result.Content;
+                                }
+                                catch (System.Exception ex)
+                                {
+                                    return "调用失败：" + ex.Message;
+                                }
+                            }, api.Name, $"{api.Describe}"));
+                            break;
+                        case HttpMethodType.Post:
+                            functions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
+                            {
+                                try
+                                {
+                                    Console.WriteLine(msg);
+                                    RestClient client = new RestClient();
+                                    RestRequest request = new RestRequest(api.Url, Method.Post);
+                                    foreach (var header in api.Header.Split("\r\n"))
+                                    {
+                                        var headerArray = header.Split(":");
+                                        if (headerArray.Length == 2)
+                                        {
+                                            request.AddHeader(headerArray[0], headerArray[1]);
+                                        }
+                                    }
+                                    //这里应该还要处理一次参数提取，等后面再迭代
+                                    request.AddJsonBody(api.JsonBody);
+                                    var result = client.Execute(request);
+                                    return result.Content;
+                                }
+                                catch (System.Exception ex)
+                                {
+                                    return "调用失败：" + ex.Message;
+                                }
+                            }, api.Name, $"{api.Describe}"));
+                            break;
+                    }
+                }
+                _kernel.ImportPluginFromFunctions("ApiFunctions", functions);
+            }
+      
         }
 
         /// <summary>

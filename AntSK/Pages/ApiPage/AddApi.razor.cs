@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using AntSK.Domain.Repositories;
 using AntSK.Models;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace AntSK.Pages.ApiPage
 {
@@ -43,6 +44,14 @@ namespace AntSK.Pages.ApiPage
                     _ = Message.Error("名称已存在！", 2);
                     return;
                 }
+
+                string pattern = @"^[A-Za-z]\w*$"; // 正则表达式模式
+                if (!Regex.IsMatch(_apiModel.Name, pattern))
+                {
+                    _ = Message.Error("API名称只能是字母、数字、下划线组成，且不能以数字开头！", 2);
+                    return;
+                }
+
                 _apis_Repositories.Insert(_apiModel);
             }
             else {
