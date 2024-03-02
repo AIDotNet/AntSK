@@ -157,7 +157,23 @@ Postgres:{
 
 I use CodeFirst mode. As long as the database link is configured, the table structure is automatically created
 
+If you want to use LLamaSharp to run the local model, you also need to set the following configuration:
+```
+  "LLamaSharp": {
+    "Chat": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf",
+    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf"
+  },
+```
 
+You need to configure the addresses of the Chat and Embedding models, and then modify EndPoint to local. When using the local model, parameters such as Key, Model, and Embedding Model are not used, so you can freely fill in these parameters:
+```
+ "OpenAIOption": {
+    "EndPoint": "https://ip:port/llama/",
+    "Key": "",
+    "Model": "",
+    "EmbeddingModel": ""
+  },
+```
 
 
 To learn more or start using**AntSK**, you can follow my public account and join the exchange group.
