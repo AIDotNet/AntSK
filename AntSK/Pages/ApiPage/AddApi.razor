@@ -22,22 +22,35 @@
                 <FormItem Label="Url地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入Url地址" @bind-Value="@context.Url" />
                 </FormItem>
+                <FormItem Label="HttpHeader" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <TextArea Placeholder="一个一行，以冒号分割。例如:Content-Type:application/json" @bind-Value="@context.Url" MinRows="3" />
+                </FormItem>
                 <FormItem Label="Method类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.Method">
                         <Radio RadioButton Value="@(HttpMethodType.Get)">Get</Radio>
                          <Radio RadioButton Value="@(HttpMethodType.Post)">Post</Radio>
                      </RadioGroup>
                  </FormItem>
-                 <FormItem Label="入参提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                     <TextArea Placeholder="请输入入参提示词" @bind-Value="@context.InputPrompt" MinRows="5" />
-                 </FormItem>
-                 <FormItem Label="返回提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                     <TextArea Placeholder="请输入返回提示词" @bind-Value="@context.OutputPrompt" MinRows="5" />
-                 </FormItem>
 
-                 <FormItem Label="JsonBody" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                     <TextArea Placeholder="请输入JsonBody" @bind-Value="@context.JsonBody" MinRows="5" />
-                 </FormItem>
+                @if (context.Method == HttpMethodType.Get)
+                {
+                    <FormItem Label="Query" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <TextArea Placeholder="请输入QueryString参数" @bind-Value="@context.Query" MinRows="5" />
+                    </FormItem>
+                }
+                else if (context.Method == HttpMethodType.Post)
+                {
+                    <FormItem Label="JsonBody" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <TextArea Placeholder="请输入JsonBody" @bind-Value="@context.JsonBody" MinRows="5" />
+                    </FormItem>
+                }
+
+                <FormItem Label="入参提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <TextArea Placeholder="请输入入参提示词" @bind-Value="@context.InputPrompt" MinRows="5" />
+                </FormItem>
+                <FormItem Label="返回提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <TextArea Placeholder="请输入返回提示词" @bind-Value="@context.OutputPrompt" MinRows="5" />
+                </FormItem>
                  <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
                      <Button Type="primary" HtmlType="submit">
                          保存

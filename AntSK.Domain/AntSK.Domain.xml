@@ -107,6 +107,16 @@
             请求方法
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.Query">
+            <summary>
+            QueryString参数
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.JsonBody">
+            <summary>
+            jsonBody 实体
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Apis.InputPrompt">
             <summary>
             入参提示词
@@ -115,11 +125,6 @@
         <member name="P:AntSK.Domain.Repositories.Apis.OutputPrompt">
             <summary>
             返回提示词
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.Apis.JsonBody">
-            <summary>
-            json 实体
             </summary>
         </member>
         <member name="P:AntSK.Domain.Repositories.Apps.Name">
@@ -135,6 +140,11 @@
         <member name="P:AntSK.Domain.Repositories.Apps.Prompt">
             <summary>
             提示词
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.ApiFunctionList">
+            <summary>
+            插件列表
             </summary>
         </member>
         <member name="P:AntSK.Domain.Repositories.Apps.KmsIdList">

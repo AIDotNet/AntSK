@@ -21,7 +21,7 @@
                 </FormItem>
                 <FormItem Label="类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.Type">
-                        <Radio RadioButton Value="@("chat")">简单对话</Radio>
+                        <Radio RadioButton Value="@("chat")">会话应用</Radio>
                         <Radio RadioButton Value="@("kms")" >知识库</Radio>
                      </RadioGroup>
                  </FormItem>
@@ -30,9 +30,26 @@
                 </FormItem>
                 @if (@context.Type == "chat")
                 {
+
                     <FormItem Label="提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <TextArea MinRows="4" Placeholder="请输入提示词,用户输入使用{{$input}} 来做占位符" @bind-Value="@context.Prompt" />
-                    </FormItem>     
+                    </FormItem>
+
+                    <FormItem Label="API插件列表(选择后会开启自动调用)" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Select Mode="multiple"
+                                @bind-Values="apiIds"
+                                Placeholder="选择API插件"
+                                TItemValue="string"
+                                TItem="string"
+                                Size="@AntSizeLDSType.Default">
+                            <SelectOptions>
+                                @foreach (var api in _apiList)
+                                {
+                                    <SelectOption TItem="string" TItemValue="string" Value="@api.Id" Label="@api.Name" />
+                                }
+                            </SelectOptions>
+                        </Select>
+                    </FormItem>
                 }
                 @if (@context.Type == "kms")
                 {

@@ -16,6 +16,9 @@ namespace AntSK.Pages.AppPage
 
         [Inject]
         protected IKmss_Repositories _kmss_Repositories { get; set; }
+
+        [Inject]
+        protected IApis_Repositories _apis_Repositories { get; set; }
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
         [Inject]
@@ -27,17 +30,25 @@ namespace AntSK.Pages.AppPage
 
         private List<Kmss> _kmsList = new List<Kmss>();
 
+        IEnumerable<string> apiIds;
+
+        private List<Apis> _apiList = new List<Apis>();
+
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             _kmsList = _kmss_Repositories.GetList();
+            _apiList= _apis_Repositories.GetList();
             if (!string.IsNullOrEmpty(AppId))
             {
                 //查看
                 _appModel= _apps_Repositories.GetFirst(p => p.Id == AppId);
                 kmsIds = _appModel.KmsIdList?.Split(",");
+                apiIds= _appModel.ApiFunctionList?.Split(",");
             }
+
+
         }
         private void HandleSubmit()
         {

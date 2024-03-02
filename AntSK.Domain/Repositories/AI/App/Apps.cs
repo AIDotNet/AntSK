@@ -35,6 +35,13 @@ namespace AntSK.Domain.Repositories
         /// 提示词
         /// </summary>
         public string? Prompt { get; set; }
+
+        /// <summary>
+        /// 插件列表
+        /// </summary>
+        public string? ApiFunctionList { get; set; }
+
+
         /// <summary>
         /// 知识库ID列表
         /// </summary>
