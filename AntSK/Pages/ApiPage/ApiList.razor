@@ -1,5 +1,6 @@
 ﻿@namespace AntSK.Pages.ApiPage
 @using AntSK.Domain.Repositories
+@using AntSK.Domain.Model
 @page "/plugins/apilist"
 @inject NavigationManager NavigationManager
 @using AntSK.Services.Auth
@@ -47,7 +48,15 @@
                                      <!--todo: Ellipsis not working-->
                                      @context.Describe
                                     </Paragraph>
-                                   
+                                    @if (context.Method == HttpMethodType.Get )
+                                    {
+                                        <Tag Color="@PresetColor.Yellow.ToString()">Get</Tag>
+                                    }
+                                    else if (context.Method == HttpMethodType.Post)
+                                    {
+                                        <Tag Color="@PresetColor.Green.ToString()">Post</Tag>
+
+                                    }
                                 </DescriptionTemplate>
                             </CardMeta>
                         </Card>

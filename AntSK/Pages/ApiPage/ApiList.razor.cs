@@ -41,7 +41,7 @@ namespace AntSK.Pages.ApiPage
 
         private void NavigateToAddApp()
         {
-            NavigationManager.NavigateTo("/app/add");
+            NavigationManager.NavigateTo("/plugins/api/add");
         }
 
         private async Task Search(string searchKey)
@@ -51,14 +51,8 @@ namespace AntSK.Pages.ApiPage
 
         private void Info(string id)
         {
-            NavigationManager.NavigateTo($"/app/add/{id}");
+            NavigationManager.NavigateTo($"/plugins/api/add/{id}");
         }
-
-        private void Open(string id)
-        {
-            NavigationManager.NavigateTo($"/app/open/{id}");
-        }
-
 
         private async Task Delete(string id)
         {

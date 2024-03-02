@@ -1,4 +1,4 @@
-﻿using AntSK.Domain.Model.Enum;
+﻿using AntSK.Domain.Model;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
