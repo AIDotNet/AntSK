@@ -4,7 +4,7 @@ using AntSK.Domain.Repositories;
 using AntSK.Models;
 using AntSK.Services;
 
-namespace AntSK.Pages
+namespace AntSK.Pages.AppPage
 {
     public partial class AppList
     {
