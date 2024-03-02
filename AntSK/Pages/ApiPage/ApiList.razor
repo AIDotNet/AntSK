@@ -34,11 +34,11 @@
                         <Card Hoverable Bordered Class="card" Actions="@(new[] {
                             info(()=> Info(context.Id)) ,
                             delete(async ()=>await Delete(context.Id)) ,
-                       
+
                              })" Style="max-height:247px;">
                              <CardMeta>
                                  <AvatarTemplate>
-                                   
+
                                  </AvatarTemplate>
                                  <TitleTemplate>
                                      <a>@context.Name</a>
@@ -48,14 +48,13 @@
                                      <!--todo: Ellipsis not working-->
                                      @context.Describe
                                     </Paragraph>
-                                    @if (context.Method == HttpMethodType.Get )
+                                    @if (context.Method == HttpMethodType.Get)
                                     {
                                         <Tag Color="@PresetColor.Yellow.ToString()">Get</Tag>
                                     }
                                     else if (context.Method == HttpMethodType.Post)
                                     {
                                         <Tag Color="@PresetColor.Green.ToString()">Post</Tag>
-
                                     }
                                 </DescriptionTemplate>
                             </CardMeta>

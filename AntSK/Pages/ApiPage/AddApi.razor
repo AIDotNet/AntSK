@@ -27,9 +27,9 @@
                         <Radio RadioButton Value="@(HttpMethodType.Get)">Get</Radio>
                          <Radio RadioButton Value="@(HttpMethodType.Post)">Post</Radio>
                      </RadioGroup>
-                </FormItem>
+                 </FormItem>
                  <FormItem Label="入参提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                     <TextArea Placeholder="请输入入参提示词" @bind-Value="@context.InputPrompt" MinRows="5"  />
+                     <TextArea Placeholder="请输入入参提示词" @bind-Value="@context.InputPrompt" MinRows="5" />
                  </FormItem>
                  <FormItem Label="返回提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                      <TextArea Placeholder="请输入返回提示词" @bind-Value="@context.OutputPrompt" MinRows="5" />
@@ -38,23 +38,23 @@
                  <FormItem Label="JsonBody" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                      <TextArea Placeholder="请输入JsonBody" @bind-Value="@context.JsonBody" MinRows="5" />
                  </FormItem>
-                <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
-                    <Button Type="primary" HtmlType="submit">
-                        保存
-                    </Button>
-                    <Button  OnClick="Back">
-                        返回
-                    </Button>
-                </FormItem>
-            </Form>
-        </Card>
-    </ChildContent>
-</PageContainer>
+                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
+                     <Button Type="primary" HtmlType="submit">
+                         保存
+                     </Button>
+                     <Button OnClick="Back">
+                         返回
+                     </Button>
+                 </FormItem>
+             </Form>
+         </Card>
+     </ChildContent>
+ </PageContainer>
 
 
-<style>
-    .avatar-uploader > .ant-upload {
-        width: 128px;
-        height: 128px;
-    }
-</style>
+ <style>
+     .avatar-uploader > .ant-upload {
+         width: 128px;
+         height: 128px;
+     }
+ </style>
