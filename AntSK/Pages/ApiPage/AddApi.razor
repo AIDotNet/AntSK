@@ -16,14 +16,14 @@
                 <FormItem Label="Api名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入Api名称" @bind-Value="@context.Name" />
                 </FormItem>
-                <FormItem Label="Api名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                <FormItem Label="Api描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入Api描述" @bind-Value="@context.Describe" />
                 </FormItem>
                 <FormItem Label="Url地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入Url地址" @bind-Value="@context.Url" />
                 </FormItem>
                 <FormItem Label="HttpHeader" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <TextArea Placeholder="一个一行，以冒号分割。例如:Content-Type:application/json" @bind-Value="@context.Url" MinRows="3" />
+                    <TextArea Placeholder="一个一行，以冒号分割。例如:Content-Type:application/json" @bind-Value="@context.Header" MinRows="3" />
                 </FormItem>
                 <FormItem Label="Method类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.Method">
