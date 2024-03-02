@@ -29,10 +29,24 @@ namespace AntSK.Pages.Setting.User
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            _data = _users_Repositories.GetList();
+            await InitData();
+        }
+        private async Task InitData(string searchKey=null)
+        {
+            if (string.IsNullOrEmpty(searchKey))
+            {
+                _data = _users_Repositories.GetList();
+            }
+            else
+            {
+                _data = _users_Repositories.GetList(p=>p.Name.Contains(searchKey)||p.Describe.Contains(searchKey)||p.No.Contains(searchKey));
+            }
+        }
+        public async Task OnSearch() {
+            await InitData(_searchKeyword);
         }
 
-        public void AddUser() {
+        public async Task AddUser() {
             NavigationManager.NavigateTo("/setting/user/add");
         }
 
