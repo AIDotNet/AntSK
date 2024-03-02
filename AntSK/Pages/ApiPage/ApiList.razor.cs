@@ -6,12 +6,12 @@ using AntSK.Services;
 
 namespace AntSK.Pages
 {
-    public partial class AppList
+    public partial class ApiList
     {
-        private Apps [] _data = { };
+        private Apis [] _data = { };
 
         [Inject] 
-        protected IApps_Repositories _apps_Repositories { get; set; }
+        protected IApis_Repositories _apis_Repositories { get; set; }
         [Inject]
         IConfirmService _confirmService { get; set; }
 
@@ -23,15 +23,15 @@ namespace AntSK.Pages
 
         private async Task InitData(string searchKey)
         {
-            var list = new List<Apps> { new Apps() };
-            List<Apps> data;
+            var list = new List<Apis> { new Apis() };
+            List<Apis> data;
             if (string.IsNullOrEmpty(searchKey))
             {
-                data = await _apps_Repositories.GetListAsync();
+                data = await _apis_Repositories.GetListAsync();
             }
             else
             {
-                data = await _apps_Repositories.GetListAsync(p => p.Name.Contains(searchKey));
+                data = await _apis_Repositories.GetListAsync(p => p.Name.Contains(searchKey));
             }
           
             list.AddRange(data);
@@ -62,12 +62,12 @@ namespace AntSK.Pages
 
         private async Task Delete(string id)
         {
-            var content = "是否确认删除此应用";
+            var content = "是否确认删除此Api";
             var title = "删除";
             var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
             if (result == ConfirmResult.Yes)
             {
-                await _apps_Repositories.DeleteAsync(id);
+                await _apis_Repositories.DeleteAsync(id);
                 await InitData("");       
             }
         }

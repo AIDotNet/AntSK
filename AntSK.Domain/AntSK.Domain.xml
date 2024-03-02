@@ -87,6 +87,41 @@
             pg链接字符串
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.Name">
+            <summary>
+            接口名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.Describe">
+            <summary>
+            接口描述
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.Url">
+            <summary>
+            接口地址
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.Method">
+            <summary>
+            请求方法
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.InputPrompt">
+            <summary>
+            入参提示词
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.OutputPrompt">
+            <summary>
+            返回提示词
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.JsonBody">
+            <summary>
+            json 实体
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Apps.Name">
             <summary>
             名称

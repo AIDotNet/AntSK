@@ -28,5 +28,16 @@ namespace AntSK.Models
                 Sm = new EmbeddedProperty { Span = 10, Offset = 7 },
             }
         };
+
+        public static ListGridType _listGridType = new ListGridType
+        {
+            Gutter = 16,
+            Xs = 1,
+            Sm = 2,
+            Md = 3,
+            Lg = 3,
+            Xl = 4,
+            Xxl = 4
+        };
     }
 }

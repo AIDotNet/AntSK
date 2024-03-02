@@ -1,11 +1,11 @@
 ﻿@namespace AntSK.Pages
 @using AntSK.Domain.Repositories
-@page "/AppList"
+@page "/plugins/apilist"
 @inject NavigationManager NavigationManager
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
 
-<PageContainer Title="应用列表">
+<PageContainer Title="API列表">
     <Content>
         <div style="text-align: center;">
             <Search Placeholder="输入回车"
@@ -17,7 +17,7 @@
     </Content>
     <ChildContent>
         <div class="cardList">
-            <AntList TItem="Apps"
+            <AntList TItem="Apis"
                      DataSource="_data"
                      ItemLayout="ListItemLayout.Horizontal"
                      Grid="LayoutModel._listGridType">
@@ -25,20 +25,19 @@
                     @if (string.IsNullOrEmpty(context.Id))
                     {
                         <Button Type="dashed" class="newButton" @onclick="NavigateToAddApp">
-                            <Icon Type="plus" Theme="outline" /> 创建应用
+                            <Icon Type="plus" Theme="outline" /> 创建API
                         </Button>
                     }
                     else
                     {
                         <Card Hoverable Bordered Class="card" Actions="@(new[] {
                             info(()=> Info(context.Id)) ,
-                            open(()=> Open(context.Id)),
                             delete(async ()=>await Delete(context.Id)) ,
                        
                              })" Style="max-height:247px;">
                              <CardMeta>
                                  <AvatarTemplate>
-                                     <Avatar Icon="@context.Icon" Style="background-color: #1890ff" />
+                                   
                                  </AvatarTemplate>
                                  <TitleTemplate>
                                      <a>@context.Name</a>
@@ -48,15 +47,7 @@
                                      <!--todo: Ellipsis not working-->
                                      @context.Describe
                                     </Paragraph>
-                                    @if (context.Type == "chat")
-                                    {
-                                        <Tag Color="@PresetColor.Yellow.ToString()">会话应用</Tag>
-                                    }
-                                    else if (context.Type == "kms")
-                                    {
-                                        <Tag Color="@PresetColor.Green.ToString()">知识库</Tag>
-                                        
-                                    }
+                                   
                                 </DescriptionTemplate>
                             </CardMeta>
                         </Card>
@@ -70,6 +61,5 @@
 @code
 {
     RenderFragment info(Action clickAction) =>@<a key="info" @onclick="@clickAction">查看</a>;
-    RenderFragment open(Action clickAction) =>@<a key="info" @onclick="@clickAction">外部使用</a>;
     RenderFragment delete(Action clickAction) => @<a key="delete" @onclick="@clickAction">删除</a> ;
 }
