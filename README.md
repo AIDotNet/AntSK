@@ -94,7 +94,7 @@ Login是默认的登陆账号和密码
   },
 ```
 
-需要配置Chat和Embedding模型的地址，然后修改EndPoint为本地：
+需要配置Chat和Embedding模型的地址，然后修改EndPoint为本地，使用本地模型时并没有用到Key、Model、EmbeddingModel这些参数，所以这几个你可以随意填写：
 ```
  "OpenAIOption": {
     "EndPoint": "https://ip:port/llama/",
