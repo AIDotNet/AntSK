@@ -37,6 +37,7 @@ namespace AntSK.Pages.Setting.AIModel
             {
                 _data = _aIModels_Repositories.GetList(p=>p.ModelName.Contains(searchKey)||p.ModelDescription.Contains(searchKey));
             }
+            await InvokeAsync(StateHasChanged);
         }
         public async Task OnSearch() {
             await InitData(_searchKeyword);

@@ -16,7 +16,8 @@ namespace AntSK.Pages.Setting.User
 
         [Inject] 
         protected IUsers_Repositories _users_Repositories { get; set; }
-
+        [Inject]
+        IConfirmService _confirmService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -33,6 +34,7 @@ namespace AntSK.Pages.Setting.User
             {
                 _data = _users_Repositories.GetList(p=>p.Name.Contains(searchKey)||p.Describe.Contains(searchKey)||p.No.Contains(searchKey));
             }
+            await InvokeAsync(StateHasChanged);
         }
         public async Task OnSearch() {
             await InitData(_searchKeyword);
@@ -45,6 +47,18 @@ namespace AntSK.Pages.Setting.User
         public void Edit(string userid)
         {
             NavigationManager.NavigateTo("/setting/user/add/"+userid);
+        }
+
+        public async Task Delete(string modelid)
+        {
+            var content = "是否确认删除此用户";
+            var title = "删除";
+            var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
+            if (result == ConfirmResult.Yes)
+            {
+                await _users_Repositories.DeleteAsync(modelid);
+                await InitData("");
+            }
         }
     }
 }
