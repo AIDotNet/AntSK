@@ -167,6 +167,21 @@
             描述
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Temperature">
+            <summary>
+            温度
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Apps.Prompt">
             <summary>
             提示词

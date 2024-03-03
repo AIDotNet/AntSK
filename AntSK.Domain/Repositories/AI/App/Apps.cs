@@ -25,11 +25,22 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         [Required]
         public string Describe { get; set; }
+        /// <summary>
+        /// 图标
+        /// </summary>
         [Required]
         public string Icon { get; set; }
 
+        /// <summary>
+        /// 类型
+        /// </summary>
         [Required]
         public string Type { get; set; }
+
+        /// <summary>
+        /// 温度
+        /// </summary>
+        public double Temperature { get; set; }=70f;
 
         /// <summary>
         /// 提示词
