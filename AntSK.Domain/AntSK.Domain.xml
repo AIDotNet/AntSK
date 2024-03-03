@@ -32,6 +32,14 @@
             瞬时
             </summary>
         </member>
+        <member name="M:AntSK.Domain.Domain.Service.KernelService.GetKernel(System.String,System.String)">
+            <summary>
+            获取kernel实例，依赖注入不好按每个用户去Import不同的插件
+            </summary>
+            <param name="modelId"></param>
+            <param name="apiKey"></param>
+            <returns></returns>
+        </member>
         <member name="M:AntSK.Domain.Map.MapperExtend.ToDTOList``1(System.Object)">
             <summary>
             Entity集合转DTO集合

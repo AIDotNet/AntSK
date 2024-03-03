@@ -171,7 +171,7 @@ namespace AntSK.Services.OpenApi
             }
             var promptTemplateFactory = new KernelPromptTemplateFactory();
             var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
-            var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
+            //var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
 
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings());
             var chatResult = await _kernel.InvokeAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });

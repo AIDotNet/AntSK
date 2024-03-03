@@ -133,7 +133,7 @@ void InitSK(WebApplicationBuilder builder)
     var handler = new OpenAIHttpClientHandler();
     var httpClient = new HttpClient(handler);
     httpClient.Timeout= TimeSpan.FromMinutes(5);
-    services.AddTransient<Kernel>((serviceProvider) =>
+    services.AddScoped<Kernel>((serviceProvider) =>
     {
         var kernel = Kernel.CreateBuilder()
          .AddOpenAIChatCompletion(

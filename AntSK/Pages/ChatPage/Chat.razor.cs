@@ -1,4 +1,5 @@
 ﻿using AntDesign;
+using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
@@ -37,8 +38,10 @@ namespace AntSK.Pages.ChatPage
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
         [Inject]
         protected MemoryServerless _memory { get; set; }
+        //[Inject]
+        //protected Kernel _kernel { get; set; }
         [Inject]
-        protected Kernel _kernel { get; set; }
+        protected IKernelService _kernelService { get; set; }
 
         protected bool _loading = false;
         protected List<MessageInfo> MessageList = [];
@@ -186,19 +189,24 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task SendChat(string questions, string msg, Apps app)
         {
+            var _kernel = _kernelService.GetKernel();
             if (string.IsNullOrEmpty(app.Prompt))
             {
                 //如果模板为空，给默认提示词
                 app.Prompt = "{{$input}}";
             }
+            OpenAIPromptExecutionSettings settings;
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
             {
-                ImportFunctions(app,_kernel);
+                _kernelService.ImportFunctions(app, _kernel);
+                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
             }
-            OpenAIPromptExecutionSettings settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
+            else 
+            {
+                settings = new() {};
+            }
             var promptTemplateFactory = new KernelPromptTemplateFactory();
             var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
-            var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
 
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
             var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
@@ -232,96 +240,7 @@ namespace AntSK.Pages.ChatPage
             await InvokeAsync(StateHasChanged);
         }
 
-        private void ImportFunctions(Apps app,Kernel _kernel)
-        {
-            //开启自动插件调用
-            var apiIdList = app.ApiFunctionList.Split(",");
-            var apiList = _apis_Repositories.GetList(p => apiIdList.Contains(p.Id));
-            List<KernelFunction> functions = new List<KernelFunction>();
-            var plugin = _kernel.Plugins.FirstOrDefault(p => p.Name == "ApiFunctions");
-
-            if (plugin.IsNotNull())
-            {
-                return;
-            }
-            else {
-                foreach (var api in apiList)
-                {
-                    if (plugin.IsNotNull() && plugin.TryGetFunction(api.Name, out KernelFunction kf))
-                    {
-                        //插件已经添加,变重复注册
-                        continue;
-                    }
-
-                    switch (api.Method)
-                    {
-                        case HttpMethodType.Get:
-                            functions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
-                            {
-                                try
-                                {
-                                    Console.WriteLine(msg);
-                                    RestClient client = new RestClient();
-                                    RestRequest request = new RestRequest(api.Url, Method.Get);
-                                    foreach (var header in api.Header.Split("\n"))
-                                    {
-                                        var headerArray = header.Split(":");
-                                        if (headerArray.Length == 2)
-                                        {
-                                            request.AddHeader(headerArray[0], headerArray[1]);
-                                        }
-                                    }
-                                    //这里应该还要处理一次参数提取，等后面再迭代
-                                    foreach (var query in api.Query.Split("\n"))
-                                    {
-                                        var queryArray = query.Split("=");
-                                        if (queryArray.Length == 2)
-                                        {
-                                            request.AddQueryParameter(queryArray[0], queryArray[1]);
-                                        }
-                                    }
-                                    var result = client.Execute(request);
-                                    return result.Content;
-                                }
-                                catch (System.Exception ex)
-                                {
-                                    return "调用失败：" + ex.Message;
-                                }
-                            }, api.Name, $"{api.Describe}"));
-                            break;
-                        case HttpMethodType.Post:
-                            functions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
-                            {
-                                try
-                                {
-                                    Console.WriteLine(msg);
-                                    RestClient client = new RestClient();
-                                    RestRequest request = new RestRequest(api.Url, Method.Post);
-                                    foreach (var header in api.Header.Split("\n"))
-                                    {
-                                        var headerArray = header.Split(":");
-                                        if (headerArray.Length == 2)
-                                        {
-                                            request.AddHeader(headerArray[0], headerArray[1]);
-                                        }
-                                    }
-                                    //这里应该还要处理一次参数提取，等后面再迭代
-                                    request.AddJsonBody(api.JsonBody);
-                                    var result = client.Execute(request);
-                                    return result.Content;
-                                }
-                                catch (System.Exception ex)
-                                {
-                                    return "调用失败：" + ex.Message;
-                                }
-                            }, api.Name, $"{api.Describe}"));
-                            break;
-                    }
-                }
-                _kernel.ImportPluginFromFunctions("ApiFunctions", functions);
-            }
-      
-        }
+       
 
         /// <summary>
         /// 历史会话的会话总结
@@ -330,6 +249,7 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task<string> HistorySummarize(string questions)
         {
+            var _kernel = _kernelService.GetKernel();
             if (MessageList.Count > 1)
             {
                 StringBuilder history = new StringBuilder();
