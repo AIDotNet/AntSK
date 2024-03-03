@@ -22,7 +22,7 @@ namespace AntSK.Domain.Domain.Service
         ) : IKernelService
     {
         /// <summary>
-        /// 获取kernel实例，依赖注入不好按每个用户去Import不同的插件
+        /// 获取kernel实例，依赖注入不好按每个用户去Import不同的插件，所以每次new一个新的kernel
         /// </summary>
         /// <param name="modelId"></param>
         /// <param name="apiKey"></param>
@@ -42,6 +42,11 @@ namespace AntSK.Domain.Domain.Service
             return kernel;
         }
 
+        /// <summary>
+        /// 根据app配置的插件，导入插件
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="_kernel"></param>
         public void ImportFunctions(Apps app, Kernel _kernel)
         {
             //开启自动插件调用
@@ -122,6 +127,10 @@ namespace AntSK.Domain.Domain.Service
 
         }
 
+        /// <summary>
+        /// 注册默认插件
+        /// </summary>
+        /// <param name="kernel"></param>
         void RegisterPluginsWithKernel(Kernel kernel)
         {
             kernel.ImportPluginFromObject(new ConversationSummaryPlugin(), "ConversationSummaryPlugin");
