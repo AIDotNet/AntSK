@@ -499,6 +499,26 @@
             sqlserver连接
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.AIModelType">
+            <summary>
+            模型类型
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.EndPoint">
+            <summary>
+            模型地址
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.ModelName">
+            <summary>
+            模型名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.ModelKey">
+            <summary>
+            模型秘钥
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Users.No">
             <summary>
             工号，用于登陆

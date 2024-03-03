@@ -1,0 +1,78 @@
+﻿@namespace AntSK.Pages.Setting.AIModel
+@using AntSK.Domain.Repositories
+@using AntSK.Domain.Model.Enum
+@page "/setting/modellist"
+@inject NavigationManager NavigationManager
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
+
+<div>
+    <PageContainer Title="模型管理">
+        <ChildContent>
+            <div class="standardList">
+
+                <Card Class="listCard"
+                      Title="模型列表"
+                      Style="margin-top: 24px;"
+                      BodyStyle="padding: 0 32px 40px 32px">
+                    <Extra>
+                        <div class="extraContent">
+
+                            <Search Class="extraContentSearch" Placeholder="查询" @bind-Value="_searchKeyword" OnSearch="OnSearch" />
+                        </div>
+                    </Extra>
+                    <ChildContent>
+                        <Button Type="dashed"
+                                Style="width: 100%; margin-bottom: 8px;"
+                                OnClick="AddModel">
+                            <Icon Type="plus" Theme="outline" />
+                            新增模型
+                        </Button>
+
+                        <AntList TItem="AIModels"
+                                 DataSource="_data"
+                                 ItemLayout="ListItemLayout.Horizontal">
+                            <ListItem Actions="new[] {
+                            edit(()=> Edit(context.Id)
+                             )}" Style="width:100%">
+                                <div class="listContent" style="width:100%">
+                                    <div class="listContentItem" style="width:20%">
+                                        <b>模型描述</b>
+                                        <p>@context.ModelDescription</p>
+                                    </div>
+                                    <div class="listContentItem" style="width:20%">
+                                        <b>模型类别</b>
+                                        <p>
+                                            @if (context.AIModelType == AIModelType.Chat)
+                                            {
+                                                <Tag Color="@PresetColor.Yellow.ToString()">会话模型</Tag>
+                                            }
+                                            else if (context.AIModelType == AIModelType.Embedding)
+                                            {
+                                                <Tag Color="@PresetColor.Green.ToString()">向量模型</Tag>
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="listContentItem" style="width:20%">
+                                        <b>模型地址</b>
+                                        <p>@context.EndPoint</p>
+                                    </div>
+                                    <div class="listContentItem" style="width:20%">
+                                        <b>模型名称</b>
+                                        <p>@context.ModelName</p>
+                                    </div>                                 
+                                </div>
+                            </ListItem>
+                        </AntList>
+                    </ChildContent>
+                </Card>
+            </div>
+        </ChildContent>
+    </PageContainer>
+</div>
+
+@code
+{
+    RenderFragment edit(Action clickAction) =>@<a key="edit" @onclick="@clickAction">修改</a>;
+   
+}
