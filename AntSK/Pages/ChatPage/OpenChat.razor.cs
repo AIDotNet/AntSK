@@ -176,8 +176,10 @@ namespace AntSK.Pages.ChatPage
                 settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
             }
 
-            var promptTemplateFactory = new KernelPromptTemplateFactory();
-            var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
+            //var promptTemplateFactory = new KernelPromptTemplateFactory();
+            //var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
+            //var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
+            //Console.WriteLine(renderedPrompt);
 
 
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);

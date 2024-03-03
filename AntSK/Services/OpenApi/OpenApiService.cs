@@ -34,17 +34,13 @@ namespace AntSK.Services.OpenApi
         IApps_Repositories _apps_Repositories,
         IKmss_Repositories _kmss_Repositories,
         IKmsDetails_Repositories _kmsDetails_Repositories,
-        Kernel _kernel,
         MemoryServerless _memory,
         IKernelService _kernelService
         ) : IOpenApiService
     {
         public async Task Chat(OpenAIModel model,string sk, HttpContext HttpContext)
         {
-
-
-            Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == sk);
-
+            Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == sk);      
             if (app.IsNotNull())
             {
                 string msg= await HistorySummarize(model);
@@ -91,6 +87,14 @@ namespace AntSK.Services.OpenApi
 
         private async Task SendChatStream( HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
         {
+            var _kernel = _kernelService.GetKernel();
+            OpenAIPromptExecutionSettings settings = new() { };
+            if (!string.IsNullOrEmpty(app.ApiFunctionList))
+            {
+                _kernelService.ImportFunctionsByApp(app, _kernel);
+                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
+            }
+
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
 
             if (string.IsNullOrEmpty(app.Prompt))
@@ -98,11 +102,12 @@ namespace AntSK.Services.OpenApi
                 //如果模板为空，给默认提示词
                 app.Prompt = "{{$input}}";
             }
-            var promptTemplateFactory = new KernelPromptTemplateFactory();
-            var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
-            var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
+            //var promptTemplateFactory = new KernelPromptTemplateFactory();
+            //var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
+            //var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
+            //Console.WriteLine(renderedPrompt);
 
-            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings());
+            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
             var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
             int i = 0;
 
@@ -171,11 +176,18 @@ namespace AntSK.Services.OpenApi
                 //如果模板为空，给默认提示词
                 app.Prompt = "{{$input}}";
             }
+
+            var _kernel = _kernelService.GetKernel();
+            OpenAIPromptExecutionSettings settings = new() { };
+            if (!string.IsNullOrEmpty(app.ApiFunctionList))
+            {
+                _kernelService.ImportFunctionsByApp(app, _kernel);
+                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
+            }
             var promptTemplateFactory = new KernelPromptTemplateFactory();
             var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
-            //var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
 
-            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings());
+            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
             var chatResult = await _kernel.InvokeAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
             if (chatResult.IsNotNull())
             {
