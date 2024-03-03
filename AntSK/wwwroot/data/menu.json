@@ -40,6 +40,11 @@
         "path": "/setting/userlist",
         "name": "用户管理",
         "key": "setting.user"
+      },
+      {
+        "path": "/setting/modellist",
+        "name": "模型管理",
+        "key": "setting.modellist"
       }
     ]
   }

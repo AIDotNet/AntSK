@@ -6,9 +6,19 @@
 
 <Body>
     @((MarkupString)(body))
+    <Image Width="200px" Src="@imgSrc" />
 </Body>
 
 @code {
+    [Inject]
+    NavigationManager NavigationManager { get; set; }
+    private string imgSrc { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        imgSrc = NavigationManager.BaseUri + "assets/gzh.png";
+    }
     private string body = new Markdown().Transform(@"非常感谢您对**AntSK**的喜爱，您的支持对我来说是莫大的鼓励。
 
 如果您对技术类视频感兴趣，欢迎关注我的B站账号，获取更多精彩内容。
@@ -23,7 +33,9 @@
 
 发送“进群请求”，我将会把您邀请进群。
 
-期待与您在线上交流技术，共同进步！");
+期待与您在线上交流技术，共同进步！
+
+也欢迎您关注我的公众号，后面可以第一时间知道**AntSK**项目进展。");
 
 
 }
