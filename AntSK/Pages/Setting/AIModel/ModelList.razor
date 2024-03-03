@@ -33,8 +33,9 @@
                                  DataSource="_data"
                                  ItemLayout="ListItemLayout.Horizontal">
                             <ListItem Actions="new[] {
-                            edit(()=> Edit(context.Id)
-                             )}" Style="width:100%">
+                            edit(()=> Edit(context.Id)),
+                            delete(async ()=>await Delete(context.Id))
+                             }" Style="width:100%">
                                 <div class="listContent" style="width:100%">
                                     <div class="listContentItem" style="width:20%">
                                         <b>模型描述</b>
@@ -74,5 +75,5 @@
 @code
 {
     RenderFragment edit(Action clickAction) =>@<a key="edit" @onclick="@clickAction">修改</a>;
-   
+    RenderFragment delete(Action clickAction) =>@<a key="delete" @onclick="@clickAction">删除</a>;
 }

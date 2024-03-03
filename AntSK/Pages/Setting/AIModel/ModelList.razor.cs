@@ -2,6 +2,7 @@
 using AntSK.Domain.Repositories;
 using AntSK.Models;
 using AntSK.Services;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.Setting.AIModel
@@ -16,6 +17,9 @@ namespace AntSK.Pages.Setting.AIModel
 
         [Inject] 
         protected IAIModels_Repositories _aIModels_Repositories { get; set; }
+
+        [Inject]
+        IConfirmService _confirmService { get; set; }
 
 
         protected override async Task OnInitializedAsync()
@@ -45,6 +49,18 @@ namespace AntSK.Pages.Setting.AIModel
         public void Edit(string modelid)
         {
             NavigationManager.NavigateTo("/setting/model/add/"+ modelid);
+        }
+
+        public async Task Delete(string modelid)
+        {
+            var content = "是否确认删除此模型";
+            var title = "删除";
+            var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
+            if (result == ConfirmResult.Yes)
+            {
+                await _aIModels_Repositories.DeleteAsync(modelid);
+                await InitData("");
+            }
         }
     }
 }
