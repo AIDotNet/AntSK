@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using AntDesign;
 using Newtonsoft.Json;
 using System.Text.Json;
+using AntSK.Domain.Domain.Interface;
 
 namespace AntSK.Services.OpenApi
 {
@@ -34,7 +35,8 @@ namespace AntSK.Services.OpenApi
         IKmss_Repositories _kmss_Repositories,
         IKmsDetails_Repositories _kmsDetails_Repositories,
         Kernel _kernel,
-        MemoryServerless _memory
+        MemoryServerless _memory,
+        IKernelService _kernelService
         ) : IOpenApiService
     {
         public async Task Chat(OpenAIModel model,string sk, HttpContext HttpContext)
@@ -191,7 +193,7 @@ namespace AntSK.Services.OpenApi
         /// <returns></returns>
         private async Task<string> HistorySummarize(OpenAIModel model)
         {
-
+            var _kernel = _kernelService.GetKernel();
             StringBuilder history = new StringBuilder();
             string questions = model.messages[model.messages.Count-1].content;
             for(int i=0;i<model.messages.Count()-1;i++)
@@ -200,10 +202,7 @@ namespace AntSK.Services.OpenApi
                 history.Append($"{item.role}:{item.content}{Environment.NewLine}");
             }
 
-            KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
-            var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
-            string his = summary.GetValue<string>();
-            var msg = $"历史对话:{his}{Environment.NewLine}用户问题：{Environment.NewLine}{questions}"; ;
+            var msg = await _kernelService.HistorySummarize(_kernel, questions, history.ToString());
             return msg;
         }
     }

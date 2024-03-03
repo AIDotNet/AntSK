@@ -195,10 +195,10 @@ namespace AntSK.Pages.ChatPage
                 //如果模板为空，给默认提示词
                 app.Prompt = "{{$input}}";
             }
-            OpenAIPromptExecutionSettings settings = settings = new() { };
+            OpenAIPromptExecutionSettings settings = new() { };
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
             {
-                _kernelService.ImportFunctions(app, _kernel);
+                _kernelService.ImportFunctionsByApp(app, _kernel);
                 settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
             }
             
@@ -261,11 +261,7 @@ namespace AntSK.Pages.ChatPage
                         history.Append($"assistant:{item.Context}{Environment.NewLine}");
                     }
                 }
-
-                KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
-                var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
-                string his = summary.GetValue<string>();
-                var msg = $"历史对话：{his}{Environment.NewLine} 用户问题：{Environment.NewLine}{questions}"; 
+                var msg = await _kernelService.HistorySummarize(_kernel, questions, history.ToString());
                 return msg;
             }
             else 

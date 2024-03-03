@@ -11,6 +11,7 @@ namespace AntSK.Domain.Domain.Interface
     public interface IKernelService
     {
         Kernel GetKernel(string modelId = null, string apiKey = null);
-        void ImportFunctions(Apps app, Kernel _kernel);
+        void ImportFunctionsByApp(Apps app, Kernel _kernel);
+        Task<string> HistorySummarize(Kernel _kernel, string questions, string history);
     }
 }

@@ -17,6 +17,8 @@ using SqlSugar;
 using System;
 using System.Text;
 using AntSK.Domain.Utils;
+using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Service;
 
 namespace AntSK.Pages.ChatPage
 {
@@ -35,7 +37,7 @@ namespace AntSK.Pages.ChatPage
         [Inject]
         protected MemoryServerless _memory { get; set; }
         [Inject]
-        protected Kernel _kernel { get; set; }
+        protected IKernelService _kernelService { get; set; }
 
         protected bool _loading = false;
         protected List<MessageInfo> MessageList = [];
@@ -44,6 +46,7 @@ namespace AntSK.Pages.ChatPage
         protected bool Sendding = false;
 
         protected Apps app = new Apps();
+
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -159,16 +162,25 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task SendChat(string questions, string msg, Apps app)
         {
+            var _kernel= _kernelService.GetKernel();
             if (string.IsNullOrEmpty(app.Prompt))
             {
                 //如果模板为空，给默认提示词
                 app.Prompt = "{{$input}}";
             }
+            //注册插件
+            OpenAIPromptExecutionSettings settings = new() { };
+            if (!string.IsNullOrEmpty(app.ApiFunctionList))
+            {
+                _kernelService.ImportFunctionsByApp(app, _kernel);
+                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
+            }
+
             var promptTemplateFactory = new KernelPromptTemplateFactory();
             var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
-            var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
 
-            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, new OpenAIPromptExecutionSettings());
+
+            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
             var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
             MessageInfo info = null;
             var markdown = new Markdown();
@@ -203,6 +215,7 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task<string> HistorySummarize(string questions)
         {
+            var _kernel = _kernelService.GetKernel();
             if (MessageList.Count > 1)
             {
                 StringBuilder history = new StringBuilder();
@@ -217,11 +230,7 @@ namespace AntSK.Pages.ChatPage
                         history.Append($"assistant:{item.Context}{Environment.NewLine}");
                     }
                 }
-
-                KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
-                var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
-                string his = summary.GetValue<string>();
-                var msg = $"历史对话：{his}{Environment.NewLine} 用户问题：{Environment.NewLine}{questions}"; ;
+                var msg = await _kernelService.HistorySummarize(_kernel, questions, history.ToString());
                 return msg;
             }
             else 

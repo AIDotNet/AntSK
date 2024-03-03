@@ -47,7 +47,7 @@ namespace AntSK.Domain.Domain.Service
         /// </summary>
         /// <param name="app"></param>
         /// <param name="_kernel"></param>
-        public void ImportFunctions(Apps app, Kernel _kernel)
+        public void ImportFunctionsByApp(Apps app, Kernel _kernel)
         {
             //开启自动插件调用
             var apiIdList = app.ApiFunctionList.Split(",");
@@ -135,6 +135,22 @@ namespace AntSK.Domain.Domain.Service
         {
             kernel.ImportPluginFromObject(new ConversationSummaryPlugin(), "ConversationSummaryPlugin");
             kernel.ImportPluginFromObject(new TimePlugin(), "TimePlugin");
+        }
+
+        /// <summary>
+        /// 会话总结
+        /// </summary>
+        /// <param name="_kernel"></param>
+        /// <param name="questions"></param>
+        /// <param name="history"></param>
+        /// <returns></returns>
+        public async Task<string> HistorySummarize(Kernel _kernel,string questions, string history)
+        {
+            KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
+            var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
+            string his = summary.GetValue<string>();
+            var msg = $"历史对话：{his}{Environment.NewLine} 用户问题：{Environment.NewLine}{questions}"; ;
+            return msg;
         }
     }
 }
