@@ -297,7 +297,7 @@ namespace AntSK.Pages.ChatPage
                                     Console.WriteLine(msg);
                                     RestClient client = new RestClient();
                                     RestRequest request = new RestRequest(api.Url, Method.Post);
-                                    foreach (var header in api.Header.Split("\r\n"))
+                                    foreach (var header in api.Header.Split("\n"))
                                     {
                                         var headerArray = header.Split(":");
                                         if (headerArray.Length == 2)
