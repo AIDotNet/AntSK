@@ -169,11 +169,12 @@ namespace AntSK.Pages.ChatPage
                 app.Prompt = "{{$input}}";
             }
             //注册插件
-            OpenAIPromptExecutionSettings settings = new() { };
+            var temperature = app.Temperature / 100;//存的是0~100需要缩小
+            OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
             {
                 _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
+                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions, Temperature = temperature };
             }
 
             //var promptTemplateFactory = new KernelPromptTemplateFactory();

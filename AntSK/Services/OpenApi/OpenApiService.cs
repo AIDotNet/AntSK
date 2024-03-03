@@ -88,11 +88,12 @@ namespace AntSK.Services.OpenApi
         private async Task SendChatStream( HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
         {
             var _kernel = _kernelService.GetKernel();
-            OpenAIPromptExecutionSettings settings = new() { };
+            var temperature = app.Temperature / 100;//存的是0~100需要缩小
+            OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
             {
                 _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
+                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions, Temperature = temperature };
             }
 
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
@@ -127,40 +128,6 @@ namespace AntSK.Services.OpenApi
             await HttpContext.Response.CompleteAsync();
         }
 
-
-        /// <summary>
-        /// 发送知识库问答
-        /// </summary>
-        /// <param name="questions"></param>
-        /// <param name="msg"></param>
-        /// <param name="app"></param>
-        /// <returns></returns>
-        private async Task<string> SendKms( string msg, Apps app)
-        {
-            string result = "";
-            //知识库问答
-            var filters = new List<MemoryFilter>();
-
-            var kmsidList = app.KmsIdList.Split(",");
-            foreach (var kmsid in kmsidList)
-            {
-                filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
-            }
-
-            var kmsResult = await _memory.AskAsync(msg, index: "kms", filters: filters);
-            if (kmsResult != null)
-            {
-                if (!string.IsNullOrEmpty(kmsResult.Result))
-                {
-                    string answers = kmsResult.Result;
-                    result = answers;     
-                }
-            }
-            return result;
-        }
-
-
-
         /// <summary>
         /// 发送普通对话
         /// </summary>
@@ -178,11 +145,12 @@ namespace AntSK.Services.OpenApi
             }
 
             var _kernel = _kernelService.GetKernel();
-            OpenAIPromptExecutionSettings settings = new() { };
+            var temperature = app.Temperature / 100;//存的是0~100需要缩小
+            OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
             {
                 _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions };
+                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions, Temperature = temperature };
             }
             var promptTemplateFactory = new KernelPromptTemplateFactory();
             var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
@@ -196,6 +164,38 @@ namespace AntSK.Services.OpenApi
             }
             return result;
         }
+
+        /// <summary>
+        /// 发送知识库问答
+        /// </summary>
+        /// <param name="questions"></param>
+        /// <param name="msg"></param>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        private async Task<string> SendKms(string msg, Apps app)
+        {
+            string result = "";
+            //知识库问答
+            var filters = new List<MemoryFilter>();
+
+            var kmsidList = app.KmsIdList.Split(",");
+            foreach (var kmsid in kmsidList)
+            {
+                filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
+            }
+
+            var kmsResult = await _memory.AskAsync(msg, index: "kms", filters: filters);
+            if (kmsResult != null)
+            {
+                if (!string.IsNullOrEmpty(kmsResult.Result))
+                {
+                    string answers = kmsResult.Result;
+                    result = answers;
+                }
+            }
+            return result;
+        }
+
 
         /// <summary>
         /// 历史会话的会话总结

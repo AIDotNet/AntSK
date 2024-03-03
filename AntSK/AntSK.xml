@@ -112,18 +112,18 @@
             本地Embedding
             </summary>
         </member>
-        <member name="M:AntSK.Services.OpenApi.OpenApiService.SendKms(System.String,AntSK.Domain.Repositories.Apps)">
+        <member name="M:AntSK.Services.OpenApi.OpenApiService.SendChat(System.String,AntSK.Domain.Repositories.Apps)">
             <summary>
-            发送知识库问答
+            发送普通对话
             </summary>
             <param name="questions"></param>
             <param name="msg"></param>
             <param name="app"></param>
             <returns></returns>
         </member>
-        <member name="M:AntSK.Services.OpenApi.OpenApiService.SendChat(System.String,AntSK.Domain.Repositories.Apps)">
+        <member name="M:AntSK.Services.OpenApi.OpenApiService.SendKms(System.String,AntSK.Domain.Repositories.Apps)">
             <summary>
-            发送普通对话
+            发送知识库问答
             </summary>
             <param name="questions"></param>
             <param name="msg"></param>
