@@ -21,6 +21,7 @@ using AntDesign;
 using Newtonsoft.Json;
 using System.Text.Json;
 using AntSK.Domain.Domain.Interface;
+using static LLama.Common.ChatHistory;
 
 namespace AntSK.Services.OpenApi
 {
@@ -214,7 +215,7 @@ namespace AntSK.Services.OpenApi
                 history.Append($"{item.role}:{item.content}{Environment.NewLine}");
             }
 
-            if (MessageList.Count > 10)
+            if (model.messages.Count() > 10)
             {
                 //历史会话大于10条，进行总结
                 var msg = await _kernelService.HistorySummarize(_kernel, questions, history.ToString());
