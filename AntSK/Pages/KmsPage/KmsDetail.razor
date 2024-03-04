@@ -19,8 +19,9 @@
                         <Dropdown Style="position: absolute; right: 20px; margin-bottom: 8px;">
                             <Overlay>
                                 <Menu>
-                                    @( _fileUpload( () =>FileShowModal()))
+                                    @(_fileUpload(() => FileShowModal()))
                                     @(_urlUpload(() => UrlShowModal()))
+                                    @(_textUpload(() => TextShowModal()))
                                 </Menu>
                             </Overlay>
                             <ChildContent>
@@ -29,20 +30,20 @@
                         </Dropdown>
                         <div class="extraContent" style="margin-right:100px;">
                             <Search Class="extraContentSearch" Placeholder="搜索文档" @bind-Value="_model.Id" />
-                         </div>
-                  
-                     </Extra>
-                    <ChildContent >
-                        <AntList TItem="KmsDetails" 
-                                  DataSource="_data"
-                                  ItemLayout="ListItemLayout.Horizontal">
-                                <ListItem Actions="@(new[] {
+                        </div>
+
+                    </Extra>
+                    <ChildContent>
+                        <AntList TItem="KmsDetails"
+                                 DataSource="_data"
+                                 ItemLayout="ListItemLayout.Horizontal">
+                            <ListItem Actions="@(new[] {
                             detail(()=> FileDetail(context.Id)) ,
                             delete(async ()=>await DeleteFile(context.Id)) ,
                              })">
                                 <ListItemMeta Description="@context.Id">
                                     <TitleTemplate>
-                                        <div >文件ID</div>
+                                        <div>文件ID</div>
                                     </TitleTemplate>
                                 </ListItemMeta>
                                 <ListItemMeta Description="@context.Type">
@@ -50,15 +51,15 @@
                                         <div>文件类型</div>
                                     </TitleTemplate>
                                 </ListItemMeta>
-                                @if(@context.Type=="file")
+                                @if (@context.Type == "file")
                                 {
-                                <ListItemMeta Avatar="" Description="@context.FileName">
-                                    <TitleTemplate>
-                                        <a >文件名称</a>
-                                    </TitleTemplate>
-                                </ListItemMeta>
+                                    <ListItemMeta Avatar="" Description="@context.FileName">
+                                        <TitleTemplate>
+                                            <a>文件名称</a>
+                                        </TitleTemplate>
+                                    </ListItemMeta>
                                 }
-                                else
+                                else if (@context.Type == "url")
                                 {
                                     <ListItemMeta Avatar="" Description="@context.Url">
                                         <TitleTemplate>
@@ -66,10 +67,17 @@
                                         </TitleTemplate>
                                     </ListItemMeta>
                                 }
-                              
+                                else if (@context.Type == "text")
+                                {
+                                    <ListItemMeta Avatar="" Description="……">
+                                        <TitleTemplate>
+                                            <a>文本内容</a>
+                                        </TitleTemplate>
+                                    </ListItemMeta>
+                                }
                                 <ListItemMeta Avatar="" Description="@context.DataCount.ToString()">
                                     <TitleTemplate>
-                                        <a >文档切片数量</a>
+                                        <a>文档切片数量</a>
                                     </TitleTemplate>
                                 </ListItemMeta>
                                 <div class="listContent">
@@ -102,6 +110,21 @@
     </Form>
 </Modal>
 
+<Modal Title="文本导入"
+       Visible="@_textVisible"
+       OnOk="@TextHandleOk"
+       OnCancel="@TextHandleCancel"
+       ConfirmLoading="@_textConfirmLoading">
+    <Form Model="@textModel"
+          LabelColSpan="8"
+          WrapperColSpan="16"
+          @ref="@_textForm">
+        <FormItem Label="文本内容">
+            <TextArea @bind-Value="@context.Text" Rows="5" />
+        </FormItem>
+    </Form>
+</Modal>
+
 <Modal Title="文件导入"
        Visible="@_fileVisible"
        OnOk="@FileHandleOk"
@@ -123,30 +146,36 @@
             text/markdown"
             BeforeUpload="BeforeUpload"
             OnSingleCompleted="OnSingleCompleted">
-         <p class="ant-upload-drag-icon">
-             <Icon Type="inbox" />
-         </p>
-         <p class="ant-upload-text">单击或拖动文件到此区域进行上传</p>
-         <p class="ant-upload-hint">
-             支持txt、word、pdf、md、excel、ppt等文件。
-         </p>
-     </Upload>
+        <p class="ant-upload-drag-icon">
+            <Icon Type="inbox" />
+        </p>
+        <p class="ant-upload-text">单击或拖动文件到此区域进行上传</p>
+        <p class="ant-upload-hint">
+            支持txt、word、pdf、md、excel、ppt等文件。
+        </p>
+    </Upload>
 </Modal>
 
 
 @code {
 
     RenderFragment _fileUpload(Action clickAction) =>@<MenuItem>
-            <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
-                文件导入
-            </a>
-        </MenuItem>;
+        <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
+            文件导入
+        </a>
+    </MenuItem>;
 
     RenderFragment _urlUpload(Action clickAction) =>@<MenuItem>
-            <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
-                链接读取
-            </a>
-        </MenuItem>;
+        <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
+            链接读取
+        </a>
+    </MenuItem>;
+
+    RenderFragment _textUpload(Action clickAction) =>@<MenuItem>
+        <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
+            文本导入
+        </a>
+    </MenuItem>;
 
     RenderFragment detail(Action clickAction) => @<a key="detail" @onclick="@clickAction">详情</a>;
     RenderFragment delete(Action clickAction) => @<a key="edit" @onclick="@clickAction">删除</a>;

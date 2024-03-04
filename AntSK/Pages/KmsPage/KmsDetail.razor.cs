@@ -31,11 +31,17 @@ namespace AntSK.Pages.KmsPage
         bool _fileVisible = false;
         bool _fileConfirmLoading = false;
 
+        bool _textVisible = false;
+        bool _textConfirmLoading = false;
+
         string filePath;
         string fileName;
 
         private Form<UrlModel> _urlForm;
         private UrlModel urlModel = new UrlModel();
+
+        private Form<TextModel> _textForm;
+        private TextModel textModel = new TextModel();
 
         private readonly IDictionary<string, ProgressStatus> _pStatus = new Dictionary<string, ProgressStatus>
         {
@@ -117,10 +123,56 @@ namespace AntSK.Pages.KmsPage
         }
         #endregion
 
+        #region Text
+
+        public class TextModel
+        {
+            [Required]
+            public string Text { get; set; }
+        }
+        private async Task TextHandleOk(MouseEventArgs e)
+        {
+            try
+            {
+                _textConfirmLoading = true;
+                string fileid = Guid.NewGuid().ToString();
+                await _memory.ImportTextAsync(textModel.Text, fileid, new TagCollection() { { "kmsid", KmsId } }
+                     , index: "kms");
+                //查询文档数量
+                var docTextList = await iKMService.GetDocumentByFileID(fileid);
+
+                KmsDetails detial = new KmsDetails()
+                {
+                    Id = fileid,
+                    KmsId = KmsId,
+                    Type = "text",
+                    DataCount = docTextList.Count,
+                    CreateTime = DateTime.Now
+                };
+                await _kmsDetails_Repositories.InsertAsync(detial);
+                _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
+
+                _textVisible = false;
+                _textConfirmLoading = false;
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+            }
+        }
+        private void TextHandleCancel(MouseEventArgs e)
+        {
+            _textVisible = false;
+        }
+        private void TextShowModal()
+        {
+            _textVisible = true;
+        }
+        #endregion
 
         #region File
 
-      
+
         private async Task FileHandleOk(MouseEventArgs e)
         {
             try
