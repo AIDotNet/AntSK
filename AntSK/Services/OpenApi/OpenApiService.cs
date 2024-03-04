@@ -223,7 +223,8 @@ namespace AntSK.Services.OpenApi
             }
             else
             {
-                return history.ToString();
+                var msg = $"history：{history.ToString()}{Environment.NewLine} user：{questions}"; ;
+                return msg;
             }
         }
     }

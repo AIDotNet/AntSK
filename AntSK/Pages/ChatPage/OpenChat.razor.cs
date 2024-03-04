@@ -241,7 +241,8 @@ namespace AntSK.Pages.ChatPage
                 }
                 else
                 {
-                    return history.ToString();
+                    var msg = $"history：{history.ToString()}{Environment.NewLine} user：{questions}"; ;
+                    return msg;
                 }
             }
             else 

@@ -149,7 +149,7 @@ namespace AntSK.Domain.Domain.Service
             KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
             var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
             string his = summary.GetValue<string>();
-            var msg = $"历史对话：{his}{Environment.NewLine} 用户问题：{Environment.NewLine}{questions}"; ;
+            var msg = $"history：{history.ToString()}{Environment.NewLine} user：{questions}"; ;
             return msg;
         }
     }
