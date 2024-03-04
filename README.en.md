@@ -35,6 +35,8 @@
 
 - **API interface publishing**: internal functions are provided externally in the form of API, so that developers can easily translate Xzy AntSK KnowledgeBase is integrated into other applications to enhance application intelligence.
 
+- **Model management**: Adapt and manage different models from different vendors.
+
 
 
 ## Application scenarios
