@@ -3,11 +3,13 @@
 @inject NavigationManager NavigationManager
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
-
-<h1>支持LLamaSharp的本地模型 支持gguf类型，推荐使用llama或者qwen</h1>
-<h1>如果模型加载报内存错误，可能是和llama.cpp版本不一致</h1>
-<a href="https://hf-mirror.com/" target="_blank" rel="noopener noreferrer">打开下载地址</a
-
+<PageContainer Title="模型下载">
+    <ChildContent>
+        <h1>支持LLamaSharp的本地模型 支持gguf类型，推荐使用llama或者qwen</h1>
+        <h1>如果模型加载报内存错误，可能是和llama.cpp版本不一致</h1>
+        <a href="https://hf-mirror.com/" target="_blank" rel="noopener noreferrer">打开下载地址</a>
+    </ChildContent>
+</PageContainer>
 @code {
 
 }
