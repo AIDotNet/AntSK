@@ -45,6 +45,11 @@
         "path": "/setting/modellist",
         "name": "模型管理",
         "key": "setting.modellist"
+      },
+      {
+        "path": "/setting/modeldown",
+        "name": "模型下载",
+        "key": "setting.modeldown"
       }
     ]
   }
