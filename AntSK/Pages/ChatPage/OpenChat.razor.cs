@@ -233,8 +233,16 @@ namespace AntSK.Pages.ChatPage
                         history.Append($"assistant:{item.Context}{Environment.NewLine}");
                     }
                 }
-                var msg = await _kernelService.HistorySummarize(_kernel, questions, history.ToString());
-                return msg;
+                if (MessageList.Count > 10)
+                {
+                    //历史会话大于10条，进行总结
+                    var msg = await _kernelService.HistorySummarize(_kernel, questions, history.ToString());
+                    return msg;
+                }
+                else
+                {
+                    return history.ToString();
+                }
             }
             else 
             {
