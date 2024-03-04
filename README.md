@@ -62,20 +62,36 @@ AntSK 适用于多种业务场景，例如：
 ## 如何开始？
 
 在这里我使用的是Postgres 作为数据存储和向量存储，因为Semantic Kernel和Kernel Memory都支持他，当然你也可以换成其他的。
-模型默认支持openai,如果需要使用azure openai需要调整SK的依赖注入，也可以使用one-api进行集成。
-Login是默认的登陆账号和密码
-需要配置如下的配置文件
-### 需要注意的是PostgreSQL需要安装扩展vector 
 
+模型默认支持openai,如果需要使用azure openai需要调整SK的依赖注入，也可以使用one-api进行集成。
+
+Login是默认的登陆账号和密码
+
+需要配置如下的配置文件
+
+## 使用docker-compose 
+
+从项目根目录下载docker-compose.yml,然后把配置文件appsettings.json和它放在统一目录，
+
+这里已经把pg的镜像做好了。在docker-compose.yml中可以修改默认账号密码，然后你的appsettings.json的数据库连接需要保持一致。
+
+然后你可以进入到目录后执行
+```
+docker-compose up -d
+```
+来启动AntSK
+
+
+## 配置文件的一些含义
 ```
   "ConnectionStrings": {
-    "Postgres": "Host=;Port=;Database=antsk;Username=;Password="
+    "Postgres": "Host=;Port=;Database=antsk;Username=;Password="//这个是业务数据的连接字符串
   },
   "OpenAIOption": {
-    "EndPoint": "",
-    "Key": "",
-    "Model": "",
-    "EmbeddingModel": ""
+    "EndPoint": "", //openai协议的接口，写到v1之前
+    "Key": "",//接口秘钥，如果使用本地模型可以随意填写一个但不能为空
+    "Model": "",//会话模型，使用接口时需要，使用本地模型可以随意填写
+    "EmbeddingModel": ""//向量模型，使用接口时需要，使用本地模型可以随意填写
   },
   "Postgres": {
     "ConnectionString": "Host=;Port=;Database=antsk;Username=;Password=",
@@ -91,18 +107,18 @@ Login是默认的登陆账号和密码
 如果想使用LLamaSharp运行本地模型还需要设置如下配置：
 ```
   "LLamaSharp": {
-    "Chat": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf",
-    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf"
+    "Chat": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf",//本地会话模型的磁盘路径
+    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf"//本地向量模型的磁盘路径
   },
 ```
 
 需要配置Chat和Embedding模型的地址，然后修改EndPoint为本地，使用本地模型时并没有用到Key、Model、EmbeddingModel这些参数，所以这几个你可以随意填写：
 ```
  "OpenAIOption": {
-    "EndPoint": "https://ip:port/llama/",
-    "Key": "",
-    "Model": "",
-    "EmbeddingModel": ""
+    "EndPoint": "https://ip:port/llama/",//如果使用本地模型这个ip端口是AntSK服务启动的ip和端口
+    "Key": "",//接口秘钥，如果使用本地模型可以随意填写一个但不能为空
+    "Model": "",//会话模型，使用接口时需要，使用本地模型可以随意填写
+    "EmbeddingModel": ""//向量模型，使用接口时需要，使用本地模型可以随意填写
   },
 ```
 
