@@ -115,7 +115,7 @@ docker-compose up -d
 需要配置Chat和Embedding模型的地址，然后修改EndPoint为本地，使用本地模型时并没有用到Key、Model、EmbeddingModel这些参数，所以这几个你可以随意填写：
 ```
  "OpenAIOption": {
-    "EndPoint": "https://ip:port/llama/",//如果使用本地模型这个ip端口是AntSK服务启动的ip和端口
+    "EndPoint": "http://ip:port/llama/",//如果使用本地模型这个ip端口是AntSK服务启动的ip和端口
     "Key": "",//接口秘钥，如果使用本地模型可以随意填写一个但不能为空
     "Model": "",//会话模型，使用接口时需要，使用本地模型可以随意填写
     "EmbeddingModel": ""//向量模型，使用接口时需要，使用本地模型可以随意填写
