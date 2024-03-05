@@ -242,6 +242,21 @@
             会话模型
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.MaxTokensPerParagraph">
+            <summary>
+            每个段落的最大标记数。
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.MaxTokensPerLine">
+            <summary>
+            每行，也就是每句话的最大标记数
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.OverlappingTokens">
+            <summary>
+            段落之间重叠标记的数量。
+            </summary>
+        </member>
         <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetList">
             <summary>
             获取所有list

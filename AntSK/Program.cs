@@ -154,7 +154,9 @@ void InitSK(WebApplicationBuilder builder)
         EmptyAnswer = "知识库未搜索到相关内容"
     };
 
+    builder.Services.Configure<PostgresConfig>(builder.Configuration.GetSection("Postgres"));
     var postgresConfig = builder.Configuration.GetSection("Postgres").Get<PostgresConfig>()!;
+
     services.AddScoped<MemoryServerless>(serviceProvider =>
     {
         var memory = new KernelMemoryBuilder()

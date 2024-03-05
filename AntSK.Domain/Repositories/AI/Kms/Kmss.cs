@@ -28,5 +28,22 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         [Required]
         public string Describe { get; set; }
+
+        /// <summary>
+        /// 每个段落的最大标记数。
+        /// </summary>
+        public int MaxTokensPerParagraph { get; set; } = 1000;
+
+
+        /// <summary>
+        /// 每行，也就是每句话的最大标记数
+        /// </summary>
+        public int MaxTokensPerLine { get; set; } = 300;
+
+
+        /// <summary>
+        /// 段落之间重叠标记的数量。
+        /// </summary>
+        public int OverlappingTokens { get; set; } = 100;
     }
 }
