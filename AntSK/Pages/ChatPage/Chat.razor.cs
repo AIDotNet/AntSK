@@ -26,7 +26,7 @@ namespace AntSK.Pages.ChatPage
     {
         [Parameter]
         public string AppId { get; set; }
-        [Inject] 
+        [Inject]
         protected MessageService? Message { get; set; }
         [Inject]
         protected IApps_Repositories _apps_Repositories { get; set; }
@@ -55,7 +55,7 @@ namespace AntSK.Pages.ChatPage
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            _list= _apps_Repositories.GetList();
+            _list = _apps_Repositories.GetList();
         }
         protected async Task OnSendAsync()
         {
@@ -111,7 +111,7 @@ namespace AntSK.Pages.ChatPage
                 msg = await HistorySummarize(questions);
             }
 
-            Apps app=_apps_Repositories.GetFirst(p => p.Id == AppId);
+            Apps app = _apps_Repositories.GetFirst(p => p.Id == AppId);
             switch (app.Type)
             {
                 case "chat":
@@ -190,10 +190,10 @@ namespace AntSK.Pages.ChatPage
         private async Task SendChat(string questions, string msg, Apps app)
         {
             var _kernel = _kernelService.GetKernel();
-            if (string.IsNullOrEmpty(app.Prompt))
+            if (string.IsNullOrEmpty(app.Prompt)||!app.Prompt.Contains("{{$input}}"))
             {
                 //如果模板为空，给默认提示词
-                app.Prompt = "{{$input}}";
+                app.Prompt = app.Prompt.ConvertToString()+"{{$input}}";
             }
             var temperature = app.Temperature/100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() {Temperature= temperature };

@@ -99,10 +99,10 @@ namespace AntSK.Services.OpenApi
 
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
 
-            if (string.IsNullOrEmpty(app.Prompt))
+            if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
             {
                 //如果模板为空，给默认提示词
-                app.Prompt = "{{$input}}";
+                app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
             }
             //var promptTemplateFactory = new KernelPromptTemplateFactory();
             //var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
@@ -139,12 +139,11 @@ namespace AntSK.Services.OpenApi
         private async Task<string> SendChat( string msg, Apps app)
         {
             string result = "";
-            if (string.IsNullOrEmpty(app.Prompt))
+            if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
             {
                 //如果模板为空，给默认提示词
-                app.Prompt = "{{$input}}";
+                app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
             }
-
             var _kernel = _kernelService.GetKernel();
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };

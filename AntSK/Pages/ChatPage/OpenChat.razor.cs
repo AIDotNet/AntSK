@@ -163,10 +163,10 @@ namespace AntSK.Pages.ChatPage
         private async Task SendChat(string questions, string msg, Apps app)
         {
             var _kernel= _kernelService.GetKernel();
-            if (string.IsNullOrEmpty(app.Prompt))
+            if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
             {
                 //如果模板为空，给默认提示词
-                app.Prompt = "{{$input}}";
+                app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
             }
             //注册插件
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
