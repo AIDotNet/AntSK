@@ -18,7 +18,8 @@ namespace AntSK.Domain.Domain.Service
         IOptions<PostgresConfig> postgresOptions
         ) : IKMService
     {
-        public MemoryServerless GetMemory(SearchClientConfig searchClientConfig=null, TextPartitioningOptions textPartitioningOptions=null) {
+        public MemoryServerless GetMemory(SearchClientConfig searchClientConfig=null, TextPartitioningOptions textPartitioningOptions=null) 
+        {
             var handler = new OpenAIHttpClientHandler();
             var httpClient = new HttpClient(handler);
             if (searchClientConfig.IsNull())

@@ -12,7 +12,7 @@
             <Search Placeholder="输入回车"
                     EnterButton="@("搜索")"
                     Size="large"
-                    Style="max-width: 522px; width: 100%;" 
+                    Style="max-width: 522px; width: 100%;"
                     OnSearch="Search" />
         </div>
     </Content>
@@ -45,8 +45,12 @@
                                 <DescriptionTemplate>
                                     <Paragraph class="item" Ellipsis>
                                      <!--todo: Ellipsis not working-->
-                                     @context.Describe
-                                    </Paragraph> 
+                                        <span>
+                                         @context.Describe
+                                        </span>
+                                        <br />
+                                        <span style="color:#c6c6c6">行切片:@context.MaxTokensPerLine 段落切片:@context.MaxTokensPerParagraph 重叠:@context.OverlappingTokens</span>
+                                    </Paragraph>
                                 </DescriptionTemplate>
                             </CardMeta>
                         </Card>

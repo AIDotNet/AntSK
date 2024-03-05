@@ -57,8 +57,11 @@ namespace AntSK.Pages.KmsPage
         protected IConfirmService _confirmService { get; set; }
         [Inject]
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
+
         [Inject]
-        protected MemoryServerless _memory { get; set; }
+        protected  IKmss_Repositories _kmss_Repositories { get; set; }
+
+        private MemoryServerless _memory { get; set; }
         [Inject]
         protected IKMService iKMService { get; set; }
         [Inject]
@@ -69,6 +72,13 @@ namespace AntSK.Pages.KmsPage
         {
             await base.OnInitializedAsync();
             _data =await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
+            var km = _kmss_Repositories.GetFirst(p => p.Id == KmsId);
+            //使用知识库设置的参数，
+            _memory = iKMService.GetMemory(textPartitioningOptions:new Microsoft.KernelMemory.Configuration.TextPartitioningOptions() { 
+                MaxTokensPerLine= km.MaxTokensPerLine, 
+                MaxTokensPerParagraph=km.MaxTokensPerParagraph ,
+                OverlappingTokens=km.OverlappingTokens
+            });
         }
         /// <summary>
         /// 根据文档ID获取文档

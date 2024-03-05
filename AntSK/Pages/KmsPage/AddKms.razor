@@ -24,13 +24,13 @@
                     <Input Placeholder="请输入描述" @bind-Value="@context.Describe" />
                 </FormItem>
                 <FormItem Label="段落切片数(token)" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <AntDesign.InputNumber @bind-Value="context.MaxTokensPerParagraph" Min="1" Max="10" DefaultValue="3" PlaceHolder="please input something"></AntDesign.InputNumber>
+                    <AntDesign.InputNumber @bind-Value="context.MaxTokensPerParagraph" PlaceHolder="段落切片数"></AntDesign.InputNumber>
                 </FormItem>
                 <FormItem Label="行切片数(token)" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <AntDesign.InputNumber @bind-Value="context.MaxTokensPerLine" Min="1" Max="10" DefaultValue="3" PlaceHolder="please input something"></AntDesign.InputNumber>
+                    <AntDesign.InputNumber @bind-Value="context.MaxTokensPerLine" PlaceHolder="行切片数"></AntDesign.InputNumber>
                 </FormItem>
                 <FormItem Label="重叠部分(token)" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <AntDesign.InputNumber @bind-Value="context.OverlappingTokens" Min="1" Max="10" DefaultValue="3" PlaceHolder="please input something"></AntDesign.InputNumber>
+                    <AntDesign.InputNumber @bind-Value="context.OverlappingTokens" PlaceHolder="重叠部分"></AntDesign.InputNumber>
                 </FormItem>
 
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
