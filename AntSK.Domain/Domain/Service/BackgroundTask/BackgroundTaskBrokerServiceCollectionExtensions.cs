@@ -31,7 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
 		public static IBackgroundTaskBulider AddHandler<TItem, THanlder>(this IBackgroundTaskBulider bulider, string name) where THanlder : class, IBackgroundTaskHandler<TItem>
 		{
 			IServiceCollection services = bulider.Services;
-			services.TryAddTransient<IBackgroundTaskHandler<TItem>, THanlder>();
+			services.TryAddSingleton<IBackgroundTaskHandler<TItem>, THanlder>();
 			services.TryAddSingleton((IServiceProvider p) => ActivatorUtilities.CreateInstance<BackgroundTaskBroker<TItem>>(p, new object[1] { p }));
 			services.AddSingleton((Func<IServiceProvider, IBackgroundTaskBroker>)((IServiceProvider p) => p.GetService<BackgroundTaskBroker<TItem>>()));
 			services.AddOptions<BackgroundTaskBrokerOptions>().Configure(delegate(BackgroundTaskBrokerOptions options, IConfiguration configuration)

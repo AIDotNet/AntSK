@@ -24,7 +24,7 @@ namespace AntSK.Domain.Domain.Service
             {
                 Console.WriteLine("ImportKMSTaskHandler.开始执行任务");
                 var  importKMSService = scope.ServiceProvider.GetRequiredService<IImportKMSService>();
-                importKMSService.ImportKMSTask(item);
+                await importKMSService.ImportKMSTask(item);
                 Console.WriteLine("ImportKMSTaskHandler.任务执行完成");
             }
 

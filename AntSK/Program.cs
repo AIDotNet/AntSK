@@ -74,8 +74,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 //后台队列任务
-builder.Services.AddBackgroundTaskBroker()
-         .AddHandler<ImportKMSTaskReq, ImportKMSTaskHandler>("ImportKMSTask");
+builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, ImportKMSTaskHandler>("ImportKMSTask");
 // 读取连接字符串配置
 {
     builder.Configuration.GetSection("DBConnection").Get<DBConnectionOption>();
