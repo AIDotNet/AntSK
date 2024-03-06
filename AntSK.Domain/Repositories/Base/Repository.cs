@@ -7,31 +7,34 @@ using System.Text;
 using System.Threading.Tasks;
 using AntSK.Domain.Map;
 using AntSK.Domain.Model;
+using Microsoft.Extensions.Configuration;
+
 
 namespace AntSK.Domain.Repositories.Base
 {
     public class Repository<T> : SimpleClient<T> where T : class, new()
     {
-        public Repository(ISqlSugarClient context = null) : base(context)//注意这里要有默认值等于null
+
+        public Repository( ISqlSugarClient context = null) : base(context)//注意这里要有默认值等于null
         {
+
             if (context == null)
             {
             }
-            //Sqlite.DbMaintenance.CreateDatabase();
-            //Sqlite.CodeFirst.InitTables(typeof(CodeFirstTable1));
+
         }
 
         //注意：如果使用Client不能写成静态的，Scope并发更高
-        public static SqlSugarScope Sqlite = SqlSugarHelper.Sqlite;
 
+        public static SqlSugarScope SqlScope = SqlSugarHelper.SqlScope();
         public SimpleClient<T> CurrentDb
-        { get { return new SimpleClient<T>(Sqlite); } }//用来处理T表的常用操作
+        { get { return new SimpleClient<T>(SqlScope); } }//用来处理T表的常用操作
 
         #region 通用方法
 
         public virtual SqlSugarScope GetDB()
         {
-            return Sqlite;
+            return SqlScope;
         }
 
         /// <summary>

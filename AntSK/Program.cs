@@ -72,12 +72,12 @@ builder.Services.AddSwaggerGen(c =>
 
 // 读取连接字符串配置
 {
-    builder.Configuration.GetSection("ConnectionStrings").Get<ConnectionOption>();
+    builder.Configuration.GetSection("DBConnection").Get<DBConnectionOption>();
     builder.Configuration.GetSection("OpenAIOption").Get<OpenAIOption>();
     builder.Configuration.GetSection("Login").Get<LoginOption>();
     builder.Configuration.GetSection("LLamaSharp").Get<LLamaSharpOption>();
 }
-InitSK(builder);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -127,68 +127,4 @@ void InitDB(WebApplication app)
     }
 }
 
-//初始化SK
-void InitSK(WebApplicationBuilder builder)
-{  
-    var services = builder.Services;
-    var handler = new OpenAIHttpClientHandler();
-    var httpClient = new HttpClient(handler);
-    httpClient.Timeout= TimeSpan.FromMinutes(5);
-    services.AddScoped<Kernel>((serviceProvider) =>
-    {
-        var kernel = Kernel.CreateBuilder()
-         .AddOpenAIChatCompletion(
-          modelId: OpenAIOption.Model,
-          apiKey: OpenAIOption.Key,
-          httpClient: httpClient)
-          .Build();
-        RegisterPluginsWithKernel(kernel);
-        return kernel;
-    });
-    //Kernel Memory
-    var searchClientConfig = new SearchClientConfig
-    {
-        MaxAskPromptSize = 2048,
-        MaxMatchesCount = 3,
-        AnswerTokens = 1000,
-        EmptyAnswer = "知识库未搜索到相关内容"
-    };
-
-    builder.Services.Configure<PostgresConfig>(builder.Configuration.GetSection("Postgres"));
-    var postgresConfig = builder.Configuration.GetSection("Postgres").Get<PostgresConfig>()!;
-
-    services.AddScoped<MemoryServerless>(serviceProvider =>
-    {
-        var memory = new KernelMemoryBuilder()
-           .WithPostgresMemoryDb(postgresConfig)
-           .WithSimpleFileStorage(new SimpleFileStorageConfig { StorageType = FileSystemTypes.Volatile, Directory = "_files" })
-           .WithSearchClientConfig(searchClientConfig)
-           //如果用本地模型需要设置token小一点。
-           .WithCustomTextPartitioningOptions(new Microsoft.KernelMemory.Configuration.TextPartitioningOptions
-           {
-               MaxTokensPerLine = 99,
-               MaxTokensPerParagraph = 299,
-               OverlappingTokens = 47
-           })
-           .WithOpenAITextGeneration(new OpenAIConfig()
-           {
-               APIKey = OpenAIOption.Key,
-               TextModel = OpenAIOption.Model
-
-           }, null, httpClient)
-           .WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
-           {
-               APIKey = OpenAIOption.Key,
-               EmbeddingModel = OpenAIOption.EmbeddingModel
-
-           }, null, false, httpClient)
-           .Build<MemoryServerless>();
-        return memory;
-    });
-}
- void RegisterPluginsWithKernel(Kernel kernel)
-{
-    kernel.ImportPluginFromObject(new ConversationSummaryPlugin(), "ConversationSummaryPlugin");
-    kernel.ImportPluginFromObject(new TimePlugin(), "TimePlugin");
-}
 

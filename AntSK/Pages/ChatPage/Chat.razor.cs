@@ -36,12 +36,13 @@ namespace AntSK.Pages.ChatPage
         protected IKmss_Repositories _kmss_Repositories { get; set; }
         [Inject]
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
-        [Inject]
-        protected MemoryServerless _memory { get; set; }
+
         //[Inject]
         //protected Kernel _kernel { get; set; }
         [Inject]
         protected IKernelService _kernelService { get; set; }
+        [Inject]
+        protected IKMService _kMService { get; set; }
 
         protected bool _loading = false;
         protected List<MessageInfo> MessageList = [];
@@ -144,6 +145,7 @@ namespace AntSK.Pages.ChatPage
         private async Task SendKms(string questions, string msg, Apps app)
         {
             var _kernel = _kernelService.GetKernel();
+            var _memory = _kMService.GetMemory();
             //知识库问答
             var filters = new List<MemoryFilter>();
 

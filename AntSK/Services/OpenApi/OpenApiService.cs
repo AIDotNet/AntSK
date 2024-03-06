@@ -23,6 +23,7 @@ using System.Text.Json;
 using AntSK.Domain.Domain.Interface;
 using static LLama.Common.ChatHistory;
 using DocumentFormat.OpenXml.Wordprocessing;
+using AntSK.Domain.Domain.Service;
 
 namespace AntSK.Services.OpenApi
 {
@@ -36,8 +37,8 @@ namespace AntSK.Services.OpenApi
         IApps_Repositories _apps_Repositories,
         IKmss_Repositories _kmss_Repositories,
         IKmsDetails_Repositories _kmsDetails_Repositories,
-        MemoryServerless _memory,
-        IKernelService _kernelService
+        IKernelService _kernelService,
+        IKMService _kMService
         ) : IOpenApiService
     {
         public async Task Chat(OpenAIModel model,string sk, HttpContext HttpContext)
@@ -176,6 +177,7 @@ namespace AntSK.Services.OpenApi
         private async Task<string> SendKms(string msg, Apps app)
         {
             var _kernel = _kernelService.GetKernel();
+            var _memory = _kMService.GetMemory();
             string result = "";
             //知识库问答
             var filters = new List<MemoryFilter>();

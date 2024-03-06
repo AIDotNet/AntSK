@@ -8,6 +8,7 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using System.Collections.Generic;
 using System;
 using Microsoft.KernelMemory;
+using AntSK.Domain.Domain.Interface;
 
 namespace AntSK.Pages
 {
@@ -20,8 +21,9 @@ namespace AntSK.Pages
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
         [Inject]
         IConfirmService _confirmService { get; set; }
+
         [Inject]
-        protected MemoryServerless _memory { get; set; }
+        protected IKMService _kMService { get; set; }
 
         private readonly ListGridType _listGridType = new ListGridType
         {
@@ -80,6 +82,7 @@ namespace AntSK.Pages
 
         private async Task Delete(string id)
         {
+            var _memory=_kMService.GetMemory();
             var content = "删除知识库会一起删除导入的知识文档，无法还原。是否确认删除此知识库？";
             var title = "删除";
             var result= await _confirmService.Show(content, title, ConfirmButtons.YesNo);

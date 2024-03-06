@@ -10,21 +10,22 @@ using Microsoft.KernelMemory.Postgres;
 using System.Net.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.KernelMemory.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace AntSK.Domain.Domain.Service
 {
     [ServiceDescription(typeof(IKMService), ServiceLifetime.Scoped)]
     public class KMService(
-        IOptions<PostgresConfig> postgresOptions
+           IConfiguration _config
         ) : IKMService
     {
-        public MemoryServerless GetMemory(SearchClientConfig searchClientConfig=null, TextPartitioningOptions textPartitioningOptions=null) 
+        public MemoryServerless GetMemory(SearchClientConfig searchClientConfig = null, TextPartitioningOptions textPartitioningOptions = null)
         {
             var handler = new OpenAIHttpClientHandler();
             var httpClient = new HttpClient(handler);
             if (searchClientConfig.IsNull())
             {
-                 searchClientConfig = new SearchClientConfig
+                searchClientConfig = new SearchClientConfig
                 {
                     MaxAskPromptSize = 2048,
                     MaxMatchesCount = 3,
@@ -43,26 +44,51 @@ namespace AntSK.Domain.Domain.Service
                 };
             }
 
-           var memory = new KernelMemoryBuilder()
-          .WithPostgresMemoryDb(postgresOptions.Value)
-          .WithSimpleFileStorage(new SimpleFileStorageConfig { StorageType = FileSystemTypes.Volatile, Directory = "_files" })
-          .WithSearchClientConfig(searchClientConfig)
-          //如果用本地模型需要设置token小一点。
-          .WithCustomTextPartitioningOptions(textPartitioningOptions)
-          .WithOpenAITextGeneration(new OpenAIConfig()
-          {
-              APIKey = OpenAIOption.Key,
-              TextModel = OpenAIOption.Model
 
-          }, null, httpClient)
-          .WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
-          {
-              APIKey = OpenAIOption.Key,
-              EmbeddingModel = OpenAIOption.EmbeddingModel
+            var memory = new KernelMemoryBuilder()
+            .WithSimpleFileStorage(new SimpleFileStorageConfig { StorageType = FileSystemTypes.Volatile, Directory = "_files" })
+            .WithSearchClientConfig(searchClientConfig)
+            .WithCustomTextPartitioningOptions(textPartitioningOptions)
+            .WithOpenAITextGeneration(new OpenAIConfig()
+            {
+                APIKey = OpenAIOption.Key,
+                TextModel = OpenAIOption.Model
 
-          }, null, false, httpClient)
-          .Build<MemoryServerless>();
-            return memory;
+            }, null, httpClient)
+            .WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
+            {
+                APIKey = OpenAIOption.Key,
+                EmbeddingModel = OpenAIOption.EmbeddingModel
+
+            }, null, false, httpClient);
+            string VectorDb = _config["KernelMemory:VectorDb"].ConvertToString();
+            string ConnectionString = _config["KernelMemory:ConnectionString"].ConvertToString();
+            string TableNamePrefix = _config["KernelMemory:TableNamePrefix"].ConvertToString();
+            switch (VectorDb)
+            {
+                case "Postgres":
+                    memory.WithPostgresMemoryDb(new PostgresConfig()
+                    {
+                        ConnectionString = ConnectionString,
+                        TableNamePrefix = TableNamePrefix
+                    });
+                    break;
+                case "Disk":
+                    memory.WithSimpleFileStorage(new SimpleFileStorageConfig()
+                    {
+                        StorageType = FileSystemTypes.Disk
+                    });
+                    break;
+                case "Memory":
+                    memory.WithSimpleFileStorage(new SimpleFileStorageConfig()
+                    {
+                        StorageType = FileSystemTypes.Volatile
+                    });
+                    break;
+            }
+
+            var result = memory.Build<MemoryServerless>();
+            return result;
         }
 
         public async Task<List<KMFile>> GetDocumentByFileID(string fileid)

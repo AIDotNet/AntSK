@@ -107,14 +107,29 @@
             总数
             </summary>
         </member>
-        <member name="P:AntSK.Domain.Options.ConnectionOption.Sqlite">
+        <member name="P:AntSK.Domain.Options.DBConnectionOption.DbType">
             <summary>
             sqlite连接字符串
             </summary>
         </member>
-        <member name="P:AntSK.Domain.Options.ConnectionOption.Postgres">
+        <member name="P:AntSK.Domain.Options.DBConnectionOption.ConnectionStrings">
             <summary>
             pg链接字符串
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Options.KernelMemoryOption.VectorDb">
+            <summary>
+            向量库
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Options.KernelMemoryOption.ConnectionString">
+            <summary>
+            连接字符串
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Options.KernelMemoryOption.TableNamePrefix">
+            <summary>
+            表前缀
             </summary>
         </member>
         <member name="P:AntSK.Domain.Repositories.Apis.Name">
@@ -509,7 +524,7 @@
             <param name="whereExpression"></param>
             <returns></returns>
         </member>
-        <member name="F:AntSK.Domain.Repositories.Base.SqlSugarHelper.Sqlite">
+        <member name="M:AntSK.Domain.Repositories.Base.SqlSugarHelper.SqlScope">
             <summary>
             sqlserver连接
             </summary>
