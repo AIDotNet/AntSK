@@ -143,6 +143,7 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task SendKms(string questions, string msg, Apps app)
         {
+            var _kernel = _kernelService.GetKernel();
             //知识库问答
             var filters = new List<MemoryFilter>();
 
@@ -152,38 +153,63 @@ namespace AntSK.Pages.ChatPage
                 filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
             }
 
-            var kmsResult = await _memory.AskAsync(msg, index: "kms", filters: filters);
-            if (kmsResult != null)
-            {
-                if (!string.IsNullOrEmpty(kmsResult.Result))
-                {
-                    string answers = kmsResult.Result;
-                    var markdown = new Markdown();
-                    string htmlAnswers = markdown.Transform(answers);
-                    var info1 = new MessageInfo()
-                    {
-                        ID = Guid.NewGuid().ToString(),
-                        Context = answers,
-                        HtmlAnswers = htmlAnswers,
-                        CreateTime = DateTime.Now,
-                    };
-                    MessageList.Add(info1);
-                }
+            //var kmsResult = await _memory.AskAsync(msg, index: "kms", filters: filters);
 
-                foreach (var x in kmsResult.RelevantSources)
+            var  xlresult = await _memory.SearchAsync(questions, index: "kms", filters: filters);
+            string promptMsg = $"Facts:{Environment.NewLine}";
+            if (xlresult != null)
+            {
+                foreach (var item in xlresult.Results)
                 {
-                    foreach (var xsd in x.Partitions)
+                    foreach (var part in item.Partitions)
                     {
+                        promptMsg += $"[file:{item.SourceName};Relevance:{part.Relevance.ToString("F2")}%]:{part.Text}{Environment.NewLine}";
                         var markdown = new Markdown();
-                        string sourceName = x.SourceName;
-                        var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == x.SourceName);
+                        string sourceName = item.SourceName;
+                        var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == item.SourceName);
                         if (fileDetail.IsNotNull())
                         {
                             sourceName = fileDetail.FileName;
                         }
-                        RelevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = markdown.Transform(xsd.Text), Relevance = xsd.Relevance });
+                        RelevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = markdown.Transform(part.Text), Relevance = part.Relevance });
                     }
                 }
+                promptMsg += @$"仅鉴于上述事实，请提供全面/详细的答案。
+你不知道这些知识是从哪里来的，只要回答就行了。
+如果您没有足够的信息，请回复“知识库未搜索到相关内容”。
+历史记录:{msg}
+问题：{{$input}}
+答案：";
+                var func = _kernel.CreateFunctionFromPrompt(promptMsg, new OpenAIPromptExecutionSettings() { });
+                var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = questions });
+                MessageInfo info = null;
+                var markdown1 = new Markdown();
+                await foreach (var content in chatResult)
+                {
+                    if (info == null)
+                    {
+                        info = new MessageInfo();
+                        info.ID = Guid.NewGuid().ToString();
+                        info.Context = content?.Content?.ConvertToString();
+                        info.HtmlAnswers = content?.Content?.ConvertToString();
+                        info.CreateTime = DateTime.Now;
+
+                        MessageList.Add(info);
+                    }
+                    else
+                    {
+                        info.HtmlAnswers += content.Content;
+                        await Task.Delay(50);
+                    }
+                    await InvokeAsync(StateHasChanged);
+                }
+                //全部处理完后再处理一次Markdown
+                if (info.IsNotNull())
+                {
+                    info!.HtmlAnswers = markdown1.Transform(info.HtmlAnswers);
+                }
+
+                await InvokeAsync(StateHasChanged);
             }
         }
 

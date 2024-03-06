@@ -15,7 +15,12 @@ namespace AntSK.Domain.Utils
             UriBuilder uriBuilder;
             Regex regex = new Regex(@"(https?)://([^/:]+)(:\d+)?/(.*)");
             Match match = regex.Match(OpenAIOption.EndPoint);
-
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" && request.Content != null)
+            {         
+                string requestBody = await request.Content.ReadAsStringAsync();
+                //便于调试查看请求prompt
+                Console.WriteLine(requestBody);
+            }
             if (match.Success)
             {
                 string xieyi = match.Groups[1].Value;
