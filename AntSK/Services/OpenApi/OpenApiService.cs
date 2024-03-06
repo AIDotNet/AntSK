@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using System.Text.Json;
 using AntSK.Domain.Domain.Interface;
 using static LLama.Common.ChatHistory;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace AntSK.Services.OpenApi
 {
@@ -174,6 +175,7 @@ namespace AntSK.Services.OpenApi
         /// <returns></returns>
         private async Task<string> SendKms(string msg, Apps app)
         {
+            var _kernel = _kernelService.GetKernel();
             string result = "";
             //知识库问答
             var filters = new List<MemoryFilter>();
@@ -184,19 +186,39 @@ namespace AntSK.Services.OpenApi
                 filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
             }
 
-            var kmsResult = await _memory.AskAsync(msg, index: "kms", filters: filters);
-            if (kmsResult != null)
+            var xlresult = await _memory.SearchAsync(msg, index: "kms", filters: filters);
+            string dataMsg = "";
+            if (xlresult != null)
             {
-                if (!string.IsNullOrEmpty(kmsResult.Result))
+                foreach (var item in xlresult.Results)
                 {
-                    string answers = kmsResult.Result;
-                    result = answers;
+                    foreach (var part in item.Partitions)
+                    {
+                        dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
+                    }
                 }
+                string promptMsg = @$"使用<data></data>标记中的内容作为你的知识:{Environment.NewLine}
+<data>{dataMsg}</data>
+回答要求：
+- 如果你不清楚答案，你需要澄清。
+- 避免提及你是从<data></data> 获取的知识。
+- 保持答案与 <data></data> 中描述的一致。
+- 请使用与问题相同的语言回答。
+- 使用 Markdown 格式回答。
+- 如果您没有足够的信息，请回复“知识库未搜索到相关内容”。
+历史记录:{msg}
+问题：{{$input}}
+答案：";
+                var func = _kernel.CreateFunctionFromPrompt(promptMsg, new OpenAIPromptExecutionSettings() { });
+                var chatResult = await _kernel.InvokeAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
+                if (chatResult.IsNotNull())
+                {
+                    string answers = chatResult.GetValue<string>();
+                    result = answers;
+                }  
             }
             return result;
         }
-
-
         /// <summary>
         /// 历史会话的会话总结
         /// </summary>

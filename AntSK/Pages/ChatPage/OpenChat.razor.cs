@@ -145,19 +145,25 @@ namespace AntSK.Pages.ChatPage
 
 
             var xlresult = await _memory.SearchAsync(questions, index: "kms", filters: filters);
-            string promptMsg = $"Facts:{Environment.NewLine}";
+            string dataMsg = "";
             if (xlresult != null)
             {
                 foreach (var item in xlresult.Results)
                 {
                     foreach (var part in item.Partitions)
                     {
-                        promptMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
+                        dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
                     }
                 }
-                promptMsg += @$"仅鉴于上述事实，请提供全面/详细的答案。
-你不知道这些知识是从哪里来的，只要回答就行了。
-如果您没有足够的信息，请回复“知识库未搜索到相关内容”。
+                string promptMsg = @$"使用<data></data>标记中的内容作为你的知识:{Environment.NewLine}
+<data>{dataMsg}</data>
+回答要求：
+- 如果你不清楚答案，你需要澄清。
+- 避免提及你是从<data></data> 获取的知识。
+- 保持答案与 <data></data> 中描述的一致。
+- 请使用与问题相同的语言回答。
+- 使用 Markdown 格式回答。
+- 如果您没有足够的信息，请回复“知识库未搜索到相关内容”。
 历史记录:{msg}
 问题：{{$input}}
 答案：";
