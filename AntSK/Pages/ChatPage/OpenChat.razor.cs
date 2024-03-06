@@ -54,24 +54,33 @@ namespace AntSK.Pages.ChatPage
         }
         protected async Task OnSendAsync()
         {
-            if (string.IsNullOrWhiteSpace(_messageInput))
+            try
             {
-                _ = Message.Info("请输入消息", 2);
-                return;
+                if (string.IsNullOrWhiteSpace(_messageInput))
+                {
+                    _ = Message.Info("请输入消息", 2);
+                    return;
+                }
+
+                MessageList.Add(new MessageInfo()
+                {
+                    ID = Guid.NewGuid().ToString(),
+                    Context = _messageInput,
+                    CreateTime = DateTime.Now,
+                    IsSend = true
+                });
+
+
+                Sendding = true;
+                await SendAsync(_messageInput);
+                _messageInput = "";
+                Sendding = false;
             }
-
-            MessageList.Add(new MessageInfo() { 
-                ID=Guid.NewGuid().ToString(),
-                Context=_messageInput,
-                CreateTime=DateTime.Now,
-                IsSend=true
-            });
-
-
-            Sendding = true;
-            await SendAsync(_messageInput);
-            _messageInput = "";
-            Sendding = false;
+            catch (System.Exception ex)
+            {
+                Sendding = false;
+                _ = Message.Error("异常:"+ex.Message, 2);
+            }
 
         }
         protected async Task OnCopyAsync(MessageInfo item)
