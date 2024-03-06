@@ -32,21 +32,21 @@ namespace AntSK.Domain.Repositories
         /// <summary>
         /// 每个段落的最大标记数。
         /// </summary>
-        [SugarColumn(DefaultValue = "1000")]
-        public int MaxTokensPerParagraph { get; set; } = 1000;
+        [SugarColumn(DefaultValue = "299")]
+        public int MaxTokensPerParagraph { get; set; } = 299;
 
 
         /// <summary>
         /// 每行，也就是每句话的最大标记数
         /// </summary>
-        [SugarColumn(DefaultValue = "300")]
-        public int MaxTokensPerLine { get; set; } = 300;
+        [SugarColumn(DefaultValue = "99")]
+        public int MaxTokensPerLine { get; set; } = 99;
 
 
         /// <summary>
         /// 段落之间重叠标记的数量。
         /// </summary>
-        [SugarColumn(DefaultValue = "100")]
-        public int OverlappingTokens { get; set; } = 100;
+        [SugarColumn(DefaultValue = "49")]
+        public int OverlappingTokens { get; set; } = 49;
     }
 }

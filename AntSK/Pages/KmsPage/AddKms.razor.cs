@@ -26,7 +26,17 @@ namespace AntSK.Pages.KmsPage
                 _ = Message.Error("名称已存在！", 2);
                 return;
             }
+            if (_kmsModel.OverlappingTokens >= _kmsModel.MaxTokensPerLine || _kmsModel.OverlappingTokens >= _kmsModel.MaxTokensPerParagraph)
+            {
+                _ = Message.Error("重叠部分需小于行切片和段落切片！", 2);
+                return;
+            }
 
+            if (_kmsModel.MaxTokensPerLine >= _kmsModel.MaxTokensPerParagraph)
+            {
+                _ = Message.Error("行切片需小于段落切片！", 2);
+                return;
+            }
             _kmss_Repositories.Insert(_kmsModel);
 
             NavigationManager.NavigateTo("/kmslist");
