@@ -1,6 +1,8 @@
 ﻿using AntDesign;
+using AntSK.Domain.BackgroundTask;
 using AntSK.Domain.Domain.Dto;
 using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using AntSK.Models;
@@ -66,6 +68,8 @@ namespace AntSK.Pages.KmsPage
         protected IKMService iKMService { get; set; }
         [Inject]
         protected MessageService? _message { get; set; }
+        [Inject]
+        protected BackgroundTaskBroker<ImportKMSTaskReq> _taskBroker { get; set; }
 
 
         protected override async Task OnInitializedAsync()
@@ -96,27 +100,15 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
-                _urlConfirmLoading = true;
-                string fileid = Guid.NewGuid().ToString();
-                await _memory.ImportWebPageAsync(urlModel.Url, fileid, new TagCollection() { { "kmsid", KmsId } }
-                     , index: "kms");
-                //查询文档数量
-                var docTextList =await iKMService.GetDocumentByFileID(fileid);
-
-                KmsDetails detial = new KmsDetails()
+                _taskBroker.QueueWorkItem(new ImportKMSTaskReq()
                 {
-                    Id = fileid,
-                    KmsId = KmsId,
-                    Type = "url",
-                    Url = urlModel.Url,
-                    DataCount= docTextList.Count,
-                    CreateTime=DateTime.Now
-                };
-                await _kmsDetails_Repositories.InsertAsync(detial);
-                _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
-
+                    Memory=_memory,
+                    ImportType=ImportType.Url,
+                    KmsId=KmsId,
+                    Url=urlModel.Url
+                });
                 _urlVisible = false;
-                _urlConfirmLoading = false;
+                _ = _message.Info("加入队列，进入后台处理中！", 2);
             }
             catch (System.Exception ex)
             {
@@ -144,26 +136,16 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
-                _textConfirmLoading = true;
-                string fileid = Guid.NewGuid().ToString();
-                await _memory.ImportTextAsync(textModel.Text, fileid, new TagCollection() { { "kmsid", KmsId } }
-                     , index: "kms");
-                //查询文档数量
-                var docTextList = await iKMService.GetDocumentByFileID(fileid);
-
-                KmsDetails detial = new KmsDetails()
+                _taskBroker.QueueWorkItem(new ImportKMSTaskReq()
                 {
-                    Id = fileid,
+                    Memory = _memory,
+                    ImportType = ImportType.Text,
                     KmsId = KmsId,
-                    Type = "text",
-                    DataCount = docTextList.Count,
-                    CreateTime = DateTime.Now
-                };
-                await _kmsDetails_Repositories.InsertAsync(detial);
-                _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
-
+                    Text= textModel.Text
+                });
                 _textVisible = false;
-                _textConfirmLoading = false;
+                _ = _message.Info("加入队列，进入后台处理中！", 2);
+
             }
             catch (System.Exception ex)
             {
@@ -187,31 +169,18 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
-                _fileConfirmLoading = true;
-                string fileid = Guid.NewGuid().ToString();
-                //上传文档
-                await _memory.ImportDocumentAsync(new Document(fileid)
-                     .AddFile(filePath)
-                     .AddTag("kmsid", KmsId)
-                     , index: "kms");
-                //查询文档数量
-                var docTextList = await iKMService.GetDocumentByFileID(fileid);
-                string fileGuidName = Path.GetFileName(filePath);
-                KmsDetails detial = new KmsDetails()
+                _taskBroker.QueueWorkItem(new ImportKMSTaskReq()
                 {
-                    Id = fileid,
+                    Memory = _memory,
+                    ImportType = ImportType.File,
                     KmsId = KmsId,
-                    Type = "file",
-                    FileName = fileName,
-                    FileGuidName= fileGuidName,
-                    DataCount = docTextList.Count,
-                    CreateTime = DateTime.Now
-                };
-                await _kmsDetails_Repositories.InsertAsync(detial);
-                _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
-
+                    FilePath = filePath,
+                    FileName=fileName
+                });
+               
+                //上传文档
                 _fileVisible = false;
-                _fileConfirmLoading = false;
+                _ = _message.Info("加入队列，进入后台处理中！", 2);
             }
             catch (System.Exception ex)
             {

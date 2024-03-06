@@ -19,6 +19,9 @@ using Microsoft.SemanticKernel.Plugins.Core;
 using Microsoft.AspNetCore.Components.Authorization;
 using AntSK.Services.Auth;
 using LLama.Native;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using AntSK.Domain.Model;
+using AntSK.Domain.Domain.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -70,7 +73,9 @@ builder.Services.AddSwaggerGen(c =>
         return version.Any(v => v == docName);
     });
 });
-
+//后台队列任务
+builder.Services.AddBackgroundTaskBroker()
+         .AddHandler<ImportKMSTaskReq, ImportKMSTaskHandler>("ImportKMSTask");
 // 读取连接字符串配置
 {
     builder.Configuration.GetSection("DBConnection").Get<DBConnectionOption>();

@@ -330,14 +330,9 @@ ASALocalRun/
 *.pdb
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
-/.semantic-kernel/results/src/ISS.IPSA.AiAgent.Api/plugins/BasePlugin/YesNo
 **/bin/
 **/obj/
 **/.vs/
-
-/Xzy.KnowledgeBase/appsettings.Development.json
-/Xzy.KnowledgeBase/XzyAgent.db
-/Xzy.KnowledgeBase/AntSK.db
 /AntSK/AntSK.db
 /AntSK/appsettings.Development.json
 /AntSK.db
