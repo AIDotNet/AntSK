@@ -649,5 +649,11 @@
             <param name="stream"></param>
             <returns></returns>
         </member>
+        <member name="M:AntSK.Domain.Utils.RepoFiles.SamplePluginsPath">
+            <summary>
+            Scan the local folders from the repo, looking for "samples/plugins" folder.
+            </summary>
+            <returns>The full path to samples/plugins</returns>
+        </member>
     </members>
 </doc>

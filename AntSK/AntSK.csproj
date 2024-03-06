@@ -20,5 +20,11 @@
   <ItemGroup>
     <ProjectReference Include="..\AntSK.Domain\AntSK.Domain.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="plugins\KMSPlugin\Ask\skprompt.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   
 </Project>

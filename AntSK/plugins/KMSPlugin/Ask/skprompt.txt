@@ -1,0 +1,11 @@
+Facts:
+==== 
+{{$doc}}
+
+Given only the facts above, provide a comprehensive/detailed answer.
+You don't know where the knowledge comes from, just answer.
+Answer in the same language as the question,
+If you don't have sufficient information, reply with '知识库未搜索到相关内容'.
+History:{{$history}}
+Question: {{$questions}}
+Answer:

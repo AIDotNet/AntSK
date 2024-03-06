@@ -197,20 +197,9 @@ namespace AntSK.Services.OpenApi
                         dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
                     }
                 }
-                string promptMsg = @$"使用<data></data>标记中的内容作为你的知识:{Environment.NewLine}
-<data>{dataMsg}</data>
-回答要求：
-- 如果你不清楚答案，你需要澄清。
-- 避免提及你是从<data></data> 获取的知识。
-- 保持答案与 <data></data> 中描述的一致。
-- 请使用与问题相同的语言回答。
-- 使用 Markdown 格式回答。
-- 如果您没有足够的信息，请回复“知识库未搜索到相关内容”。
-历史记录:{msg}
-问题：{{$input}}
-答案：";
-                var func = _kernel.CreateFunctionFromPrompt(promptMsg, new OpenAIPromptExecutionSettings() { });
-                var chatResult = await _kernel.InvokeAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
+                KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
+                var chatResult = await _kernel.InvokeAsync(function: jsonFun,
+                    arguments: new KernelArguments() { ["data"] = dataMsg, ["history"] = "", ["questions"] = msg });
                 if (chatResult.IsNotNull())
                 {
                     string answers = chatResult.GetValue<string>();
