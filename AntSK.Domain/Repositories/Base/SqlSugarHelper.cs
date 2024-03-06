@@ -25,7 +25,6 @@ namespace AntSK.Domain.Repositories.Base
             var config = new ConnectionConfig()
             {
                 ConnectionString = ConnectionString,
-               // DbType = DbType.PostgreSQL,
                 InitKeyType = InitKeyType.Attribute,//从特性读取主键和自增列信息
                 IsAutoCloseConnection = true,
                 ConfigureExternalServices = new ConfigureExternalServices
@@ -43,22 +42,8 @@ namespace AntSK.Domain.Repositories.Base
                     }
                 }
             };
-            switch (DBType)
-            {
-                case "Postgre":
-                    config.DbType = DbType.PostgreSQL;
-                    break;
-                case "Sqlite":
-                    config.DbType = DbType.Sqlite;
-                    break;
-                case "SqlServer":
-                    config.DbType = DbType.SqlServer;
-                    break;
-                case "Mysql":
-                    config.DbType = DbType.MySql;
-                    break;
-            }
-
+            DbType dbType = (DbType)Enum.Parse(typeof(DbType), DBType);
+            config.DbType = dbType;  
             var scope= new SqlSugarScope(config, Db =>
             {
                
