@@ -18,6 +18,7 @@ using AntSK.Domain.Repositories;
 using Microsoft.SemanticKernel.Plugins.Core;
 using Microsoft.AspNetCore.Components.Authorization;
 using AntSK.Services.Auth;
+using LLama.Native;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -76,6 +77,20 @@ builder.Services.AddSwaggerGen(c =>
     builder.Configuration.GetSection("OpenAIOption").Get<OpenAIOption>();
     builder.Configuration.GetSection("Login").Get<LoginOption>();
     builder.Configuration.GetSection("LLamaSharp").Get<LLamaSharpOption>();
+    if (LLamaSharpOption.RunType.ToUpper() == "CPU")
+    {
+        NativeLibraryConfig
+           .Instance
+           .WithCuda(false)
+           .WithLogs(true);
+    }
+    else if(LLamaSharpOption.RunType.ToUpper() == "GPU")
+    {
+        NativeLibraryConfig
+        .Instance
+        .WithCuda(true)
+        .WithLogs(true);
+    }
 }
 
 var app = builder.Build();
