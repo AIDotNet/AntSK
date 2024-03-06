@@ -37,31 +37,31 @@ namespace AntSK.Domain.Repositories
         [Required]
         public HttpMethodType Method { get; set; }
 
-        [SugarColumn(ColumnDataType = "varchar(2000)")]
+        [SugarColumn(ColumnDataType = "varchar(1000)")]
         public string? Header { get; set; }
         /// <summary>
         /// QueryString参数
         /// </summary>
-        [SugarColumn(ColumnDataType = "varchar(2000)")]
+        [SugarColumn(ColumnDataType = "varchar(1000)")]
         public string? Query { get; set; }
         /// <summary>
         /// jsonBody 实体
         /// </summary>
-        [SugarColumn(ColumnDataType = "varchar(8000)")]
+        [SugarColumn(ColumnDataType = "varchar(7000)")]
         public string? JsonBody { get; set; }
 
         /// <summary>
         /// 入参提示词
         /// </summary>
         [Required]
-        [SugarColumn(ColumnDataType = "varchar(2000)")]
+        [SugarColumn(ColumnDataType = "varchar(1500)")]
         public string InputPrompt { get; set; }
 
         /// <summary>
         /// 返回提示词
         /// </summary>
         [Required]
-        [SugarColumn(ColumnDataType = "varchar(2000)")]
+        [SugarColumn(ColumnDataType = "varchar(1500)")]
         public string OutputPrompt { get; set; }
     }
 }
