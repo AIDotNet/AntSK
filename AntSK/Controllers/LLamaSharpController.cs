@@ -17,6 +17,7 @@ namespace AntSK.Controllers
         [Route("llama/v1/chat/completions")]
         public async Task chat(OpenAIModel model)
         {
+            Console.WriteLine("开始：llama/v1/chat/completions");
             if (model.stream)
             {
                 await _lLamaSharpService.ChatStream(model, HttpContext);
@@ -25,6 +26,7 @@ namespace AntSK.Controllers
             {
                 await _lLamaSharpService.Chat(model, HttpContext);
             }
+            Console.WriteLine("结束：llama/v1/chat/completions");
         }
 
         /// <summary>
@@ -36,8 +38,9 @@ namespace AntSK.Controllers
         [Route("llama/v1/embeddings")]
         public async Task embedding(OpenAIEmbeddingModel model)
         {
-
+            Console.WriteLine("开始：llama/v1/embeddings");
             await _lLamaSharpService.Embedding(model,HttpContext);
+            Console.WriteLine("结束：llama/v1/embeddings");
 
         }
     }

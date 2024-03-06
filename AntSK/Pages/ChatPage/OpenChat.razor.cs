@@ -152,7 +152,7 @@ namespace AntSK.Pages.ChatPage
                 {
                     foreach (var part in item.Partitions)
                     {
-                        promptMsg += $"[file:{item.SourceName};Relevance:{part.Relevance.ToString("F2")}%]:{part.Text}{Environment.NewLine}";
+                        promptMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
                     }
                 }
                 promptMsg += @$"仅鉴于上述事实，请提供全面/详细的答案。
