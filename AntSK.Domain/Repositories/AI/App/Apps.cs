@@ -40,6 +40,7 @@ namespace AntSK.Domain.Repositories
         /// <summary>
         /// 温度
         /// </summary>
+        [SugarColumn(DefaultValue = "70")]
         public double Temperature { get; set; }=70f;
 
         /// <summary>
