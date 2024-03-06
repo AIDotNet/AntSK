@@ -231,11 +231,6 @@ namespace AntSK.Pages.ChatPage
                 settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,Temperature = temperature };
             }
             
-            //var promptTemplateFactory = new KernelPromptTemplateFactory();
-            //var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
-            //var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
-            //Console.WriteLine(renderedPrompt);
-
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
             var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
             MessageInfo info = null;
