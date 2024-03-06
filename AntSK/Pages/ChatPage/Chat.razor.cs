@@ -161,6 +161,7 @@ namespace AntSK.Pages.ChatPage
                     foreach (var part in item.Partitions)
                     {
                         dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance*100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
+                        //输出调试信息
                         var markdown = new Markdown();
                         string sourceName = item.SourceName;
                         var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == item.SourceName);
