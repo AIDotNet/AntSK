@@ -1,0 +1,679 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AntSK.Domain</name>
+    </assembly>
+    <members>
+        <member name="T:AntSK.Domain.Common.DependencyInjection.ServiceCollectionExtensions">
+            <summary>
+            容器扩展
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.Common.DependencyInjection.ServiceCollectionExtensions.AddServicesFromAssemblies(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String[])">
+            <summary>
+            从程序集中加载类型并添加到容器中
+            </summary>
+            <param name="services">容器</param>
+            <param name="assemblies">程序集集合</param>
+            <returns></returns>
+        </member>
+        <member name="F:AntSK.Domain.Common.DependencyInjection.ServiceLifetime.Scoped">
+            <summary>
+            作用域
+            </summary>
+        </member>
+        <member name="F:AntSK.Domain.Common.DependencyInjection.ServiceLifetime.Singleton">
+            <summary>
+            单例
+            </summary>
+        </member>
+        <member name="F:AntSK.Domain.Common.DependencyInjection.ServiceLifetime.Transient">
+            <summary>
+            瞬时
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.Domain.Service.KernelService.GetKernel(System.String,System.String)">
+            <summary>
+            获取kernel实例，依赖注入不好按每个用户去Import不同的插件，所以每次new一个新的kernel
+            </summary>
+            <param name="modelId"></param>
+            <param name="apiKey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Domain.Service.KernelService.ImportFunctionsByApp(AntSK.Domain.Repositories.Apps,Microsoft.SemanticKernel.Kernel)">
+            <summary>
+            根据app配置的插件，导入插件
+            </summary>
+            <param name="app"></param>
+            <param name="_kernel"></param>
+        </member>
+        <member name="M:AntSK.Domain.Domain.Service.KernelService.RegisterPluginsWithKernel(Microsoft.SemanticKernel.Kernel)">
+            <summary>
+            注册默认插件
+            </summary>
+            <param name="kernel"></param>
+        </member>
+        <member name="M:AntSK.Domain.Domain.Service.KernelService.HistorySummarize(Microsoft.SemanticKernel.Kernel,System.String,System.String)">
+            <summary>
+            会话总结
+            </summary>
+            <param name="_kernel"></param>
+            <param name="questions"></param>
+            <param name="history"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Map.MapperExtend.ToDTOList``1(System.Object)">
+            <summary>
+            Entity集合转DTO集合
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Map.MapperExtend.ToDTO``1(System.Object)">
+            <summary>
+            Entity转DTO
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Map.MapperExtend.MapTo``1(System.Object,``0)">
+            <summary>
+            给已有对象map,适合update场景，如需过滤空值需要在AutoMapProfile 设置
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="P:AntSK.Domain.Model.MessageInfo.IsSend">
+            <summary>
+            发送是true  接收是false
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Model.PageList`1.PageIndex">
+            <summary>
+            当前页，从1开始
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Model.PageList`1.PageSize">
+            <summary>
+            每页数量
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Model.PageList`1.TotalCount">
+            <summary>
+            总数
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Options.DBConnectionOption.DbType">
+            <summary>
+            sqlite连接字符串
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Options.DBConnectionOption.ConnectionStrings">
+            <summary>
+            pg链接字符串
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Options.KernelMemoryOption.VectorDb">
+            <summary>
+            向量库
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Options.KernelMemoryOption.ConnectionString">
+            <summary>
+            连接字符串
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Options.KernelMemoryOption.TableNamePrefix">
+            <summary>
+            表前缀
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.Name">
+            <summary>
+            接口名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.Describe">
+            <summary>
+            接口描述
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.Url">
+            <summary>
+            接口地址
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.Method">
+            <summary>
+            请求方法
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.Query">
+            <summary>
+            QueryString参数
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.JsonBody">
+            <summary>
+            jsonBody 实体
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.InputPrompt">
+            <summary>
+            入参提示词
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apis.OutputPrompt">
+            <summary>
+            返回提示词
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Describe">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Temperature">
+            <summary>
+            温度
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Prompt">
+            <summary>
+            提示词
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.ApiFunctionList">
+            <summary>
+            插件列表
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.KmsIdList">
+            <summary>
+            知识库ID列表
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.SecretKey">
+            <summary>
+            API调用秘钥
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.FileName">
+            <summary>
+            文件名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Url">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Type">
+            <summary>
+            类型 file，url
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.DataCount">
+            <summary>
+            数据数量
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.Describe">
+            <summary>
+            会话模型
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.MaxTokensPerParagraph">
+            <summary>
+            每个段落的最大标记数。
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.MaxTokensPerLine">
+            <summary>
+            每行，也就是每句话的最大标记数
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.OverlappingTokens">
+            <summary>
+            段落之间重叠标记的数量。
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetList">
+            <summary>
+            获取所有list
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetListAsync">
+            <summary>
+            获取所有list-异步
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetList(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            根据lambda查询
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetListAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            根据lambda查询-异步
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.Count(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            根据lambda表达式获取数量
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.CountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            根据lambda表达式获取数量-异步
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetPageList(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},SqlSugar.PageModel)">
+            <summary>
+            获取分页
+            </summary>
+            <param name="whereExpression"></param>
+            <param name="page"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetPageListAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},SqlSugar.PageModel)">
+            <summary>
+            获取分页-异步
+            </summary>
+            <param name="whereExpression"></param>
+            <param name="page"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetById(System.Object)">
+            <summary>
+            根据id获取实体
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetByIdAsync(System.Object)">
+            <summary>
+            根据id获取实体-异步
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetSingle(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            根据lambda获取单个对象 （注意，需要确保唯一，如果获取到2个会报错，这种场景需要使用GetFirst）
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetSingleAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            根据lambda获取单个对象-异步  （注意，需要确保唯一，如果获取到2个会报错，这种场景需要使用GetFirst）
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetFirst(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            根据lambda获取单个对象
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetFirstAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            根据lambda获取单个对象 --异步
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.Insert(`0)">
+            <summary>
+            实体插入
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.InsertAsync(`0)">
+            <summary>
+            实体插入-异步
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.InsertRange(System.Collections.Generic.List{`0})">
+            <summary>
+            批量插入
+            </summary>
+            <param name="objs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.InsertRangeAsync(System.Collections.Generic.List{`0})">
+            <summary>
+            批量插入-异步
+            </summary>
+            <param name="objs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.InsertReturnIdentity(`0)">
+            <summary>
+            插入返回自增列
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.InsertReturnIdentityAsync(`0)">
+            <summary>
+            插入返回自增列-异步
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.InsertReturnBigIdentity(`0)">
+            <summary>
+            插入返回longid
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.InsertReturnBigIdentityAsync(`0)">
+            <summary>
+            插入返回longid-异步
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.DeleteByIds(System.Object[])">
+            <summary>
+            批量删除
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.DeleteByIdsAsync(System.Object[])">
+            <summary>
+            批量删除-异步
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.Delete(System.Object)">
+            <summary>
+            根据主键删除
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.DeleteAsync(System.Object)">
+            <summary>
+            根据主键删除-异步
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.Delete(`0)">
+            <summary>
+            根据实体删除
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.DeleteAsync(`0)">
+            <summary>
+            根据实体删除-异步
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.Delete(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            根据表达式删除
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.DeleteAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            根据表达式删除-异步
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.Update(`0)">
+            <summary>
+            更新
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.UpdateAsync(`0)">
+            <summary>
+            更新-异步
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.UpdateRange(System.Collections.Generic.List{`0})">
+            <summary>
+            批量更新
+            </summary>
+            <param name="objs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.UpdateRangeAsync(System.Collections.Generic.List{`0})">
+            <summary>
+            批量更新-异步
+            </summary>
+            <param name="objs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.IsAny(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            是否包含元素
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.Repository`1.IsAnyAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            是否包含元素-异步
+            </summary>
+            <param name="whereExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Repositories.Base.SqlSugarHelper.SqlScope">
+            <summary>
+            sqlserver连接
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.AIModelType">
+            <summary>
+            模型类型
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.EndPoint">
+            <summary>
+            模型地址
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.ModelName">
+            <summary>
+            模型名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.ModelKey">
+            <summary>
+            模型秘钥
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Users.No">
+            <summary>
+            工号，用于登陆
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Users.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Users.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Users.Describe">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Users.MenuRole">
+            <summary>
+            菜单权限
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.IsNull(System.Object)">
+            <summary>
+            判断是否为空，为空返回true
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.IsNotNull(System.Object)">
+            <summary>
+            判断是否为空，为空返回true
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.IsNull(System.String)">
+            <summary>
+            判断是否为空，为空返回true
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ConvertToString(System.Object)">
+            <summary>
+            将obj类型转换为string
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ConvertToInt32(System.Object)">
+            <summary>
+            object 转int32
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ConvertToInt64(System.Object)">
+            <summary>
+            object 转int32
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ConvertToDouble(System.Object)">
+            <summary>
+            将字符串转double
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ConvertToDateTime(System.String)">
+            <summary>
+            转换为datetime类型
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ConvertToDateTime(System.String,System.String)">
+            <summary>
+            转换为datetime类型的格式字符串
+            </summary>
+            <param name="s">要转换的对象</param>
+            <param name="y">格式化字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ConvertToDecimal(System.Object)">
+            <summary>
+            将字符串转换成decimal
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.DecimalFraction(System.Decimal)">
+            <summary>
+            decimal保留2位小数
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ReplaceHtml(System.String)">
+            <summary>
+            替换html种的特殊字符
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.StreamToByte(System.IO.Stream)">
+            <summary>
+            流转byte
+            </summary>
+            <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.RepoFiles.SamplePluginsPath">
+            <summary>
+            Scan the local folders from the repo, looking for "samples/plugins" folder.
+            </summary>
+            <returns>The full path to samples/plugins</returns>
+        </member>
+    </members>
+</doc>
