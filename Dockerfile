@@ -7,7 +7,7 @@ COPY ["src/AntSK/AntSK.csproj", "AntSK/"]
 RUN dotnet restore "AntSK/AntSK.csproj"
 
 # Copy everything else and build
-COPY . .
+COPY src/ .
 WORKDIR "/src/AntSK"
 RUN dotnet build "AntSK.csproj" -c Release -o /app/build
 RUN dotnet publish "AntSK.csproj" -c Release -o /app/publish
