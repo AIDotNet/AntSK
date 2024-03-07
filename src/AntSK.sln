@@ -9,7 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntSK.Domain", "AntSK.Domai
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{9F2E193A-5F9D-4C82-B591-CB133EEB59F0}"
 	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
+		..\docker-compose.simple.yml = ..\docker-compose.simple.yml
+		..\docker-compose.yml = ..\docker-compose.yml
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
