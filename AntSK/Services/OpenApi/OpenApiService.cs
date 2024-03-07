@@ -199,7 +199,7 @@ namespace AntSK.Services.OpenApi
                 }
                 KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
                 var chatResult = await _kernel.InvokeAsync(function: jsonFun,
-                    arguments: new KernelArguments() { ["data"] = dataMsg, ["history"] = "", ["questions"] = msg });
+                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = "", ["questions"] = msg });
                 if (chatResult.IsNotNull())
                 {
                     string answers = chatResult.GetValue<string>();

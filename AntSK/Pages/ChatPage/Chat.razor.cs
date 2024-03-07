@@ -175,7 +175,7 @@ namespace AntSK.Pages.ChatPage
               
                 KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
                 var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: jsonFun, 
-                    arguments: new KernelArguments() { ["data"] = dataMsg, ["history"] = msg, ["questions"]=questions });
+                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = msg, ["questions"]=questions });
 
                 MessageInfo info = null;
                 var markdown1 = new Markdown();
