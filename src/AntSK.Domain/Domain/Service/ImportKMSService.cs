@@ -32,7 +32,7 @@ namespace AntSK.Domain.Domain.Service
                     MaxTokensPerParagraph = km.MaxTokensPerParagraph,
                     OverlappingTokens = km.OverlappingTokens
                 });
-                string fileid = Guid.NewGuid().ToString();
+                string fileid = req.KmsDetail.Id;
                 switch (req.ImportType)
                 {
                     case ImportType.File:
@@ -66,7 +66,7 @@ namespace AntSK.Domain.Domain.Service
                         //导入文本
                         {
                             var importResult = _memory.ImportTextAsync(req.Text, fileid, new TagCollection() { { "kmsid", req.KmsId } }
-                       , index: "kms");
+                       , index: "kms").Result;
                             //查询文档数量
                             var docTextList =  _kMService.GetDocumentByFileID(fileid).Result;
                             req.KmsDetail.Url = req.Url;

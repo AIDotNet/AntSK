@@ -87,6 +87,12 @@ namespace AntSK.Pages.KmsPage
                 OverlappingTokens=km.OverlappingTokens
             });
         }
+
+        //刷新
+        private async  Task Refresh() 
+        {
+            _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
+        }
         /// <summary>
         /// 根据文档ID获取文档
         /// </summary>

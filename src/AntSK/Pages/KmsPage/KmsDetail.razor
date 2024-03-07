@@ -16,6 +16,7 @@
                       BodyStyle="padding: 0 32px 40px 32px">
 
                     <Extra>
+                        <Button Type="@ButtonType.Primary" Style="position: absolute; right:360px; margin-bottom: 8px;" OnClick="Refresh">刷新 </Button>
                         <Dropdown Style="position: absolute; right: 20px; margin-bottom: 8px;">
                             <Overlay>
                                 <Menu>
@@ -78,6 +79,11 @@
                                 <ListItemMeta Avatar="" Description="@context.DataCount.ToString()">
                                     <TitleTemplate>
                                         <a>文档切片数量</a>
+                                    </TitleTemplate>
+                                </ListItemMeta>
+                                <ListItemMeta Avatar="" Description="@context.Status.ToString()">
+                                    <TitleTemplate>
+                                        <a>状态</a>
                                     </TitleTemplate>
                                 </ListItemMeta>
                                 <div class="listContent">
