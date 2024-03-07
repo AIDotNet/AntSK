@@ -22,10 +22,10 @@ namespace AntSK.Domain.Domain.Service
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                Console.WriteLine("ImportKMSTaskHandler.开始执行任务");
+                Console.WriteLine("ExecuteAsync.开始执行后台任务");
                 var  importKMSService = scope.ServiceProvider.GetRequiredService<IImportKMSService>();
                 await importKMSService.ImportKMSTask(item);
-                Console.WriteLine("ImportKMSTaskHandler.任务执行完成");
+                Console.WriteLine("ExecuteAsync.后台任务执行完成");
             }
 
         }
