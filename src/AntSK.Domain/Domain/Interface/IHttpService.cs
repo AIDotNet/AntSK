@@ -9,6 +9,6 @@ namespace AntSK.Domain.Domain.Interface
 {
     public interface IHttpService
     {
-        RestResponse Post(string url, Object jsonBody);
+        Task<RestResponse> PostAsync(string url, Object jsonBody);
     }
 }

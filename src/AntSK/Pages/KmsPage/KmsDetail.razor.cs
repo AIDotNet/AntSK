@@ -109,7 +109,7 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
-                var result=_httpService.Post(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
+                var result= await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
                 {
                     ImportType = ImportType.Url,
                     KmsId = KmsId,
@@ -145,7 +145,7 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
-                var result = _httpService.Post(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
+                var result =await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
                 {
                     ImportType = ImportType.Text,
                     KmsId = KmsId,
@@ -178,7 +178,7 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
-                var result = _httpService.Post(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
+                var result = await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
                 {
                     ImportType = ImportType.File,
                     KmsId = KmsId,
