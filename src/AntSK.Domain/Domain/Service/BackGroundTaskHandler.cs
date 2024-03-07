@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace AntSK.Domain.Domain.Service
 {
-    public class ImportKMSTaskHandler : IBackgroundTaskHandler<ImportKMSTaskReq>
+    public class BackGroundTaskHandler : IBackgroundTaskHandler<ImportKMSTaskReq>
     {
         private readonly IServiceScopeFactory _scopeFactory;
 
-        public ImportKMSTaskHandler(IServiceScopeFactory scopeFactory)
+        public BackGroundTaskHandler(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
         }
@@ -24,7 +24,8 @@ namespace AntSK.Domain.Domain.Service
             {
                 Console.WriteLine("ExecuteAsync.开始执行后台任务");
                 var  importKMSService = scope.ServiceProvider.GetRequiredService<IImportKMSService>();
-                await importKMSService.ImportKMSTask(item);
+                //不能使用异步
+                importKMSService.ImportKMSTask(item);
                 Console.WriteLine("ExecuteAsync.后台任务执行完成");
             }
 

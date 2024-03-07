@@ -9,6 +9,6 @@ namespace AntSK.Domain.Domain.Interface
 {
     public interface IImportKMSService
     {
-         Task ImportKMSTask(ImportKMSTaskReq req);
+        void ImportKMSTask(ImportKMSTaskReq req);
     }
 }

@@ -18,34 +18,35 @@ namespace AntSK.Controllers
     /// <param name="_taskBroker"></param>
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class KMSController(
-        IKmsDetails_Repositories _kmsDetails_Repositories,
-        IKMService _iKMService,
-        BackgroundTaskBroker<ImportKMSTaskReq> _taskBroker
-        ) : ControllerBase
+    public class KMSController : ControllerBase
     {
+        private readonly IKmsDetails_Repositories _kmsDetails_Repositories;
+        private readonly IKMService _iKMService;
+        private readonly BackgroundTaskBroker<ImportKMSTaskReq> _taskBroker;
+        public KMSController(
+            IKmsDetails_Repositories kmsDetails_Repositories,
+            IKMService iKMService,
+            BackgroundTaskBroker<ImportKMSTaskReq> taskBroker
+            ) 
+        {
+            _kmsDetails_Repositories = kmsDetails_Repositories;
+            _iKMService = iKMService;
+            _taskBroker = taskBroker;
+        }
         [HttpPost]
         public async Task<IActionResult> ImportKMSTask(ImportKMSTaskDTO model) 
         {
             Console.WriteLine("api/kms/ImportKMSTask  开始");
-            ImportKMSTaskReq req = new ImportKMSTaskReq()
-            {
-                FileName = model.FileName,
-                FilePath = model.FilePath,
-                Text = model.Text,
-                ImportType = model.ImportType,
-                KmsId = model.KmsId,
-                Url = model.Url
-            };
+            ImportKMSTaskReq req = model.ToDTO<ImportKMSTaskReq>();
             KmsDetails detail = new KmsDetails()
             {
-                Id=Guid.NewGuid().ToString(),
-                KmsId=req.KmsId,
-                CreateTime=DateTime.Now,
-                Status=ImportKmsStatus.Loadding,
-                Type= model.ImportType.ToString().ToLower()
+                Id = Guid.NewGuid().ToString(),
+                KmsId = req.KmsId,
+                CreateTime = DateTime.Now,
+                Status = ImportKmsStatus.Loadding,
+                Type = model.ImportType.ToString().ToLower()
             };
-            
+
             _kmsDetails_Repositories.Insert(detail);
             req.KmsDetail = detail;
             _taskBroker.QueueWorkItem(req);

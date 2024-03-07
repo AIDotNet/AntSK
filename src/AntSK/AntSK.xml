@@ -22,12 +22,6 @@
             </summary>
             <param name="_taskBroker"></param>
         </member>
-        <member name="M:AntSK.Controllers.KMSController.#ctor(AntSK.Domain.Repositories.IKmsDetails_Repositories,AntSK.Domain.Domain.Interface.IKMService,AntSK.BackgroundTask.BackgroundTaskBroker{AntSK.Domain.Model.ImportKMSTaskReq})">
-            <summary>
-            
-            </summary>
-            <param name="_taskBroker"></param>
-        </member>
         <member name="M:AntSK.Controllers.LLamaSharpController.chat(AntSK.Models.OpenAIModel)">
             <summary>
             本地会话接口
