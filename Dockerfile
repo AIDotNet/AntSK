@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy csproj and restore as distinct layers
-COPY ["AntSK/AntSK.csproj", "AntSK/"]
+COPY ["src/AntSK/AntSK.csproj", "AntSK/"]
 RUN dotnet restore "AntSK/AntSK.csproj"
 
 # Copy everything else and build
