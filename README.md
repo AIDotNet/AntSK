@@ -71,9 +71,11 @@ Login是默认的登陆账号和密码
 
 ## 使用docker-compose 
 
-从项目根目录下载docker-compose.yml,然后把配置文件appsettings.json和它放在统一目录，
+提供了pg版本 **appsettings.json** 和 简化版本（Sqlite+disk） **docker-compose.simple.yml**
 
-这里已经把pg的镜像做好了。在docker-compose.yml中可以修改默认账号密码，然后你的appsettings.json的数据库连接需要保持一致。
+从项目根目录下载**docker-compose.yml**,然后把配置文件**appsettings.json**和它放在统一目录，
+
+这里已经把pg的镜像做好了。在docker-compose.yml中可以修改默认账号密码，然后你的**appsettings.json**的数据库连接需要保持一致。
 
 然后你可以进入到目录后执行
 ```
@@ -84,43 +86,63 @@ docker-compose up -d
 
 ## 配置文件的一些含义
 ```
-  "ConnectionStrings": {
-    "Postgres": "Host=;Port=;Database=antsk;Username=;Password="//这个是业务数据的连接字符串
+{
+  "DBConnection": {
+    "DbType": "Sqlite", 
+    "ConnectionStrings": "Data Source=AntSK.db;"
   },
   "OpenAIOption": {
-    "EndPoint": "", //openai协议的接口，写到v1之前
-    "Key": "",//接口秘钥，如果使用本地模型可以随意填写一个但不能为空
-    "Model": "",//会话模型，使用接口时需要，使用本地模型可以随意填写
-    "EmbeddingModel": ""//向量模型，使用接口时需要，使用本地模型可以随意填写
+    "EndPoint": "http://localhost:5000/llama/",
+    "Key": "NotNull",
+    "Model": "gpt4-turbo",
+    "EmbeddingModel": "text-embedding-ada-002"
   },
-  "Postgres": {
+  "KernelMemory": {
+    "VectorDb": "Disk", 
     "ConnectionString": "Host=;Port=;Database=antsk;Username=;Password=",
     "TableNamePrefix": "km-"
+  },
+  "LLamaSharp": {
+    "RunType": "GPU", 
+    "Chat": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf",
+    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf"
   },
   "Login": {
     "User": "admin",
     "Password": "xuzeyu"
+  },
+  "BackgroundTaskBroker": {
+    "ImportKMSTask": {
+      "WorkerCount": 1 
+    }
   }
+}
 ```
+```
+//支持多种数据库，具体可以查看SqlSugar，MySql，SqlServer，Sqlite，Oracle，PostgreSQL，Dm，Kdbndp，Oscar，MySqlConnector，Access，OpenGauss，QuestDB，HG，ClickHouse，GBase，Odbc，OceanBaseForOracle，TDengine，GaussDB，OceanBase，Tidb，Vastbase，PolarDB，Custom
+DBConnection.DbType
+//连接字符串，需要根据不同DB类型，用对应的字符串
+DBConnection.ConnectionStrings
+//可以使用符合openai格式的在线API（国产模型使用one-api转接） ，也可以使用AntSK自带的llama api，ip和端口是AntSK启动地址
+OpenAIOption.EndPoint
+//模型秘钥，如果使用本地模型可以默认NotNull 这里不能用中文
+OpenAIOption.Key
+//向量存储的类型，支持  Postgres  Disk  Memory ，其中Postgres需要配置 ConnectionString
+KernelMemory.VectorDb
+//本地模型使用的运行方式  GUP  CPU ,如果用在线API 这个随意使用一个即可
+LLamaSharp.RunType
+//本地会话模型的模型路径 注意区分linux和windows盘符不同
+LLamaSharp.Chat
+//本地向量模型的模型路径 注意区分linux和windows盘符不同
+LLamaSharp.Embedding
+//默认管理员账号密码
+Login
+//导入异步处理的线程数，使用在线API可以高一点，本地模型建议1 否则容易内存溢出崩掉
+BackgroundTaskBroker.ImportKMSTask.WorkerCount
+```
+
 我使用的是CodeFirst模式，只要配置好数据库链接，表结构是自动创建的
 
-如果想使用LLamaSharp运行本地模型还需要设置如下配置：
-```
-  "LLamaSharp": {
-    "Chat": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf",//本地会话模型的磁盘路径
-    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf"//本地向量模型的磁盘路径
-  },
-```
-
-需要配置Chat和Embedding模型的地址，然后修改EndPoint为本地，使用本地模型时并没有用到Key、Model、EmbeddingModel这些参数，所以这几个你可以随意填写：
-```
- "OpenAIOption": {
-    "EndPoint": "http://ip:port/llama/",//如果使用本地模型这个ip端口是AntSK服务启动的ip和端口
-    "Key": "",//接口秘钥，如果使用本地模型可以随意填写一个但不能为空
-    "Model": "",//会话模型，使用接口时需要，使用本地模型可以随意填写
-    "EmbeddingModel": ""//向量模型，使用接口时需要，使用本地模型可以随意填写
-  },
-```
 
 
 想了解更多信息或开始使用 **AntSK**，可以关注我的公众号以及加入交流群。
@@ -132,3 +154,4 @@ docker-compose up -d
 ---
 
 我们对您在**AntSK**的兴趣表示感谢，并期待与您携手共创智能化的未来！
+
