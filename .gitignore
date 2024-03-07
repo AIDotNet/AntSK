@@ -337,3 +337,5 @@ ASALocalRun/
 /AntSK/appsettings.Development.json
 /AntSK.db
 */tmp-memory-files/*
+/src/AntSK/AntSK.db
+/src/AntSK/tmp-memory-files/kms
