@@ -51,12 +51,25 @@ namespace AntSK.Services.Auth
 
         public  ClaimsPrincipal GetCurrentUser()
         {
+            //var userSessionStorageResult =await  _protectedSessionStore.GetAsync<UserSession>("UserSession");
+            //var userSession = userSessionStorageResult.Success ? userSessionStorageResult.Value : null;
+            //if (userSession.IsNotNull())
+            //{
+            //    var claims = new[] { new Claim(ClaimTypes.Name, userSession.UserName) };
+            //    identity = new ClaimsIdentity(claims, "AntSKUser");
+            //}
             var user = new ClaimsPrincipal(identity);
             return user;
         }
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var userSession = await _protectedSessionStore.GetAsync<UserSession>("UserSession");
+            var userSessionStorageResult = await _protectedSessionStore.GetAsync<UserSession>("UserSession");
+            var userSession = userSessionStorageResult.Success ? userSessionStorageResult.Value : null;
+            if (userSession.IsNotNull())
+            {
+                var claims = new[] { new Claim(ClaimTypes.Name, userSession.UserName) };
+                identity = new ClaimsIdentity(claims, "AntSKUser");
+            }
             var user = new ClaimsPrincipal(identity);
             return await Task.FromResult(new AuthenticationState(user));
         }
