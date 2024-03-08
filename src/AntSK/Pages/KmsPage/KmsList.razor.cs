@@ -78,8 +78,11 @@ namespace AntSK.Pages
             NavigationManager.NavigateTo($"/kms/detail/{id}");
         }
 
-  
 
+        private async Task Update(string id)
+        {
+            NavigationManager.NavigateTo($"/kms/add/{id}");
+        }
         private async Task Delete(string id)
         {
 

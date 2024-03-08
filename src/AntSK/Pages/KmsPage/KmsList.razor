@@ -33,6 +33,7 @@
                     {
                         <Card Hoverable Bordered Class="card" Actions="@(new[] {
                             info(()=> Info(context.Id)) ,
+                            update(async ()=>await Update(context.Id)),
                             delete(async ()=>await Delete(context.Id)) ,
                              })" Style="max-height:247px;">
                              <CardMeta>
@@ -64,5 +65,6 @@
 @code
 {
     RenderFragment info(Action clickAction) =>@<a key="info" @onclick="@clickAction">查看</a>;
+    RenderFragment update(Action clickAction) =>@<a key="update" @onclick="@clickAction">修改</a>;
     RenderFragment delete(Action clickAction) => @<a key="delete" @onclick="@clickAction">删除</a> ;
 }

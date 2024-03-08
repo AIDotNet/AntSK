@@ -59,6 +59,22 @@ namespace AntSK.Pages.AppPage
         }
         private void HandleSubmit()
         {
+            if (kmsIds != null && kmsIds.Count() > 0)
+            {
+                var kmsList = _kmss_Repositories.GetList(p => kmsIds.Contains(p.Id));
+                bool allSameEmbeddingModelID = kmsList.Select(k => k.EmbeddingModelID).Distinct().Count() == 1;
+                if (!allSameEmbeddingModelID)
+                {
+                    _ = Message.Error("同一个应用的知识库的Embedding模型必须相同！", 2);
+                    return;
+                }
+                _appModel.KmsIdList = string.Join(",", kmsIds);
+            }
+            if (apiIds != null && apiIds.Count() > 0)
+            {
+                _appModel.ApiFunctionList = string.Join(",", apiIds);
+            }
+
             if (string.IsNullOrEmpty(AppId))
             {
                 //新增
@@ -71,44 +87,14 @@ namespace AntSK.Pages.AppPage
                     return;
                 }
 
-                if (kmsIds != null && kmsIds.Count() > 0)
-                {
-                    var kmsList=_kmss_Repositories.GetList(p => kmsIds.Contains(p.Id));
-                    bool allSameEmbeddingModelID = kmsList.Select(k => k.EmbeddingModelID).Distinct().Count() == 1;
-                    if (!allSameEmbeddingModelID)
-                    {
-                        _ = Message.Error("同一个应用的知识库的Embedding模型必须相同！", 2);
-                        return;
-                    }
-                    _appModel.KmsIdList = string.Join(",", kmsIds);
-                }
-                if (apiIds != null && apiIds.Count() > 0)
-                {
-                    _appModel.ApiFunctionList = string.Join(",", apiIds);
-                }
+              
                 _apps_Repositories.Insert(_appModel);
             }
             else {
-                //修改
-                if (kmsIds != null && kmsIds.Count() > 0)
-                {
-                    var kmsList = _kmss_Repositories.GetList(p => kmsIds.Contains(p.Id));
-                    bool allSameEmbeddingModelID = kmsList.Select(k => k.EmbeddingModelID).Distinct().Count() == 1;
-                    if (!allSameEmbeddingModelID)
-                    {
-                        _ = Message.Error("同一个应用的知识库的Embedding模型必须相同！", 2);
-                        return;
-                    }
-                    _appModel.KmsIdList = string.Join(",", kmsIds);
-                }
-                if (apiIds != null && apiIds.Count() > 0)
-                {
-                    _appModel.ApiFunctionList = string.Join(",", apiIds);
-                }
+                //修改  
                 _apps_Repositories.Update(_appModel);
             }
           
-
             //NavigationManager.NavigateTo($"/app/detail/{_appModel.Id}");
             NavigationManager.NavigateTo($"/applist");
         }

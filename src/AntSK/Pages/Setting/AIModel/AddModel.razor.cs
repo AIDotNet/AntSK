@@ -34,6 +34,21 @@ namespace AntSK.Pages.Setting.AIModel
 
         private void HandleSubmit()
         {
+            if (_aimodels_Repositories.IsAny(p => p.AIModelType == _aiModel.AIModelType && p.EndPoint == _aiModel.EndPoint.ConvertToString() && p.ModelKey == _aiModel.ModelKey && p.ModelName == _aiModel.ModelName))
+            {
+                _ = Message.Error("模型已存在！", 2);
+                return;
+            }
+            if (_aiModel.AIType.IsNull())
+            {
+                _ = Message.Error("AI类型必须选择", 2);
+                return;
+            }
+            if (_aiModel.AIModelType.IsNull())
+            {
+                _ = Message.Error("模型类型必须选择", 2);
+                return;
+            }
             if (string.IsNullOrEmpty(ModelId))
             {
                 //新增
@@ -42,22 +57,6 @@ namespace AntSK.Pages.Setting.AIModel
                 if (_aimodels_Repositories.IsAny(p => p.ModelDescription == _aiModel.ModelDescription ))
                 {
                     _ = Message.Error("模型描述已存在！", 2);
-                    return;
-                }
-
-                if (_aimodels_Repositories.IsAny(p =>p.AIModelType==_aiModel.AIModelType&& p.EndPoint == _aiModel.EndPoint.ConvertToString()&&p.ModelKey==_aiModel.ModelKey&&p.ModelName==_aiModel.ModelName))
-                {
-                    _ = Message.Error("模型已存在！", 2);
-                    return;
-                }
-                if (_aiModel.AIType.IsNull())
-                {
-                    _ = Message.Error("AI类型必须选择", 2);
-                      return;
-                }
-                if (_aiModel.AIModelType.IsNull())
-                {
-                    _ = Message.Error("模型类型必须选择", 2);
                     return;
                 }
                 _aimodels_Repositories.Insert(_aiModel);
