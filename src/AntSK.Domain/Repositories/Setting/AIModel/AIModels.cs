@@ -15,6 +15,13 @@ namespace AntSK.Domain.Repositories
         [SugarColumn(IsPrimaryKey = true)]
         public string Id { get; set; }
         /// <summary>
+        /// AI类型
+        /// </summary>
+
+        [Required]
+        [SugarColumn(DefaultValue = "1")]
+        public AIType AIType { get; set; }
+        /// <summary>
         /// 模型类型
         /// </summary>
         [Required]
@@ -34,6 +41,9 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         [Required]
         public string ModelKey { get; set; }
+
+        public string? DeploymentName { get; set; }
+
         [Required]
         public string ModelDescription { get; set; }
     }

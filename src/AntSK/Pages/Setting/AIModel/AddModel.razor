@@ -17,23 +17,45 @@
                 <FormItem Label="模型描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入模型描述" @bind-Value="@context.ModelDescription" />
                 </FormItem>
-                <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <RadioGroup @bind-Value="context.AIModelType">
-                        <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
+
+                <FormItem Label="AI类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <RadioGroup @bind-Value="context.AIType">
+                        <Radio RadioButton Value="@(AIType.OpenAI)" Checked="true">OpenAI</Radio>
+                         <Radio RadioButton Value="@(AIType.AzureOpenAI)">AzureOpenAI</Radio>
+                         <Radio RadioButton Value="@(AIType.LLamaSharp)">LLamaSharp</Radio>
+                     </RadioGroup>
+                 </FormItem>
+                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                     <RadioGroup @bind-Value="context.AIModelType">
+                         <Radio RadioButton Value="@(AIModelType.Chat)" Checked="true">会话模型</Radio>
                          <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
                      </RadioGroup>
-                </FormItem>
+                 </FormItem>
+                 @if (context.AIType == AIType.AzureOpenAI)
+                {
+                    <FormItem Label="部署名" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="请输入部署名" @bind-Value="@context.DeploymentName" />
+                    </FormItem>
 
-                 <FormItem Label="模型地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                     <Input Placeholder="请输入模型地址" @bind-Value="@context.EndPoint" />
-                 </FormItem>
-                 <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                     <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" />
-                 </FormItem>
-                <FormItem Label="模型秘钥" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                     <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥" Size="@InputSize.Large"  />
-                </FormItem>
-         
+                }
+                @if (context.AIType == AIType.OpenAI || (context.AIType == AIType.AzureOpenAI))
+                {
+                    <FormItem Label="模型地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="请输入模型地址" @bind-Value="@context.EndPoint" />
+                    </FormItem>
+                    <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" />
+                    </FormItem>
+                    <FormItem Label="模型秘钥" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥" Size="@InputSize.Large" />
+                    </FormItem>
+                }
+                @if (context.AIType == AIType.LLamaSharp)
+                {
+                    <FormItem Label="模型路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="请输入模型路径" @bind-Value="@context.ModelName" />
+                    </FormItem>                
+                }
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
                     <Button Type="primary" OnClick="HandleSubmit">
                         保存

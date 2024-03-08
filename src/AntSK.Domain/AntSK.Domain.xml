@@ -103,6 +103,16 @@
             <param name="result"></param>
             <returns></returns>
         </member>
+        <member name="T:AntSK.Domain.Model.Enum.AIType">
+            <summary>
+            AI类型
+            </summary>
+        </member>
+        <member name="T:AntSK.Domain.Model.Enum.AIModelType">
+            <summary>
+            模型类型
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Model.MessageInfo.IsSend">
             <summary>
             发送是true  接收是false
@@ -548,6 +558,11 @@
         <member name="M:AntSK.Domain.Repositories.Base.SqlSugarHelper.SqlScope">
             <summary>
             sqlserver连接
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.AIType">
+            <summary>
+            AI类型
             </summary>
         </member>
         <member name="P:AntSK.Domain.Repositories.AIModels.AIModelType">
