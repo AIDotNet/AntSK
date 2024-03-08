@@ -31,8 +31,13 @@
                          <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
                      </RadioGroup>
                  </FormItem>
+                 @if (context.AIModelType == AIModelType.Embedding)
+                {
+                    <FormItem Label="注意事项" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <b>请不要使用不同维度的向量模型，否则会导致无法向量存储</b>
+                     </FormItem>
+                }
 
-             
                  @if (context.AIType == AIType.AzureOpenAI)
                 {
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
