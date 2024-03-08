@@ -6,6 +6,7 @@ using AntSK.Domain.Utils;
 using Azure.AI.OpenAI;
 using Azure.Core;
 using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using MarkdownSharp;
 using Microsoft.AspNetCore.Components;
@@ -43,6 +44,8 @@ namespace AntSK.Pages.ChatPage
         protected IKernelService _kernelService { get; set; }
         [Inject]
         protected IKMService _kMService { get; set; }
+        [Inject]
+        IConfirmService _confirmService { get; set; }
 
         protected bool _loading = false;
         protected List<MessageInfo> MessageList = [];
@@ -102,14 +105,23 @@ namespace AntSK.Pages.ChatPage
             });
         }
 
-        protected async Task OnClearAsync(string id)
-        {
-            await Task.Run(() =>
+        protected async Task OnClearAsync() {
+            if (MessageList.Count > 0)
             {
-                MessageList = MessageList.Where(w => w.ID != id).ToList();
-            });
+                var content = "是否要清理会话记录";
+                var title = "清理";
+                var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
+                if (result == ConfirmResult.Yes)
+                {
+                    MessageList.Clear();
+                    _ = Message.Info("清理成功");
+                }
+            }
+            else
+            {
+                _ = Message.Info("没有会话记录");
+            }
         }
-
         protected async Task<bool> SendAsync(string questions)
         {
             string msg = "";
