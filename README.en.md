@@ -123,58 +123,76 @@ The model supports openai by default. If you need to use azure openai and need t
 
 The following configuration files need to be configured
 
+## Using Docker Compose
+Provided pg version appsettings. json and simplified version (Sqlite+disk) Docker Compose. simple. yml
+Download Docker Compose.yml from the project root directory, and then place the configuration file appsettings.json and it in a unified directory,
+The image of PG has been prepared here. You can modify the default account password in Docker Compose.yml, and your appsettings. json database connection needs to be consistent.
+Then you can enter the directory and execute it
+```
+docker compose up - d
+```
+To start AntSK
+
+Some meanings of configuration files
+
 ```
 
-"ConnectionStrings":{
-
-"Postgres": "Host=; Port=; Database=antsk; Username=; Password="
-
-},
-
-"OpenAIOption":{
-
-"EndPoint": "",
-
-"Key": "",
-
-"Model": "",
-
-"Embedding Model": """""
-
-},
-
-Postgres:{
-
-"ConnectionString": "Host=; Port=; Database=antsk; Username=; Password=",
-
-"TableNamePrefix": "km -"
-
-},
-"Login": {
-  "User": "admin",
-  "Password": "xuzeyu"
+{
+  "DBConnection": {
+    "DbType": "Sqlite", 
+    "ConnectionStrings": "Data Source=AntSK.db;"
+  },
+  "OpenAIOption": {
+    "EndPoint": "http://localhost:5000/llama/",
+    "Key": "NotNull",
+    "Model": "gpt4-turbo",
+    "EmbeddingModel": "text-embedding-ada-002"
+  },
+  "KernelMemory": {
+    "VectorDb": "Disk", 
+    "ConnectionString": "Host=;Port=;Database=antsk;Username=;Password=",
+    "TableNamePrefix": "km-"
+  },
+  "LLamaSharp": {
+    "RunType": "GPU", 
+    "Chat": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf",
+    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf"
+  },
+  "Login": {
+    "User": "admin",
+    "Password": "xuzeyu"
+  },
+  "BackgroundTaskBroker": {
+    "ImportKMSTask": {
+      "WorkerCount": 1 
+    }
+  }
 }
 
 ```
 
-I use CodeFirst mode. As long as the database link is configured, the table structure is automatically created
+```
+//Supports multiple databases, including SqlSugar, MySql, SqlServer, Sqlite, Oracle, PostgreSQL, Dm, Kdbndp, Oscar, MySqlConnector, Access, OpenGaussian, QuestDB, HG, ClickHouse, GBase, Odbc, OceanBaseForOracle, TDengine, GaussDB, OceanBase, Tidb, Vastbase, PolarDB, Custom
+DBConnection DbType
+//Connection string, corresponding strings need to be used according to different DB types
+DBConnection ConnectionStrings
+//You can use an online API that conforms to the OpenAI format (domestic models use one API adapter), or you can use AntSK's built-in llama API, with the IP and port being the AntSK startup address
+OpenAIOption EndPoint
+//Model key, if using a local model, it can default to Notnull. Chinese cannot be used here
+OpenAIOption Key
+//The type of vector storage supports Postgres Disk Memory, where Postgres requires the configuration of ConnectionString
+KernelMemory VectorDb
+//The running mode used by the local model is GUP CPU. If using an online API, you can freely use one
+LLamaSharp RunType
+//The model path of the local session model should pay attention to distinguishing between Linux and Windows drive letters
+LLamaSharp Chat
+//The model path of the local vector model should pay attention to distinguishing between Linux and Windows drive letters
+LLamaSharp Embedding
+//Default administrator account password
+Login
+//The number of threads for importing asynchronous processing can be higher when using online APIs. Local models suggest 1, otherwise memory overflow and crash may occur
+BackgroundTaskBroker ImportKMSTask WorkerCount
 
-If you want to use LLamaSharp to run the local model, you also need to set the following configuration:
-```
-  "LLamaSharp": {
-    "Chat": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf",
-    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\tinyllama-1.1b-chat.gguf"
-  },
-```
-
-You need to configure the addresses of the Chat and Embedding models, and then modify EndPoint to local. When using the local model, parameters such as Key, Model, and Embedding Model are not used, so you can freely fill in these parameters:
-```
- "OpenAIOption": {
-    "EndPoint": "https://ip:port/llama/",
-    "Key": "",
-    "Model": "",
-    "EmbeddingModel": ""
-  },
 ```
 
 

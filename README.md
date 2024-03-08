@@ -83,6 +83,33 @@ docker-compose up -d
 ```
 来启动AntSK
 
+## 如何在docker中挂载本地模型
+```
+# 非 host 版本, 不使用本机代理
+version: '3.8'
+services:
+  antsk:
+    container_name: antsk
+    image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.1.5
+    ports:
+      - 5000:5000
+    networks:
+      - antsk
+    depends_on:
+      - antskpg
+    restart: always
+    environment:
+      - ASPNETCORE_URLS=http://*:5000
+    volumes:
+      - ./appsettings.json:/app/appsettings.json # 本地配置文件 需要放在同级目录
+      - D://model:/app/model
+networks:
+  antsk:
+```
+以这个为示例，意思是把windows本地D://model的文件夹挂载进 容器内/app/model 如果是这样你的appsettings.json中的模型地址应该配置为  
+```
+model/xxx.gguf
+```
 
 ## 配置文件的一些含义
 ```
