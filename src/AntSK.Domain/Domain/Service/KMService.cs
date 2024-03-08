@@ -12,6 +12,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.KernelMemory.Configuration;
 using Microsoft.Extensions.Configuration;
 using AntSK.Domain.Repositories;
+using LLamaSharp.KernelMemory;
+using LLama.Common;
+using DocumentFormat.OpenXml.Spreadsheet;
+using LLama;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -90,11 +94,23 @@ namespace AntSK.Domain.Domain.Service
                     memory.WithAzureOpenAITextEmbeddingGeneration(new AzureOpenAIConfig()
                     {
                         APIKey = embedModel.ModelKey,
-                        Deployment = embedModel.DeploymentName.ConvertToString(),
-                        Endpoint = embedModel.EndPoint
+                        Deployment = embedModel.ModelName.ConvertToString(),
+                        Endpoint = embedModel.EndPoint                         
                     });
                     break;
                 case Model.Enum.AIType.LLamaSharp:
+                    InferenceParams infParams = new() { AntiPrompts = ["\n\n"] };
+                    LLamaSharpConfig lsConfig = new(embedModel.ModelName) { DefaultInferenceParams = infParams };
+                    var parameters = new ModelParams(lsConfig.ModelPath)
+                    {
+                        ContextSize = lsConfig?.ContextSize ?? 2048,
+                        Seed = lsConfig?.Seed ?? 0,
+                        GpuLayerCount = lsConfig?.GpuLayerCount ?? 20,
+                        EmbeddingMode = true
+                    };
+                    var weights = LLamaWeights.LoadFromFile(parameters);
+                    var embedder = new LLamaEmbedder(weights, parameters);
+                    memory.WithLLamaSharpTextEmbeddingGeneration(new LLamaSharpTextEmbeddingGenerator(embedder));
                     break;
             }
         }
@@ -114,12 +130,24 @@ namespace AntSK.Domain.Domain.Service
                     memory.WithAzureOpenAITextGeneration(new AzureOpenAIConfig()
                     {
                         APIKey = chatModel.ModelKey,
-                        Deployment = chatModel.DeploymentName.ConvertToString(),
+                        Deployment = chatModel.ModelName.ConvertToString(),
                         Endpoint = chatModel.EndPoint
                     });
                     break;
                 case Model.Enum.AIType.LLamaSharp:
-
+                    InferenceParams infParams = new() { AntiPrompts = ["\n\n"] };
+                    LLamaSharpConfig lsConfig = new(chatModel.ModelName) { DefaultInferenceParams = infParams };
+                    var parameters = new ModelParams(lsConfig.ModelPath)
+                    {
+                        ContextSize = lsConfig?.ContextSize ?? 2048,
+                        Seed = lsConfig?.Seed ?? 0,
+                        GpuLayerCount = lsConfig?.GpuLayerCount ?? 20,
+                        EmbeddingMode = true
+                    };
+                    var weights = LLamaWeights.LoadFromFile(parameters);
+                    var context = weights.CreateContext(parameters);
+                    var executor = new StatelessExecutor(weights, parameters);
+                    memory.WithLLamaSharpTextGeneration(new LlamaSharpTextGenerator(weights, context, executor, lsConfig?.DefaultInferenceParams));
                     break;
             }
         }

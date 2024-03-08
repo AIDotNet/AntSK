@@ -45,8 +45,6 @@ namespace AntSK.Domain.Repositories
         /// 部署名，azure需要使用
         /// </summary>
 
-        public string? DeploymentName { get; set; }
-
         [Required]
         public string ModelDescription { get; set; }
     }
