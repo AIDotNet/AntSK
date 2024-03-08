@@ -20,7 +20,7 @@ namespace AntSK.Pages.KmsPage
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            _data = await iKMService.GetDocumentByFileID(FileId);
+            _data = await iKMService.GetDocumentByFileID(KmsId, FileId);
         }
 
         private void NavigateBack() {

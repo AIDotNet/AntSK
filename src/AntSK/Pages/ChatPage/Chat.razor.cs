@@ -114,12 +114,12 @@ namespace AntSK.Pages.ChatPage
         {
             string msg = "";
             //处理多轮会话
+            Apps app = _apps_Repositories.GetFirst(p => p.Id == AppId);
             if (MessageList.Count > 0)
             {
-                msg = await HistorySummarize(questions);
+                msg = await HistorySummarize(app,questions);
             }
 
-            Apps app = _apps_Repositories.GetFirst(p => p.Id == AppId);
             switch (app.Type)
             {
                 case "chat":
@@ -144,12 +144,12 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task SendKms(string questions, string msg, Apps app)
         {
-            var _kernel = _kernelService.GetKernel();
-            var _memory = _kMService.GetMemory();
+            var _kernel = _kernelService.GetKernelByApp(app);
             //知识库问答
             var filters = new List<MemoryFilter>();
-
             var kmsidList = app.KmsIdList.Split(",");
+            //只取第一个知识库的配置
+            var _memory = _kMService.GetMemoryByKMS(kmsidList.FirstOrDefault());
             foreach (var kmsid in kmsidList)
             {
                 filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
@@ -219,7 +219,7 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task SendChat(string questions, string msg, Apps app)
         {
-            var _kernel = _kernelService.GetKernel();
+            var _kernel = _kernelService.GetKernelByApp(app);
             if (string.IsNullOrEmpty(app.Prompt)||!app.Prompt.Contains("{{$input}}"))
             {
                 //如果模板为空，给默认提示词
@@ -272,9 +272,9 @@ namespace AntSK.Pages.ChatPage
         /// </summary>
         /// <param name="questions"></param>
         /// <returns></returns>
-        private async Task<string> HistorySummarize(string questions)
+        private async Task<string> HistorySummarize(Apps app,string questions)
         {
-            var _kernel = _kernelService.GetKernel();
+            var _kernel = _kernelService.GetKernelByApp(app);
             if (MessageList.Count > 1)
             {
                 StringBuilder history = new StringBuilder();

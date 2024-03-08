@@ -11,18 +11,39 @@ using System.Net.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.KernelMemory.Configuration;
 using Microsoft.Extensions.Configuration;
+using AntSK.Domain.Repositories;
 
 namespace AntSK.Domain.Domain.Service
 {
     [ServiceDescription(typeof(IKMService), ServiceLifetime.Scoped)]
     public class KMService(
-           IConfiguration _config
+           IConfiguration _config,
+           IKmss_Repositories _kmss_Repositories,
+           IAIModels_Repositories _aIModels_Repositories
         ) : IKMService
     {
-        public MemoryServerless GetMemory(SearchClientConfig searchClientConfig = null, TextPartitioningOptions textPartitioningOptions = null)
+        public MemoryServerless GetMemory()
         {
-            var handler = new OpenAIHttpClientHandler();
-            var httpClient = new HttpClient(handler);
+            var memory = new KernelMemoryBuilder();
+            //加载向量库
+            WithMemoryDbByVectorDB(memory, _config);
+            var result = memory.Build<MemoryServerless>();
+            return result;
+        }
+
+
+        public MemoryServerless GetMemoryByKMS(string kmsID, SearchClientConfig searchClientConfig = null)
+        {
+            //获取KMS配置
+            var kms = _kmss_Repositories.GetFirst(p => p.Id == kmsID);
+            var chatModel = _aIModels_Repositories.GetFirst(p => p.Id == kms.ChatModelID);
+            var embedModel = _aIModels_Repositories.GetFirst(p => p.Id == kms.EmbeddingModelID);
+
+            //http代理
+            var chatHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
+            var embeddingHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(embedModel.EndPoint);
+
+            //搜索配置
             if (searchClientConfig.IsNull())
             {
                 searchClientConfig = new SearchClientConfig
@@ -34,33 +55,77 @@ namespace AntSK.Domain.Domain.Service
                 };
             }
 
-            if (textPartitioningOptions.IsNull())
-            {
-                textPartitioningOptions = new TextPartitioningOptions
-                {
-                    MaxTokensPerLine = 99,
-                    MaxTokensPerParagraph = 299,
-                    OverlappingTokens = 47
-                };
-            }
-
-
             var memory = new KernelMemoryBuilder()
-            .WithSimpleFileStorage(new SimpleFileStorageConfig { StorageType = FileSystemTypes.Volatile, Directory = "_files" })
             .WithSearchClientConfig(searchClientConfig)
-            .WithCustomTextPartitioningOptions(textPartitioningOptions)
-            .WithOpenAITextGeneration(new OpenAIConfig()
+            .WithCustomTextPartitioningOptions(new TextPartitioningOptions
             {
-                APIKey = OpenAIOption.Key,
-                TextModel = OpenAIOption.Model
+                MaxTokensPerLine = kms.MaxTokensPerLine,
+                MaxTokensPerParagraph = kms.MaxTokensPerParagraph,
+                OverlappingTokens = kms.OverlappingTokens
+            });
+            //加载huihu 模型
+            WithTextGenerationByAIType(memory, chatModel, chatHttpClient);
+            //加载向量模型
+            WithTextEmbeddingGenerationByAIType(memory,embedModel, embeddingHttpClient);
+            //加载向量库
+            WithMemoryDbByVectorDB(memory, _config);
 
-            }, null, httpClient)
-            .WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
+            var result = memory.Build<MemoryServerless>();
+            return result;
+
+        }
+
+        private void WithTextEmbeddingGenerationByAIType(IKernelMemoryBuilder memory,AIModels embedModel, HttpClient embeddingHttpClient )
+        {
+            switch (embedModel.AIType)
             {
-                APIKey = OpenAIOption.Key,
-                EmbeddingModel = OpenAIOption.EmbeddingModel
+                case Model.Enum.AIType.OpenAI:
+                    memory.WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
+                    {
+                        APIKey = embedModel.ModelKey,
+                        EmbeddingModel = embedModel.ModelName
+                    }, null, false, embeddingHttpClient);
+                    break;
+                case Model.Enum.AIType.AzureOpenAI:
+                    memory.WithAzureOpenAITextEmbeddingGeneration(new AzureOpenAIConfig()
+                    {
+                        APIKey = embedModel.ModelKey,
+                        Deployment = embedModel.DeploymentName.ConvertToString(),
+                        Endpoint = embedModel.EndPoint
+                    });
+                    break;
+                case Model.Enum.AIType.LLamaSharp:
+                    break;
+            }
+        }
 
-            }, null, false, httpClient);
+        private void WithTextGenerationByAIType(IKernelMemoryBuilder memory,AIModels chatModel, HttpClient chatHttpClient )
+        {
+            switch (chatModel.AIType)
+            {
+                case Model.Enum.AIType.OpenAI:
+                    memory.WithOpenAITextGeneration(new OpenAIConfig()
+                    {
+                        APIKey = chatModel.ModelKey,
+                        TextModel = chatModel.ModelName
+                    }, null, chatHttpClient);
+                    break;
+                case Model.Enum.AIType.AzureOpenAI:
+                    memory.WithAzureOpenAITextGeneration(new AzureOpenAIConfig()
+                    {
+                        APIKey = chatModel.ModelKey,
+                        Deployment = chatModel.DeploymentName.ConvertToString(),
+                        Endpoint = chatModel.EndPoint
+                    });
+                    break;
+                case Model.Enum.AIType.LLamaSharp:
+
+                    break;
+            }
+        }
+
+        private void WithMemoryDbByVectorDB(IKernelMemoryBuilder memory,IConfiguration _config)
+        {
             string VectorDb = _config["KernelMemory:VectorDb"].ConvertToString();
             string ConnectionString = _config["KernelMemory:ConnectionString"].ConvertToString();
             string TableNamePrefix = _config["KernelMemory:TableNamePrefix"].ConvertToString();
@@ -86,14 +151,11 @@ namespace AntSK.Domain.Domain.Service
                     });
                     break;
             }
-
-            var result = memory.Build<MemoryServerless>();
-            return result;
         }
 
-        public async Task<List<KMFile>> GetDocumentByFileID(string fileid)
+        public async Task<List<KMFile>> GetDocumentByFileID(string kmsid,string fileid)
         {
-            var _memory = GetMemory();
+            var _memory = GetMemoryByKMS(kmsid);
             var memories = await _memory.ListIndexesAsync();
             var memoryDbs = _memory.Orchestrator.GetMemoryDbs();
             List<KMFile> docTextList = new List<KMFile>();

@@ -81,11 +81,7 @@ namespace AntSK.Pages.KmsPage
             _data =await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
             var km = _kmss_Repositories.GetFirst(p => p.Id == KmsId);
             //使用知识库设置的参数，
-            _memory = iKMService.GetMemory(textPartitioningOptions:new Microsoft.KernelMemory.Configuration.TextPartitioningOptions() { 
-                MaxTokensPerLine= km.MaxTokensPerLine, 
-                MaxTokensPerParagraph=km.MaxTokensPerParagraph ,
-                OverlappingTokens=km.OverlappingTokens
-            });
+            _memory = iKMService.GetMemoryByKMS(km.Id);
         }
 
         //刷新

@@ -18,30 +18,32 @@ namespace AntSK.Domain.Domain.Service
 {
     [ServiceDescription(typeof(IKernelService), ServiceLifetime.Scoped)]
     public class KernelService(
-        IApis_Repositories _apis_Repositories
+        IApis_Repositories _apis_Repositories,
+        IAIModels_Repositories _aIModels_Repositories
         ) : IKernelService
     {
+
         /// <summary>
         /// 获取kernel实例，依赖注入不好按每个用户去Import不同的插件，所以每次new一个新的kernel
         /// </summary>
         /// <param name="modelId"></param>
         /// <param name="apiKey"></param>
         /// <returns></returns>
-        public Kernel GetKernel(string modelId=null,string apiKey=null)
+        public Kernel GetKernelByApp(Apps app)
         {
-            var handler = new OpenAIHttpClientHandler();
-            var httpClient = new HttpClient(handler);
-            httpClient.Timeout = TimeSpan.FromMinutes(5);
+            var chatModel= _aIModels_Repositories.GetFirst(p => p.Id == app.ChatModelID);
+
+            var httpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
+
             var kernel = Kernel.CreateBuilder()
               .AddOpenAIChatCompletion(
-               modelId: modelId!=null? modelId : OpenAIOption.Model,
-               apiKey: apiKey!=null? apiKey: OpenAIOption.Key,
+               modelId: chatModel.ModelName,
+               apiKey: chatModel.ModelKey,
                httpClient: httpClient)
                .Build();
             RegisterPluginsWithKernel(kernel);
             return kernel;
         }
-
         /// <summary>
         /// 根据app配置的插件，导入插件
         /// </summary>

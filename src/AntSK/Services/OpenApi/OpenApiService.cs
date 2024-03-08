@@ -46,7 +46,7 @@ namespace AntSK.Services.OpenApi
             Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == sk);      
             if (app.IsNotNull())
             {
-                string msg= await HistorySummarize(model);
+                string msg= await HistorySummarize(app,model);
                 switch (app.Type)
                 {
                     case "chat":
@@ -90,7 +90,7 @@ namespace AntSK.Services.OpenApi
 
         private async Task SendChatStream( HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
         {
-            var _kernel = _kernelService.GetKernel();
+            var _kernel = _kernelService.GetKernelByApp(app);
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
@@ -146,7 +146,7 @@ namespace AntSK.Services.OpenApi
                 //如果模板为空，给默认提示词
                 app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
             }
-            var _kernel = _kernelService.GetKernel();
+            var _kernel = _kernelService.GetKernelByApp(app);
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
@@ -176,8 +176,8 @@ namespace AntSK.Services.OpenApi
         /// <returns></returns>
         private async Task<string> SendKms(string msg, Apps app)
         {
-            var _kernel = _kernelService.GetKernel();
-            var _memory = _kMService.GetMemory();
+            var _kernel = _kernelService.GetKernelByApp(app);
+            var _memory = _kMService.GetMemoryByKMS(app.KmsIdList.Split(",").FirstOrDefault());
             string result = "";
             //知识库问答
             var filters = new List<MemoryFilter>();
@@ -216,9 +216,9 @@ namespace AntSK.Services.OpenApi
         /// <param name="questions"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        private async Task<string> HistorySummarize(OpenAIModel model)
+        private async Task<string> HistorySummarize(Apps app,OpenAIModel model)
         {
-            var _kernel = _kernelService.GetKernel();
+            var _kernel = _kernelService.GetKernelByApp(app);
             StringBuilder history = new StringBuilder();
             string questions = model.messages[model.messages.Count-1].content;
             for(int i=0;i<model.messages.Count()-1;i++)

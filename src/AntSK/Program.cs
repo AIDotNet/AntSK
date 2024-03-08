@@ -81,7 +81,6 @@ builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGrou
 // 读取连接字符串配置
 {
     builder.Configuration.GetSection("DBConnection").Get<DBConnectionOption>();
-    builder.Configuration.GetSection("OpenAIOption").Get<OpenAIOption>();
     builder.Configuration.GetSection("Login").Get<LoginOption>();
     builder.Configuration.GetSection("LLamaSharp").Get<LLamaSharpOption>();
     if (LLamaSharpOption.RunType.ToUpper() == "CPU")

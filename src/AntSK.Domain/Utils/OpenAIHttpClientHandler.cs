@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,11 +11,17 @@ namespace AntSK.Domain.Utils
 {
     public class OpenAIHttpClientHandler : HttpClientHandler
     {
+        private string _endPoint { get; set; }
+        public OpenAIHttpClientHandler(string endPoint)
+        {
+            this._endPoint = endPoint;
+        }
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             UriBuilder uriBuilder;
             Regex regex = new Regex(@"(https?)://([^/:]+)(:\d+)?/(.*)");
-            Match match = regex.Match(OpenAIOption.EndPoint);
+            Match match = regex.Match(_endPoint);
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" && request.Content != null)
             {         
                 string requestBody = await request.Content.ReadAsStringAsync();
@@ -72,6 +79,18 @@ namespace AntSK.Domain.Utils
             HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
             return response;
+        }
+    }
+
+
+    public  class OpenAIHttpClientHandlerUtil
+    {
+        public static HttpClient GetHttpClient( string endPoint)
+        {
+            var handler = new OpenAIHttpClientHandler(endPoint);
+            var httpClient = new HttpClient(handler);
+            httpClient.Timeout = TimeSpan.FromMinutes(5);
+            return httpClient;
         }
     }
 }

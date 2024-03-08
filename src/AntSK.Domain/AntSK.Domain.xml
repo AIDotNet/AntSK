@@ -48,7 +48,7 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="M:AntSK.Domain.Domain.Service.KernelService.GetKernel(System.String,System.String)">
+        <member name="M:AntSK.Domain.Domain.Service.KernelService.GetKernelByApp(AntSK.Domain.Repositories.Apps)">
             <summary>
             获取kernel实例，依赖注入不好按每个用户去Import不同的插件，所以每次new一个新的kernel
             </summary>

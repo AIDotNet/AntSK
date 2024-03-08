@@ -11,7 +11,8 @@ namespace AntSK.Domain.Domain.Interface
 {
     public interface IKMService
     {
-        MemoryServerless GetMemory(SearchClientConfig searchClientConfig = null, TextPartitioningOptions textPartitioningOptions = null);
-        Task<List<KMFile>> GetDocumentByFileID(string fileid);
+        MemoryServerless GetMemory();
+        MemoryServerless GetMemoryByKMS(string kmsID, SearchClientConfig searchClientConfig = null);
+        Task<List<KMFile>> GetDocumentByFileID(string kmsid, string fileid);
     }
 }
