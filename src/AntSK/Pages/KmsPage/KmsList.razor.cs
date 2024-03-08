@@ -82,12 +82,13 @@ namespace AntSK.Pages
 
         private async Task Delete(string id)
         {
-            var _memory=_kMService.GetMemory();
+
             var content = "删除知识库会一起删除导入的知识文档，无法还原。是否确认删除此知识库？";
             var title = "删除";
             var result= await _confirmService.Show(content, title, ConfirmButtons.YesNo);
             if (result == ConfirmResult.Yes)
             {
+                var _memory = _kMService.GetMemoryByKMS(id);
                 var detailList = _kmsDetails_Repositories.GetList(p => p.KmsId == id);
                 foreach (var detail in detailList)
                 {

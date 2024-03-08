@@ -32,11 +32,12 @@
                      </RadioGroup>
                  </FormItem>
 
-                <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <Input Placeholder="请输入请求地址" @bind-Value="@context.EndPoint" />
-                </FormItem>
+             
                  @if (context.AIType == AIType.AzureOpenAI)
                 {
+                    <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="请输入请求地址" @bind-Value="@context.EndPoint" />
+                    </FormItem>
                     <FormItem Label="部署名(模型名)" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="请输入部署名" @bind-Value="@context.ModelName" />
                     </FormItem>
@@ -46,6 +47,9 @@
                 }
                 @if (context.AIType == AIType.OpenAI)
                 {
+                    <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="请输入请求地址" @bind-Value="@context.EndPoint" />
+                    </FormItem>
                     <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" />
                     </FormItem>

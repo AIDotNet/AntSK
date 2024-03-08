@@ -26,16 +26,6 @@ namespace AntSK.Domain.Domain.Service
            IAIModels_Repositories _aIModels_Repositories
         ) : IKMService
     {
-        public MemoryServerless GetMemory()
-        {
-            var memory = new KernelMemoryBuilder();
-            //加载向量库
-            WithMemoryDbByVectorDB(memory, _config);
-            var result = memory.Build<MemoryServerless>();
-            return result;
-        }
-
-
         public MemoryServerless GetMemoryByKMS(string kmsID, SearchClientConfig searchClientConfig = null)
         {
             //获取KMS配置
@@ -95,7 +85,7 @@ namespace AntSK.Domain.Domain.Service
                     {
                         APIKey = embedModel.ModelKey,
                         Deployment = embedModel.ModelName.ConvertToString(),
-                        Endpoint = embedModel.EndPoint                         
+                        Endpoint = embedModel.EndPoint.ConvertToString()        
                     });
                     break;
                 case Model.Enum.AIType.LLamaSharp:
@@ -131,7 +121,7 @@ namespace AntSK.Domain.Domain.Service
                     {
                         APIKey = chatModel.ModelKey,
                         Deployment = chatModel.ModelName.ConvertToString(),
-                        Endpoint = chatModel.EndPoint
+                        Endpoint = chatModel.EndPoint.ConvertToString()
                     });
                     break;
                 case Model.Enum.AIType.LLamaSharp:

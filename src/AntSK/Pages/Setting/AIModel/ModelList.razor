@@ -42,6 +42,25 @@
                                         <p>@context.ModelDescription</p>
                                     </div>
                                     <div class="listContentItem" style="width:20%">
+                                        <b>AI类型</b>
+                                        <p>
+                                            @if (context.AIType == AIType.OpenAI)
+                                            {
+                                                <Tag Color="@PresetColor.Yellow.ToString()">OpenAI</Tag>
+                                            }
+                                            else if (context.AIType == AIType.AzureOpenAI)
+                                            {
+                                                <Tag Color="@PresetColor.Green.ToString()">AzureOpenAI</Tag>
+                                            }
+                                            else if (context.AIType == AIType.LLamaSharp)
+                                            {
+                                                <Tag Color="@PresetColor.Red.ToString()">LLamaSharp</Tag>
+                                            }
+                                        </p>
+                                    </div>
+
+
+                                    <div class="listContentItem" style="width:20%">
                                         <b>模型类别</b>
                                         <p>
                                             @if (context.AIModelType == AIModelType.Chat)
@@ -61,7 +80,7 @@
                                     <div class="listContentItem" style="width:20%">
                                         <b>模型名称</b>
                                         <p>@context.ModelName</p>
-                                    </div>                                 
+                                    </div>
                                 </div>
                             </ListItem>
                         </AntList>

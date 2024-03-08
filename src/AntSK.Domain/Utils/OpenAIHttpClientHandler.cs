@@ -87,7 +87,7 @@ namespace AntSK.Domain.Utils
     {
         public static HttpClient GetHttpClient( string endPoint)
         {
-            var handler = new OpenAIHttpClientHandler(endPoint);
+            var handler = new OpenAIHttpClientHandler(endPoint.ConvertToString());
             var httpClient = new HttpClient(handler);
             httpClient.Timeout = TimeSpan.FromMinutes(5);
             return httpClient;

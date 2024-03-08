@@ -33,7 +33,7 @@
                      <Select DataSource="@_chatList"
                              @bind-Value="@context.ChatModelID"
                              ValueProperty="c=>c.Id"
-                             LabelProperty="c=>c.ModelDescription">
+                             LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
                      </Select>
                  </FormItem>
                  @if (@context.Type == "chat")

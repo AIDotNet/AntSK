@@ -20,27 +20,27 @@ namespace AntSK.Domain.Repositories
 
         [Required]
         [SugarColumn(DefaultValue = "1")]
-        public AIType AIType { get; set; }
+        public AIType AIType { get; set; } = AIType.OpenAI;
         /// <summary>
         /// 模型类型
         /// </summary>
         [Required]
-        public AIModelType AIModelType { get; set; }
+        public AIModelType AIModelType { get; set; }= AIModelType.Chat;
         /// <summary>
         /// 模型地址
         /// </summary>
         [Required]
-        public string EndPoint { get; set; }
+        public string EndPoint { get; set; } = "";
         /// <summary>
         /// 模型名称
         /// </summary>
         [Required]
-        public string ModelName { get; set; }
+        public string ModelName { get; set; } = "";
         /// <summary>
         /// 模型秘钥
         /// </summary>
         [Required]
-        public string ModelKey { get; set; }
+        public string ModelKey { get; set; } = "";
         /// <summary>
         /// 部署名，azure需要使用
         /// </summary>

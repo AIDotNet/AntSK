@@ -45,7 +45,7 @@ namespace AntSK.Pages.Setting.AIModel
                     return;
                 }
 
-                if (_aimodels_Repositories.IsAny(p =>p.AIModelType==_aiModel.AIModelType&& p.EndPoint == _aiModel.EndPoint&&p.ModelKey==_aiModel.ModelKey&&p.ModelName==_aiModel.ModelName))
+                if (_aimodels_Repositories.IsAny(p =>p.AIModelType==_aiModel.AIModelType&& p.EndPoint == _aiModel.EndPoint.ConvertToString()&&p.ModelKey==_aiModel.ModelKey&&p.ModelName==_aiModel.ModelName))
                 {
                     _ = Message.Error("模型已存在！", 2);
                     return;
