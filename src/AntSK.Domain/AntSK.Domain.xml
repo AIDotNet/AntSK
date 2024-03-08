@@ -585,6 +585,11 @@
             模型秘钥
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.DeploymentName">
+            <summary>
+            部署名，azure需要使用
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Users.No">
             <summary>
             工号，用于登陆

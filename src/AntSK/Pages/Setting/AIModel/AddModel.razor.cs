@@ -6,6 +6,7 @@ using AntSK.Domain.Utils;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Components;
+using System;
 
 namespace AntSK.Pages.Setting.AIModel
 {
@@ -49,7 +50,16 @@ namespace AntSK.Pages.Setting.AIModel
                     _ = Message.Error("模型已存在！", 2);
                     return;
                 }
-
+                if (_aiModel.AIType.IsNull())
+                {
+                    _ = Message.Error("AI类型必须选择", 2);
+                      return;
+                }
+                if (_aiModel.AIModelType.IsNull())
+                {
+                    _ = Message.Error("模型类型必须选择", 2);
+                    return;
+                }
                 _aimodels_Repositories.Insert(_aiModel);
             }
             else
