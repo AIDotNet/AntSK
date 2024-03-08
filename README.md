@@ -168,7 +168,20 @@ Login
 BackgroundTaskBroker.ImportKMSTask.WorkerCount
 ```
 
-我使用的是CodeFirst模式，只要配置好数据库链接，表结构是自动创建的
+## 找不到样式问题解决：
+AntSK/src/AntSK下执行:
+```
+dotnet clean
+dotnet build
+dotnet publish "AntSK.csproj"
+```
+再去AntSK/src/AntSK/bin/Release/net8.0/publish下
+```
+dotnet AntSK.dll
+```
+然后启动就有样式了
+
+DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是自动创建的
 
 
 
