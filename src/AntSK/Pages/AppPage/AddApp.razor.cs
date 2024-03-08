@@ -73,6 +73,13 @@ namespace AntSK.Pages.AppPage
 
                 if (kmsIds != null && kmsIds.Count() > 0)
                 {
+                    var kmsList=_kmss_Repositories.GetList(p => kmsIds.Contains(p.Id));
+                    bool allSameEmbeddingModelID = kmsList.Select(k => k.EmbeddingModelID).Distinct().Count() == 1;
+                    if (!allSameEmbeddingModelID)
+                    {
+                        _ = Message.Error("同一个应用的知识库的Embedding模型必须相同！", 2);
+                        return;
+                    }
                     _appModel.KmsIdList = string.Join(",", kmsIds);
                 }
                 if (apiIds != null && apiIds.Count() > 0)
@@ -85,6 +92,13 @@ namespace AntSK.Pages.AppPage
                 //修改
                 if (kmsIds != null && kmsIds.Count() > 0)
                 {
+                    var kmsList = _kmss_Repositories.GetList(p => kmsIds.Contains(p.Id));
+                    bool allSameEmbeddingModelID = kmsList.Select(k => k.EmbeddingModelID).Distinct().Count() == 1;
+                    if (!allSameEmbeddingModelID)
+                    {
+                        _ = Message.Error("同一个应用的知识库的Embedding模型必须相同！", 2);
+                        return;
+                    }
                     _appModel.KmsIdList = string.Join(",", kmsIds);
                 }
                 if (apiIds != null && apiIds.Count() > 0)
