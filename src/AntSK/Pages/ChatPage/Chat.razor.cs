@@ -176,7 +176,7 @@ namespace AntSK.Pages.ChatPage
                 }
               
                 KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
-                var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: jsonFun, 
+                var chatResult = _kernel.InvokeStreamingAsync<StreamingTextContent>(function: jsonFun, 
                     arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = msg, ["questions"]=questions });
 
                 MessageInfo info = null;
@@ -187,15 +187,15 @@ namespace AntSK.Pages.ChatPage
                     {
                         info = new MessageInfo();
                         info.ID = Guid.NewGuid().ToString();
-                        info.Context = content?.Content?.ConvertToString();
-                        info.HtmlAnswers = content?.Content?.ConvertToString();
+                        info.Context = content?.Text?.ConvertToString();
+                        info.HtmlAnswers = content?.Text?.ConvertToString();
                         info.CreateTime = DateTime.Now;
 
                         MessageList.Add(info);
                     }
                     else
                     {
-                        info.HtmlAnswers += content.Content;
+                        info.HtmlAnswers += content.Text;
                         await Task.Delay(50);
                     }
                     await InvokeAsync(StateHasChanged);
