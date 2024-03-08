@@ -78,6 +78,11 @@
             <param name="history"></param>
             <returns></returns>
         </member>
+        <member name="F:AntSK.Domain.Domain.Service.LLamaConfig.dicLLamaWeights">
+            <summary>
+            避免模型重复加载，本地缓存
+            </summary>
+        </member>
         <member name="M:AntSK.Domain.Map.MapperExtend.ToDTOList``1(System.Object)">
             <summary>
             Entity集合转DTO集合

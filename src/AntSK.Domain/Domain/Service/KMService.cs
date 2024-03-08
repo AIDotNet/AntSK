@@ -89,16 +89,7 @@ namespace AntSK.Domain.Domain.Service
                     });
                     break;
                 case Model.Enum.AIType.LLamaSharp:
-                    InferenceParams infParams = new() { AntiPrompts = ["\n\n"] };
-                    LLamaSharpConfig lsConfig = new(embedModel.ModelName) { DefaultInferenceParams = infParams };
-                    var parameters = new ModelParams(lsConfig.ModelPath)
-                    {
-                        ContextSize = lsConfig?.ContextSize ?? 2048,
-                        Seed = lsConfig?.Seed ?? 0,
-                        GpuLayerCount = lsConfig?.GpuLayerCount ?? 20,
-                        EmbeddingMode = true
-                    };
-                    var weights = LLamaWeights.LoadFromFile(parameters);
+                    var (weights, parameters) = LLamaConfig.GetLLamaConfig(embedModel.ModelName);
                     var embedder = new LLamaEmbedder(weights, parameters);
                     memory.WithLLamaSharpTextEmbeddingGeneration(new LLamaSharpTextEmbeddingGenerator(embedder));
                     break;
@@ -125,19 +116,10 @@ namespace AntSK.Domain.Domain.Service
                     });
                     break;
                 case Model.Enum.AIType.LLamaSharp:
-                    InferenceParams infParams = new() { AntiPrompts = ["\n\n"] };
-                    LLamaSharpConfig lsConfig = new(chatModel.ModelName) { DefaultInferenceParams = infParams };
-                    var parameters = new ModelParams(lsConfig.ModelPath)
-                    {
-                        ContextSize = lsConfig?.ContextSize ?? 2048,
-                        Seed = lsConfig?.Seed ?? 0,
-                        GpuLayerCount = lsConfig?.GpuLayerCount ?? 20,
-                        EmbeddingMode = true
-                    };
-                    var weights = LLamaWeights.LoadFromFile(parameters);
+                    var (weights, parameters) = LLamaConfig.GetLLamaConfig(chatModel.ModelName);
                     var context = weights.CreateContext(parameters);
                     var executor = new StatelessExecutor(weights, parameters);
-                    memory.WithLLamaSharpTextGeneration(new LlamaSharpTextGenerator(weights, context, executor, lsConfig?.DefaultInferenceParams));
+                    memory.WithLLamaSharpTextGeneration(new LlamaSharpTextGenerator(weights, context, executor));
                     break;
             }
         }
@@ -200,5 +182,7 @@ namespace AntSK.Domain.Domain.Service
             }
             return docTextList;
         }
+
+       
     }
 }

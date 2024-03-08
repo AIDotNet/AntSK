@@ -4,8 +4,15 @@ using AntSK.Domain.Model;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
+using DocumentFormat.OpenXml.EMMA;
+using LLama;
+using LLamaSharp.KernelMemory;
+using LLamaSharp.SemanticKernel.TextCompletion;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Plugins.Core;
+using Microsoft.SemanticKernel.TextGeneration;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -13,16 +20,24 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 
 namespace AntSK.Domain.Domain.Service
 {
     [ServiceDescription(typeof(IKernelService), ServiceLifetime.Scoped)]
-    public class KernelService(
-        IApis_Repositories _apis_Repositories,
-        IAIModels_Repositories _aIModels_Repositories
-        ) : IKernelService
+    public class KernelService: IKernelService
     {
+        private readonly IApis_Repositories _apis_Repositories;
+        private readonly IAIModels_Repositories _aIModels_Repositories;
+        public KernelService(
+              IApis_Repositories apis_Repositories,
+        IAIModels_Repositories aIModels_Repositories
+            ) 
+        {
+            _apis_Repositories = apis_Repositories;
+            _aIModels_Repositories = aIModels_Repositories;
 
+        }
         /// <summary>
         /// 获取kernel实例，依赖注入不好按每个用户去Import不同的插件，所以每次new一个新的kernel
         /// </summary>
@@ -33,17 +48,42 @@ namespace AntSK.Domain.Domain.Service
         {
             var chatModel= _aIModels_Repositories.GetFirst(p => p.Id == app.ChatModelID);
 
-            var httpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
+            var chatHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
 
-            var kernel = Kernel.CreateBuilder()
-              .AddOpenAIChatCompletion(
-               modelId: chatModel.ModelName,
-               apiKey: chatModel.ModelKey,
-               httpClient: httpClient)
-               .Build();
+            var builder = Kernel.CreateBuilder();
+            WithTextGenerationByAIType(builder, chatModel, chatHttpClient);
+
+ 
+            var kernel= builder.Build();
             RegisterPluginsWithKernel(kernel);
             return kernel;
         }
+
+        private void WithTextGenerationByAIType(IKernelBuilder builder, AIModels chatModel, HttpClient chatHttpClient)
+        {
+            switch (chatModel.AIType)
+            {
+                case Model.Enum.AIType.OpenAI:
+                    builder.AddOpenAIChatCompletion(
+                       modelId: chatModel.ModelName,
+                       apiKey: chatModel.ModelKey,
+                       httpClient: chatHttpClient);
+                    break;
+                case Model.Enum.AIType.AzureOpenAI:
+                    builder.AddAzureOpenAIChatCompletion(
+                        deploymentName:chatModel.ModelName,
+                        apiKey: chatModel.ModelKey,
+                        endpoint: chatModel.EndPoint
+                        );
+                    break;
+                case Model.Enum.AIType.LLamaSharp:
+                    var (weights, parameters) = LLamaConfig.GetLLamaConfig(chatModel.ModelName);
+                    var ex = new StatelessExecutor(weights, parameters);
+                    builder.Services.AddKeyedSingleton<ITextGenerationService>("local-llama", new LLamaSharpTextCompletion(ex));               
+                    break;
+            }
+        }
+
         /// <summary>
         /// 根据app配置的插件，导入插件
         /// </summary>
