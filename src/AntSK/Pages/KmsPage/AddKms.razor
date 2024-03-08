@@ -23,6 +23,20 @@
                 <FormItem Label="描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入描述" @bind-Value="@context.Describe" />
                 </FormItem>
+                <FormItem Label="会话模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Select DataSource="@_chatList"
+                            @bind-Value="@context.ChatModelID"
+                            ValueProperty="c=>c.Id"
+                            LabelProperty="c=>c.ModelDescription" >
+                    </Select>
+                </FormItem>
+                <FormItem Label="嵌入模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Select DataSource="@_embeddingList"
+                            @bind-Value="@context.EmbeddingModelID"
+                            ValueProperty="c=>c.Id"
+                            LabelProperty="c=>c.ModelDescription" >
+                    </Select>
+                </FormItem>
                 <FormItem Label="段落切片数(token)" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <AntDesign.InputNumber @bind-Value="context.MaxTokensPerParagraph" PlaceHolder="段落切片数"></AntDesign.InputNumber>
                 </FormItem>

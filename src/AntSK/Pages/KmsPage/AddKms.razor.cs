@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using AntSK.Domain.Repositories;
 using AntSK.Models;
 using System.IO;
+using AntSK.Domain.Model.Enum;
 
 namespace AntSK.Pages.KmsPage
 {
@@ -16,8 +17,19 @@ namespace AntSK.Pages.KmsPage
         [Inject]
         protected MessageService? Message { get; set; }
 
-        private readonly Kmss _kmsModel = new Kmss() ;
+        [Inject]
+        protected IAIModels_Repositories _aimodels_Repositories { get; set; }
 
+        private readonly Kmss _kmsModel = new Kmss();
+
+        private List<AIModels> _chatList { get; set; }
+        private List<AIModels> _embeddingList { get; set; }
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+            _chatList = _aimodels_Repositories.GetList(p=>p.AIModelType==AIModelType.Chat);
+            _embeddingList = _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Embedding);
+        }
         private void HandleSubmit()
         {
             _kmsModel.Id = Guid.NewGuid().ToString();

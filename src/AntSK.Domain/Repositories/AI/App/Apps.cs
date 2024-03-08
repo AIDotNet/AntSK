@@ -38,6 +38,12 @@ namespace AntSK.Domain.Repositories
         public string Type { get; set; }
 
         /// <summary>
+        /// 会话模型ID
+        /// </summary>
+        [Required]
+        public string? ChatModelID { get; set; }
+
+        /// <summary>
         /// 温度
         /// </summary>
         [SugarColumn(DefaultValue = "70")]

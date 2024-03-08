@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using AntSK.Domain.Repositories;
 using AntSK.Models;
 using System.IO;
+using AntSK.Domain.Model.Enum;
 
 namespace AntSK.Pages.AppPage
 {
@@ -23,6 +24,8 @@ namespace AntSK.Pages.AppPage
         protected NavigationManager NavigationManager { get; set; }
         [Inject]
         protected MessageService? Message { get; set; }
+        [Inject]
+        protected IAIModels_Repositories _aimodels_Repositories { get; set; }
 
         private Apps _appModel = new Apps() ;
 
@@ -34,12 +37,16 @@ namespace AntSK.Pages.AppPage
 
         private List<Apis> _apiList = new List<Apis>();
 
+        private List<AIModels> _chatList { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             _kmsList = _kmss_Repositories.GetList();
             _apiList= _apis_Repositories.GetList();
+
+            _chatList= _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Chat);
+
             if (!string.IsNullOrEmpty(AppId))
             {
                 //查看

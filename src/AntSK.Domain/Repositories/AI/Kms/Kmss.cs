@@ -28,6 +28,17 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         [Required]
         public string Describe { get; set; }
+        /// <summary>
+        /// 会话模型ID
+        /// </summary>
+        [Required]
+
+        public string? ChatModelID { get; set; }
+        /// <summary>
+        /// 向量模型ID
+        /// </summary>
+        [Required]
+        public string? EmbeddingModelID { get; set; }
 
         /// <summary>
         /// 每个段落的最大标记数。
@@ -48,5 +59,7 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         [SugarColumn(DefaultValue = "49")]
         public int OverlappingTokens { get; set; } = 49;
+
+        
     }
 }

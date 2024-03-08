@@ -28,6 +28,14 @@
                  <FormItem Label="描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                      <Input Placeholder="请输入描述" @bind-Value="@context.Describe" />
                  </FormItem>
+
+                 <FormItem Label="会话模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                     <Select DataSource="@_chatList"
+                             @bind-Value="@context.ChatModelID"
+                             ValueProperty="c=>c.Id"
+                             LabelProperty="c=>c.ModelDescription">
+                     </Select>
+                 </FormItem>
                  @if (@context.Type == "chat")
                 {
 

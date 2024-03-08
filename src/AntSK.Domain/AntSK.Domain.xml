@@ -218,6 +218,11 @@
             类型
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.ChatModelID">
+            <summary>
+            会话模型ID
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Apps.Temperature">
             <summary>
             温度
@@ -286,6 +291,16 @@
         <member name="P:AntSK.Domain.Repositories.Kmss.Describe">
             <summary>
             会话模型
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.ChatModelID">
+            <summary>
+            会话模型ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Kmss.EmbeddingModelID">
+            <summary>
+            向量模型ID
             </summary>
         </member>
         <member name="P:AntSK.Domain.Repositories.Kmss.MaxTokensPerParagraph">
