@@ -10,14 +10,11 @@ namespace AntSk.LLM.SparkDesk
     public class SparkDeskTextCompletion : ITextGenerationService, IAIService
     {
         private readonly Dictionary<string, object?> _attributes = new();
+        private readonly SparkDeskClient _client;
+        private string _chatId;
+        private readonly SparkDeskOptions _options;
 
         public IReadOnlyDictionary<string, object?> Attributes => _attributes;
-
-        private SparkDeskClient _client;
-
-        private string _chatId;
-
-        SparkDeskOptions _options;
 
         public SparkDeskTextCompletion(SparkDeskOptions options, string chatId)
         {
