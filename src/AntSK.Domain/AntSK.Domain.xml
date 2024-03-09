@@ -53,7 +53,7 @@
             避免模型重复加载，本地缓存
             </summary>
         </member>
-        <member name="M:AntSK.Domain.Domain.Service.ChatService.ChatAsync(AntSK.Domain.Repositories.Apps,System.String,System.String)">
+        <member name="M:AntSK.Domain.Domain.Service.ChatService.ChatByAppAsync(AntSK.Domain.Repositories.Apps,System.String,System.String)">
             <summary>
             发送消息
             </summary>

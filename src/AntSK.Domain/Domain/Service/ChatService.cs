@@ -22,7 +22,7 @@ namespace AntSK.Domain.Domain.Service
         /// <param name="questions"></param>
         /// <param name="history"></param>
         /// <returns></returns>
-        public async IAsyncEnumerable<StreamingKernelContent> ChatAsync(Apps app, string questions,string history)
+        public async IAsyncEnumerable<StreamingKernelContent> ChatByAppAsync(Apps app, string questions,string history)
         {
             if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
             {

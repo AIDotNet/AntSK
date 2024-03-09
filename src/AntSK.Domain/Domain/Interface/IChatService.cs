@@ -10,6 +10,6 @@ namespace AntSK.Domain.Domain.Interface
 {
     public interface IChatService
     {
-        IAsyncEnumerable<StreamingKernelContent> ChatAsync(Apps app, string questions, string history);
+        IAsyncEnumerable<StreamingKernelContent> ChatByAppAsync(Apps app, string questions, string history);
     }
 }
