@@ -23,7 +23,8 @@ namespace AntSK.Services.OpenApi
         IKmss_Repositories _kmss_Repositories,
         IKmsDetails_Repositories _kmsDetails_Repositories,
         IKernelService _kernelService,
-        IKMService _kMService
+        IKMService _kMService,
+        IChatService _chatService
         ) : IOpenApiService
     {
         public async Task Chat(OpenAIModel model, string sk, HttpContext HttpContext)
@@ -75,31 +76,9 @@ namespace AntSK.Services.OpenApi
 
         private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
         {
-            var _kernel = _kernelService.GetKernelByApp(app);
-            var temperature = app.Temperature / 100;//存的是0~100需要缩小
-            OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
-            if (!string.IsNullOrEmpty(app.ApiFunctionList))
-            {
-                _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
-            }
-
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
-
-            if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
-            {
-                //如果模板为空，给默认提示词
-                app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
-            }
-            //var promptTemplateFactory = new KernelPromptTemplateFactory();
-            //var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
-            //var renderedPrompt = await promptTemplate.RenderAsync(_kernel);
-            //Console.WriteLine(renderedPrompt);
-
-            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult = _kernel.InvokeStreamingAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
+            var chatResult = _chatService.ChatByAppAsync(app, msg, "");
             int i = 0;
-
             await foreach (var content in chatResult)
             {
                 result.choices[0].delta.content = content.ConvertToString();
