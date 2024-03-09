@@ -21,8 +21,8 @@ using AntSK.Services.Auth;
 using LLama.Native;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using AntSK.Domain.Model;
-using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Common.Map;
+using AntSK.Domain.Domain.BackGroundTask;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.

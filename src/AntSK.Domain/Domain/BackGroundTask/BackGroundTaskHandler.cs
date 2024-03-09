@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AntSK.Domain.Domain.Service
+namespace AntSK.Domain.Domain.BackGroundTask
 {
     public class BackGroundTaskHandler : IBackgroundTaskHandler<ImportKMSTaskReq>
     {
@@ -23,7 +23,7 @@ namespace AntSK.Domain.Domain.Service
             using (var scope = _scopeFactory.CreateScope())
             {
                 Console.WriteLine("ExecuteAsync.开始执行后台任务");
-                var  importKMSService = scope.ServiceProvider.GetRequiredService<IImportKMSService>();
+                var importKMSService = scope.ServiceProvider.GetRequiredService<IImportKMSService>();
                 //不能使用异步
                 importKMSService.ImportKMSTask(item);
                 Console.WriteLine("ExecuteAsync.后台任务执行完成");
