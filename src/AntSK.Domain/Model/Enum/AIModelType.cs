@@ -7,7 +7,8 @@
     {
         OpenAI = 1,
         AzureOpenAI = 2,
-        LLamaSharp = 3
+        LLamaSharp=3,
+        SparkDesk=4,
     }
 
     /// <summary>

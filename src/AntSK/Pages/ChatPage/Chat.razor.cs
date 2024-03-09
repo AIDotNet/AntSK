@@ -41,6 +41,9 @@ namespace AntSK.Pages.ChatPage
         [Inject]
         IChatService _chatService { get; set; }
 
+        [Inject]
+        private ILogger<Chat> Logger { get; set; }
+
         protected bool _loading = false;
         protected List<MessageInfo> MessageList = [];
         protected string? _messageInput;
@@ -88,8 +91,8 @@ namespace AntSK.Pages.ChatPage
             catch (System.Exception ex)
             {
                 Sendding = false;
-                Console.WriteLine("异常:" + ex.Message);
-                _ = Message.Error("异常:" + ex.Message, 2);
+                Logger.LogError( ex,"对话异常");
+                _ = Message.Error("异常:"+ex.Message, 2);
             }
         }
         protected async Task OnCopyAsync(MessageInfo item)
