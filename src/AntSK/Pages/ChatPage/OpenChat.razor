@@ -14,8 +14,9 @@
                 <GridRow>
                     <GridCol Span="23">
                         <div class="chat-bubble sent">
-                            @(item.Context)
-                            @* <span class="timestamp">@item.CreateTime</span> *@
+                            <Popover Title="@item.CreateTime.ToString()">
+                                @(item.Context)
+                            </Popover>
                         </div>
                         <Icon Style="float:right;margin-top:10px;" Type="copy" Theme="outline" OnClick="async () =>await OnCopyAsync(item)" />
                     </GridCol>
@@ -32,10 +33,12 @@
                     </GridCol>
                     <GridCol Span="23">
                         <div class="chat-bubble received">
-                            @((MarkupString)(item.HtmlAnswers))
-                            @* <span class="timestamp">@item.CreateTime</span> *@
+                            <Popover Title="@item.CreateTime.ToString()">
+                                @((MarkupString)(item.HtmlAnswers))
+                            </Popover>
                         </div>
-                    </GridCol>           
+
+                    </GridCol>
                 </GridRow>
             }
 
@@ -92,22 +95,6 @@
         background-color: #daf8cb;
         align-self: flex-end;
         float: right;
-    }
-
-    .timestamp {
-        display: block;
-        font-size: 0.75em;
-        margin-top: 5px;
-    }
-
-    .received .timestamp {
-        text-align: right;
-        margin-right: 10px;
-    }
-
-    .sent .timestamp {
-        text-align: left;
-        margin-left: 10px;
     }
 </style>
 
