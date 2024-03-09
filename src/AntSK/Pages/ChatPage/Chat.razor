@@ -33,6 +33,7 @@
                                                 @(item.Context)
                                                 @* <span class="timestamp">@item.CreateTime</span> *@
                                             </div>
+                                            <Icon Style="float:right;margin-top:10px;" Type="copy" Theme="outline" OnClick="async () =>await OnCopyAsync(item)" />
                                         </GridCol>
                                         <GridCol Span="1">
                                             <Image Width="100%" Style="margin-top:10px;" Src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
@@ -77,7 +78,7 @@
             </Extra>
             <Body>
                 <AntList Bordered DataSource="@_relevantSources" Style="padding:10px;">
-                     <ChildContent Context="item" >
+                     <ChildContent Context="item">
                          <span> <b>@item.SourceName </b>  相似度：<Text Mark> @item.Relevance</Text></span>
                             <Body>
                                 @((MarkupString)(@item.Text))
@@ -130,6 +131,7 @@
             background-color: #daf8cb;
             align-self: flex-end;
             float: right;
+            position: relative;
         }
 
         .timestamp {

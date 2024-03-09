@@ -17,6 +17,7 @@
                             @(item.Context)
                             @* <span class="timestamp">@item.CreateTime</span> *@
                         </div>
+                        <Icon Style="float:right;margin-top:10px;" Type="copy" Theme="outline" OnClick="async () =>await OnCopyAsync(item)" />
                     </GridCol>
                     <GridCol Span="1">
                         <Image Width="100%" Style="margin-top:10px;" Src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
@@ -34,7 +35,7 @@
                             @((MarkupString)(item.HtmlAnswers))
                             @* <span class="timestamp">@item.CreateTime</span> *@
                         </div>
-                    </GridCol>
+                    </GridCol>           
                 </GridRow>
             }
 
