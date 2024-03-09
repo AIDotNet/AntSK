@@ -2,7 +2,7 @@
 using LLama.Common;
 using LLamaSharp.KernelMemory;
 
-namespace AntSK.Domain.Domain.Service
+namespace AntSK.Domain.Domain.Other
 {
     public static class LLamaConfig
     {

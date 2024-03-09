@@ -31,6 +31,8 @@ namespace AntSK.Pages.ChatPage
         protected IKMService _kMService { get; set; }
         [Inject]
         IConfirmService _confirmService { get; set; }
+        [Inject]
+        IChatService _chatService { get; set; }
 
         protected bool _loading = false;
         protected List<MessageInfo> MessageList = [];
@@ -207,30 +209,14 @@ namespace AntSK.Pages.ChatPage
         /// 发送普通对话
         /// </summary>
         /// <param name="questions"></param>
-        /// <param name="msg"></param>
+        /// <param name="history"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        private async Task SendChat(string questions, string msg, Apps app)
+        private async Task SendChat(string questions, string history, Apps app)
         {
-            var _kernel = _kernelService.GetKernelByApp(app);
-            if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
-            {
-                //如果模板为空，给默认提示词
-                app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
-            }
-            //注册插件
-            var temperature = app.Temperature / 100;//存的是0~100需要缩小
-            OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
-            if (!string.IsNullOrEmpty(app.ApiFunctionList))
-            {
-                _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
-            }
-
-            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult = _kernel.InvokeStreamingAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
             MessageInfo info = null;
             var markdown = new Markdown();
+            var chatResult = _chatService.ChatAsync(app, questions, history);
             await foreach (var content in chatResult)
             {
                 if (info == null)
@@ -291,7 +277,7 @@ namespace AntSK.Pages.ChatPage
             }
             else
             {
-                return questions;
+                return "";
             }
         }
     }

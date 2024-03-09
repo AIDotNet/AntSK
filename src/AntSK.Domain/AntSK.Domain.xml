@@ -48,6 +48,20 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="F:AntSK.Domain.Domain.Other.LLamaConfig.dicLLamaWeights">
+            <summary>
+            避免模型重复加载，本地缓存
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.Domain.Service.ChatService.ChatAsync(AntSK.Domain.Repositories.Apps,System.String,System.String)">
+            <summary>
+            发送消息
+            </summary>
+            <param name="app"></param>
+            <param name="questions"></param>
+            <param name="history"></param>
+            <returns></returns>
+        </member>
         <member name="M:AntSK.Domain.Domain.Service.KernelService.GetKernelByApp(AntSK.Domain.Repositories.Apps)">
             <summary>
             获取kernel实例，依赖注入不好按每个用户去Import不同的插件，所以每次new一个新的kernel
@@ -77,11 +91,6 @@
             <param name="questions"></param>
             <param name="history"></param>
             <returns></returns>
-        </member>
-        <member name="F:AntSK.Domain.Domain.Service.LLamaConfig.dicLLamaWeights">
-            <summary>
-            避免模型重复加载，本地缓存
-            </summary>
         </member>
         <member name="M:AntSK.Domain.Map.MapperExtend.ToDTOList``1(System.Object)">
             <summary>

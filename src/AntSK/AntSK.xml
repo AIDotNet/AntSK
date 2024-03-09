@@ -65,7 +65,7 @@
             发送普通对话
             </summary>
             <param name="questions"></param>
-            <param name="msg"></param>
+            <param name="history"></param>
             <param name="app"></param>
             <returns></returns>
         </member>
@@ -90,7 +90,7 @@
             发送普通对话
             </summary>
             <param name="questions"></param>
-            <param name="msg"></param>
+            <param name="history"></param>
             <param name="app"></param>
             <returns></returns>
         </member>

@@ -3,7 +3,7 @@ using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Model;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AntSK.Domain.Domain.BackGroundTask
+namespace AntSK.Domain.Domain.Other
 {
     public class BackGroundTaskHandler : IBackgroundTaskHandler<ImportKMSTaskReq>
     {

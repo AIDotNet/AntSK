@@ -1,7 +1,7 @@
 using AntDesign.ProLayout;
 using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Common.Map;
-using AntSK.Domain.Domain.BackGroundTask;
+using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Model;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
