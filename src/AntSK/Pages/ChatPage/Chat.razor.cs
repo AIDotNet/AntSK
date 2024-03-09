@@ -264,7 +264,7 @@ namespace AntSK.Pages.ChatPage
                 }
                 else
                 {
-                    info.HtmlAnswers += content.Content;
+                    info.HtmlAnswers += content.Text;
                     await Task.Delay(50); 
                 }
                 await InvokeAsync(StateHasChanged);
