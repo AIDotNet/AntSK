@@ -246,7 +246,7 @@ namespace AntSK.Pages.ChatPage
             }
             
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult = _kernel.InvokeStreamingAsync<StreamingChatMessageContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
+            var chatResult = _kernel.InvokeStreamingAsync<StreamingTextContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
             MessageInfo info = null;
             var markdown = new Markdown();
             await foreach (var content in chatResult)
@@ -255,8 +255,8 @@ namespace AntSK.Pages.ChatPage
                 {
                     info = new MessageInfo();
                     info.ID = Guid.NewGuid().ToString();
-                    info.Context = content?.Content?.ConvertToString();
-                    info.HtmlAnswers = content?.Content?.ConvertToString();
+                    info.Context = content?.Text?.ConvertToString();
+                    info.HtmlAnswers = content?.Text?.ConvertToString();
                     info.CreateTime = DateTime.Now;
 
                     MessageList.Add(info);
