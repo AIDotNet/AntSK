@@ -12,13 +12,15 @@ using AntSK.Domain.Utils;
 using Microsoft.KernelMemory;
 using AntSK.Domain.Model;
 using MarkdownSharp;
+using AntSK.Domain.Domain.Dto;
 
 namespace AntSK.Domain.Domain.Service
 {
     [ServiceDescription(typeof(IChatService), ServiceLifetime.Scoped)]
     public class ChatService(
         IKernelService _kernelService,
-        IKMService _kMService 
+        IKMService _kMService ,
+        IKmsDetails_Repositories _kmsDetails_Repositories
         ) : IChatService
     {
         /// <summary>
@@ -52,7 +54,7 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history)
+        public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history, List<RelevantSource> relevantSources=null)
         {
             var _kernel = _kernelService.GetKernelByApp(app);
             //知识库问答
@@ -73,6 +75,18 @@ namespace AntSK.Domain.Domain.Service
                     foreach (var part in item.Partitions)
                     {
                         dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
+
+                        if (relevantSources.IsNotNull())
+                        {
+                            var markdown = new Markdown();
+                            string sourceName = item.SourceName;
+                            var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == item.SourceName);
+                            if (fileDetail.IsNotNull())
+                            {
+                                sourceName = fileDetail.FileName;
+                            }
+                            relevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = markdown.Transform(part.Text), Relevance = part.Relevance });
+                        }
                     }
                 }
                 KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");

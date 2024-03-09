@@ -1,4 +1,5 @@
 ﻿using AntDesign;
+using AntSK.Domain.Domain.Dto;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
@@ -45,7 +46,7 @@ namespace AntSK.Pages.ChatPage
         protected string _json = "";
         protected bool Sendding = false;
 
-        List<RelevantSource> RelevantSources = new List<RelevantSource>();
+        List<RelevantSource> _relevantSources = new List<RelevantSource>();
 
         protected List<Apps> _list = new List<Apps>();
         protected override async Task OnInitializedAsync()
@@ -150,70 +151,38 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task SendKms(string questions, string msg, Apps app)
         {
-            var _kernel = _kernelService.GetKernelByApp(app);
-            //知识库问答
-            var filters = new List<MemoryFilter>();
-            var kmsidList = app.KmsIdList.Split(",");
-            //只取第一个知识库的配置
-            var _memory = _kMService.GetMemoryByKMS(kmsidList.FirstOrDefault());
-            foreach (var kmsid in kmsidList)
+
+
+            MessageInfo info = null;
+            var markdown1 = new Markdown();
+            var chatResult = _chatService.SendKmsByAppAsync(app, questions, msg, _relevantSources);
+            await foreach (var content in chatResult)
             {
-                filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
-            }
-            var xlresult = await _memory.SearchAsync(questions, index: "kms", filters: filters);
-            string dataMsg = "";
-            if (xlresult != null)
-            {
-                foreach (var item in xlresult.Results)
+                if (info == null)
                 {
-                    foreach (var part in item.Partitions)
-                    {
-                        dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
-                        //输出调试信息
-                        var markdown = new Markdown();
-                        string sourceName = item.SourceName;
-                        var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == item.SourceName);
-                        if (fileDetail.IsNotNull())
-                        {
-                            sourceName = fileDetail.FileName;
-                        }
-                        RelevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = markdown.Transform(part.Text), Relevance = part.Relevance });
-                    }
+                    info = new MessageInfo();
+                    info.ID = Guid.NewGuid().ToString();
+                    info.Context = content?.ConvertToString();
+                    info.HtmlAnswers = content?.ConvertToString();
+                    info.CreateTime = DateTime.Now;
+
+                    MessageList.Add(info);
                 }
-
-                KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
-                var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
-                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = msg, ["questions"] = questions });
-
-                MessageInfo info = null;
-                var markdown1 = new Markdown();
-                await foreach (var content in chatResult)
+                else
                 {
-                    if (info == null)
-                    {
-                        info = new MessageInfo();
-                        info.ID = Guid.NewGuid().ToString();
-                        info.Context = content?.ConvertToString();
-                        info.HtmlAnswers = content?.ConvertToString();
-                        info.CreateTime = DateTime.Now;
-
-                        MessageList.Add(info);
-                    }
-                    else
-                    {
-                        info.HtmlAnswers += content.ConvertToString();
-                        await Task.Delay(50);
-                    }
-                    await InvokeAsync(StateHasChanged);
+                    info.HtmlAnswers += content.ConvertToString();
+                    await Task.Delay(50);
                 }
-                //全部处理完后再处理一次Markdown
-                if (info.IsNotNull())
-                {
-                    info!.HtmlAnswers = markdown1.Transform(info.HtmlAnswers);
-                }
-
                 await InvokeAsync(StateHasChanged);
             }
+            //全部处理完后再处理一次Markdown
+            if (info.IsNotNull())
+            {
+                info!.HtmlAnswers = markdown1.Transform(info.HtmlAnswers);
+            }
+
+            await InvokeAsync(StateHasChanged);
+
         }
 
         /// <summary>
@@ -299,11 +268,5 @@ namespace AntSK.Pages.ChatPage
         }
     }
 
-    public class RelevantSource
-    {
-        public string SourceName { get; set; }
-
-        public string Text { get; set; }
-        public float Relevance { get; set; }
-    }
+  
 }

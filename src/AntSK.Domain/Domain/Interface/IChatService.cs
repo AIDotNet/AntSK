@@ -1,4 +1,5 @@
-﻿using AntSK.Domain.Repositories;
+﻿using AntSK.Domain.Domain.Dto;
+using AntSK.Domain.Repositories;
 using Microsoft.SemanticKernel;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,6 @@ namespace AntSK.Domain.Domain.Interface
     {
         IAsyncEnumerable<StreamingKernelContent> SendChatByAppAsync(Apps app, string questions, string history);
 
-        IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history);
+        IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history, List<RelevantSource> relevantSources = null);
     }
 }
