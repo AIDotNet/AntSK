@@ -6,11 +6,13 @@ using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using MarkdownSharp;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using RestSharp;
 using System.Text;
+using AntSK.Domain.Utils;
 
 namespace AntSK.Pages.ChatPage
 {
@@ -28,9 +30,8 @@ namespace AntSK.Pages.ChatPage
         protected IKmss_Repositories _kmss_Repositories { get; set; }
         [Inject]
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
+        [Inject]  IJSRuntime _JSRuntime { get; set; }
 
-        //[Inject]
-        //protected Kernel _kernel { get; set; }
         [Inject]
         protected IKernelService _kernelService { get; set; }
         [Inject]
@@ -182,6 +183,7 @@ namespace AntSK.Pages.ChatPage
             }
 
             await InvokeAsync(StateHasChanged);
+            await _JSRuntime.ScrollToBottomAsync("scrollDiv");
 
         }
 
@@ -221,8 +223,8 @@ namespace AntSK.Pages.ChatPage
             {
                 info!.HtmlAnswers = markdown.Transform(info.HtmlAnswers);
             }
-
             await InvokeAsync(StateHasChanged);
+            await _JSRuntime.ScrollToBottomAsync("scrollDiv");
         }
 
 
@@ -266,6 +268,7 @@ namespace AntSK.Pages.ChatPage
                 return "";
             }
         }
+
     }
 
   

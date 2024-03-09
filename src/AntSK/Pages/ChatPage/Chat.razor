@@ -49,9 +49,7 @@
                                         </GridCol>
                                         <GridCol Span="23">
                                             <div class="chat-bubble received">
-                                                <Popover Title="@item.CreateTime.ToString()">
-                                                    @((MarkupString)(item.HtmlAnswers))
-                                                </Popover>
+                                                @((MarkupString)(item.HtmlAnswers))
                                             </div>
                                         </GridCol>
                                     </GridRow>
@@ -134,7 +132,7 @@
             align-self: flex-end;
             float: right;
             position: relative;
-        } 
+        }
     </style>
     @code {
 

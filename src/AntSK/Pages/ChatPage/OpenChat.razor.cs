@@ -10,6 +10,8 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using SqlSugar;
 using System.Text;
+using AntSK.Domain.Utils;
+using Microsoft.JSInterop;
 
 namespace AntSK.Pages.ChatPage
 {
@@ -33,6 +35,8 @@ namespace AntSK.Pages.ChatPage
         IConfirmService _confirmService { get; set; }
         [Inject]
         IChatService _chatService { get; set; }
+        [Inject] IJSRuntime _JSRuntime { get; set; }
+
 
         protected bool _loading = false;
         protected List<MessageInfo> MessageList = [];
@@ -175,6 +179,7 @@ namespace AntSK.Pages.ChatPage
                 info!.HtmlAnswers = markdown1.Transform(info.HtmlAnswers);
             }
             await InvokeAsync(StateHasChanged);
+            await _JSRuntime.ScrollToBottomAsync("scrollDiv");
         }
 
         /// <summary>
@@ -211,6 +216,7 @@ namespace AntSK.Pages.ChatPage
             //全部处理完后再处理一次Markdown
             info!.HtmlAnswers = markdown.Transform(info.HtmlAnswers);
             await InvokeAsync(StateHasChanged);
+            await _JSRuntime.ScrollToBottomAsync("scrollDiv");
         }
 
         /// <summary>
