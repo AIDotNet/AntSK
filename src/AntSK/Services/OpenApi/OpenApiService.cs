@@ -61,13 +61,26 @@ namespace AntSK.Services.OpenApi
                         break;
                     case "kms":
                         //知识库问答
-                        OpenAIResult result3 = new OpenAIResult();
-                        result3.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                        result3.choices = new List<ChoicesModel>() { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
-                        result3.choices[0].message.content = await SendKms(msg, app);
-                        HttpContext.Response.ContentType = "application/json";
-                        await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result3));
-                        await HttpContext.Response.CompleteAsync();
+                        if (model.stream)
+                        {
+                            OpenAIStreamResult result3 = new OpenAIStreamResult();
+                            result3.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                            result3.choices = new List<StreamChoicesModel>() { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
+                            await SendKmsStream(HttpContext, result3, app, msg);
+                            HttpContext.Response.ContentType = "application/json";
+                            await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result3));
+                            await HttpContext.Response.CompleteAsync();
+                        }
+                        else 
+                        {
+                            OpenAIResult result4 = new OpenAIResult();
+                            result4.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                            result4.choices = new List<ChoicesModel>() { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
+                            result4.choices[0].message.content = await SendKms(msg, app);
+                            HttpContext.Response.ContentType = "application/json";
+                            await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result4));
+                            await HttpContext.Response.CompleteAsync();
+                        }
                         break;
                 }
             }
@@ -129,6 +142,27 @@ namespace AntSK.Services.OpenApi
                 result = answers;
             }
             return result;
+        }
+
+        private async Task SendKmsStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
+        {
+            HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
+            var chatResult = _chatService.SendKmsByAppAsync(app, msg, "");
+            int i = 0;
+            await foreach (var content in chatResult)
+            {
+                result.choices[0].delta.content = content.ConvertToString();
+                string message = $"data: {JsonConvert.SerializeObject(result)}\n\n";
+                await HttpContext.Response.WriteAsync(message, Encoding.UTF8);
+                await HttpContext.Response.Body.FlushAsync();
+                //模拟延迟。
+                await Task.Delay(TimeSpan.FromMilliseconds(50));
+            }
+
+            await HttpContext.Response.WriteAsync("data: [DONE]");
+            await HttpContext.Response.Body.FlushAsync();
+
+            await HttpContext.Response.CompleteAsync();
         }
 
         /// <summary>
