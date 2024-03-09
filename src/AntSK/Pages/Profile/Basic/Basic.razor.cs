@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Components;
-using System.Threading.Tasks;
 using AntSK.Models;
 using AntSK.Services;
+using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.Profile
 {

@@ -1,14 +1,7 @@
 ﻿using AntDesign;
-using Microsoft.AspNetCore.Components;
-using AntSK.Domain.Repositories;
-using AntSK.Models;
-using AntSK.Services;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using System.Collections.Generic;
-using System;
-using Microsoft.KernelMemory;
 using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Repositories;
+using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages
 {
@@ -53,11 +46,11 @@ namespace AntSK.Pages
             {
                 data = await _kmss_Repositories.GetListAsync();
             }
-            else 
+            else
             {
                 data = await _kmss_Repositories.GetListAsync(p => p.Name.Contains(searchKey));
             }
-    
+
             list.AddRange(data);
             _data = list.ToArray();
             await InvokeAsync(StateHasChanged);
@@ -88,7 +81,7 @@ namespace AntSK.Pages
 
             var content = "删除知识库会一起删除导入的知识文档，无法还原。是否确认删除此知识库？";
             var title = "删除";
-            var result= await _confirmService.Show(content, title, ConfirmButtons.YesNo);
+            var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
             if (result == ConfirmResult.Yes)
             {
                 var _memory = _kMService.GetMemoryByKMS(id);
@@ -104,7 +97,7 @@ namespace AntSK.Pages
 
                 await _kmss_Repositories.DeleteAsync(id);
                 await InitData("");
-            }  
+            }
         }
     }
 }

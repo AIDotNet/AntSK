@@ -1,13 +1,7 @@
-﻿using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using AntSK.Domain.Map;
+﻿using AntSK.Domain.Map;
 using AntSK.Domain.Model;
-using Microsoft.Extensions.Configuration;
+using SqlSugar;
+using System.Linq.Expressions;
 
 
 namespace AntSK.Domain.Repositories.Base
@@ -15,7 +9,7 @@ namespace AntSK.Domain.Repositories.Base
     public class Repository<T> : SimpleClient<T> where T : class, new()
     {
 
-        public Repository( ISqlSugarClient context = null) : base(context)//注意这里要有默认值等于null
+        public Repository(ISqlSugarClient context = null) : base(context)//注意这里要有默认值等于null
         {
 
             if (context == null)

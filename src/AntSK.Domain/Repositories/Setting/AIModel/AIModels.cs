@@ -1,11 +1,6 @@
 ﻿using AntSK.Domain.Model.Enum;
 using SqlSugar;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AntSK.Domain.Repositories
 {
@@ -25,7 +20,7 @@ namespace AntSK.Domain.Repositories
         /// 模型类型
         /// </summary>
         [Required]
-        public AIModelType AIModelType { get; set; }= AIModelType.Chat;
+        public AIModelType AIModelType { get; set; } = AIModelType.Chat;
         /// <summary>
         /// 模型地址
         /// </summary>

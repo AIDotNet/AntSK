@@ -1,29 +1,14 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
-using AntSK.Domain.Model;
+using AntSK.Domain.Domain.Dto;
+using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using AntSK.Models;
-using AntSK.Models.OpenAPI;
-using AntSK.Pages.ChatPage;
-using MarkdownSharp;
 using Microsoft.KernelMemory;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel;
-using System.Text;
-using System;
-using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
-using AntDesign.Core.Extensions;
-using Azure.AI.OpenAI;
-using Azure;
-using Azure.Core;
-using Microsoft.AspNetCore.Http.HttpResults;
-using AntDesign;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
-using System.Text.Json;
-using AntSK.Domain.Domain.Interface;
-using static LLama.Common.ChatHistory;
-using DocumentFormat.OpenXml.Wordprocessing;
-using AntSK.Domain.Domain.Service;
+using System.Text;
+using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 
 namespace AntSK.Services.OpenApi
 {
@@ -41,12 +26,12 @@ namespace AntSK.Services.OpenApi
         IKMService _kMService
         ) : IOpenApiService
     {
-        public async Task Chat(OpenAIModel model,string sk, HttpContext HttpContext)
+        public async Task Chat(OpenAIModel model, string sk, HttpContext HttpContext)
         {
-            Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == sk);      
+            Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == sk);
             if (app.IsNotNull())
             {
-                string msg= await HistorySummarize(app,model);
+                string msg = await HistorySummarize(app, model);
                 switch (app.Type)
                 {
                     case "chat":
@@ -56,13 +41,13 @@ namespace AntSK.Services.OpenApi
                             OpenAIStreamResult result1 = new OpenAIStreamResult();
                             result1.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                             result1.choices = new List<StreamChoicesModel>() { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
-                            await SendChatStream( HttpContext, result1, app, msg);
+                            await SendChatStream(HttpContext, result1, app, msg);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result1));
                             await HttpContext.Response.CompleteAsync();
                             return;
                         }
-                        else 
+                        else
                         {
                             OpenAIResult result2 = new OpenAIResult();
                             result2.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -78,17 +63,17 @@ namespace AntSK.Services.OpenApi
                         OpenAIResult result3 = new OpenAIResult();
                         result3.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                         result3.choices = new List<ChoicesModel>() { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
-                        result3.choices[0].message.content = await SendKms( msg, app);
+                        result3.choices[0].message.content = await SendKms(msg, app);
                         HttpContext.Response.ContentType = "application/json";
                         await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result3));
                         await HttpContext.Response.CompleteAsync();
                         break;
                 }
             }
-    
+
         }
 
-        private async Task SendChatStream( HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
+        private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
         {
             var _kernel = _kernelService.GetKernelByApp(app);
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
@@ -138,7 +123,7 @@ namespace AntSK.Services.OpenApi
         /// <param name="msg"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        private async Task<string> SendChat( string msg, Apps app)
+        private async Task<string> SendChat(string msg, Apps app)
         {
             string result = "";
             if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
@@ -206,7 +191,7 @@ namespace AntSK.Services.OpenApi
                 {
                     string answers = chatResult.GetValue<string>();
                     result = answers;
-                }  
+                }
             }
             return result;
         }
@@ -216,12 +201,12 @@ namespace AntSK.Services.OpenApi
         /// <param name="questions"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        private async Task<string> HistorySummarize(Apps app,OpenAIModel model)
+        private async Task<string> HistorySummarize(Apps app, OpenAIModel model)
         {
             var _kernel = _kernelService.GetKernelByApp(app);
             StringBuilder history = new StringBuilder();
-            string questions = model.messages[model.messages.Count-1].content;
-            for(int i=0;i<model.messages.Count()-1;i++)
+            string questions = model.messages[model.messages.Count - 1].content;
+            for (int i = 0; i < model.messages.Count() - 1; i++)
             {
                 var item = model.messages[i];
                 history.Append($"{item.role}:{item.content}{Environment.NewLine}");

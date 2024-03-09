@@ -1,5 +1,3 @@
-using System;
-
 namespace AntSK.Models
 {
     public class ActivitiesType

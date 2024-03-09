@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AntSK.Domain.Model.Enum
+﻿namespace AntSK.Domain.Model.Enum
 {
     /// <summary>
     /// AI类型
@@ -13,7 +7,7 @@ namespace AntSK.Domain.Model.Enum
     {
         OpenAI = 1,
         AzureOpenAI = 2,
-        LLamaSharp=3
+        LLamaSharp = 3
     }
 
     /// <summary>

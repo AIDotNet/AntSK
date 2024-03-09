@@ -1,6 +1,5 @@
 ﻿using AntSK.Domain.Domain.Dto;
 using AntSK.Domain.Domain.Interface;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.KmsPage
@@ -15,7 +14,7 @@ namespace AntSK.Pages.KmsPage
         [Inject]
         protected IKMService iKMService { get; set; }
 
-        private List<KMFile> _data = new List<KMFile>() ;
+        private List<KMFile> _data = new List<KMFile>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -23,8 +22,9 @@ namespace AntSK.Pages.KmsPage
             _data = await iKMService.GetDocumentByFileID(KmsId, FileId);
         }
 
-        private void NavigateBack() {
+        private void NavigateBack()
+        {
             NavigationManager.NavigateTo($"/kms/detail/{KmsId}");
-        } 
+        }
     }
 }

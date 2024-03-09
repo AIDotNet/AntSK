@@ -2,11 +2,6 @@
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Model;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AntSK.Domain.Domain.BackGroundTask
 {

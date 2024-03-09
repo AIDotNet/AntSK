@@ -1,8 +1,6 @@
 ﻿using AntDesign;
 using AntSK.Domain.Repositories;
 using AntSK.Models;
-using AntSK.Services;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.Setting.AIModel
@@ -15,7 +13,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private string _searchKeyword;
 
-        [Inject] 
+        [Inject]
         protected IAIModels_Repositories _aIModels_Repositories { get; set; }
 
         [Inject]
@@ -27,7 +25,7 @@ namespace AntSK.Pages.Setting.AIModel
             await base.OnInitializedAsync();
             await InitData();
         }
-        private async Task InitData(string searchKey=null)
+        private async Task InitData(string searchKey = null)
         {
             if (string.IsNullOrEmpty(searchKey))
             {
@@ -35,21 +33,23 @@ namespace AntSK.Pages.Setting.AIModel
             }
             else
             {
-                _data = _aIModels_Repositories.GetList(p=>p.ModelName.Contains(searchKey)||p.ModelDescription.Contains(searchKey));
+                _data = _aIModels_Repositories.GetList(p => p.ModelName.Contains(searchKey) || p.ModelDescription.Contains(searchKey));
             }
             await InvokeAsync(StateHasChanged);
         }
-        public async Task OnSearch() {
+        public async Task OnSearch()
+        {
             await InitData(_searchKeyword);
         }
 
-        public async Task AddModel() {
+        public async Task AddModel()
+        {
             NavigationManager.NavigateTo("/setting/model/add");
         }
 
         public void Edit(string modelid)
         {
-            NavigationManager.NavigateTo("/setting/model/add/"+ modelid);
+            NavigationManager.NavigateTo("/setting/model/add/" + modelid);
         }
 
         public async Task Delete(string modelid)

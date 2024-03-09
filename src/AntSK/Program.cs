@@ -1,28 +1,20 @@
 using AntDesign.ProLayout;
-using Microsoft.AspNetCore.Components;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using AntSK.Domain.Utils;
-using AntSK.Services;
 using AntSK.Domain.Common.DependencyInjection;
+using AntSK.Domain.Common.Map;
+using AntSK.Domain.Domain.BackGroundTask;
+using AntSK.Domain.Model;
+using AntSK.Domain.Options;
+using AntSK.Domain.Repositories;
+using AntSK.Domain.Utils;
+using AntSK.Services.Auth;
+using LLama.Native;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
-using AntSK.Domain.Options;
-using Microsoft.KernelMemory.ContentStorage.DevTools;
-using Microsoft.KernelMemory.FileSystem.DevTools;
-using Microsoft.KernelMemory;
-using Microsoft.SemanticKernel;
-using Microsoft.KernelMemory.Postgres;
-using AntSK.Domain.Repositories;
-using Microsoft.SemanticKernel.Plugins.Core;
-using Microsoft.AspNetCore.Components.Authorization;
-using AntSK.Services.Auth;
-using LLama.Native;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using AntSK.Domain.Model;
-using AntSK.Domain.Common.Map;
-using AntSK.Domain.Domain.BackGroundTask;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -90,7 +82,7 @@ builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGrou
            .WithCuda(false)
            .WithLogs(true);
     }
-    else if(LLamaSharpOption.RunType.ToUpper() == "GPU")
+    else if (LLamaSharpOption.RunType.ToUpper() == "GPU")
     {
         NativeLibraryConfig
         .Instance
@@ -130,7 +122,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 app.Run();
-void InitDB(WebApplication app) 
+void InitDB(WebApplication app)
 {
     using (var scope = app.Services.CreateScope())
     {

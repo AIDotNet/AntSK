@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AntSK.Domain.Model
+﻿namespace AntSK.Domain.Model
 {
     public class PageList<T>
     {

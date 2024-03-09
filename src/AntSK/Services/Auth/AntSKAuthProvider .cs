@@ -5,7 +5,6 @@ using AntSK.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Security.Claims;
-using System.Security.Principal;
 
 namespace AntSK.Services.Auth
 {
@@ -30,7 +29,7 @@ namespace AntSK.Services.Auth
                 NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
                 return true;
             }
-            else  
+            else
             {
                 if (user.IsNull())
                 {
@@ -49,7 +48,7 @@ namespace AntSK.Services.Auth
             }
         }
 
-        public  ClaimsPrincipal GetCurrentUser()
+        public ClaimsPrincipal GetCurrentUser()
         {
             //var userSessionStorageResult =await  _protectedSessionStore.GetAsync<UserSession>("UserSession");
             //var userSession = userSessionStorageResult.Success ? userSessionStorageResult.Value : null;

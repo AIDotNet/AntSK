@@ -1,6 +1,5 @@
-using System;
-using System.Text.Json.Serialization;
 using AntSK.Domain.Utils;
+using System.Text.Json.Serialization;
 
 namespace AntSK.Models
 {

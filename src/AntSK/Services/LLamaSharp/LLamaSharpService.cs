@@ -1,19 +1,8 @@
-﻿using AntDesign;
-using AntSK.Domain.Common.DependencyInjection;
-using AntSK.Domain.Domain.Service;
-using AntSK.Domain.Options;
+﻿using AntSK.Domain.Common.DependencyInjection;
+using AntSK.Domain.Domain.Dto;
 using AntSK.Domain.Utils;
-using AntSK.Models;
-using AntSK.Models.OpenAPI;
-using AntSK.Services.OpenApi;
-using Azure;
-using DocumentFormat.OpenXml.EMMA;
-using LLama;
-using LLama.Common;
 using Newtonsoft.Json;
 using System.Text;
-using System.Threading;
-using static Azure.Core.HttpHeader;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 
 namespace AntSK.Services.LLamaSharp
@@ -32,7 +21,7 @@ namespace AntSK.Services.LLamaSharp
         ILLamaChatService _lLamaChatService
         ) : ILLamaSharpService
     {
-   
+
         public async Task ChatStream(OpenAIModel model, HttpContext HttpContext)
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
@@ -60,7 +49,7 @@ namespace AntSK.Services.LLamaSharp
             result.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             result.choices = new List<ChoicesModel>() { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
 
-            result.choices[0].message.content =await _lLamaChatService.ChatAsync(questions); ;
+            result.choices[0].message.content = await _lLamaChatService.ChatAsync(questions); ;
             HttpContext.Response.ContentType = "application/json";
             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
             await HttpContext.Response.CompleteAsync();

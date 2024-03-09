@@ -1,8 +1,6 @@
 ﻿using AntDesign;
-using Microsoft.AspNetCore.Components;
 using AntSK.Domain.Repositories;
-using AntSK.Models;
-using System.IO;
+using Microsoft.AspNetCore.Components;
 using System.Text.RegularExpressions;
 
 namespace AntSK.Pages.ApiPage
@@ -20,7 +18,7 @@ namespace AntSK.Pages.ApiPage
         [Inject]
         protected MessageService? Message { get; set; }
 
-        private Apis _apiModel = new Apis() ;
+        private Apis _apiModel = new Apis();
 
 
         protected override async Task OnInitializedAsync()
@@ -38,7 +36,7 @@ namespace AntSK.Pages.ApiPage
             {
                 //新增
                 _apiModel.Id = Guid.NewGuid().ToString();
-               
+
                 if (_apis_Repositories.IsAny(p => p.Name == _apiModel.Name))
                 {
                     _ = Message.Error("名称已存在！", 2);
@@ -54,7 +52,8 @@ namespace AntSK.Pages.ApiPage
 
                 _apis_Repositories.Insert(_apiModel);
             }
-            else {
+            else
+            {
                 //修改
 
                 _apis_Repositories.Update(_apiModel);
@@ -64,7 +63,8 @@ namespace AntSK.Pages.ApiPage
         }
 
 
-        private void Back() {
+        private void Back()
+        {
             NavigationManager.NavigateTo("/plugins/apilist");
         }
     }

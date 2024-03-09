@@ -1,21 +1,16 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
-using AntSK.Domain.Domain.Interface;
-using Microsoft.KernelMemory;
-using AntSK.Domain.Utils;
 using AntSK.Domain.Domain.Dto;
-using AntSK.Domain.Options;
+using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Repositories;
+using AntSK.Domain.Utils;
+using LLama;
+using LLamaSharp.KernelMemory;
+using Microsoft.Extensions.Configuration;
+using Microsoft.KernelMemory;
+using Microsoft.KernelMemory.Configuration;
 using Microsoft.KernelMemory.ContentStorage.DevTools;
 using Microsoft.KernelMemory.FileSystem.DevTools;
 using Microsoft.KernelMemory.Postgres;
-using System.Net.Http;
-using Microsoft.Extensions.Options;
-using Microsoft.KernelMemory.Configuration;
-using Microsoft.Extensions.Configuration;
-using AntSK.Domain.Repositories;
-using LLamaSharp.KernelMemory;
-using LLama.Common;
-using DocumentFormat.OpenXml.Spreadsheet;
-using LLama;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -60,7 +55,7 @@ namespace AntSK.Domain.Domain.Service
             //加载huihu 模型
             WithTextGenerationByAIType(memory, chatModel, chatHttpClient);
             //加载向量模型
-            WithTextEmbeddingGenerationByAIType(memory,embedModel, embeddingHttpClient);
+            WithTextEmbeddingGenerationByAIType(memory, embedModel, embeddingHttpClient);
             //加载向量库
             WithMemoryDbByVectorDB(memory, _config);
 
@@ -69,7 +64,7 @@ namespace AntSK.Domain.Domain.Service
 
         }
 
-        private void WithTextEmbeddingGenerationByAIType(IKernelMemoryBuilder memory,AIModels embedModel, HttpClient embeddingHttpClient )
+        private void WithTextEmbeddingGenerationByAIType(IKernelMemoryBuilder memory, AIModels embedModel, HttpClient embeddingHttpClient)
         {
             switch (embedModel.AIType)
             {
@@ -98,7 +93,7 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        private void WithTextGenerationByAIType(IKernelMemoryBuilder memory,AIModels chatModel, HttpClient chatHttpClient )
+        private void WithTextGenerationByAIType(IKernelMemoryBuilder memory, AIModels chatModel, HttpClient chatHttpClient)
         {
             switch (chatModel.AIType)
             {
@@ -106,7 +101,7 @@ namespace AntSK.Domain.Domain.Service
                     memory.WithOpenAITextGeneration(new OpenAIConfig()
                     {
                         APIKey = chatModel.ModelKey,
-                        TextModel = chatModel.ModelName                 
+                        TextModel = chatModel.ModelName
                     }, null, chatHttpClient);
                     break;
                 case Model.Enum.AIType.AzureOpenAI:
@@ -128,7 +123,7 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        private void WithMemoryDbByVectorDB(IKernelMemoryBuilder memory,IConfiguration _config)
+        private void WithMemoryDbByVectorDB(IKernelMemoryBuilder memory, IConfiguration _config)
         {
             string VectorDb = _config["KernelMemory:VectorDb"].ConvertToString();
             string ConnectionString = _config["KernelMemory:ConnectionString"].ConvertToString();
@@ -157,7 +152,7 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        public async Task<List<KMFile>> GetDocumentByFileID(string kmsid,string fileid)
+        public async Task<List<KMFile>> GetDocumentByFileID(string kmsid, string fileid)
         {
             var _memory = GetMemoryByKMS(kmsid);
             var memories = await _memory.ListIndexesAsync();
@@ -187,6 +182,6 @@ namespace AntSK.Domain.Domain.Service
             return docTextList;
         }
 
-       
+
     }
 }

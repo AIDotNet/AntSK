@@ -1,9 +1,7 @@
 ﻿using AntDesign;
-using Microsoft.AspNetCore.Components;
-using AntSK.Domain.Repositories;
-using AntSK.Models;
-using System.IO;
 using AntSK.Domain.Model.Enum;
+using AntSK.Domain.Repositories;
+using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.AppPage
 {
@@ -27,9 +25,9 @@ namespace AntSK.Pages.AppPage
         [Inject]
         protected IAIModels_Repositories _aimodels_Repositories { get; set; }
 
-        private Apps _appModel = new Apps() ;
+        private Apps _appModel = new Apps();
 
-        IEnumerable <string>  kmsIds;
+        IEnumerable<string> kmsIds;
 
         private List<Kmss> _kmsList = new List<Kmss>();
 
@@ -43,16 +41,16 @@ namespace AntSK.Pages.AppPage
         {
             await base.OnInitializedAsync();
             _kmsList = _kmss_Repositories.GetList();
-            _apiList= _apis_Repositories.GetList();
+            _apiList = _apis_Repositories.GetList();
 
-            _chatList= _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Chat);
+            _chatList = _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Chat);
 
             if (!string.IsNullOrEmpty(AppId))
             {
                 //查看
-                _appModel= _apps_Repositories.GetFirst(p => p.Id == AppId);
+                _appModel = _apps_Repositories.GetFirst(p => p.Id == AppId);
                 kmsIds = _appModel.KmsIdList?.Split(",");
-                apiIds= _appModel.ApiFunctionList?.Split(",");
+                apiIds = _appModel.ApiFunctionList?.Split(",");
             }
 
 
@@ -80,27 +78,29 @@ namespace AntSK.Pages.AppPage
                 //新增
                 _appModel.Id = Guid.NewGuid().ToString();
                 //秘钥
-                _appModel.SecretKey="sk-"+ Guid.NewGuid().ToString();
+                _appModel.SecretKey = "sk-" + Guid.NewGuid().ToString();
                 if (_apps_Repositories.IsAny(p => p.Name == _appModel.Name))
                 {
                     _ = Message.Error("名称已存在！", 2);
                     return;
                 }
 
-              
+
                 _apps_Repositories.Insert(_appModel);
             }
-            else {
+            else
+            {
                 //修改  
                 _apps_Repositories.Update(_appModel);
             }
-          
+
             //NavigationManager.NavigateTo($"/app/detail/{_appModel.Id}");
             NavigationManager.NavigateTo($"/applist");
         }
 
 
-        private void Back() {
+        private void Back()
+        {
             NavigationManager.NavigateTo("/applist");
         }
     }

@@ -3,13 +3,6 @@ using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
 using Microsoft.KernelMemory;
-using Microsoft.KernelMemory.Configuration;
-using Microsoft.SemanticKernel.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -34,12 +27,12 @@ namespace AntSK.Domain.Domain.Service
                     case ImportType.File:
                         //导入文件
                         {
-                           var importResult=  _memory.ImportDocumentAsync(new Document(fileid)
-                         .AddFile(req.FilePath)
-                         .AddTag("kmsid", req.KmsId)
-                         , index: "kms").Result;
+                            var importResult = _memory.ImportDocumentAsync(new Document(fileid)
+                          .AddFile(req.FilePath)
+                          .AddTag("kmsid", req.KmsId)
+                          , index: "kms").Result;
                             //查询文档数量
-                            var docTextList =  _kMService.GetDocumentByFileID(km.Id,fileid).Result;
+                            var docTextList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
                             string fileGuidName = Path.GetFileName(req.FilePath);
                             req.KmsDetail.FileName = req.FileName;
                             req.KmsDetail.FileGuidName = fileGuidName;
@@ -53,7 +46,7 @@ namespace AntSK.Domain.Domain.Service
                             var importResult = _memory.ImportWebPageAsync(req.Url, fileid, new TagCollection() { { "kmsid", req.KmsId } }
                                  , index: "kms").Result;
                             //查询文档数量
-                            var docTextList = _kMService.GetDocumentByFileID(km.Id,fileid).Result;
+                            var docTextList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
                             req.KmsDetail.Url = req.Url;
                             req.KmsDetail.DataCount = docTextList.Count;
                         }
@@ -64,7 +57,7 @@ namespace AntSK.Domain.Domain.Service
                             var importResult = _memory.ImportTextAsync(req.Text, fileid, new TagCollection() { { "kmsid", req.KmsId } }
                        , index: "kms").Result;
                             //查询文档数量
-                            var docTextList =  _kMService.GetDocumentByFileID(km.Id,fileid).Result;
+                            var docTextList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
                             req.KmsDetail.Url = req.Url;
                             req.KmsDetail.DataCount = docTextList.Count;
 
@@ -72,14 +65,14 @@ namespace AntSK.Domain.Domain.Service
                         break;
                 }
                 req.KmsDetail.Status = Model.Enum.ImportKmsStatus.Success;
-                 _kmsDetails_Repositories.Update(req.KmsDetail);
-                 //_kmsDetails_Repositories.GetList(p => p.KmsId == req.KmsId);
+                _kmsDetails_Repositories.Update(req.KmsDetail);
+                //_kmsDetails_Repositories.GetList(p => p.KmsId == req.KmsId);
                 Console.WriteLine("后台导入任务成功:" + req.KmsDetail.DataCount);
             }
             catch (Exception ex)
             {
                 req.KmsDetail.Status = Model.Enum.ImportKmsStatus.Fail;
-               _kmsDetails_Repositories.Update(req.KmsDetail);
+                _kmsDetails_Repositories.Update(req.KmsDetail);
                 Console.WriteLine("后台导入任务异常:" + ex.Message);
             }
         }

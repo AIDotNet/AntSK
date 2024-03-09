@@ -1,15 +1,12 @@
 ﻿using AntDesign;
 using AntDesign.ProLayout;
-using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AntSK.Domain.Options;
 using AntSK.Models;
 using AntSK.Services;
+using AntSK.Services.Auth;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
-using AntSK.Services.Auth;
-using AntSK.Domain.Options;
 
 namespace AntSK.Components
 {
@@ -56,7 +53,7 @@ namespace AntSK.Components
         [Inject] public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
         [Inject] protected MessageService? Message { get; set; }
 
-        private ClaimsPrincipal context  => ((AntSKAuthProvider)AuthenticationStateProvider).GetCurrentUser();
+        private ClaimsPrincipal context => ((AntSKAuthProvider)AuthenticationStateProvider).GetCurrentUser();
 
         protected override async Task OnInitializedAsync()
         {
@@ -86,7 +83,7 @@ namespace AntSK.Components
                     {
                         NavigationManager.NavigateTo("/setting/user/info/" + context.Identity.Name);
                     }
-                    else 
+                    else
                     {
                         _ = Message.Info("管理员无需设置", 2);
                     }

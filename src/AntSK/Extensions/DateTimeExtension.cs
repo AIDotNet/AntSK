@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AntSK
+﻿namespace AntSK
 {
     public static class DateTimeExtension
     {

@@ -1,7 +1,3 @@
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
 using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Models;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;

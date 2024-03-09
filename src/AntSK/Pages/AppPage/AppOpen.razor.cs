@@ -1,9 +1,7 @@
 ﻿using AntDesign;
-using AntSK.Domain.Model;
+using AntSK.Domain.Domain.Dto;
 using AntSK.Domain.Repositories;
 using AntSK.Models;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 
@@ -53,7 +51,7 @@ namespace AntSK.Pages.AppPage
             await base.OnInitializedAsync();
             _appModel = _apps_Repositories.GetFirst(p => p.Id == AppId);
             _openApiUrl = NavigationManager.BaseUri + "api/v1/chat/completions";
-            _openChatUrl= NavigationManager.BaseUri + "openchat/"+AppId;
+            _openChatUrl = NavigationManager.BaseUri + "openchat/" + AppId;
             GetDesc();
             GetScript();
         }
@@ -63,7 +61,7 @@ namespace AntSK.Pages.AppPage
             _desc = @$"为了方便其他应用对接，接口符合openai规范，省略了温度TopP等参数。{Environment.NewLine}BaseUrl:{Environment.NewLine}{_openApiUrl} {Environment.NewLine}headers:{Environment.NewLine}Authorization: ""{_appModel.SecretKey}"" {Environment.NewLine}Body:  {Environment.NewLine}{JsonConvert.SerializeObject(new OpenAIModel() { messages = new List<OpenAIMessage>() { new OpenAIMessage() { role = "user", content = "你好，你是谁" } } }, Formatting.Indented)}";
         }
 
-        private void GetScript() 
+        private void GetScript()
         {
             _script = $"<script src=\"{NavigationManager.BaseUri}js/iframe.js\" data-width=\"40rem\" data-height=\"80vh\" id=\"antsk-iframe\" data-src=\"{NavigationManager.BaseUri}openchat/{AppId}\" data-color=\"#4e83fd\" data-message-icon-url=\"{NavigationManager.BaseUri}assets/ai.png\"></script>";
         }

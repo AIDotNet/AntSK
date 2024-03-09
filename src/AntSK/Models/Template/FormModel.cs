@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AntSK.Models
+﻿namespace AntSK.Models
 {
     public class StepFormModel
     {

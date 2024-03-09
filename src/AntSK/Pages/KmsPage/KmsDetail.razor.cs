@@ -1,23 +1,13 @@
 ﻿using AntDesign;
 using AntSK.BackgroundTask;
-using AntSK.Domain.Domain.Dto;
 using AntSK.Domain.Domain.Interface;
-using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
-using AntSK.Domain.Utils;
-using AntSK.Models;
-using AntSK.Services;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.KernelMemory;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Security.Claims;
-using System.Security.Policy;
 
 namespace AntSK.Pages.KmsPage
 {
@@ -54,7 +44,7 @@ namespace AntSK.Pages.KmsPage
             {"success", ProgressStatus.Success}
         };
 
-        private List<KmsDetails> _data =new List<KmsDetails>();
+        private List<KmsDetails> _data = new List<KmsDetails>();
 
         [Inject]
         protected IConfirmService _confirmService { get; set; }
@@ -62,7 +52,7 @@ namespace AntSK.Pages.KmsPage
         protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
 
         [Inject]
-        protected  IKmss_Repositories _kmss_Repositories { get; set; }
+        protected IKmss_Repositories _kmss_Repositories { get; set; }
 
         private MemoryServerless _memory { get; set; }
         [Inject]
@@ -78,14 +68,14 @@ namespace AntSK.Pages.KmsPage
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            _data =await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
+            _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
             var km = _kmss_Repositories.GetFirst(p => p.Id == KmsId);
             //使用知识库设置的参数，
             _memory = iKMService.GetMemoryByKMS(km.Id);
         }
 
         //刷新
-        private async  Task Refresh() 
+        private async Task Refresh()
         {
             _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
         }
@@ -105,7 +95,7 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
-                var result= await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
+                var result = await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
                 {
                     ImportType = ImportType.Url,
                     KmsId = KmsId,
@@ -117,7 +107,7 @@ namespace AntSK.Pages.KmsPage
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine(ex.Message+" ---- "+ex.StackTrace);
+                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
             }
         }
         private void UrlHandleCancel(MouseEventArgs e)
@@ -141,7 +131,7 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
-                var result =await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
+                var result = await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
                 {
                     ImportType = ImportType.Text,
                     KmsId = KmsId,
@@ -215,17 +205,17 @@ namespace AntSK.Pages.KmsPage
                 "text/x-markdown",
                 "text/markdown"
             };
-            var IsType = types.Contains( file.Type );
-            if (!IsType&& file.Ext != ".md")
+            var IsType = types.Contains(file.Type);
+            if (!IsType && file.Ext != ".md")
             {
                 _message.Error("文件格式错误,请重新选择!");
             }
-            var IsLt500K = file.Size < 1024 *1024* 100;
+            var IsLt500K = file.Size < 1024 * 1024 * 100;
             if (!IsLt500K)
             {
                 _message.Error("文件需不大于100MB!");
             }
-          
+
             return IsType && IsLt500K;
         }
         private void OnSingleCompleted(UploadInfo fileinfo)
@@ -233,8 +223,8 @@ namespace AntSK.Pages.KmsPage
 
             if (fileinfo.File.State == UploadState.Success)
             {
-                filePath=fileinfo.File.Url = fileinfo.File.Response;
-                fileName= fileinfo.File.FileName;
+                filePath = fileinfo.File.Url = fileinfo.File.Response;
+                fileName = fileinfo.File.FileName;
             }
         }
 
@@ -244,7 +234,7 @@ namespace AntSK.Pages.KmsPage
         }
 
         private async Task DeleteFile(string fileid)
-        {   
+        {
             try
             {
                 var content = "是否确认删除此文档?";

@@ -3,22 +3,12 @@ using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using Azure.AI.OpenAI;
-using Azure.Core;
-using DocumentFormat.OpenXml.EMMA;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
 using MarkdownSharp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.KernelMemory;
-using Microsoft.OpenApi.Models;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
-using Newtonsoft.Json;
 using RestSharp;
-using SqlSugar;
-using System;
 using System.Text;
 
 namespace AntSK.Pages.ChatPage
@@ -95,7 +85,7 @@ namespace AntSK.Pages.ChatPage
             {
                 Sendding = false;
                 Console.WriteLine("异常:" + ex.Message);
-                _ = Message.Error("异常:"+ex.Message, 2);
+                _ = Message.Error("异常:" + ex.Message, 2);
             }
         }
         protected async Task OnCopyAsync(MessageInfo item)
@@ -106,7 +96,8 @@ namespace AntSK.Pages.ChatPage
             });
         }
 
-        protected async Task OnClearAsync() {
+        protected async Task OnClearAsync()
+        {
             if (MessageList.Count > 0)
             {
                 var content = "是否要清理会话记录";
@@ -130,7 +121,7 @@ namespace AntSK.Pages.ChatPage
             Apps app = _apps_Repositories.GetFirst(p => p.Id == AppId);
             if (MessageList.Count > 0)
             {
-                msg = await HistorySummarize(app,questions);
+                msg = await HistorySummarize(app, questions);
             }
 
             switch (app.Type)
@@ -167,7 +158,7 @@ namespace AntSK.Pages.ChatPage
             {
                 filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
             }
-            var  xlresult = await _memory.SearchAsync(questions, index: "kms", filters: filters);
+            var xlresult = await _memory.SearchAsync(questions, index: "kms", filters: filters);
             string dataMsg = "";
             if (xlresult != null)
             {
@@ -175,7 +166,7 @@ namespace AntSK.Pages.ChatPage
                 {
                     foreach (var part in item.Partitions)
                     {
-                        dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance*100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
+                        dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
                         //输出调试信息
                         var markdown = new Markdown();
                         string sourceName = item.SourceName;
@@ -187,10 +178,10 @@ namespace AntSK.Pages.ChatPage
                         RelevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = markdown.Transform(part.Text), Relevance = part.Relevance });
                     }
                 }
-              
+
                 KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
-                var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun, 
-                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = msg, ["questions"]=questions });
+                var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
+                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = msg, ["questions"] = questions });
 
                 MessageInfo info = null;
                 var markdown1 = new Markdown();
@@ -233,19 +224,19 @@ namespace AntSK.Pages.ChatPage
         private async Task SendChat(string questions, string msg, Apps app)
         {
             var _kernel = _kernelService.GetKernelByApp(app);
-            if (string.IsNullOrEmpty(app.Prompt)||!app.Prompt.Contains("{{$input}}"))
+            if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
             {
                 //如果模板为空，给默认提示词
-                app.Prompt = app.Prompt.ConvertToString()+"{{$input}}";
+                app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
             }
-            var temperature = app.Temperature/100;//存的是0~100需要缩小
-            OpenAIPromptExecutionSettings settings = new() {Temperature= temperature };
+            var temperature = app.Temperature / 100;//存的是0~100需要缩小
+            OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
             {
                 _kernelService.ImportFunctionsByApp(app, _kernel);
                 settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
             }
-            
+
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
             var chatResult = _kernel.InvokeStreamingAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
             MessageInfo info = null;
@@ -265,7 +256,7 @@ namespace AntSK.Pages.ChatPage
                 else
                 {
                     info.HtmlAnswers += content.ConvertToString();
-                    await Task.Delay(50); 
+                    await Task.Delay(50);
                 }
                 await InvokeAsync(StateHasChanged);
             }
@@ -274,18 +265,18 @@ namespace AntSK.Pages.ChatPage
             {
                 info!.HtmlAnswers = markdown.Transform(info.HtmlAnswers);
             }
-     
+
             await InvokeAsync(StateHasChanged);
         }
 
-       
+
 
         /// <summary>
         /// 历史会话的会话总结
         /// </summary>
         /// <param name="questions"></param>
         /// <returns></returns>
-        private async Task<string> HistorySummarize(Apps app,string questions)
+        private async Task<string> HistorySummarize(Apps app, string questions)
         {
             var _kernel = _kernelService.GetKernelByApp(app);
             if (MessageList.Count > 1)
@@ -308,13 +299,13 @@ namespace AntSK.Pages.ChatPage
                     var msg = await _kernelService.HistorySummarize(_kernel, questions, history.ToString());
                     return msg;
                 }
-                else 
+                else
                 {
                     var msg = $"history：{history.ToString()}{Environment.NewLine} user：{questions}"; ;
                     return msg;
-                }          
+                }
             }
-            else 
+            else
             {
                 return questions;
             }

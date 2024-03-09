@@ -1,10 +1,6 @@
-﻿using AntSK.Domain.Model;
-using AntSK.Domain.Repositories;
+﻿using AntSK.Domain.Domain.Dto;
 using AntSK.Domain.Utils;
-using AntSK.Models;
-using AntSK.Models.OpenAPI;
 using AntSK.Services.OpenApi;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AntSK.Controllers
@@ -25,7 +21,7 @@ namespace AntSK.Controllers
         public async Task chat(OpenAIModel model)
         {
             string sk = HttpContext.Request.Headers["Authorization"].ConvertToString();
-            await _openApiService.Chat(model,sk, HttpContext);
+            await _openApiService.Chat(model, sk, HttpContext);
         }
     }
 }

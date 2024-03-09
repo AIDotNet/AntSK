@@ -1,7 +1,4 @@
-﻿using AntDesign;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Net.NetworkInformation;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace AntSK.Controllers
 {
@@ -32,10 +29,10 @@ namespace AntSK.Controllers
             }
 
             string extension = Path.GetExtension(file.FileName);
-            string fileid=Guid.NewGuid().ToString();
+            string fileid = Guid.NewGuid().ToString();
             // 组合目标路径
-            var uploads = Path.Combine(uploadsFolderPath, fileid+extension);
-       
+            var uploads = Path.Combine(uploadsFolderPath, fileid + extension);
+
             // 保存文件至目标路径
             using var fileStream = System.IO.File.Create(uploads);
             using var uploadStream = file.OpenReadStream();

@@ -1,11 +1,6 @@
-﻿using LLama.Common;
-using LLama;
+﻿using LLama;
+using LLama.Common;
 using LLamaSharp.KernelMemory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -16,7 +11,7 @@ namespace AntSK.Domain.Domain.Service
         /// 避免模型重复加载，本地缓存
         /// </summary>
         static Dictionary<string, (LLamaWeights, ModelParams)> dicLLamaWeights = new Dictionary<string, (LLamaWeights, ModelParams)>();
-        public static (LLamaWeights, ModelParams) GetLLamaConfig(string modelPath, LLamaSharpConfig config =null)
+        public static (LLamaWeights, ModelParams) GetLLamaConfig(string modelPath, LLamaSharpConfig config = null)
         {
             lock (lockobj)
             {
@@ -28,7 +23,7 @@ namespace AntSK.Domain.Domain.Service
                 {
                     InferenceParams infParams = new() { AntiPrompts = ["\n\n"] };
                     LLamaSharpConfig lsConfig = new(modelPath) { DefaultInferenceParams = infParams };
-                    if (config!=null)
+                    if (config != null)
                     {
                         lsConfig = config;
                     }
@@ -43,7 +38,7 @@ namespace AntSK.Domain.Domain.Service
                     dicLLamaWeights.Add(modelPath, (weights, parameters));
                     return (weights, parameters);
                 }
-            }       
+            }
         }
     }
 }

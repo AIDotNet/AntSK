@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System.Text.Json.Serialization;
 
-namespace AntSK.Models.OpenAPI
+namespace AntSK.Domain.Domain.Dto
 {
     public class OpenAIResult
     {
@@ -21,7 +20,7 @@ namespace AntSK.Models.OpenAPI
         public OpenAIMessage message { get; set; }
     }
 
-    public class OpenAIEmbeddingResult 
+    public class OpenAIEmbeddingResult
     {
         [JsonProperty("object")]
         public string obj { get; set; } = "list";
@@ -29,17 +28,17 @@ namespace AntSK.Models.OpenAPI
 
         public UsageModel usage { get; set; } = new UsageModel();
 
-        public  List<DataModel> data { get; set; } = new List<DataModel>() { new DataModel() };
+        public List<DataModel> data { get; set; } = new List<DataModel>() { new DataModel() };
     }
 
-    public class UsageModel 
+    public class UsageModel
     {
         public long prompt_tokens { get; set; } = 0;
 
         public long total_tokens { get; set; } = 0;
     }
 
-    public class DataModel 
+    public class DataModel
     {
         [JsonProperty("object")]
         public string obj { get; set; } = "embedding";

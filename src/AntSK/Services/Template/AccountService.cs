@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using AntSK.Domain.Common.DependencyInjection;
-using AntSK.Domain.Repositories;
+﻿using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Models;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 

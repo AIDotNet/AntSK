@@ -1,16 +1,14 @@
 ﻿using AntDesign;
-using Microsoft.AspNetCore.Components;
 using AntSK.Domain.Repositories;
-using AntSK.Models;
-using AntSK.Services;
+using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.AppPage
 {
     public partial class AppList
     {
-        private Apps [] _data = { };
+        private Apps[] _data = { };
 
-        [Inject] 
+        [Inject]
         protected IApps_Repositories _apps_Repositories { get; set; }
         [Inject]
         IConfirmService _confirmService { get; set; }
@@ -33,7 +31,7 @@ namespace AntSK.Pages.AppPage
             {
                 data = await _apps_Repositories.GetListAsync(p => p.Name.Contains(searchKey));
             }
-          
+
             list.AddRange(data);
             _data = list.ToArray();
             await InvokeAsync(StateHasChanged);
@@ -68,7 +66,7 @@ namespace AntSK.Pages.AppPage
             if (result == ConfirmResult.Yes)
             {
                 await _apps_Repositories.DeleteAsync(id);
-                await InitData("");       
+                await InitData("");
             }
         }
     }

@@ -1,40 +1,28 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Model;
-using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using DocumentFormat.OpenXml.EMMA;
 using LLama;
-using LLamaSharp.KernelMemory;
-using LLamaSharp.SemanticKernel.ChatCompletion;
 using LLamaSharp.SemanticKernel.TextCompletion;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Plugins.Core;
 using Microsoft.SemanticKernel.TextGeneration;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 
 namespace AntSK.Domain.Domain.Service
 {
     [ServiceDescription(typeof(IKernelService), ServiceLifetime.Scoped)]
-    public class KernelService: IKernelService
+    public class KernelService : IKernelService
     {
         private readonly IApis_Repositories _apis_Repositories;
         private readonly IAIModels_Repositories _aIModels_Repositories;
         public KernelService(
               IApis_Repositories apis_Repositories,
         IAIModels_Repositories aIModels_Repositories
-            ) 
+            )
         {
             _apis_Repositories = apis_Repositories;
             _aIModels_Repositories = aIModels_Repositories;
@@ -48,15 +36,15 @@ namespace AntSK.Domain.Domain.Service
         /// <returns></returns>
         public Kernel GetKernelByApp(Apps app)
         {
-            var chatModel= _aIModels_Repositories.GetFirst(p => p.Id == app.ChatModelID);
+            var chatModel = _aIModels_Repositories.GetFirst(p => p.Id == app.ChatModelID);
 
             var chatHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
 
             var builder = Kernel.CreateBuilder();
             WithTextGenerationByAIType(builder, chatModel, chatHttpClient);
 
- 
-            var kernel= builder.Build();
+
+            var kernel = builder.Build();
             RegisterPluginsWithKernel(kernel);
             return kernel;
         }
@@ -73,7 +61,7 @@ namespace AntSK.Domain.Domain.Service
                     break;
                 case Model.Enum.AIType.AzureOpenAI:
                     builder.AddAzureOpenAIChatCompletion(
-                        deploymentName:chatModel.ModelName,
+                        deploymentName: chatModel.ModelName,
                         apiKey: chatModel.ModelKey,
                         endpoint: chatModel.EndPoint
                         );
@@ -189,7 +177,7 @@ namespace AntSK.Domain.Domain.Service
         /// <param name="questions"></param>
         /// <param name="history"></param>
         /// <returns></returns>
-        public async Task<string> HistorySummarize(Kernel _kernel,string questions, string history)
+        public async Task<string> HistorySummarize(Kernel _kernel, string questions, string history)
         {
             KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
             var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });

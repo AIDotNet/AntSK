@@ -1,10 +1,7 @@
 ﻿using AntDesign;
-using Microsoft.AspNetCore.Components;
-using AntSK.Domain.Repositories;
-using AntSK.Models;
-using System.IO;
 using AntSK.Domain.Model.Enum;
-using DocumentFormat.OpenXml.Wordprocessing;
+using AntSK.Domain.Repositories;
+using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.KmsPage
 {
@@ -31,12 +28,12 @@ namespace AntSK.Pages.KmsPage
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            _chatList = _aimodels_Repositories.GetList(p=>p.AIModelType==AIModelType.Chat);
+            _chatList = _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Chat);
             _embeddingList = _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Embedding);
             if (!string.IsNullOrEmpty(KmsId))
             {
                 //查看
-                _kmsModel =await _kmss_Repositories.GetFirstAsync(p => p.Id == KmsId);
+                _kmsModel = await _kmss_Repositories.GetFirstAsync(p => p.Id == KmsId);
             }
         }
         private void HandleSubmit()
@@ -60,7 +57,7 @@ namespace AntSK.Pages.KmsPage
                 {
                     _ = Message.Error("名称已存在！", 2);
                     return;
-                }             
+                }
                 _kmss_Repositories.Insert(_kmsModel);
             }
             else
@@ -71,5 +68,5 @@ namespace AntSK.Pages.KmsPage
             NavigationManager.NavigateTo("/kmslist");
 
         }
-    }    
+    }
 }

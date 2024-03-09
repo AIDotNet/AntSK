@@ -1,12 +1,8 @@
 ﻿using AntDesign;
 using AntDesign.ProLayout;
-using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Components;
-using System;
 
 namespace AntSK.Pages.Setting.AIModel
 {
@@ -28,7 +24,7 @@ namespace AntSK.Pages.Setting.AIModel
             await base.OnInitializedAsync();
             if (!string.IsNullOrEmpty(ModelId))
             {
-                _aiModel= _aimodels_Repositories.GetFirst(p => p.Id == ModelId);
+                _aiModel = _aimodels_Repositories.GetFirst(p => p.Id == ModelId);
             }
         }
 
@@ -54,7 +50,7 @@ namespace AntSK.Pages.Setting.AIModel
                 //新增
                 _aiModel.Id = Guid.NewGuid().ToString();
 
-                if (_aimodels_Repositories.IsAny(p => p.ModelDescription == _aiModel.ModelDescription ))
+                if (_aimodels_Repositories.IsAny(p => p.ModelDescription == _aiModel.ModelDescription))
                 {
                     _ = Message.Error("模型描述已存在！", 2);
                     return;
@@ -69,7 +65,7 @@ namespace AntSK.Pages.Setting.AIModel
             Back();
         }
 
-        private void Back() 
+        private void Back()
         {
             NavigationManager.NavigateTo("/setting/modellist");
         }

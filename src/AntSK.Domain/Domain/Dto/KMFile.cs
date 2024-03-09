@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AntSK.Domain.Domain.Dto
+﻿namespace AntSK.Domain.Domain.Dto
 {
     public class KMFile
     {

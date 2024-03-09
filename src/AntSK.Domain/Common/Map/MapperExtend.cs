@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AntSK.Domain.Common.Map
+﻿namespace AntSK.Domain.Common.Map
 {
     public static class MapperExtend
     {

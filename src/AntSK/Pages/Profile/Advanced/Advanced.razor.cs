@@ -1,9 +1,7 @@
 ﻿using AntDesign.ProLayout;
-using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AntSK.Models;
 using AntSK.Services;
+using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.Profile
 {

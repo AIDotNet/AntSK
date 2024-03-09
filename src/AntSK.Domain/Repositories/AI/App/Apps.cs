@@ -1,10 +1,5 @@
 ﻿using SqlSugar;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AntSK.Domain.Repositories
 {
@@ -47,7 +42,7 @@ namespace AntSK.Domain.Repositories
         /// 温度
         /// </summary>
         [SugarColumn(DefaultValue = "70")]
-        public double Temperature { get; set; }=70f;
+        public double Temperature { get; set; } = 70f;
 
         /// <summary>
         /// 提示词

@@ -3,8 +3,6 @@ using AntDesign.ProLayout;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.Setting.User
@@ -27,11 +25,11 @@ namespace AntSK.Pages.Setting.User
             await base.OnInitializedAsync();
             if (!string.IsNullOrEmpty(UserId))
             {
-                _userModel= _users_Repositories.GetFirst(p => p.Id == UserId);
-                _password= _userModel.Password;
+                _userModel = _users_Repositories.GetFirst(p => p.Id == UserId);
+                _password = _userModel.Password;
             }
-            menuList = (await HttpClient.GetFromJsonAsync<MenuDataItem[]>("data/menu.json")).ToList().Where(p=>p.Key!= "setting").ToList();
-            _menuKeys= _userModel.MenuRole?.Split(",");
+            menuList = (await HttpClient.GetFromJsonAsync<MenuDataItem[]>("data/menu.json")).ToList().Where(p => p.Key != "setting").ToList();
+            _menuKeys = _userModel.MenuRole?.Split(",");
         }
 
         private void HandleSubmit()
@@ -52,13 +50,13 @@ namespace AntSK.Pages.Setting.User
                     _ = Message.Error("工号已存在！", 2);
                     return;
                 }
-                _userModel.Password=PasswordUtil.HashPassword(_userModel.Password);
+                _userModel.Password = PasswordUtil.HashPassword(_userModel.Password);
                 _users_Repositories.Insert(_userModel);
             }
             else
             {
                 //修改
-                if (_userModel.Password!=_password)
+                if (_userModel.Password != _password)
                 {
                     _userModel.Password = PasswordUtil.HashPassword(_userModel.Password);
                 }
@@ -68,7 +66,7 @@ namespace AntSK.Pages.Setting.User
             Back();
         }
 
-        private void Back() 
+        private void Back()
         {
             NavigationManager.NavigateTo("/setting/userlist");
         }

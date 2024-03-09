@@ -1,9 +1,7 @@
 ﻿using AntDesign;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 
 namespace AntSK.Pages.Setting.User
 {
@@ -22,16 +20,16 @@ namespace AntSK.Pages.Setting.User
             await base.OnInitializedAsync();
             if (!string.IsNullOrEmpty(UserNo))
             {
-                _userModel= _users_Repositories.GetFirst(p => p.No == UserNo);
-                _password= _userModel.Password;
+                _userModel = _users_Repositories.GetFirst(p => p.No == UserNo);
+                _password = _userModel.Password;
             }
         }
 
         private async Task HandleSubmit()
         {
 
-                //修改
-            if (_userModel.Password!=_password)
+            //修改
+            if (_userModel.Password != _password)
             {
                 _userModel.Password = PasswordUtil.HashPassword(_userModel.Password);
             }
@@ -41,7 +39,7 @@ namespace AntSK.Pages.Setting.User
             _ = Message.Info("保存成功！", 2);
         }
 
-        private async Task Back() 
+        private async Task Back()
         {
             NavigationManager.NavigateTo("/");
         }

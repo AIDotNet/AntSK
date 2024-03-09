@@ -22,13 +22,13 @@
             </summary>
             <param name="_taskBroker"></param>
         </member>
-        <member name="M:AntSK.Controllers.LLamaSharpController.chat(AntSK.Models.OpenAIModel)">
+        <member name="M:AntSK.Controllers.LLamaSharpController.chat(AntSK.Domain.Domain.Dto.OpenAIModel)">
             <summary>
             本地会话接口
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AntSK.Controllers.LLamaSharpController.embedding(AntSK.Models.OpenAIEmbeddingModel)">
+        <member name="M:AntSK.Controllers.LLamaSharpController.embedding(AntSK.Domain.Domain.Dto.OpenAIEmbeddingModel)">
             <summary>
             本地嵌入接口
             </summary>
@@ -45,7 +45,7 @@
             对外接口
             </summary>
         </member>
-        <member name="M:AntSK.Controllers.OpenController.chat(AntSK.Models.OpenAIModel)">
+        <member name="M:AntSK.Controllers.OpenController.chat(AntSK.Domain.Domain.Dto.OpenAIModel)">
             <summary>
             对话接口
             </summary>
@@ -136,7 +136,7 @@
             <param name="app"></param>
             <returns></returns>
         </member>
-        <member name="M:AntSK.Services.OpenApi.OpenApiService.HistorySummarize(AntSK.Domain.Repositories.Apps,AntSK.Models.OpenAIModel)">
+        <member name="M:AntSK.Services.OpenApi.OpenApiService.HistorySummarize(AntSK.Domain.Repositories.Apps,AntSK.Domain.Domain.Dto.OpenAIModel)">
             <summary>
             历史会话的会话总结
             </summary>

@@ -1,13 +1,6 @@
-﻿using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AntSK.Domain.Options;
-using AntSK.Domain.Utils;
+﻿using AntSK.Domain.Options;
+using SqlSugar;
 using System.Reflection;
-using Microsoft.Extensions.Configuration;
 
 namespace AntSK.Domain.Repositories.Base
 {
@@ -17,7 +10,8 @@ namespace AntSK.Domain.Repositories.Base
         /// <summary>
         /// sqlserver连接
         /// </summary>
-        public static SqlSugarScope SqlScope() {
+        public static SqlSugarScope SqlScope()
+        {
 
             string DBType = DBConnectionOption.DbType;
             string ConnectionString = DBConnectionOption.ConnectionStrings;
@@ -43,12 +37,12 @@ namespace AntSK.Domain.Repositories.Base
                 }
             };
             DbType dbType = (DbType)Enum.Parse(typeof(DbType), DBType);
-            config.DbType = dbType;  
-            var scope= new SqlSugarScope(config, Db =>
+            config.DbType = dbType;
+            var scope = new SqlSugarScope(config, Db =>
             {
-               
+
             });
             return scope;
-        } 
+        }
     }
 }

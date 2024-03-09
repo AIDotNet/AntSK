@@ -1,24 +1,15 @@
 ﻿using AntDesign;
+using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using Azure.AI.OpenAI;
-using Azure.Core;
-using DocumentFormat.OpenXml.EMMA;
 using MarkdownSharp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.KernelMemory;
-using Microsoft.OpenApi.Models;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
-using Newtonsoft.Json;
 using SqlSugar;
-using System;
 using System.Text;
-using AntSK.Domain.Utils;
-using AntSK.Domain.Domain.Interface;
-using AntSK.Domain.Domain.Service;
 
 namespace AntSK.Pages.ChatPage
 {
@@ -26,7 +17,7 @@ namespace AntSK.Pages.ChatPage
     {
         [Parameter]
         public string AppId { get; set; }
-        [Inject] 
+        [Inject]
         protected MessageService? Message { get; set; }
         [Inject]
         protected IApps_Repositories _apps_Repositories { get; set; }
@@ -52,7 +43,7 @@ namespace AntSK.Pages.ChatPage
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            app = _apps_Repositories.GetFirst(p=>p.Id==AppId);
+            app = _apps_Repositories.GetFirst(p => p.Id == AppId);
         }
 
         protected async Task OnClearAsync()
@@ -101,7 +92,7 @@ namespace AntSK.Pages.ChatPage
             {
                 Sendding = false;
                 Console.WriteLine("异常:" + ex.Message);
-                _ = Message.Error("异常:"+ex.Message, 2);
+                _ = Message.Error("异常:" + ex.Message, 2);
             }
 
         }
@@ -125,10 +116,10 @@ namespace AntSK.Pages.ChatPage
         {
             string msg = "";
             //处理多轮会话
-            Apps app=_apps_Repositories.GetFirst(p => p.Id == AppId);
+            Apps app = _apps_Repositories.GetFirst(p => p.Id == AppId);
             if (MessageList.Count > 0)
             {
-                msg = await HistorySummarize(app,questions);
+                msg = await HistorySummarize(app, questions);
             }
             switch (app.Type)
             {
@@ -221,7 +212,7 @@ namespace AntSK.Pages.ChatPage
         /// <returns></returns>
         private async Task SendChat(string questions, string msg, Apps app)
         {
-            var _kernel= _kernelService.GetKernelByApp(app);
+            var _kernel = _kernelService.GetKernelByApp(app);
             if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
             {
                 //如果模板为空，给默认提示词
@@ -246,7 +237,7 @@ namespace AntSK.Pages.ChatPage
                 {
                     info = new MessageInfo();
                     info.ID = Guid.NewGuid().ToString();
-                    info.Context = content.ConvertToString(); 
+                    info.Context = content.ConvertToString();
                     info.HtmlAnswers = content.ConvertToString();
                     info.CreateTime = DateTime.Now;
 
@@ -255,7 +246,7 @@ namespace AntSK.Pages.ChatPage
                 else
                 {
                     info.HtmlAnswers += content.ConvertToString();
-                    await Task.Delay(50); 
+                    await Task.Delay(50);
                 }
                 await InvokeAsync(StateHasChanged);
             }
@@ -269,7 +260,7 @@ namespace AntSK.Pages.ChatPage
         /// </summary>
         /// <param name="questions"></param>
         /// <returns></returns>
-        private async Task<string> HistorySummarize(Apps app,string questions)
+        private async Task<string> HistorySummarize(Apps app, string questions)
         {
             var _kernel = _kernelService.GetKernelByApp(app);
             if (MessageList.Count > 1)
@@ -298,7 +289,7 @@ namespace AntSK.Pages.ChatPage
                     return msg;
                 }
             }
-            else 
+            else
             {
                 return questions;
             }

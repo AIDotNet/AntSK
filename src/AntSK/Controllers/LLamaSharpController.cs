@@ -1,8 +1,6 @@
-﻿using AntSK.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using AntSK.Domain.Utils;
+﻿using AntSK.Domain.Domain.Dto;
 using AntSK.Services.LLamaSharp;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AntSK.Controllers
 {
@@ -39,7 +37,7 @@ namespace AntSK.Controllers
         public async Task embedding(OpenAIEmbeddingModel model)
         {
             Console.WriteLine("开始：llama/v1/embeddings");
-            await _lLamaSharpService.Embedding(model,HttpContext);
+            await _lLamaSharpService.Embedding(model, HttpContext);
             Console.WriteLine("结束：llama/v1/embeddings");
 
         }

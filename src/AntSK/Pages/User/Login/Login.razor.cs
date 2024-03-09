@@ -1,13 +1,7 @@
 ﻿using AntDesign;
-using Microsoft.AspNetCore.Components;
-using System.Threading.Tasks;
 using AntSK.Models;
-using AntSK.Services;
-using AntSK.Domain.Options;
-using SqlSugar;
 using AntSK.Services.Auth;
-using AntSK.Domain.Repositories;
-using AntSK.Domain.Utils;
+using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.User
 {
@@ -22,7 +16,7 @@ namespace AntSK.Pages.User
         public async Task HandleSubmit()
         {
             //判断是否管理员
-            var loginFailed = await((AntSKAuthProvider)AuthenticationStateProvider).SignIn(_model.UserName, _model.Password);
+            var loginFailed = await ((AntSKAuthProvider)AuthenticationStateProvider).SignIn(_model.UserName, _model.Password);
             if (loginFailed)
             {
                 NavigationManager.NavigateTo("/");
@@ -32,6 +26,6 @@ namespace AntSK.Pages.User
             {
                 Message.Error("账号密码错误", 2);
             }
-        }  
+        }
     }
 }

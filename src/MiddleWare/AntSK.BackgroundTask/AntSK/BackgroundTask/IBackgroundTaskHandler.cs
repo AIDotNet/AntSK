@@ -2,12 +2,12 @@ using System.Threading.Tasks;
 
 namespace AntSK.BackgroundTask
 {
-	public interface IBackgroundTaskHandler<TItem>
-	{
-		Task ExecuteAsync(TItem item);
+    public interface IBackgroundTaskHandler<TItem>
+    {
+        Task ExecuteAsync(TItem item);
 
-		Task OnSuccess();
+        Task OnSuccess();
 
-		Task OnFailed();
-	}
+        Task OnFailed();
+    }
 }

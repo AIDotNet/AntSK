@@ -1,11 +1,7 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Options;
-using AntSK.Models.OpenAPI;
-using AntSK.Models;
 using LLama;
 using LLama.Common;
-using Newtonsoft.Json;
-using static Azure.Core.HttpHeader;
 
 namespace AntSK.Services.LLamaSharp
 {

@@ -1,11 +1,4 @@
-﻿using AntSK.Domain.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace AntSK.Domain.Utils
 {
@@ -23,7 +16,7 @@ namespace AntSK.Domain.Utils
             Regex regex = new Regex(@"(https?)://([^/:]+)(:\d+)?/(.*)");
             Match match = regex.Match(_endPoint);
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" && request.Content != null)
-            {         
+            {
                 string requestBody = await request.Content.ReadAsStringAsync();
                 //便于调试查看请求prompt
                 Console.WriteLine(requestBody);
@@ -47,14 +40,14 @@ namespace AntSK.Domain.Utils
                         {
                             // 这里是你要修改的 URL
                             Scheme = $"{xieyi}://{hostnew}/",
-                            Host = host,                         
+                            Host = host,
                             Path = route + "v1/chat/completions",
                         };
                         if (port.ConvertToInt32() != 0)
                         {
                             uriBuilder.Port = port.ConvertToInt32();
                         }
-                      
+
                         request.RequestUri = uriBuilder.Uri;
 
                         break;
@@ -83,9 +76,9 @@ namespace AntSK.Domain.Utils
     }
 
 
-    public  class OpenAIHttpClientHandlerUtil
+    public class OpenAIHttpClientHandlerUtil
     {
-        public static HttpClient GetHttpClient( string endPoint)
+        public static HttpClient GetHttpClient(string endPoint)
         {
             var handler = new OpenAIHttpClientHandler(endPoint.ConvertToString());
             var httpClient = new HttpClient(handler);

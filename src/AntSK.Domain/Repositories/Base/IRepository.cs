@@ -1,11 +1,6 @@
-﻿using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AntSK.Domain.Model;
+using SqlSugar;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using AntSK.Domain.Model;
 
 namespace AntSK.Domain.Repositories.Base
 {

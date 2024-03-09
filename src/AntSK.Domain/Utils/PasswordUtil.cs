@@ -1,6 +1,4 @@
-﻿using BCrypt.Net;
-
-namespace AntSK.Domain.Utils
+﻿namespace AntSK.Domain.Utils
 {
     public class PasswordUtil
     {

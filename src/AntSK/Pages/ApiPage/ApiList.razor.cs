@@ -1,16 +1,14 @@
 ﻿using AntDesign;
-using Microsoft.AspNetCore.Components;
 using AntSK.Domain.Repositories;
-using AntSK.Models;
-using AntSK.Services;
+using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.ApiPage
 {
     public partial class ApiList
     {
-        private Apis [] _data = { };
+        private Apis[] _data = { };
 
-        [Inject] 
+        [Inject]
         protected IApis_Repositories _apis_Repositories { get; set; }
         [Inject]
         IConfirmService _confirmService { get; set; }
@@ -33,7 +31,7 @@ namespace AntSK.Pages.ApiPage
             {
                 data = await _apis_Repositories.GetListAsync(p => p.Name.Contains(searchKey));
             }
-          
+
             list.AddRange(data);
             _data = list.ToArray();
             await InvokeAsync(StateHasChanged);
@@ -62,7 +60,7 @@ namespace AntSK.Pages.ApiPage
             if (result == ConfirmResult.Yes)
             {
                 await _apis_Repositories.DeleteAsync(id);
-                await InitData("");       
+                await InitData("");
             }
         }
     }

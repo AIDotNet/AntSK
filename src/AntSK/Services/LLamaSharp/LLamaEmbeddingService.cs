@@ -1,10 +1,7 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Options;
-using AntSK.Models.OpenAPI;
-using AntSK.Models;
 using LLama;
 using LLama.Common;
-using Newtonsoft.Json;
 
 namespace AntSK.Services.LLamaSharp
 {
@@ -21,7 +18,8 @@ namespace AntSK.Services.LLamaSharp
     {
         private LLamaEmbedder _embedder;
 
-        public LLamaEmbeddingService() {
+        public LLamaEmbeddingService()
+        {
 
             var @params = new ModelParams(LLamaSharpOption.Embedding) { EmbeddingMode = true };
             using var weights = LLamaWeights.LoadFromFile(@params);
@@ -34,9 +32,9 @@ namespace AntSK.Services.LLamaSharp
 
         public async Task<List<float>> Embedding(string text)
         {
-            float[] embeddings =await _embedder.GetEmbeddings(text);
+            float[] embeddings = await _embedder.GetEmbeddings(text);
             //PG只有1536维
-            return embeddings.ToList(); 
+            return embeddings.ToList();
         }
     }
 }

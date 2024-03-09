@@ -1,10 +1,4 @@
 ﻿using AntSK.Domain.Repositories;
-using Microsoft.KernelMemory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AntSK.Domain.Model
 {
@@ -26,14 +20,15 @@ namespace AntSK.Domain.Model
     }
 
 
-    public class ImportKMSTaskReq: ImportKMSTaskDTO
+    public class ImportKMSTaskReq : ImportKMSTaskDTO
     {
         public KmsDetails KmsDetail { get; set; } = new KmsDetails();
     }
 
-    public enum ImportType { 
-        File=1,
-        Url=2,
-        Text=3
+    public enum ImportType
+    {
+        File = 1,
+        Url = 2,
+        Text = 3
     }
 }

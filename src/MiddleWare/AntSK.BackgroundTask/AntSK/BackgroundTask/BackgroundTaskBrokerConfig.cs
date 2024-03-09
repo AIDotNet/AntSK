@@ -1,7 +1,7 @@
 namespace AntSK.BackgroundTask
 {
-	public class BackgroundTaskBrokerConfig
-	{
-		public int WorkerCount { get; set; }
-	}
+    public class BackgroundTaskBrokerConfig
+    {
+        public int WorkerCount { get; set; }
+    }
 }
