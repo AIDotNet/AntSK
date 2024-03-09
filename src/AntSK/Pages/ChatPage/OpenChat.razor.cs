@@ -233,7 +233,7 @@ namespace AntSK.Pages.ChatPage
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
             {
                 _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions, Temperature = temperature };
+                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
             }
 
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);

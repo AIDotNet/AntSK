@@ -96,7 +96,7 @@ namespace AntSK.Services.OpenApi
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
             {
                 _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions, Temperature = temperature };
+                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
             }
 
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
@@ -152,7 +152,7 @@ namespace AntSK.Services.OpenApi
             if (!string.IsNullOrEmpty(app.ApiFunctionList))
             {
                 _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings = new() { ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions, Temperature = temperature };
+                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
             }
             var promptTemplateFactory = new KernelPromptTemplateFactory();
             var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
