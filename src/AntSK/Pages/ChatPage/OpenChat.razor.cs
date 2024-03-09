@@ -178,7 +178,7 @@ namespace AntSK.Pages.ChatPage
                     }
                 }
                 KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
-                var chatResult = _kernel.InvokeStreamingAsync<StreamingTextContent>(function: jsonFun,
+                var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
                     arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = msg, ["questions"] = questions });
 
                 MessageInfo info = null;
@@ -189,15 +189,15 @@ namespace AntSK.Pages.ChatPage
                     {
                         info = new MessageInfo();
                         info.ID = Guid.NewGuid().ToString();
-                        info.Context = content?.Text?.ConvertToString();
-                        info.HtmlAnswers = content?.Text?.ConvertToString();
+                        info.Context = content.ConvertToString();
+                        info.HtmlAnswers = content.ConvertToString();
                         info.CreateTime = DateTime.Now;
 
                         MessageList.Add(info);
                     }
                     else
                     {
-                        info.HtmlAnswers += content.Text;
+                        info.HtmlAnswers += content.ConvertToString();
                         await Task.Delay(50);
                     }
                     await InvokeAsync(StateHasChanged);
@@ -237,7 +237,7 @@ namespace AntSK.Pages.ChatPage
             }
 
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult = _kernel.InvokeStreamingAsync<StreamingTextContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
+            var chatResult = _kernel.InvokeStreamingAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
             MessageInfo info = null;
             var markdown = new Markdown();
             await foreach (var content in chatResult)
@@ -246,15 +246,15 @@ namespace AntSK.Pages.ChatPage
                 {
                     info = new MessageInfo();
                     info.ID = Guid.NewGuid().ToString();
-                    info.Context = content?.Text?.ConvertToString(); 
-                    info.HtmlAnswers = content?.Text?.ConvertToString();
+                    info.Context = content.ConvertToString(); 
+                    info.HtmlAnswers = content.ConvertToString();
                     info.CreateTime = DateTime.Now;
 
                     MessageList.Add(info);
                 }
                 else
                 {
-                    info.HtmlAnswers += content.Text;
+                    info.HtmlAnswers += content.ConvertToString();
                     await Task.Delay(50); 
                 }
                 await InvokeAsync(StateHasChanged);

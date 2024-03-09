@@ -85,7 +85,9 @@ namespace AntSK.Domain.Domain.Service
                     {
                         APIKey = embedModel.ModelKey,
                         Deployment = embedModel.ModelName.ConvertToString(),
-                        Endpoint = embedModel.EndPoint.ConvertToString()        
+                        Endpoint = embedModel.EndPoint.ConvertToString(),
+                        Auth = AzureOpenAIConfig.AuthTypes.APIKey,
+                        APIType = AzureOpenAIConfig.APITypes.EmbeddingGeneration,
                     });
                     break;
                 case Model.Enum.AIType.LLamaSharp:
@@ -104,7 +106,7 @@ namespace AntSK.Domain.Domain.Service
                     memory.WithOpenAITextGeneration(new OpenAIConfig()
                     {
                         APIKey = chatModel.ModelKey,
-                        TextModel = chatModel.ModelName
+                        TextModel = chatModel.ModelName                 
                     }, null, chatHttpClient);
                     break;
                 case Model.Enum.AIType.AzureOpenAI:
@@ -112,7 +114,9 @@ namespace AntSK.Domain.Domain.Service
                     {
                         APIKey = chatModel.ModelKey,
                         Deployment = chatModel.ModelName.ConvertToString(),
-                        Endpoint = chatModel.EndPoint.ConvertToString()
+                        Endpoint = chatModel.EndPoint.ConvertToString(),
+                        Auth = AzureOpenAIConfig.AuthTypes.APIKey,
+                        APIType = AzureOpenAIConfig.APITypes.TextCompletion,
                     });
                     break;
                 case Model.Enum.AIType.LLamaSharp:

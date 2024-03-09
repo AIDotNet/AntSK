@@ -112,12 +112,12 @@ namespace AntSK.Services.OpenApi
             //Console.WriteLine(renderedPrompt);
 
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult = _kernel.InvokeStreamingAsync<StreamingTextContent>(function: func, arguments: new KernelArguments() { ["input"] = msg });
+            var chatResult = _kernel.InvokeStreamingAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
             int i = 0;
 
             await foreach (var content in chatResult)
             {
-                result.choices[0].delta.content = content.Text.ConvertToString();
+                result.choices[0].delta.content = content.ConvertToString();
                 string message = $"data: {JsonConvert.SerializeObject(result)}\n\n";
                 await HttpContext.Response.WriteAsync(message, Encoding.UTF8);
                 await HttpContext.Response.Body.FlushAsync();
