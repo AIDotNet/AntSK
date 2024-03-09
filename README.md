@@ -118,12 +118,6 @@ model/xxx.gguf
     "DbType": "Sqlite", 
     "ConnectionStrings": "Data Source=AntSK.db;"
   },
-  "OpenAIOption": {
-    "EndPoint": "http://localhost:5000/llama/",
-    "Key": "NotNull",
-    "Model": "gpt4-turbo",
-    "EmbeddingModel": "text-embedding-ada-002"
-  },
   "KernelMemory": {
     "VectorDb": "Disk", 
     "ConnectionString": "Host=;Port=;Database=antsk;Username=;Password=",
