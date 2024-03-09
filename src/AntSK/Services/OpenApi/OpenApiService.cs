@@ -77,7 +77,7 @@ namespace AntSK.Services.OpenApi
         private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
-            var chatResult = _chatService.ChatByAppAsync(app, msg, "");
+            var chatResult = _chatService.SendChatByAppAsync(app, msg, "");
             int i = 0;
             await foreach (var content in chatResult)
             {

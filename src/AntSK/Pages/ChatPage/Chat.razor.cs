@@ -227,7 +227,7 @@ namespace AntSK.Pages.ChatPage
         {
             MessageInfo info =null;
             var markdown = new Markdown();
-            var chatResult = _chatService.ChatByAppAsync(app, questions, history);
+            var chatResult = _chatService.SendChatByAppAsync(app, questions, history);
             await foreach (var content in chatResult)
             {
                 if (info == null)

@@ -9,11 +9,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AntSK.Domain.Utils;
+using Microsoft.KernelMemory;
+using AntSK.Domain.Model;
+using MarkdownSharp;
 
 namespace AntSK.Domain.Domain.Service
 {
     [ServiceDescription(typeof(IChatService), ServiceLifetime.Scoped)]
-    public class ChatService(IKernelService _kernelService) : IChatService
+    public class ChatService(
+        IKernelService _kernelService,
+        IKMService _kMService 
+        ) : IChatService
     {
         /// <summary>
         /// 发送消息
@@ -22,7 +28,7 @@ namespace AntSK.Domain.Domain.Service
         /// <param name="questions"></param>
         /// <param name="history"></param>
         /// <returns></returns>
-        public async IAsyncEnumerable<StreamingKernelContent> ChatByAppAsync(Apps app, string questions,string history)
+        public async IAsyncEnumerable<StreamingKernelContent> SendChatByAppAsync(Apps app, string questions, string history)
         {
             if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
             {
@@ -43,6 +49,42 @@ namespace AntSK.Domain.Domain.Service
             await foreach (var content in chatResult)
             {
                 yield return content;
+            }
+        }
+
+        public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history)
+        {
+            var _kernel = _kernelService.GetKernelByApp(app);
+            //知识库问答
+            var filters = new List<MemoryFilter>();
+            var kmsidList = app.KmsIdList.Split(",");
+            //只取第一个知识库的配置
+            var _memory = _kMService.GetMemoryByKMS(kmsidList.FirstOrDefault());
+            foreach (var kmsid in kmsidList)
+            {
+                filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
+            }
+            var xlresult = await _memory.SearchAsync(questions, index: "kms", filters: filters);
+            string dataMsg = "";
+            if (xlresult != null)
+            {
+                foreach (var item in xlresult.Results)
+                {
+                    foreach (var part in item.Partitions)
+                    {
+                        dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
+                    }
+                }
+                KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
+                var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
+                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = history, ["questions"] = questions });
+
+                MessageInfo info = null;
+                var markdown1 = new Markdown();
+                await foreach (var content in chatResult)
+                {
+                    yield return content;
+                }             
             }
         }
     }
