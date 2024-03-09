@@ -100,6 +100,7 @@ namespace AntSK.Pages.ChatPage
             catch (System.Exception ex)
             {
                 Sendding = false;
+                Console.WriteLine("异常:" + ex.Message);
                 _ = Message.Error("异常:"+ex.Message, 2);
             }
 
