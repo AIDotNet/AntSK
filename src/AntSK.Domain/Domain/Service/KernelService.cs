@@ -74,7 +74,7 @@ namespace AntSK.Domain.Domain.Service
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("local-llama", new LLamaSharpTextCompletion(ex));
                     break;
                 case Model.Enum.AIType.SparkDesk:
-                    var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelName, ApiKey = chatModel.ModelKey,ModelVersion= Sdcb.SparkDesk.ModelVersion.V3_5 };
+                    var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelKey, ApiKey = chatModel.ModelName, ModelVersion= Sdcb.SparkDesk.ModelVersion.V3_5 };
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, app.Id));
                     break;
             }
