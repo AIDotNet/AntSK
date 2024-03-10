@@ -10,8 +10,7 @@
 <PageContainer Title="新增知识库">
     <ChildContent>
         <Card>
-            <Form 
-                  Model="@_kmsModel"
+            <Form Model="@_kmsModel"
                   Style="margin-top: 8px;"
                   OnFinish="HandleSubmit">
                 <FormItem Label="知识库名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
@@ -30,13 +29,15 @@
                             ValueProperty="c=>c.Id"
                             LabelProperty="c=>'【'+c.AIType.ToString()+'】'+ c.ModelDescription">
                     </Select>
+                    <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
                 </FormItem>
-                <FormItem Label="嵌入模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                <FormItem Label="向量模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Select DataSource="@_embeddingList"
                             @bind-Value="@context.EmbeddingModelID"
                             ValueProperty="c=>c.Id"
                             LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
                     </Select>
+                    <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
                 </FormItem>
                 <FormItem Label="段落切片数(token)" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <AntDesign.InputNumber @bind-Value="context.MaxTokensPerParagraph" PlaceHolder="段落切片数"></AntDesign.InputNumber>

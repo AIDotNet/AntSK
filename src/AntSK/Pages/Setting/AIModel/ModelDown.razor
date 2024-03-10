@@ -3,6 +3,10 @@
 @inject NavigationManager NavigationManager
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "AntSKAdmin")]
+
+
 <PageContainer Title="模型下载">
     <ChildContent>
         <h1>支持LLamaSharp的本地模型 支持gguf类型，推荐使用llama或者qwen</h1>

@@ -68,5 +68,10 @@ namespace AntSK.Pages.KmsPage
             NavigationManager.NavigateTo("/kmslist");
 
         }
+
+        private void NavigateModelList()
+        {
+            NavigationManager.NavigateTo("/setting/modellist");
+        }
     }
 }

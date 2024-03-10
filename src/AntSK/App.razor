@@ -1,16 +1,24 @@
 @inject NavigationManager NavigationManager
-@using Microsoft.AspNetCore.Components.Authorization 
+@using Microsoft.AspNetCore.Components.Authorization
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
             <CascadingValue Value="routeData">
-                <RouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)" />
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)" >
+                    <NotAuthorized>
+                        您没有权限访问此页面
+                    </NotAuthorized>
+                    <Authorizing>
+                        <RouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)" />
+                    </Authorizing>
+                    </AuthorizeRouteView>
             </CascadingValue>
         </Found>
         <NotFound>
             <LayoutView Layout="@typeof(BasicLayout)">
-                <AntSK.Pages.Exception._404/>
+                <AntSK.Pages.Exception._404 />
             </LayoutView>
+
         </NotFound>
     </Router>
     <AntContainer />

@@ -5,7 +5,8 @@
 @page "/setting/user/add/{UserId}"
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
-
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "AntSKAdmin")]
 
 <PageContainer Title="新增用户">
     <ChildContent>

@@ -5,6 +5,8 @@
 @inject IMessageService _message
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "AntSKAdmin")]
 
 
 <PageContainer Title="个人设置">

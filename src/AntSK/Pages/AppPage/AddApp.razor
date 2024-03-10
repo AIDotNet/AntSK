@@ -35,6 +35,7 @@
                              ValueProperty="c=>c.Id"
                              LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
                      </Select>
+                     <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
                  </FormItem>
                  @if (@context.Type == "chat")
                 {

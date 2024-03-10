@@ -22,15 +22,20 @@ namespace AntSK.Services.Auth
             var user = _users_Repositories.GetFirst(p => p.No == username);
             if (username == LoginOption.User && password == LoginOption.Password)
             {
+                string AdminRole = "AntSKAdmin";
                 // 管理员认证成功，创建用户的ClaimsIdentity
-                var claims = new[] { new Claim(ClaimTypes.Name, username) };
-                identity = new ClaimsIdentity(claims, "AntSKAdmin");
-                await _protectedSessionStore.SetAsync("UserSession", new UserSession() { UserName = username, Role = "AntSKAdmin" });
+                var claims = new[] {    
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, AdminRole)
+                };
+                identity = new ClaimsIdentity(claims, AdminRole);
+                await _protectedSessionStore.SetAsync("UserSession", new UserSession() { UserName = username, Role = AdminRole });
                 NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
                 return true;
             }
             else
             {
+                string UserRole = "AntSKUser";
                 if (user.IsNull())
                 {
                     return false;
@@ -40,9 +45,12 @@ namespace AntSK.Services.Auth
                     return false;
                 }
                 // 用户认证成功，创建用户的ClaimsIdentity
-                var claims = new[] { new Claim(ClaimTypes.Name, username) };
-                identity = new ClaimsIdentity(claims, "AntSKUser");
-                await _protectedSessionStore.SetAsync("UserSession", new UserSession() { UserName = username, Role = "AntSKUser" });
+                var claims = new[] { 
+                     new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, UserRole)
+                     };
+                identity = new ClaimsIdentity(claims, UserRole);
+                await _protectedSessionStore.SetAsync("UserSession", new UserSession() { UserName = username, Role = UserRole });
                 NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
                 return true;
             }
@@ -55,12 +63,15 @@ namespace AntSK.Services.Auth
         }
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
+            
             var userSessionStorageResult = await _protectedSessionStore.GetAsync<UserSession>("UserSession");
             var userSession = userSessionStorageResult.Success ? userSessionStorageResult.Value : null;
             if (userSession.IsNotNull())
             {
-                var claims = new[] { new Claim(ClaimTypes.Name, userSession.UserName) };
-                identity = new ClaimsIdentity(claims, "AntSKUser");
+                var claims = new[] {
+                    new Claim(ClaimTypes.Name, userSession.UserName),
+                    new Claim( ClaimTypes.Role, userSession.Role) };
+                identity = new ClaimsIdentity(claims, userSession.Role);
             }
             var user = new ClaimsPrincipal(identity);
             return await Task.FromResult(new AuthenticationState(user));

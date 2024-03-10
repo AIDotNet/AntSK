@@ -103,6 +103,11 @@ namespace AntSK.Pages.AppPage
         {
             NavigationManager.NavigateTo("/applist");
         }
+
+        private void NavigateModelList()
+        {
+            NavigationManager.NavigateTo("/setting/modellist");
+        }
     }
 
 }

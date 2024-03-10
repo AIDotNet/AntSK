@@ -6,7 +6,8 @@
 @page "/setting/model/add/{ModelId}"
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
-
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "AntSKAdmin")]
 
 <PageContainer Title="新增模型">
     <ChildContent>
@@ -20,10 +21,10 @@
 
                 <FormItem Label="AI类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <EnumRadioGroup @bind-Value="context.AIType"></EnumRadioGroup>
-                 </FormItem>
-                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                     <RadioGroup @bind-Value="context.AIModelType">
-                         <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
+                </FormItem>
+                <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <RadioGroup @bind-Value="context.AIModelType">
+                        <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
                          <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
                      </RadioGroup>
                  </FormItem>
@@ -31,10 +32,10 @@
                 {
                     <FormItem Label="注意事项" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <b>请不要使用不同维度的向量模型，否则会导致无法向量存储</b>
-                     </FormItem>
+                    </FormItem>
                 }
 
-                 @if (context.AIType == AIType.AzureOpenAI)
+                @if (context.AIType == AIType.AzureOpenAI)
                 {
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="请输入请求地址" @bind-Value="@context.EndPoint" />

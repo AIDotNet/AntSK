@@ -32,6 +32,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddAntDesign();
 
 builder.Services.AddAuthorizationCore();
+builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<AuthenticationStateProvider, AntSKAuthProvider>();
 
 builder.Services.AddScoped(sp => new HttpClient

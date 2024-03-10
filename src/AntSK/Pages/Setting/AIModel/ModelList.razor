@@ -5,6 +5,8 @@
 @inject NavigationManager NavigationManager
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "AntSKAdmin")]
 
 <div>
     <PageContainer Title="模型管理">
