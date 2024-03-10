@@ -31,7 +31,7 @@ namespace AntSK.Domain.Domain.Other
                     {
                         ContextSize = lsConfig?.ContextSize ?? 2048,
                         Seed = lsConfig?.Seed ?? 0,
-                        GpuLayerCount = lsConfig?.GpuLayerCount ?? 20,
+                        GpuLayerCount = lsConfig?.GpuLayerCount ?? 10,
                         EmbeddingMode = true
                     };
                     var weights = LLamaWeights.LoadFromFile(parameters);
