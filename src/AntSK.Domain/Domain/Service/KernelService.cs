@@ -1,4 +1,5 @@
-﻿using AntSK.Domain.Common.DependencyInjection;
+﻿using AntSk.LLM.SparkDesk;
+using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Model;
@@ -42,7 +43,7 @@ namespace AntSK.Domain.Domain.Service
             var chatHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
 
             var builder = Kernel.CreateBuilder();
-            WithTextGenerationByAIType(builder, chatModel, chatHttpClient);
+            WithTextGenerationByAIType(builder, app,chatModel, chatHttpClient);
 
 
             var kernel = builder.Build();
@@ -50,7 +51,7 @@ namespace AntSK.Domain.Domain.Service
             return kernel;
         }
 
-        private void WithTextGenerationByAIType(IKernelBuilder builder, AIModels chatModel, HttpClient chatHttpClient)
+        private void WithTextGenerationByAIType(IKernelBuilder builder, Apps app, AIModels chatModel, HttpClient chatHttpClient)
         {
             switch (chatModel.AIType)
             {
@@ -71,6 +72,10 @@ namespace AntSK.Domain.Domain.Service
                     var (weights, parameters) = LLamaConfig.GetLLamaConfig(chatModel.ModelName);
                     var ex = new StatelessExecutor(weights, parameters);
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("local-llama", new LLamaSharpTextCompletion(ex));
+                    break;
+                case Model.Enum.AIType.SparkDesk:
+                    var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelName, ApiKey = chatModel.ModelKey,ModelVersion= Sdcb.SparkDesk.ModelVersion.V3_5 };
+                    builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, app.Id));
                     break;
             }
         }
