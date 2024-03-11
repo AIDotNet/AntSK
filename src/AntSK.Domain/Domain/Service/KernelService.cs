@@ -106,99 +106,100 @@ namespace AntSK.Domain.Domain.Service
             //插件不能重复注册，否则会异常
             if (!_kernel.Plugins.Any(p => p.Name == "AntSkFunctions"))
             {
-                List<KernelFunction> apiFunctions = new List<KernelFunction>();
-
-                //API插件
-                if (!string.IsNullOrWhiteSpace(app.ApiFunctionList))
-                {
-                    //开启自动插件调用
-                    var apiIdList = app.ApiFunctionList.Split(",");
-                    var apiList = _apis_Repositories.GetList(p => apiIdList.Contains(p.Id));
-
-                    foreach (var api in apiList)
-                    {
-                        switch (api.Method)
-                        {
-                            case HttpMethodType.Get:
-                                apiFunctions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
-                                {
-                                    try
-                                    {
-                                        Console.WriteLine(msg);
-                                        RestClient client = new RestClient();
-                                        RestRequest request = new RestRequest(api.Url, Method.Get);
-                                        foreach (var header in api.Header.Split("\n"))
-                                        {
-                                            var headerArray = header.Split(":");
-                                            if (headerArray.Length == 2)
-                                            {
-                                                request.AddHeader(headerArray[0], headerArray[1]);
-                                            }
-                                        }
-                                        //这里应该还要处理一次参数提取，等后面再迭代
-                                        foreach (var query in api.Query.Split("\n"))
-                                        {
-                                            var queryArray = query.Split("=");
-                                            if (queryArray.Length == 2)
-                                            {
-                                                request.AddQueryParameter(queryArray[0], queryArray[1]);
-                                            }
-                                        }
-                                        var result = client.Execute(request);
-                                        return result.Content;
-                                    }
-                                    catch (System.Exception ex)
-                                    {
-                                        return "调用失败：" + ex.Message;
-                                    }
-                                }, api.Name, $"{api.Describe}"));
-                                break;
-
-                            case HttpMethodType.Post:
-                                apiFunctions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
-                                {
-                                    try
-                                    {
-                                        Console.WriteLine(msg);
-                                        RestClient client = new RestClient();
-                                        RestRequest request = new RestRequest(api.Url, Method.Post);
-                                        foreach (var header in api.Header.Split("\n"))
-                                        {
-                                            var headerArray = header.Split(":");
-                                            if (headerArray.Length == 2)
-                                            {
-                                                request.AddHeader(headerArray[0], headerArray[1]);
-                                            }
-                                        }
-                                        //这里应该还要处理一次参数提取，等后面再迭代
-                                        request.AddJsonBody(api.JsonBody);
-                                        var result = client.Execute(request);
-                                        return result.Content;
-                                    }
-                                    catch (System.Exception ex)
-                                    {
-                                        return "调用失败：" + ex.Message;
-                                    }
-                                }, api.Name, $"{api.Describe}"));
-                                break;
-                        }
-                    }
-                }
-
-                //本地函数插件
-                if (false)//需要添加判断应用是否开启了本地函数插件
-                {             
-                    _functionService.SearchMarkedMethods();
-                    foreach (var func in _functionService.Functions)
-                    {
-                        var methodInfo = _functionService.MethodInfos[func.Key];
-                        var parameters = methodInfo.Parameters.Select(x => new KernelParameterMetadata(x.ParameterName) { ParameterType = x.ParameterType, Description = x.Description });
-                        var returnType = new KernelReturnParameterMetadata() { ParameterType = methodInfo.ReturnType.ParameterType, Description = methodInfo.ReturnType.Description };
-                        apiFunctions.Add(_kernel.CreateFunctionFromMethod((object[] args) => func.Value(args), func.Key, methodInfo.Description, parameters, returnType));
-                    }
-                }
-                _kernel.ImportPluginFromFunctions("AntSkFunctions", apiFunctions);
+                return;
             }
+            List<KernelFunction> apiFunctions = new List<KernelFunction>();
+
+            //API插件
+            if (!string.IsNullOrWhiteSpace(app.ApiFunctionList))
+            {
+                //开启自动插件调用
+                var apiIdList = app.ApiFunctionList.Split(",");
+                var apiList = _apis_Repositories.GetList(p => apiIdList.Contains(p.Id));
+
+                foreach (var api in apiList)
+                {
+                    switch (api.Method)
+                    {
+                        case HttpMethodType.Get:
+                            apiFunctions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
+                            {
+                                try
+                                {
+                                    Console.WriteLine(msg);
+                                    RestClient client = new RestClient();
+                                    RestRequest request = new RestRequest(api.Url, Method.Get);
+                                    foreach (var header in api.Header.Split("\n"))
+                                    {
+                                        var headerArray = header.Split(":");
+                                        if (headerArray.Length == 2)
+                                        {
+                                            request.AddHeader(headerArray[0], headerArray[1]);
+                                        }
+                                    }
+                                    //这里应该还要处理一次参数提取，等后面再迭代
+                                    foreach (var query in api.Query.Split("\n"))
+                                    {
+                                        var queryArray = query.Split("=");
+                                        if (queryArray.Length == 2)
+                                        {
+                                            request.AddQueryParameter(queryArray[0], queryArray[1]);
+                                        }
+                                    }
+                                    var result = client.Execute(request);
+                                    return result.Content;
+                                }
+                                catch (System.Exception ex)
+                                {
+                                    return "调用失败：" + ex.Message;
+                                }
+                            }, api.Name, $"{api.Describe}"));
+                            break;
+
+                        case HttpMethodType.Post:
+                            apiFunctions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
+                            {
+                                try
+                                {
+                                    Console.WriteLine(msg);
+                                    RestClient client = new RestClient();
+                                    RestRequest request = new RestRequest(api.Url, Method.Post);
+                                    foreach (var header in api.Header.Split("\n"))
+                                    {
+                                        var headerArray = header.Split(":");
+                                        if (headerArray.Length == 2)
+                                        {
+                                            request.AddHeader(headerArray[0], headerArray[1]);
+                                        }
+                                    }
+                                    //这里应该还要处理一次参数提取，等后面再迭代
+                                    request.AddJsonBody(api.JsonBody);
+                                    var result = client.Execute(request);
+                                    return result.Content;
+                                }
+                                catch (System.Exception ex)
+                                {
+                                    return "调用失败：" + ex.Message;
+                                }
+                            }, api.Name, $"{api.Describe}"));
+                            break;
+                    }
+                }
+            }
+
+            //本地函数插件
+            if (false)//需要添加判断应用是否开启了本地函数插件
+            {
+                _functionService.SearchMarkedMethods();
+                foreach (var func in _functionService.Functions)
+                {
+                    var methodInfo = _functionService.MethodInfos[func.Key];
+                    var parameters = methodInfo.Parameters.Select(x => new KernelParameterMetadata(x.ParameterName) { ParameterType = x.ParameterType, Description = x.Description });
+                    var returnType = new KernelReturnParameterMetadata() { ParameterType = methodInfo.ReturnType.ParameterType, Description = methodInfo.ReturnType.Description };
+                    apiFunctions.Add(_kernel.CreateFunctionFromMethod((object[] args) => func.Value(args), func.Key, methodInfo.Description, parameters, returnType));
+                }
+            }
+            _kernel.ImportPluginFromFunctions("AntSkFunctions", apiFunctions);
         }
 
         /// <summary>
