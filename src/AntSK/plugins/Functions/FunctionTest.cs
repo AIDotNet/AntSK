@@ -1,6 +1,6 @@
 ﻿using AntSK.Domain.Common;
 
-namespace AntSK.Functions
+namespace AntSK.plugins.Functions
 {
     public class FunctionTest
     {

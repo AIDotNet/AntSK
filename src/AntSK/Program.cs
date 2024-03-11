@@ -7,7 +7,7 @@ using AntSK.Domain.Model;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using AntSK.Functions;
+using AntSK.plugins.Functions;
 using AntSK.Services.Auth;
 using LLama.Native;
 using Microsoft.AspNetCore.Components;
