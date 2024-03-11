@@ -3,11 +3,14 @@ using AntSK.BackgroundTask;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
+using AntSK.Models;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.KernelMemory;
 using System.ComponentModel.DataAnnotations;
+using static AntSK.Pages.KmsPage.KmsDetail;
 
 namespace AntSK.Pages.KmsPage
 {
@@ -27,8 +30,7 @@ namespace AntSK.Pages.KmsPage
         bool _textVisible = false;
         bool _textConfirmLoading = false;
 
-        string filePath;
-        string fileName;
+        List<FileInfoModel> fileList = new List<FileInfoModel>();
 
         private Form<UrlModel> _urlForm;
         private UrlModel urlModel = new UrlModel();
@@ -103,7 +105,8 @@ namespace AntSK.Pages.KmsPage
                 });
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
                 _urlVisible = false;
-                _ = _message.Info("加入队列，进入后台处理中！", 2);
+                urlModel.Url = "";
+               _ = _message.Info("加入队列，进入后台处理中！", 2);
             }
             catch (System.Exception ex)
             {
@@ -139,6 +142,7 @@ namespace AntSK.Pages.KmsPage
                 });
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
                 _textVisible = false;
+                textModel.Text = "";
                 _ = _message.Info("加入队列，进入后台处理中！", 2);
 
             }
@@ -164,13 +168,16 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
-                var result = await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
+                foreach (var item in fileList)
                 {
-                    ImportType = ImportType.File,
-                    KmsId = KmsId,
-                    FilePath = filePath,
-                    FileName = fileName
-                });
+                    var result = await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
+                    {
+                        ImportType = ImportType.File,
+                        KmsId = KmsId,
+                        FilePath = item.FilePath,
+                        FileName = item.FileName
+                    });
+                }            
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
                 //上传文档
                 _fileVisible = false;
@@ -220,11 +227,14 @@ namespace AntSK.Pages.KmsPage
         }
         private void OnSingleCompleted(UploadInfo fileinfo)
         {
-
             if (fileinfo.File.State == UploadState.Success)
             {
-                filePath = fileinfo.File.Url = fileinfo.File.Response;
-                fileName = fileinfo.File.FileName;
+                //文件列表
+                fileList.Add(new FileInfoModel()
+                {
+                    FileName = fileinfo.File.FileName,
+                    FilePath = fileinfo.File.Url = fileinfo.File.Response
+                });
             }
         }
 
