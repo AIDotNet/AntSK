@@ -52,7 +52,14 @@ namespace AntSK.Domain.Repositories
         /// <summary>
         /// 插件列表
         /// </summary>
+        [SugarColumn(ColumnDataType = "varchar(1000)")]
         public string? ApiFunctionList { get; set; }
+
+        /// <summary>
+        /// 本地函数列表
+        /// </summary>
+        [SugarColumn(ColumnDataType = "varchar(1000)")]
+        public string? NativeFunctionList { get; set; }
 
 
         /// <summary>

@@ -257,6 +257,11 @@
             插件列表
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.NativeFunctionList">
+            <summary>
+            本地函数列表
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Apps.KmsIdList">
             <summary>
             知识库ID列表

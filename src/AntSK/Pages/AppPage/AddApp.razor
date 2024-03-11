@@ -50,18 +50,34 @@
                         <Slider TValue="double" Style="display: inline-block;width: 300px; " Min="0" Max="100" DefaultValue="70" @bind-Value="@context.Temperature" />
                         <span>更发散</span>
                     </FormItem>
-
-                    <FormItem Label="API插件列表(选择后会开启自动调用)" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                  
+                    <FormItem Label="API插件列表" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">                      
                         <Select Mode="multiple"
                                 @bind-Values="apiIds"
-                                Placeholder="选择API插件"
+                                Placeholder="选择API插件, 选择后会开启自动调用"
                                 TItemValue="string"
                                 TItem="string"
                                 Size="@AntSizeLDSType.Default">
                             <SelectOptions>
                                 @foreach (var api in _apiList)
                                 {
-                                    <SelectOption TItem="string" TItemValue="string" Value="@api.Id" Label="@api.Name" />
+                                    <SelectOption TItem="string" TItemValue="string" Value="@api.Id" Label="@(api.Name+"-"+api.Describe)" />
+                                }
+                            </SelectOptions>
+                        </Select>
+                    </FormItem>
+
+                    <FormItem Label="原生插件列表" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Select Mode="multiple"
+                                @bind-Values="funIds"
+                                Placeholder="选择原生插件, 选择后会开启自动调用"
+                                TItemValue="string"
+                                TItem="string"
+                                Size="@AntSizeLDSType.Default">
+                            <SelectOptions>
+                                @foreach (var fun in _funList)
+                                {
+                                    <SelectOption TItem="string" TItemValue="string" Value="@fun.Key" Label="@(fun.Key+"-"+fun.Value)" />
                                 }
                             </SelectOptions>
                         </Select>

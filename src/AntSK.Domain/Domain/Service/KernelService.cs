@@ -188,15 +188,20 @@ namespace AntSK.Domain.Domain.Service
             }
 
             //本地函数插件
-            if (false)//需要添加判断应用是否开启了本地函数插件
+            if (!string.IsNullOrWhiteSpace(app.NativeFunctionList))//需要添加判断应用是否开启了本地函数插件
             {
+                var nativeIdList = app.NativeFunctionList.Split(",");
+
                 _functionService.SearchMarkedMethods();
                 foreach (var func in _functionService.Functions)
                 {
-                    var methodInfo = _functionService.MethodInfos[func.Key];
-                    var parameters = methodInfo.Parameters.Select(x => new KernelParameterMetadata(x.ParameterName) { ParameterType = x.ParameterType, Description = x.Description });
-                    var returnType = new KernelReturnParameterMetadata() { ParameterType = methodInfo.ReturnType.ParameterType, Description = methodInfo.ReturnType.Description };
-                    apiFunctions.Add(_kernel.CreateFunctionFromMethod((object[] args) => func.Value(args), func.Key, methodInfo.Description, parameters, returnType));
+                    if (nativeIdList.Contains(func.Key))
+                    {
+                        var methodInfo = _functionService.MethodInfos[func.Key];
+                        var parameters = methodInfo.Parameters.Select(x => new KernelParameterMetadata(x.ParameterName) { ParameterType = x.ParameterType, Description = x.Description });
+                        var returnType = new KernelReturnParameterMetadata() { ParameterType = methodInfo.ReturnType.ParameterType, Description = methodInfo.ReturnType.Description };
+                        apiFunctions.Add(_kernel.CreateFunctionFromMethod((object[] args) => func.Value(args), func.Key, methodInfo.Description, parameters, returnType));
+                    }
                 }
             }
             _kernel.ImportPluginFromFunctions("AntSkFunctions", apiFunctions);
