@@ -103,6 +103,7 @@ namespace AntSK.Domain.Domain.Service
         /// <param name="_kernel"></param>
         public void ImportFunctionsByApp(Apps app, Kernel _kernel)
         {
+            //插件不能重复注册，否则会异常
             if (!_kernel.Plugins.Any(p => p.Name == "AntSkFunctions"))
             {
                 List<KernelFunction> apiFunctions = new List<KernelFunction>();
