@@ -22,46 +22,54 @@ namespace AntSK.Domain.Domain.Service
            IAIModels_Repositories _aIModels_Repositories
         ) : IKMService
     {
+        private MemoryServerless _memory;
+
         public MemoryServerless GetMemoryByKMS(string kmsID, SearchClientConfig searchClientConfig = null)
         {
-            //获取KMS配置
-            var kms = _kmss_Repositories.GetFirst(p => p.Id == kmsID);
-            var chatModel = _aIModels_Repositories.GetFirst(p => p.Id == kms.ChatModelID);
-            var embedModel = _aIModels_Repositories.GetFirst(p => p.Id == kms.EmbeddingModelID);
-
-            //http代理
-            var chatHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
-            var embeddingHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(embedModel.EndPoint);
-
-            //搜索配置
-            if (searchClientConfig.IsNull())
+            if (_memory.IsNull())
             {
-                searchClientConfig = new SearchClientConfig
+                //获取KMS配置
+                var kms = _kmss_Repositories.GetFirst(p => p.Id == kmsID);
+                var chatModel = _aIModels_Repositories.GetFirst(p => p.Id == kms.ChatModelID);
+                var embedModel = _aIModels_Repositories.GetFirst(p => p.Id == kms.EmbeddingModelID);
+
+                //http代理
+                var chatHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
+                var embeddingHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(embedModel.EndPoint);
+
+                //搜索配置
+                if (searchClientConfig.IsNull())
                 {
-                    MaxAskPromptSize = 2048,
-                    MaxMatchesCount = 3,
-                    AnswerTokens = 1000,
-                    EmptyAnswer = "知识库未搜索到相关内容"
-                };
+                    searchClientConfig = new SearchClientConfig
+                    {
+                        MaxAskPromptSize = 2048,
+                        MaxMatchesCount = 3,
+                        AnswerTokens = 1000,
+                        EmptyAnswer = "知识库未搜索到相关内容"
+                    };
+                }
+
+                var memoryBuild = new KernelMemoryBuilder()
+                .WithSearchClientConfig(searchClientConfig)
+                .WithCustomTextPartitioningOptions(new TextPartitioningOptions
+                {
+                    MaxTokensPerLine = kms.MaxTokensPerLine,
+                    MaxTokensPerParagraph = kms.MaxTokensPerParagraph,
+                    OverlappingTokens = kms.OverlappingTokens
+                });
+                //加载huihu 模型
+                WithTextGenerationByAIType(memoryBuild, chatModel, chatHttpClient);
+                //加载向量模型
+                WithTextEmbeddingGenerationByAIType(memoryBuild, embedModel, embeddingHttpClient);
+                //加载向量库
+                WithMemoryDbByVectorDB(memoryBuild, _config);
+
+                _memory = memoryBuild.Build<MemoryServerless>();
+                return _memory;
             }
-
-            var memory = new KernelMemoryBuilder()
-            .WithSearchClientConfig(searchClientConfig)
-            .WithCustomTextPartitioningOptions(new TextPartitioningOptions
-            {
-                MaxTokensPerLine = kms.MaxTokensPerLine,
-                MaxTokensPerParagraph = kms.MaxTokensPerParagraph,
-                OverlappingTokens = kms.OverlappingTokens
-            });
-            //加载huihu 模型
-            WithTextGenerationByAIType(memory, chatModel, chatHttpClient);
-            //加载向量模型
-            WithTextEmbeddingGenerationByAIType(memory, embedModel, embeddingHttpClient);
-            //加载向量库
-            WithMemoryDbByVectorDB(memory, _config);
-
-            var result = memory.Build<MemoryServerless>();
-            return result;
+            else {
+                return _memory;
+            }
 
         }
 
