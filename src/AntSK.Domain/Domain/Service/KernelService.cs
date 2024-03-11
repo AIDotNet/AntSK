@@ -34,7 +34,7 @@ namespace AntSK.Domain.Domain.Service
             _functionService = functionService;
         }
 
-        private Kernel? _kernel;
+        private Kernel _kernel;
 
 
         /// <summary>
