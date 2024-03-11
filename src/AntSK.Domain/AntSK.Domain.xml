@@ -48,131 +48,6 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="T:AntSK.Domain.Common.XmlCommentHelper">
-            <summary>
-            注释辅助类
-            </summary>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.LoadAll">
-            <summary>
-            从当前dll文件中加载所有的xml文件
-            </summary>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.LoadXml(System.String[])">
-            <summary>
-            从xml中加载
-            </summary>
-            <param name="xmls"></param>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.Load(System.String[])">
-            <summary>
-            从文件中加载
-            </summary>
-            <param name="xmlFiles"></param>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.Load(System.IO.Stream[])">
-            <summary>
-            从流中加载
-            </summary>
-            <param name="streams"></param>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetTypeComment(System.Type,System.String,System.Boolean)">
-            <summary>
-            读取类型中的注释
-            </summary>
-            <param name="type">类型</param>
-            <param name="xPath">注释路径</param>
-            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetFieldOrPropertyComment(System.Reflection.MemberInfo,System.String,System.Boolean)">
-            <summary>
-            读取字段或者属性的注释
-            </summary>
-            <param name="fieldOrPropertyInfo">字段或者属性</param>
-            <param name="xPath">注释路径</param>
-            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetMethodComment(System.Reflection.MethodInfo,System.String,System.Boolean)">
-            <summary>
-            读取方法中的注释
-            </summary>
-            <param name="methodInfo">方法</param>
-            <param name="xPath">注释路径</param>
-            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetMethodReturnComment(System.Reflection.MethodInfo,System.Boolean)">
-            <summary>
-            读取方法中的返回值注释
-            </summary>
-            <param name="methodInfo">方法</param>
-            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetParameterComment(System.Reflection.ParameterInfo,System.Boolean)">
-            <summary>
-            读取参数的注释
-            </summary>
-            <param name="parameterInfo">参数</param>
-            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetParameterComments(System.Reflection.MethodInfo,System.Boolean)">
-            <summary>
-            读取方法的所有参数的注释
-            </summary>
-            <param name="methodInfo">方法</param>
-            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetComment(System.String,System.String,System.Boolean)">
-            <summary>
-            读取指定名称节点的注释
-            </summary>
-            <param name="name">节点名称</param>
-            <param name="xPath">注释路径</param>
-            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetSummary(System.String,System.Boolean)">
-            <summary>
-            读取指定节点的summary注释
-            </summary>
-            <param name="name">节点名称</param>
-            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetExample(System.String,System.Boolean)">
-            <summary>
-            读取指定节点的example注释
-            </summary>
-            <param name="name">节点名称</param>
-            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetMemberNameForMethod(System.Reflection.MethodInfo)">
-            <summary>
-            获取方法的节点名称
-            </summary>
-            <param name="method"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetMemberNameForType(System.Type)">
-            <summary>
-            获取类型的节点名称
-            </summary>
-            <param name="type"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Common.XmlCommentHelper.GetMemberNameForFieldOrProperty(System.Reflection.MemberInfo)">
-            <summary>
-            获取字段或者属性的节点名称
-            </summary>
-            <param name="fieldOrPropertyInfo"></param>
-            <returns></returns>
-        </member>
         <member name="F:AntSK.Domain.Domain.Other.LLamaConfig.dicLLamaWeights">
             <summary>
             避免模型重复加载，本地缓存
@@ -869,6 +744,131 @@
             Scan the local folders from the repo, looking for "samples/plugins" folder.
             </summary>
             <returns>The full path to samples/plugins</returns>
+        </member>
+        <member name="T:AntSK.Domain.Utils.XmlCommentHelper">
+            <summary>
+            注释辅助类
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.LoadAll">
+            <summary>
+            从当前dll文件中加载所有的xml文件
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.LoadXml(System.String[])">
+            <summary>
+            从xml中加载
+            </summary>
+            <param name="xmls"></param>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.Load(System.String[])">
+            <summary>
+            从文件中加载
+            </summary>
+            <param name="xmlFiles"></param>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.Load(System.IO.Stream[])">
+            <summary>
+            从流中加载
+            </summary>
+            <param name="streams"></param>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetTypeComment(System.Type,System.String,System.Boolean)">
+            <summary>
+            读取类型中的注释
+            </summary>
+            <param name="type">类型</param>
+            <param name="xPath">注释路径</param>
+            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetFieldOrPropertyComment(System.Reflection.MemberInfo,System.String,System.Boolean)">
+            <summary>
+            读取字段或者属性的注释
+            </summary>
+            <param name="fieldOrPropertyInfo">字段或者属性</param>
+            <param name="xPath">注释路径</param>
+            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetMethodComment(System.Reflection.MethodInfo,System.String,System.Boolean)">
+            <summary>
+            读取方法中的注释
+            </summary>
+            <param name="methodInfo">方法</param>
+            <param name="xPath">注释路径</param>
+            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetMethodReturnComment(System.Reflection.MethodInfo,System.Boolean)">
+            <summary>
+            读取方法中的返回值注释
+            </summary>
+            <param name="methodInfo">方法</param>
+            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetParameterComment(System.Reflection.ParameterInfo,System.Boolean)">
+            <summary>
+            读取参数的注释
+            </summary>
+            <param name="parameterInfo">参数</param>
+            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetParameterComments(System.Reflection.MethodInfo,System.Boolean)">
+            <summary>
+            读取方法的所有参数的注释
+            </summary>
+            <param name="methodInfo">方法</param>
+            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetComment(System.String,System.String,System.Boolean)">
+            <summary>
+            读取指定名称节点的注释
+            </summary>
+            <param name="name">节点名称</param>
+            <param name="xPath">注释路径</param>
+            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetSummary(System.String,System.Boolean)">
+            <summary>
+            读取指定节点的summary注释
+            </summary>
+            <param name="name">节点名称</param>
+            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetExample(System.String,System.Boolean)">
+            <summary>
+            读取指定节点的example注释
+            </summary>
+            <param name="name">节点名称</param>
+            <param name="humanize">可读性优化(比如：去掉xml标记)</param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetMemberNameForMethod(System.Reflection.MethodInfo)">
+            <summary>
+            获取方法的节点名称
+            </summary>
+            <param name="method"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetMemberNameForType(System.Type)">
+            <summary>
+            获取类型的节点名称
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.XmlCommentHelper.GetMemberNameForFieldOrProperty(System.Reflection.MemberInfo)">
+            <summary>
+            获取字段或者属性的节点名称
+            </summary>
+            <param name="fieldOrPropertyInfo"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>
