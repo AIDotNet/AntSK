@@ -2,10 +2,12 @@ using AntDesign.ProLayout;
 using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Common.Map;
 using AntSK.Domain.Domain.Other;
+using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Model;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
+using AntSK.Functions;
 using AntSK.Services.Auth;
 using LLama.Native;
 using Microsoft.AspNetCore.Components;
@@ -42,6 +44,8 @@ builder.Services.AddScoped(sp => new HttpClient
 builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSettings"));
 builder.Services.AddServicesFromAssemblies("AntSK");
 builder.Services.AddServicesFromAssemblies("AntSK.Domain");
+builder.Services.AddSingleton(sp => new FunctionService(sp, [typeof(AntSK.App).Assembly, typeof(AntSK.Domain.Common.AntSkFunctionAttribute).Assembly]));
+builder.Services.AddSingleton<FunctionTest>();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -140,5 +144,3 @@ void InitDB(WebApplication app)
         _repository.GetDB().Ado.ExecuteCommandAsync($"CREATE EXTENSION IF NOT EXISTS vector;");
     }
 }
-
-

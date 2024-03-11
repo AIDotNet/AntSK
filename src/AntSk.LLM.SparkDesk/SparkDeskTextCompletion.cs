@@ -3,7 +3,13 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Services;
 using Microsoft.SemanticKernel.TextGeneration;
 using Sdcb.SparkDesk;
+using System;
+using System.ComponentModel;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Unicode;
 
 namespace AntSk.LLM.SparkDesk
 {
@@ -13,6 +19,12 @@ namespace AntSk.LLM.SparkDesk
         private readonly SparkDeskClient _client;
         private string _chatId;
         private readonly SparkDeskOptions _options;
+
+        private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+        {
+            NumberHandling = JsonNumberHandling.AllowReadingFromString,
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+        };
 
         public IReadOnlyDictionary<string, object?> Attributes => _attributes;
 
@@ -31,11 +43,10 @@ namespace AntSk.LLM.SparkDesk
                 ChatId = _chatId,
             };
 
-            if (executionSettings is OpenAIPromptExecutionSettings openAISettings)
-            {
-                parameters.Temperature = (float)openAISettings.Temperature;
-                parameters.MaxTokens = openAISettings.MaxTokens ?? parameters.MaxTokens;
-            }
+            OpenAIPromptExecutionSettings chatExecutionSettings = OpenAIPromptExecutionSettings.FromExecutionSettings(executionSettings);
+
+            parameters.Temperature = (float)chatExecutionSettings.Temperature;
+            parameters.MaxTokens = chatExecutionSettings.MaxTokens ?? parameters.MaxTokens;
 
             await foreach (StreamedChatResponse msg in _client.ChatAsStreamAsync(_options.ModelVersion, GetHistories(prompt), parameters))
             {
@@ -45,23 +56,71 @@ namespace AntSk.LLM.SparkDesk
             return [new(sb.ToString())];
         }
 
-        public async IAsyncEnumerable<StreamingTextContent> GetStreamingTextContentsAsync(string prompt, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
+        public IAsyncEnumerable<StreamingTextContent> GetStreamingTextContentsAsync(string prompt, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
         {
             var parameters = new ChatRequestParameters
             {
                 ChatId = _chatId,
             };
+            OpenAIPromptExecutionSettings chatExecutionSettings = OpenAIPromptExecutionSettings.FromExecutionSettings(executionSettings);
 
-            if (executionSettings is OpenAIPromptExecutionSettings openAISettings)
+            parameters.Temperature = (float)chatExecutionSettings.Temperature;
+            parameters.MaxTokens = chatExecutionSettings.MaxTokens ?? parameters.MaxTokens;
+
+            IList<KernelFunctionMetadata> functions = kernel?.Plugins.GetFunctionsMetadata().Where(x => x.PluginName == "AntSkFunctions").ToList() ?? [];
+            var functionDefs = functions.Select(func => new FunctionDef(func.Name, func.Description, func.Parameters.Select(p => new FunctionParametersDef(p.Name, p.ParameterType?.IsClass == true ? "object" : "string", func.Description, p.IsRequired)).ToList())).ToList();
+
+            var messages = GetHistories(prompt);
+
+            return GetStreamingMessageAsync(messages, parameters, functionDefs, cancellationToken);
+
+            async IAsyncEnumerable<StreamingTextContent> GetStreamingMessageAsync(ChatMessage[] messages, ChatRequestParameters parameters, List<FunctionDef> functionDefs, CancellationToken cancellationToken)
             {
-                parameters.Temperature = (float)openAISettings.Temperature;
-                parameters.MaxTokens = openAISettings.MaxTokens ?? parameters.MaxTokens;
+                await foreach (StreamedChatResponse msg in _client.ChatAsStreamAsync(_options.ModelVersion, messages, parameters, functionDefs.Count > 0 ? [.. functionDefs] : null, cancellationToken: cancellationToken))
+                {
+                    if (msg.FunctionCall != null)
+                    {
+                        var func = functions.Where(x => x.Name == msg.FunctionCall.Name).FirstOrDefault();
+
+                        if (kernel.Plugins.TryGetFunction(func.PluginName, func.Name, out var function))
+                        {
+                            var funcArgs = new Dictionary<string, object?>();
+
+                            var JsonElement = JsonDocument.Parse(msg.FunctionCall.Arguments).RootElement;
+                            foreach (var parameter in func.Parameters)
+                            {
+                                if (JsonElement.TryGetProperty(parameter.Name, out var property))
+                                {
+                                    funcArgs.Add(parameter.Name, property.Deserialize(parameter.ParameterType!, _jsonSerializerOptions));
+                                }
+                            }
+
+                            var arguments = new KernelArguments
+                            {
+                                { "args", funcArgs.Values.ToArray() }
+                            };
+
+                            var result = (await function.InvokeAsync(kernel, arguments, cancellationToken)).GetValue<object>() ?? string.Empty;
+                            var stringResult = ProcessFunctionResult(result, chatExecutionSettings.ToolCallBehavior);
+                            messages = [.. messages, ChatMessage.FromUser($"""
+                                                                           function call result:
+                                                                           {stringResult}
+                                                                           """)];
+
+                            functionDefs.RemoveAll(x => x.Name == msg.FunctionCall.Name);
+
+                            await foreach (var content in GetStreamingMessageAsync(messages, parameters, functionDefs, cancellationToken))
+                            {
+                                yield return content;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        yield return new(msg);
+                    }
+                };
             }
-
-            await foreach (StreamedChatResponse msg in _client.ChatAsStreamAsync(_options.ModelVersion, GetHistories(prompt), parameters, cancellationToken: cancellationToken))
-            {
-                yield return new(msg);
-            };
         }
 
         private ChatMessage[] GetHistories(string prompt)
@@ -73,6 +132,64 @@ namespace AntSk.LLM.SparkDesk
                 .Select(pair => new ChatMessage(pair[0].Trim() == "user" ? "user" : "assistant", pair[1])).ToArray();
 
             return histories;
+        }
+
+        private static string? ProcessFunctionResult(object functionResult, ToolCallBehavior? toolCallBehavior)
+        {
+            if (functionResult is string stringResult)
+            {
+                return stringResult;
+            }
+
+            if (functionResult is ChatMessageContent chatMessageContent)
+            {
+                return chatMessageContent.ToString();
+            }
+
+            return JsonSerializer.Serialize(functionResult, _jsonSerializerOptions);
+        }
+
+        public static Dictionary<string, object> ParseJsonElement(JsonElement element, string propertyName)
+        {
+            Dictionary<string, object> dict = new();
+
+            switch (element.ValueKind)
+            {
+                case JsonValueKind.Object:
+                    foreach (JsonProperty property in element.EnumerateObject())
+                    {
+                        dict.Add(property.Name, ParseJsonElement(property.Value, property.Name));
+                    }
+                    break;
+
+                case JsonValueKind.Array:
+                    List<object> list = new List<object>();
+                    foreach (JsonElement arrayElement in element.EnumerateArray())
+                    {
+                        list.Add(ParseJsonElement(arrayElement, ""));
+                    }
+                    dict.Add(propertyName, list);
+                    break;
+
+                case JsonValueKind.String:
+                    dict.Add(propertyName, element.GetString());
+                    break;
+
+                case JsonValueKind.Number:
+                    dict.Add(propertyName, element.GetInt32());
+                    break;
+
+                case JsonValueKind.True:
+                case JsonValueKind.False:
+                    dict.Add(propertyName, element.GetBoolean());
+                    break;
+
+                default:
+                    dict.Add(propertyName, "Unsupported value type");
+                    break;
+            }
+
+            return dict;
         }
     }
 }

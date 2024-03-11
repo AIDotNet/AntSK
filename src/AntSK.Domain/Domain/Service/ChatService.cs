@@ -19,7 +19,7 @@ namespace AntSK.Domain.Domain.Service
     [ServiceDescription(typeof(IChatService), ServiceLifetime.Scoped)]
     public class ChatService(
         IKernelService _kernelService,
-        IKMService _kMService ,
+        IKMService _kMService,
         IKmsDetails_Repositories _kmsDetails_Repositories
         ) : IChatService
     {
@@ -40,11 +40,9 @@ namespace AntSK.Domain.Domain.Service
             var _kernel = _kernelService.GetKernelByApp(app);
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
-            if (!string.IsNullOrEmpty(app.ApiFunctionList))
-            {
-                _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
-            }
+
+            _kernelService.ImportFunctionsByApp(app, _kernel);
+            settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
 
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
             var chatResult = _kernel.InvokeStreamingAsync(function: func, arguments: new KernelArguments() { ["input"] = $"{history}{Environment.NewLine} user:{questions}" });
@@ -54,7 +52,7 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history, List<RelevantSource> relevantSources=null)
+        public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history, List<RelevantSource> relevantSources = null)
         {
             var _kernel = _kernelService.GetKernelByApp(app);
             //知识库问答
@@ -98,7 +96,7 @@ namespace AntSK.Domain.Domain.Service
                 await foreach (var content in chatResult)
                 {
                     yield return content;
-                }             
+                }
             }
         }
     }

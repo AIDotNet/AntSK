@@ -59,6 +59,7 @@ namespace AntSK.Services.OpenApi
                             await HttpContext.Response.CompleteAsync();
                         }
                         break;
+
                     case "kms":
                         //知识库问答
                         if (model.stream)
@@ -71,7 +72,7 @@ namespace AntSK.Services.OpenApi
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result3));
                             await HttpContext.Response.CompleteAsync();
                         }
-                        else 
+                        else
                         {
                             OpenAIResult result4 = new OpenAIResult();
                             result4.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -84,7 +85,6 @@ namespace AntSK.Services.OpenApi
                         break;
                 }
             }
-
         }
 
         private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
@@ -126,11 +126,10 @@ namespace AntSK.Services.OpenApi
             var _kernel = _kernelService.GetKernelByApp(app);
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
-            if (!string.IsNullOrEmpty(app.ApiFunctionList))
-            {
-                _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
-            }
+
+            _kernelService.ImportFunctionsByApp(app, _kernel);
+            settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
+
             var promptTemplateFactory = new KernelPromptTemplateFactory();
             var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
 
@@ -208,6 +207,7 @@ namespace AntSK.Services.OpenApi
             }
             return result;
         }
+
         /// <summary>
         /// 历史会话的会话总结
         /// </summary>
