@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.XPath;
 
-namespace AntSK.Domain.Common
+namespace AntSK.Domain.Utils
 {
     /// <summary>
     /// 注释辅助类
@@ -231,7 +231,7 @@ namespace AntSK.Domain.Common
         /// <returns></returns>
         public string GetMemberNameForFieldOrProperty(MemberInfo fieldOrPropertyInfo)
         {
-            var builder = new StringBuilder(((fieldOrPropertyInfo.MemberType & MemberTypes.Field) != 0) ? "F:" : "P:");
+            var builder = new StringBuilder((fieldOrPropertyInfo.MemberType & MemberTypes.Field) != 0 ? "F:" : "P:");
             builder.Append(QualifiedNameFor(fieldOrPropertyInfo.DeclaringType));
             builder.Append($".{fieldOrPropertyInfo.Name}");
 
