@@ -3,7 +3,6 @@ using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using MarkdownSharp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
@@ -12,6 +11,7 @@ using SqlSugar;
 using System.Text;
 using AntSK.Domain.Utils;
 using Microsoft.JSInterop;
+using Markdig;
 
 namespace AntSK.Pages.ChatPage
 {
@@ -152,7 +152,6 @@ namespace AntSK.Pages.ChatPage
         private async Task SendKms(string questions, string msg, Apps app)
         {
             MessageInfo info = null;
-            var markdown1 = new Markdown();
             var chatResult=_chatService.SendKmsByAppAsync(app, questions, msg);
             await foreach (var content in chatResult)
             {
@@ -174,12 +173,7 @@ namespace AntSK.Pages.ChatPage
                 await InvokeAsync(StateHasChanged);
             }
             //全部处理完后再处理一次Markdown
-            if (info.IsNotNull())
-            {
-                info!.HtmlAnswers = markdown1.Transform(info.HtmlAnswers);
-            }
-            await InvokeAsync(StateHasChanged);
-            await _JSRuntime.ScrollToBottomAsync("scrollDiv");
+            await MarkDown(info);
         }
 
         /// <summary>
@@ -192,7 +186,6 @@ namespace AntSK.Pages.ChatPage
         private async Task SendChat(string questions, string history, Apps app)
         {
             MessageInfo info = null;
-            var markdown = new Markdown();
             var chatResult = _chatService.SendChatByAppAsync(app, questions, history);
             await foreach (var content in chatResult)
             {
@@ -214,11 +207,21 @@ namespace AntSK.Pages.ChatPage
                 await InvokeAsync(StateHasChanged);
             }
             //全部处理完后再处理一次Markdown
-            info!.HtmlAnswers = markdown.Transform(info.HtmlAnswers);
-            await InvokeAsync(StateHasChanged);
-            await _JSRuntime.ScrollToBottomAsync("scrollDiv");
+            await MarkDown(info);
         }
 
+        private async Task MarkDown(MessageInfo info)
+        {
+            if (info.IsNotNull())
+            {
+                // info!.HtmlAnswers = markdown.Transform(info.HtmlAnswers);
+                info!.HtmlAnswers = Markdown.ToHtml(info.HtmlAnswers);
+
+            }
+            await InvokeAsync(StateHasChanged);
+            await _JSRuntime.InvokeVoidAsync("Prism.highlightAll");
+            await _JSRuntime.ScrollToBottomAsync("scrollDiv");
+        }
         /// <summary>
         /// 历史会话的会话总结
         /// </summary>

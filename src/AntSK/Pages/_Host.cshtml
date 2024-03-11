@@ -16,6 +16,12 @@
     <link href="_content/AntDesign.ProLayout/css/ant-design-pro-layout-blazor.css" rel="stylesheet" />
     <link href="./css/site.css" rel="stylesheet" />
     <link href="AntSK.styles.css" rel="stylesheet" />
+
+    <link href="./css/normalize.css" rel="stylesheet" />
+    <link href="./css/prism-coy.min.css" rel="stylesheet" />
+    <link href="./css/prism-toolbar.min.css" rel="stylesheet" />
+    <link href="./css/prism-line-numbers.min.css" rel="stylesheet" />
+
 </head>
 <body>
     <app>
@@ -27,5 +33,19 @@
     <script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script>
     <script src="_framework/blazor.server.js"></script>
     <script src="./js/scrollHelper.js"></script>
+
+
+    <!--prism核心js (用于渲染代码块)-->
+    <script src="./js/prism.min.js"></script>
+    <!--显示代码块行号-->
+    <script src="./js/prism-line-numbers.min.js"></script>
+    <!--工具栏(一些插件的前置依赖)-->
+    <script src="./js/prism-toolbar.min.js"></script>
+    <!--代码块显示语言名称-->
+    <script src="./js/prism-show-language.min.js"></script>
+    <!--复制代码-->
+    <script src="./js/prism-copy-to-clipboard.min.js"></script>
+    <!--自动去cdn加载对应语言的代码高亮js-->
+    <script src="./js/prism-autoloader.min.js"></script>
 </body>
 </html>

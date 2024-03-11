@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 using AntSK.Domain.Utils;
 using Microsoft.KernelMemory;
 using AntSK.Domain.Model;
-using MarkdownSharp;
 using AntSK.Domain.Domain.Dto;
+using Markdig;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -77,14 +77,13 @@ namespace AntSK.Domain.Domain.Service
 
                         if (relevantSources.IsNotNull())
                         {
-                            var markdown = new Markdown();
                             string sourceName = item.SourceName;
                             var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == item.SourceName);
                             if (fileDetail.IsNotNull())
                             {
                                 sourceName = fileDetail.FileName;
                             }
-                            relevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = markdown.Transform(part.Text), Relevance = part.Relevance });
+                            relevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = Markdown.ToHtml(part.Text), Relevance = part.Relevance });
                         }
                     }
                 }
@@ -93,7 +92,6 @@ namespace AntSK.Domain.Domain.Service
                     arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = history, ["questions"] = questions });
 
                 MessageInfo info = null;
-                var markdown1 = new Markdown();
                 await foreach (var content in chatResult)
                 {
                     yield return content;

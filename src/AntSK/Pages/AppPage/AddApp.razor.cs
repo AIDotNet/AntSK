@@ -35,11 +35,11 @@ namespace AntSK.Pages.AppPage
 
         private List<Kmss> _kmsList = new List<Kmss>();
 
-        IEnumerable<string> apiIds;
+        IEnumerable<string> apiIds=[];
 
         private List<Apis> _apiList = new List<Apis>();
 
-        IEnumerable<string> funIds;
+        IEnumerable<string> funIds=[];
 
         public Dictionary<string, string> _funList = new Dictionary<string, string>();
 
