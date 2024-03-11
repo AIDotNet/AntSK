@@ -40,10 +40,11 @@ namespace AntSK.Domain.Domain.Service
             var _kernel = _kernelService.GetKernelByApp(app);
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
-
-            _kernelService.ImportFunctionsByApp(app, _kernel);
-            settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
-
+            if (!string.IsNullOrEmpty(app.ApiFunctionList))//这里还需要加上本地插件的
+            {
+                _kernelService.ImportFunctionsByApp(app, _kernel);
+                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
+            }
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
             var chatResult = _kernel.InvokeStreamingAsync(function: func, arguments: new KernelArguments() { ["input"] = $"{history}{Environment.NewLine} user:{questions}" });
             await foreach (var content in chatResult)

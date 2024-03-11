@@ -26,7 +26,7 @@ namespace AntSK.Domain.Domain.Service
 
         public MemoryServerless GetMemoryByKMS(string kmsID, SearchClientConfig searchClientConfig = null)
         {
-            if (_memory.IsNull())
+            //if (_memory.IsNull())
             {
                 //获取KMS配置
                 var kms = _kmss_Repositories.GetFirst(p => p.Id == kmsID);
@@ -67,9 +67,9 @@ namespace AntSK.Domain.Domain.Service
                 _memory = memoryBuild.Build<MemoryServerless>();
                 return _memory;
             }
-            else {
-                return _memory;
-            }
+            //else {
+            //    return _memory;
+            //}
 
         }
 

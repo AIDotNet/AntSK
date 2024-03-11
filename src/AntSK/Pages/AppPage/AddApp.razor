@@ -1,6 +1,7 @@
 ﻿@namespace AntSK.Pages.AppPage
 @using AntSK.Domain.Repositories
 @using AntSK.Models
+@using AntSK.Domain.Model.Enum
 @page "/App/Add"
 @page "/App/Add/{AppId}"
 @using AntSK.Services.Auth
@@ -21,8 +22,8 @@
                 </FormItem>
                 <FormItem Label="类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.Type">
-                        <Radio RadioButton Value="@("chat")">会话应用</Radio>
-                         <Radio RadioButton Value="@("kms")">知识库</Radio>
+                        <Radio RadioButton Value="@AppType.chat.ToString()">会话应用</Radio>
+                         <Radio RadioButton Value="@AppType.kms.ToString()">知识库</Radio>
                      </RadioGroup>
                  </FormItem>
                  <FormItem Label="描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
@@ -37,7 +38,7 @@
                      </Select>
                      <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
                  </FormItem>
-                 @if (@context.Type == "chat")
+                 @if (@context.Type == AppType.chat.ToString())
                 {
 
                     <FormItem Label="提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
@@ -66,7 +67,7 @@
                         </Select>
                     </FormItem>
                 }
-                @if (@context.Type == "kms")
+                @if (@context.Type == AppType.kms.ToString())
                 {
                     <FormItem Label="知识库" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Select Mode="multiple"

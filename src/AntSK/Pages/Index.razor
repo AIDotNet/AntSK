@@ -2,40 +2,63 @@
 @using MarkdownSharp
 @page "/"
 @using AntSK.Services.Auth
+@using AntSK.Components
 @inherits AuthComponentBase
 
-<Body>
-    @((MarkupString)(body))
-    <Image Width="200px" Src="@imgSrc" />
-</Body>
+<GridContent>
+    <Row Type="flex" Gutter="24">
+        <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+            <ChartCard Title="应用数量"
+                       Total="@appCount"
+                       Icon="wechat"
+                       ContentHeight="46">
+                <ChildContent>
+                    <Tag Color="@PresetColor.Yellow.ToString()">会话应用：@chatAppCount</Tag>
+                        <Tag Color="@PresetColor.Green.ToString()">知识库应用：@kmsAppCount</Tag>
+                    </ChildContent>
+                    <Footer>
+                    </Footer>
+                </ChartCard>
+            </AntDesign.Col>
+            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                <ChartCard Title="知识库数量"
+                           Total="@kmsCount"
+                           Icon="database"
+                           ContentHeight="46">
+                    <ChildContent>
 
-@code {
-    [Inject]
-    NavigationManager NavigationManager { get; set; }
-    private string imgSrc { get; set; }
+                    </ChildContent>
+                    <Footer>
+                    </Footer>
+                </ChartCard>
+            </AntDesign.Col>
+            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                <ChartCard Title="文档数量"
+                           Total="@filesCount"
+                           Icon="file"
+                           ContentHeight="46">
+                    <ChildContent>
+                        <Tag Color="@PresetColor.Yellow.ToString()">文档：@fileCount</Tag>
+                        <Tag Color="@PresetColor.Green.ToString()">链接：@urlCount</Tag>
+                        <Tag Color="@PresetColor.Orange.ToString()">文本：@textCount</Tag>
+                    </ChildContent>
+                    <Footer>
+                    </Footer>
+                </ChartCard>
+            </AntDesign.Col>
+            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                <ChartCard Title="模型数量"
+                           Total="@aiModelCount"
+                           Icon="robot"
+                           ContentHeight="46">
+                    <ChildContent>
+                        <Tag Color="@PresetColor.Yellow.ToString()">会话模型：@chatAIModelCount</Tag>
+                        <Tag Color="@PresetColor.Green.ToString()">向量模型：@embeddingAIModelCount</Tag>
+                    </ChildContent>
+                    <Footer>
+                    </Footer>
+                </ChartCard>
+            </AntDesign.Col>
+        </Row>
+    </GridContent>
 
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        imgSrc = NavigationManager.BaseUri + "assets/gzh.png";
-    }
-    private string body = new Markdown().Transform(@"非常感谢您对**AntSK**的喜爱，您的支持对我来说是莫大的鼓励。
-
-如果您对技术类视频感兴趣，欢迎关注我的B站账号，获取更多精彩内容。
-
-- **Bilibili账号**：[点击这里](https://space.bilibili.com/1673184683/channel/series)
-
-同时，如果您感兴趣，可以访问我的GitHub页面，查看更多开源项目和代码：
-
-- **GitHub页面**：[点击这里](https://github.com/xuzeyu91)
-
-另外，如果您想加入由我创建的**.Net/AI应用开发微信交流群**，欢迎先添加我的微信**（xuzeyu91）**。
-
-发送“进群请求”，我将会把您邀请进群。
-
-期待与您在线上交流技术，共同进步！
-
-也欢迎您关注我的公众号，后面可以第一时间知道**AntSK**项目进展。");
-
-
-}

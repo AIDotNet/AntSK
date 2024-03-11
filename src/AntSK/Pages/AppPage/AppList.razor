@@ -1,5 +1,6 @@
 ﻿@namespace AntSK.Pages.AppPage
 @using AntSK.Domain.Repositories
+@using AntSK.Domain.Model.Enum
 @page "/AppList"
 @inject NavigationManager NavigationManager
 @using AntSK.Services.Auth
@@ -48,11 +49,11 @@
                                      <!--todo: Ellipsis not working-->
                                      @context.Describe
                                     </Paragraph>
-                                    @if (context.Type == "chat")
+                                    @if (context.Type == AppType.chat.ToString())
                                     {
                                         <Tag Color="@PresetColor.Yellow.ToString()">会话应用</Tag>
                                     }
-                                    else if (context.Type == "kms")
+                                    else if (context.Type == AppType.kms.ToString())
                                     {
                                         <Tag Color="@PresetColor.Green.ToString()">知识库</Tag>
                                         

@@ -45,7 +45,7 @@ namespace AntSK.Domain.Domain.Service
         /// <returns></returns>
         public Kernel GetKernelByApp(Apps app)
         {
-            if (_kernel.IsNull())
+            //if (_kernel.IsNull())
             {
                 var chatModel = _aIModels_Repositories.GetFirst(p => p.Id == app.ChatModelID);
 
@@ -58,10 +58,10 @@ namespace AntSK.Domain.Domain.Service
                 RegisterPluginsWithKernel(_kernel);
                 return _kernel;
             }
-            else 
-            {
-                return _kernel;
-            }
+            //else 
+            //{
+            //    return _kernel;
+            //}
         }
 
         private void WithTextGenerationByAIType(IKernelBuilder builder, Apps app, AIModels chatModel, HttpClient chatHttpClient)
@@ -104,7 +104,7 @@ namespace AntSK.Domain.Domain.Service
         public void ImportFunctionsByApp(Apps app, Kernel _kernel)
         {
             //插件不能重复注册，否则会异常
-            if (!_kernel.Plugins.Any(p => p.Name == "AntSkFunctions"))
+            if (_kernel.Plugins.Any(p => p.Name == "AntSkFunctions"))
             {
                 return;
             }
