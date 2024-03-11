@@ -8,56 +8,64 @@
 <GridContent>
     <Row Type="flex" Gutter="24">
         <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-            <ChartCard Title="应用数量"
-                       Total="@appCount"
-                       Icon="wechat"
-                       ContentHeight="46">
-                <ChildContent>
-                    <Tag Color="@PresetColor.Yellow.ToString()">会话应用：@chatAppCount</Tag>
-                        <Tag Color="@PresetColor.Green.ToString()">知识库应用：@kmsAppCount</Tag>
-                    </ChildContent>
-                    <Footer>
-                    </Footer>
-                </ChartCard>
-            </AntDesign.Col>
-            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-                <ChartCard Title="知识库数量"
-                           Total="@kmsCount"
-                           Icon="database"
+            <div @onclick="NavToApp" style=" cursor: pointer;">
+                <ChartCard Title="应用数量"
+                           Total="@appCount"
+                           Icon="wechat"
                            ContentHeight="46">
                     <ChildContent>
+                        <Tag Color="@PresetColor.Yellow.ToString()">会话应用：@chatAppCount</Tag>
+                            <Tag Color="@PresetColor.Green.ToString()">知识库应用：@kmsAppCount</Tag>
+                        </ChildContent>
+                        <Footer>
+                        </Footer>
+                    </ChartCard>
+                </div>
+            </AntDesign.Col>
+            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                <div @onclick="NavToKms" style=" cursor: pointer;">
+                    <ChartCard Title="知识库数量"
+                               Total="@kmsCount"
+                               Icon="database"
+                               ContentHeight="46">
+                        <ChildContent>
 
-                    </ChildContent>
-                    <Footer>
-                    </Footer>
-                </ChartCard>
+                        </ChildContent>
+                        <Footer>
+                        </Footer>
+                    </ChartCard>
+                </div>
             </AntDesign.Col>
             <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-                <ChartCard Title="文档数量"
-                           Total="@filesCount"
-                           Icon="file"
-                           ContentHeight="46">
-                    <ChildContent>
-                        <Tag Color="@PresetColor.Yellow.ToString()">文档：@fileCount</Tag>
-                        <Tag Color="@PresetColor.Green.ToString()">链接：@urlCount</Tag>
-                        <Tag Color="@PresetColor.Orange.ToString()">文本：@textCount</Tag>
-                    </ChildContent>
-                    <Footer>
-                    </Footer>
-                </ChartCard>
+                <div @onclick="NavToKms" style=" cursor: pointer;">
+                    <ChartCard Title="文档数量"
+                               Total="@filesCount"
+                               Icon="file"
+                               ContentHeight="46">
+                        <ChildContent>
+                            <Tag Color="@PresetColor.Yellow.ToString()">文档：@fileCount</Tag>
+                            <Tag Color="@PresetColor.Green.ToString()">链接：@urlCount</Tag>
+                            <Tag Color="@PresetColor.Orange.ToString()">文本：@textCount</Tag>
+                        </ChildContent>
+                        <Footer>
+                        </Footer>
+                    </ChartCard>
+                </div>
             </AntDesign.Col>
             <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-                <ChartCard Title="模型数量"
-                           Total="@aiModelCount"
-                           Icon="robot"
-                           ContentHeight="46">
-                    <ChildContent>
-                        <Tag Color="@PresetColor.Yellow.ToString()">会话模型：@chatAIModelCount</Tag>
-                        <Tag Color="@PresetColor.Green.ToString()">向量模型：@embeddingAIModelCount</Tag>
-                    </ChildContent>
-                    <Footer>
-                    </Footer>
-                </ChartCard>
+                <div @onclick="NavToAIModel" style=" cursor: pointer;">
+                    <ChartCard Title="模型数量"
+                               Total="@aiModelCount"
+                               Icon="robot"
+                               ContentHeight="46">
+                        <ChildContent>
+                            <Tag Color="@PresetColor.Yellow.ToString()">会话模型：@chatAIModelCount</Tag>
+                            <Tag Color="@PresetColor.Green.ToString()">向量模型：@embeddingAIModelCount</Tag>
+                        </ChildContent>
+                        <Footer>
+                        </Footer>
+                    </ChartCard>
+                </div>
             </AntDesign.Col>
         </Row>
     </GridContent>

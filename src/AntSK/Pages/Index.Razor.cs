@@ -56,5 +56,21 @@ namespace AntSK.Pages
             filesCount = (fileCount.ConvertToInt32() + urlCount.ConvertToInt32() + textCount.ConvertToInt32()).ConvertToString();
 
         }
+
+        private void NavToApp()
+        {
+            NavigationManager.NavigateTo("/AppList");
+
+        }
+
+        private void NavToKms()
+        {
+            NavigationManager.NavigateTo("/KmsList");
+        }
+
+        private void NavToAIModel()
+        {
+            NavigationManager.NavigateTo("/setting/modellist");
+        }
     }
 }
