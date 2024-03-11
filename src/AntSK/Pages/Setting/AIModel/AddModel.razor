@@ -50,7 +50,7 @@
                 @if (context.AIType == AIType.OpenAI)
                 {
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入请求地址" @bind-Value="@context.EndPoint" />
+                        <Input Placeholder="请输入请求地址 示例格式 http://ip:port/" @bind-Value="@context.EndPoint" />
                     </FormItem>
                     <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" />
