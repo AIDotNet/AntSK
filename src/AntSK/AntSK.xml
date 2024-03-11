@@ -51,6 +51,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AntSK.Functions.FunctionTest.GetOrder(System.Int32)">
+            <summary>
+            获取订单信息
+            </summary>
+            <param name="id">订单号</param>
+            <returns>订单信息</returns>
+        </member>
         <member name="M:AntSK.Pages.ChatPage.Chat.SendKms(System.String,System.String,AntSK.Domain.Repositories.Apps)">
             <summary>
             发送知识库问答

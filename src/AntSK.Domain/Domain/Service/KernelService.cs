@@ -12,6 +12,7 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Plugins.Core;
 using Microsoft.SemanticKernel.TextGeneration;
 using RestSharp;
+using System;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 
 namespace AntSK.Domain.Domain.Service
@@ -21,15 +22,18 @@ namespace AntSK.Domain.Domain.Service
     {
         private readonly IApis_Repositories _apis_Repositories;
         private readonly IAIModels_Repositories _aIModels_Repositories;
+        private readonly FunctionService _functionService;
+
         public KernelService(
               IApis_Repositories apis_Repositories,
-        IAIModels_Repositories aIModels_Repositories
-            )
+              IAIModels_Repositories aIModels_Repositories,
+              FunctionService functionService)
         {
             _apis_Repositories = apis_Repositories;
             _aIModels_Repositories = aIModels_Repositories;
-
+            _functionService = functionService;
         }
+
         /// <summary>
         /// 获取kernel实例，依赖注入不好按每个用户去Import不同的插件，所以每次new一个新的kernel
         /// </summary>
@@ -43,8 +47,7 @@ namespace AntSK.Domain.Domain.Service
             var chatHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
 
             var builder = Kernel.CreateBuilder();
-            WithTextGenerationByAIType(builder, app,chatModel, chatHttpClient);
-
+            WithTextGenerationByAIType(builder, app, chatModel, chatHttpClient);
 
             var kernel = builder.Build();
             RegisterPluginsWithKernel(kernel);
@@ -61,6 +64,7 @@ namespace AntSK.Domain.Domain.Service
                        apiKey: chatModel.ModelKey,
                        httpClient: chatHttpClient);
                     break;
+
                 case Model.Enum.AIType.AzureOpenAI:
                     builder.AddAzureOpenAIChatCompletion(
                         deploymentName: chatModel.ModelName,
@@ -68,13 +72,15 @@ namespace AntSK.Domain.Domain.Service
                         endpoint: chatModel.EndPoint
                         );
                     break;
+
                 case Model.Enum.AIType.LLamaSharp:
                     var (weights, parameters) = LLamaConfig.GetLLamaConfig(chatModel.ModelName);
                     var ex = new StatelessExecutor(weights, parameters);
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("local-llama", new LLamaSharpTextCompletion(ex));
                     break;
+
                 case Model.Enum.AIType.SparkDesk:
-                    var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelKey, ApiKey = chatModel.ModelName, ModelVersion= Sdcb.SparkDesk.ModelVersion.V3_5 };
+                    var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelKey, ApiKey = chatModel.ModelName, ModelVersion = Sdcb.SparkDesk.ModelVersion.V3_5 };
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, app.Id));
                     break;
             }
@@ -87,18 +93,20 @@ namespace AntSK.Domain.Domain.Service
         /// <param name="_kernel"></param>
         public void ImportFunctionsByApp(Apps app, Kernel _kernel)
         {
-            //开启自动插件调用
-            var apiIdList = app.ApiFunctionList.Split(",");
-            var apiList = _apis_Repositories.GetList(p => apiIdList.Contains(p.Id));
-            List<KernelFunction> functions = new List<KernelFunction>();
-            var plugin = _kernel.Plugins.FirstOrDefault(p => p.Name == "ApiFunctions");
+            List<KernelFunction> apiFunctions = new List<KernelFunction>();
+
+            if (!string.IsNullOrWhiteSpace(app.ApiFunctionList))
             {
+                //开启自动插件调用
+                var apiIdList = app.ApiFunctionList.Split(",");
+                var apiList = _apis_Repositories.GetList(p => apiIdList.Contains(p.Id));
+
                 foreach (var api in apiList)
                 {
                     switch (api.Method)
                     {
                         case HttpMethodType.Get:
-                            functions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
+                            apiFunctions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
                             {
                                 try
                                 {
@@ -131,8 +139,9 @@ namespace AntSK.Domain.Domain.Service
                                 }
                             }, api.Name, $"{api.Describe}"));
                             break;
+
                         case HttpMethodType.Post:
-                            functions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
+                            apiFunctions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
                             {
                                 try
                                 {
@@ -160,16 +169,26 @@ namespace AntSK.Domain.Domain.Service
                             break;
                     }
                 }
-                _kernel.ImportPluginFromFunctions("ApiFunctions", functions);
             }
 
+            _functionService.SearchMarkedMethods();
+
+            foreach (var func in _functionService.Functions)
+            {
+                var methodInfo = _functionService.MethodInfos[func.Key];
+                var parameters = methodInfo.Parameters.Select(x => new KernelParameterMetadata(x.ParameterName) { ParameterType = x.ParameterType, Description = x.Description });
+                var returnType = new KernelReturnParameterMetadata() { ParameterType = methodInfo.ReturnType.ParameterType, Description = methodInfo.ReturnType.Description };
+                apiFunctions.Add(_kernel.CreateFunctionFromMethod((object[] args) => func.Value(args), func.Key, methodInfo.Description, parameters, returnType));
+            }
+
+            _kernel.ImportPluginFromFunctions("AntSkFunctions", apiFunctions);
         }
 
         /// <summary>
         /// 注册默认插件
         /// </summary>
         /// <param name="kernel"></param>
-        void RegisterPluginsWithKernel(Kernel kernel)
+        private void RegisterPluginsWithKernel(Kernel kernel)
         {
             kernel.ImportPluginFromObject(new ConversationSummaryPlugin(), "ConversationSummaryPlugin");
             kernel.ImportPluginFromObject(new TimePlugin(), "TimePlugin");
