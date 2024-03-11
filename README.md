@@ -146,12 +146,10 @@ model/xxx.gguf
 DBConnection.DbType
 //连接字符串，需要根据不同DB类型，用对应的字符串
 DBConnection.ConnectionStrings
-//可以使用符合openai格式的在线API（国产模型使用one-api转接） ，也可以使用AntSK自带的llama api，ip和端口是AntSK启动地址
-OpenAIOption.EndPoint
-//模型秘钥，如果使用本地模型可以默认NotNull 这里不能用中文
-OpenAIOption.Key
+
 //向量存储的类型，支持  Postgres  Disk  Memory ，其中Postgres需要配置 ConnectionString
 KernelMemory.VectorDb
+
 //本地模型使用的运行方式  GUP  CPU ,如果用在线API 这个随意使用一个即可
 LLamaSharp.RunType
 //本地会话模型的模型路径 注意区分linux和windows盘符不同
@@ -159,6 +157,7 @@ LLamaSharp.Chat
 //本地向量模型的模型路径 注意区分linux和windows盘符不同
 LLamaSharp.Embedding
 //默认管理员账号密码
+
 Login
 //导入异步处理的线程数，使用在线API可以高一点，本地模型建议1 否则容易内存溢出崩掉
 BackgroundTaskBroker.ImportKMSTask.WorkerCount
