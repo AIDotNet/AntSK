@@ -25,7 +25,9 @@
                 <ListItem NoFlex>
                     <Card Hoverable
                            BodyStyle="padding-bottom: 20px;"
-                           Actions="Actions">
+                           Actions="new[] {
+                            down(()=> Down(context.Id)) 
+                             }">
                          <CardMeta>
                              <TitleTemplate>
                                  @context.Id
@@ -54,13 +56,7 @@
 </PageContainer>
 @code
 {
-    private static readonly RenderFragment Download =@<AntDesign.Tooltip Title="@("下载")">
-        <Icon Type="download" Theme="outline" />
-    </AntDesign.Tooltip>;
+    RenderFragment down(Action clickAction) =>@<a key="down" @onclick="@clickAction">下载</a>;
 
-    private static readonly IList<RenderFragment> Actions = new List<RenderFragment>
-{
-        Download
-    };
 }
 

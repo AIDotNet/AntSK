@@ -123,7 +123,7 @@ namespace AntSK.Pages.Setting.AIModel
             _aiModel.ModelName = _download.Package.FileName;
             _downloadModalVisible = false;
             _downloadStarted = false;
-u            _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory));
+            _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory));
             InvokeAsync(StateHasChanged);
         }
 
