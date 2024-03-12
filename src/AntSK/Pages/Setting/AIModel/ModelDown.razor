@@ -7,13 +7,75 @@
 @attribute [Authorize(Roles = "AntSKAdmin")]
 
 
-<PageContainer Title="模型下载">
+<PageContainer Title="模型列表">
+    <Content>
+        <div style="text-align: center;">
+            <Search Placeholder="输入回车"
+                    EnterButton="@("搜索")"
+                    Size="large"
+                    Style="max-width: 522px; width: 100%;"
+                    OnSearch="Search" />
+        </div>
+    </Content>
     <ChildContent>
-        <h1>支持LLamaSharp的本地模型 支持gguf类型，推荐使用llama或者qwen</h1>
-        <h1>如果模型加载报内存错误，可能是和llama.cpp版本不一致</h1>
-        <a href="https://hf-mirror.com/models?search=gguf" target="_blank" rel="noopener noreferrer">打开下载地址</a>
+        <div class="filterCardList">
+            <AntList TItem="ListItemDataType"
+                     Grid="LayoutModel._listGridType"
+                     DataSource="_fakeList">
+                <ListItem NoFlex>
+                    <Card Hoverable
+                           BodyStyle="padding-bottom: 20px;"
+                           Actions="Actions">
+                         <CardMeta>
+                             <TitleTemplate>
+                                 @context.Title
+                            </TitleTemplate>
+                            <AvatarTemplate>
+                                <Avatar Size="small" Src="@context.Avatar" />
+                            </AvatarTemplate>
+                        </CardMeta>
+                        <div class="cardItemContent">
+                            <div class="cardInfo">
+                                <div>
+                                    <p>Active</p>
+                                    <p>@FormatWan(context.ActiveUser)</p>
+                                </div>
+                                <div>
+                                    <p>New</p>
+                                    <p>@context.NewUser.ToString("0,0")</p>
+                                </div>
+                            </div>
+                        </div>
+                    </Card>
+                </ListItem>
+            </AntList>
+        </div>
     </ChildContent>
 </PageContainer>
-@code {
+@code
+{
+    private static readonly RenderFragment Download =@<AntDesign.Tooltip Title="@("下载")">
+        <Icon Type="download" Theme="outline" />
+    </AntDesign.Tooltip>;
 
+    private static readonly IList<RenderFragment> Actions = new List<RenderFragment>
+{
+        Download,
+    @<AntDesign.Tooltip Title="@("Edit")"><Icon Type="edit" Theme="outline" /></AntDesign.Tooltip>,
+    @<AntDesign.Tooltip Title="@("Share")"><Icon Type="share-alt" Theme="outline" /></AntDesign.Tooltip>,
+    @<Dropdown><Icon Type="ellipsis" Theme="outline" /></Dropdown>
+        };
+
+    private static RenderFragment FormatWan(int val)
+    {
+        if (val > 10000)
+        {
+            val = (int)Math.Floor((double)val / 10000);
+        }
+
+        return @<span>
+        @val
+        <span style="position: relative; top: -2px; font-size: 14px; font-style: normal; margin-left: 2px;">k</span>
+    </span>;
+    }
 }
