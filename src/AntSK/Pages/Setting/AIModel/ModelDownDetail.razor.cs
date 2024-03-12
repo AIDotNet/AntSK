@@ -1,4 +1,6 @@
 ﻿using AntSK.Domain.Model.hfmirror;
+using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Spreadsheet;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Components;
 using RestSharp;
@@ -48,7 +50,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private void Down(string path)
         {
-          
+            NavigationManager.NavigateTo($"/setting/model/addbypath/{path.Replace("?download=true", "").Replace("/", "---")}");
         }
     }
 }

@@ -4,6 +4,7 @@
 @using AntSK.Domain.Model.Enum
 @page "/setting/model/add"
 @page "/setting/model/add/{ModelId}"
+@page "/setting/model/addbypath/{ModelPath}"
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
 @using Microsoft.AspNetCore.Authorization
@@ -99,13 +100,6 @@
 
 <Modal @ref="_modal" Visible="_downloadModalVisible" Footer="null" Closable Title="模型下载" OnCancel="OnCancel" DestroyOnClose>
     <Flex Gap="10" Vertical>
-
-        <Alert>
-            <p>支持LLamaSharp的本地模型 支持gguf类型，推荐使用llama或者qwen</p>
-            <p>如果模型加载报内存错误，可能是和llama.cpp版本不一致</p>
-            <a href="https://hf-mirror.com/models?search=gguf" target="_blank" rel="noopener noreferrer">打开下载地址</a>
-        </Alert>
-
         <InputGroup>
             <Input Disabled="_downloadStarted" Placeholder="请输入下载地址" @bind-Value="_downloadUrl" Style="width:80%"></Input>
             @if (!_downloadStarted)

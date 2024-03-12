@@ -13,6 +13,8 @@ namespace AntSK.Pages.Setting.AIModel
     {
         [Parameter]
         public string ModelId { get; set; }
+        [Parameter]
+        public string ModelPath { get; set; }
         [Inject] protected IAIModels_Repositories _aimodels_Repositories { get; set; }
         [Inject] protected MessageService? Message { get; set; }
         [Inject] public HttpClient HttpClient { get; set; }
@@ -33,15 +35,30 @@ namespace AntSK.Pages.Setting.AIModel
         IEnumerable<string> _menuKeys;
 
         private List<MenuDataItem> menuList = new List<MenuDataItem>();
+
         protected override async Task OnInitializedAsync()
         {
-            await base.OnInitializedAsync();
-            if (!string.IsNullOrEmpty(ModelId))
+            try
             {
-                _aiModel = _aimodels_Repositories.GetFirst(p => p.Id == ModelId);
-            }
+                await base.OnInitializedAsync();
+                if (!string.IsNullOrEmpty(ModelId))
+                {
+                    _aiModel = _aimodels_Repositories.GetFirst(p => p.Id == ModelId);
+                }
 
-            _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory));
+                _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory));
+                if (!string.IsNullOrEmpty(ModelPath))
+                {
+                    _aiModel.AIType = Domain.Model.Enum.AIType.LLamaSharp;
+                    _downloadModalVisible = true;
+
+                    _downloadUrl = $"https://hf-mirror.com{ModelPath.Replace("---","/")}";
+                }
+            }
+            catch 
+            {
+                _ = Message.Error("LLamaSharp.FileDirectory目录配置不正确！", 2);
+            }
         }
 
         private void HandleSubmit()
@@ -113,7 +130,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private void DownloadProgressChanged(object? sender, DownloadProgressChangedEventArgs e)
         {
-            _downloadProgress = e.ProgressPercentage;
+            _downloadProgress = Math.Round( e.ProgressPercentage,2);
             InvokeAsync(StateHasChanged);
         }
 
