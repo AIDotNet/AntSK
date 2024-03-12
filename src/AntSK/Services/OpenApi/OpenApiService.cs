@@ -8,6 +8,7 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 
 namespace AntSK.Services.OpenApi
@@ -29,7 +30,11 @@ namespace AntSK.Services.OpenApi
     {
         public async Task Chat(OpenAIModel model, string sk, HttpContext HttpContext)
         {
-            Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == sk);
+            string headerValue = sk;
+            Regex regex = new Regex(@"Bearer (.*)");
+            Match match = regex.Match(headerValue);
+            string token = match.Groups[1].Value;
+            Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == token);
             if (app.IsNotNull())
             {
                 string msg = await HistorySummarize(app, model);
