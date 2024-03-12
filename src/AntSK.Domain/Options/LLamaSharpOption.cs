@@ -6,5 +6,7 @@
         public static string Chat { get; set; }
 
         public static string Embedding { get; set; }
+
+        public static string FileDirectory { get; set; }
     }
 }
