@@ -181,6 +181,7 @@ namespace AntSK.Pages.KmsPage
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
                 //上传文档
                 _fileVisible = false;
+                fileList.Clear();
                 _ = _message.Info("加入队列，进入后台处理中！", 2);
             }
             catch (System.Exception ex)
