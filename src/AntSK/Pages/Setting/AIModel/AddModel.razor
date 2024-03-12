@@ -25,10 +25,10 @@
                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.AIModelType">
                         <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
-                         <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
-                     </RadioGroup>
-                 </FormItem>
-                 @if (context.AIModelType == AIModelType.Embedding)
+                        <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
+                    </RadioGroup>
+                </FormItem>
+                @if (context.AIModelType == AIModelType.Embedding)
                 {
                     <FormItem Label="注意事项" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <b>请不要使用不同维度的向量模型，否则会导致无法向量存储</b>
@@ -74,13 +74,15 @@
                 @if (context.AIType == AIType.LLamaSharp)
                 {
                     <FormItem Label="模型路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入模型路径" @bind-Value="@context.ModelName" />
+                        <InputGroup>
+                            <AutoComplete Options="_modelFiles" Placeholder="请输入模型路径" @bind-Value="@context.ModelName" />
+                            <Button OnClick="()=>_downloadModalVisible=true">从Haggingface下载</Button>
+                        </InputGroup>
+
                     </FormItem>
                 }
                 @if (context.AIType == AIType.Mock)
                 {
-                    
-                        
                 }
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
                     <Button Type="primary" OnClick="HandleSubmit">
@@ -95,6 +97,27 @@
     </ChildContent>
 </PageContainer>
 
-@code {
+<Modal @ref="_modal" Visible="_downloadModalVisible" Footer="null" Closable Title="模型下载" OnCancel="OnCancel" DestroyOnClose>
+    <Flex Gap="10" Vertical>
 
-}
+        <Alert>
+            <p>支持LLamaSharp的本地模型 支持gguf类型，推荐使用llama或者qwen</p>
+            <p>如果模型加载报内存错误，可能是和llama.cpp版本不一致</p>
+            <a href="https://hf-mirror.com/models?search=gguf" target="_blank" rel="noopener noreferrer">打开下载地址</a>
+        </Alert>
+
+        <InputGroup>
+            <Input Disabled="_downloadStarted" Placeholder="请输入下载地址" @bind-Value="_downloadUrl" Style="width:80%"></Input>
+            @if (!_downloadStarted)
+            {
+                <Button OnClick="StartDownload">开始</Button>
+            }
+            else
+            {
+                <Button OnClick="Stop">停止</Button>
+            }
+        </InputGroup>
+        <AntDesign.Progress Percent="_downloadProgress"></AntDesign.Progress>
+
+    </Flex>
+</Modal>
