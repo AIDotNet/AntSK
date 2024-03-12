@@ -9,6 +9,7 @@
         AzureOpenAI = 2,
         LLamaSharp=3,
         SparkDesk=4,
+        Mock=5,
     }
 
     /// <summary>

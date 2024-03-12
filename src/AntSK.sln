@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MiddleWare", "MiddleWare", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntSK.BackgroundTask", "MiddleWare\AntSK.BackgroundTask\AntSK.BackgroundTask.csproj", "{DF87E829-99C5-44A7-9718-B3E67DC801F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntSk.LLM.SparkDesk", "AntSk.LLM.SparkDesk\AntSk.LLM.SparkDesk.csproj", "{1B4313B3-EF8E-4ADC-982A-C3F608BDEFDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntSK.LLM", "AntSk.LLM\AntSK.LLM.csproj", "{19529BFA-152F-4A8C-8254-F2D4896AB739}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,10 +38,10 @@ Global
 		{DF87E829-99C5-44A7-9718-B3E67DC801F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF87E829-99C5-44A7-9718-B3E67DC801F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF87E829-99C5-44A7-9718-B3E67DC801F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1B4313B3-EF8E-4ADC-982A-C3F608BDEFDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1B4313B3-EF8E-4ADC-982A-C3F608BDEFDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1B4313B3-EF8E-4ADC-982A-C3F608BDEFDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1B4313B3-EF8E-4ADC-982A-C3F608BDEFDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19529BFA-152F-4A8C-8254-F2D4896AB739}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19529BFA-152F-4A8C-8254-F2D4896AB739}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19529BFA-152F-4A8C-8254-F2D4896AB739}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19529BFA-152F-4A8C-8254-F2D4896AB739}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

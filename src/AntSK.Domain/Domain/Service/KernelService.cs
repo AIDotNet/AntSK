@@ -1,4 +1,4 @@
-﻿using AntSk.LLM.SparkDesk;
+﻿using AntSK.LLM.SparkDesk;
 using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Other;
@@ -14,6 +14,7 @@ using Microsoft.SemanticKernel.TextGeneration;
 using RestSharp;
 using System;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
+using AntSK.LLM.Mock;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -92,6 +93,9 @@ namespace AntSK.Domain.Domain.Service
                 case Model.Enum.AIType.SparkDesk:
                     var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelKey, ApiKey = chatModel.ModelName, ModelVersion = Sdcb.SparkDesk.ModelVersion.V3_5 };
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, app.Id));
+                    break;
+                case Model.Enum.AIType.Mock:
+                    builder.Services.AddKeyedSingleton<ITextGenerationService>("mock", new MockTextCompletion());
                     break;
             }
         }

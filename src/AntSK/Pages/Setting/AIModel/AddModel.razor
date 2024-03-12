@@ -77,6 +77,11 @@
                         <Input Placeholder="请输入模型路径" @bind-Value="@context.ModelName" />
                     </FormItem>
                 }
+                @if (context.AIType == AIType.Mock)
+                {
+                    
+                        
+                }
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
                     <Button Type="primary" OnClick="HandleSubmit">
                         保存

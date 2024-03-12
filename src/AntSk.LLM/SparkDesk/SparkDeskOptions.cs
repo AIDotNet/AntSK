@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AntSk.LLM.SparkDesk
+namespace AntSK.LLM.SparkDesk
 {
     public class SparkDeskOptions
     {

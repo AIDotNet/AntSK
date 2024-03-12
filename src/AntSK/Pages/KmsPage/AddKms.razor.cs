@@ -28,9 +28,10 @@ namespace AntSK.Pages.KmsPage
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            //星火没实现KM先隐藏
-            _chatList = _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Chat&&p.AIType!=AIType.SparkDesk);
-            _embeddingList = _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Embedding && p.AIType != AIType.SparkDesk);
+            //星火 Mock没实现KM先隐藏
+            List<AIType> ignores = new List<AIType>() { AIType.SparkDesk, AIType.Mock };
+            _chatList = _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Chat&& !ignores.Contains(p.AIType));
+            _embeddingList = _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Embedding && !ignores.Contains(p.AIType));
             if (!string.IsNullOrEmpty(KmsId))
             {
                 //查看
