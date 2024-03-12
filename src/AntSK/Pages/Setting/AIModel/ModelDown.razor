@@ -1,9 +1,9 @@
 ﻿@namespace AntSK.Pages.Setting.AIModel
 @page "/setting/modeldown"
-@inject NavigationManager NavigationManager
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
 @using Microsoft.AspNetCore.Authorization
+@using AntSK.Domain.Model.hfmirror
 @attribute [Authorize(Roles = "AntSKAdmin")]
 
 
@@ -19,30 +19,30 @@
     </Content>
     <ChildContent>
         <div class="filterCardList">
-            <AntList TItem="ListItemDataType"
+            <AntList TItem="HfModels"
                      Grid="LayoutModel._listGridType"
-                     DataSource="_fakeList">
+                     DataSource="_modelList">
                 <ListItem NoFlex>
                     <Card Hoverable
                            BodyStyle="padding-bottom: 20px;"
                            Actions="Actions">
                          <CardMeta>
                              <TitleTemplate>
-                                 @context.Title
+                                 @context.Id
                             </TitleTemplate>
                             <AvatarTemplate>
-                                <Avatar Size="small" Src="@context.Avatar" />
+                                <Avatar Size="small" Src="@context.AuthorData.AvatarUrl" />
                             </AvatarTemplate>
                         </CardMeta>
                         <div class="cardItemContent">
                             <div class="cardInfo">
                                 <div>
-                                    <p>Active</p>
-                                    <p>@FormatWan(context.ActiveUser)</p>
+                                    <p>Downloads</p>
+                                    <p>@context.Downloads.ToString("0,0")</p>
                                 </div>
                                 <div>
-                                    <p>New</p>
-                                    <p>@context.NewUser.ToString("0,0")</p>
+                                    <p>Likes</p>
+                                    <p>@context.Likes.ToString("0,0")</p>
                                 </div>
                             </div>
                         </div>
@@ -60,22 +60,7 @@
 
     private static readonly IList<RenderFragment> Actions = new List<RenderFragment>
 {
-        Download,
-    @<AntDesign.Tooltip Title="@("Edit")"><Icon Type="edit" Theme="outline" /></AntDesign.Tooltip>,
-    @<AntDesign.Tooltip Title="@("Share")"><Icon Type="share-alt" Theme="outline" /></AntDesign.Tooltip>,
-    @<Dropdown><Icon Type="ellipsis" Theme="outline" /></Dropdown>
-        };
-
-    private static RenderFragment FormatWan(int val)
-    {
-        if (val > 10000)
-        {
-            val = (int)Math.Floor((double)val / 10000);
-        }
-
-        return @<span>
-        @val
-        <span style="position: relative; top: -2px; font-size: 14px; font-style: normal; margin-left: 2px;">k</span>
-    </span>;
-    }
+        Download
+    };
 }
+

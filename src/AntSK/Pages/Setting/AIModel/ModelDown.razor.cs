@@ -1,7 +1,10 @@
 ﻿using AntDesign;
+using AntSK.Domain.Model.hfmirror;
 using AntSK.Models;
 using AntSK.Services;
 using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace AntSK.Pages.Setting.AIModel
 {
@@ -10,20 +13,34 @@ namespace AntSK.Pages.Setting.AIModel
         private readonly ListFormModel _model = new ListFormModel();
         private readonly IList<string> _selectCategories = new List<string>();
 
-        private IList<ListItemDataType> _fakeList = new List<ListItemDataType>();
+        private List<HfModels> _modelList = new List<HfModels>();
 
 
-        [Inject] public IProjectService ProjectService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            _fakeList = await ProjectService.GetFakeListAsync(8);
+            InitData("");
+        }
+
+        private void InitData(string searchKey) {
+            var param = searchKey.Split(" ");
+
+            string urlBase = "https://hf-mirror.com/models-json?sort=trending&search=gguf";
+            if (param.Count() > 0)
+            {
+                urlBase+="+"+string.Join("+",param);
+            }
+            RestClient client = new RestClient();
+            RestRequest request = new RestRequest(urlBase, Method.Get);
+            var response = client.Execute(request);
+            var model = JsonConvert.DeserializeObject<HfModel>(response.Content);
+            _modelList=model.models;
         }
 
         private async Task Search(string searchKey)
         {
-            
+            InitData(searchKey);
         }
     }
 }
