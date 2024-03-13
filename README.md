@@ -85,7 +85,7 @@ docker-compose up -d
 ```
 来启动AntSK
 
-## 如何在docker中挂载本地模型
+## 如何在docker中挂载本地模型，和模型下载的目录
 ```
 # 非 host 版本, 不使用本机代理
 version: '3.8'
@@ -128,7 +128,8 @@ model/xxx.gguf
   "LLamaSharp": {
     "RunType": "GPU", 
     "Chat": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf",
-    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf"
+    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf",
+    "FileDirectory": "D:\\Code\\AI\\AntBlazor\\model\\"
   },
   "Login": {
     "User": "admin",
@@ -156,8 +157,10 @@ LLamaSharp.RunType
 LLamaSharp.Chat
 //本地向量模型的模型路径 注意区分linux和windows盘符不同
 LLamaSharp.Embedding
-//默认管理员账号密码
+//本地模型路径，用于在选择llama时可以快速选择目录下的模型，以及保存下载的模型
+LLamaSharp.FileDirectory
 
+//默认管理员账号密码
 Login
 //导入异步处理的线程数，使用在线API可以高一点，本地模型建议1 否则容易内存溢出崩掉
 BackgroundTaskBroker.ImportKMSTask.WorkerCount
