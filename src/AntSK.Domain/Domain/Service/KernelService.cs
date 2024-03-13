@@ -133,7 +133,7 @@ namespace AntSK.Domain.Domain.Service
                                     Console.WriteLine(msg);
                                     RestClient client = new RestClient();
                                     RestRequest request = new RestRequest(api.Url, Method.Get);
-                                    foreach (var header in api.Header.Split("\n"))
+                                    foreach (var header in api.Header.ConvertToString().Split("\n"))
                                     {
                                         var headerArray = header.Split(":");
                                         if (headerArray.Length == 2)
@@ -142,7 +142,7 @@ namespace AntSK.Domain.Domain.Service
                                         }
                                     }
                                     //这里应该还要处理一次参数提取，等后面再迭代
-                                    foreach (var query in api.Query.Split("\n"))
+                                    foreach (var query in api.Query.ConvertToString().Split("\n"))
                                     {
                                         var queryArray = query.Split("=");
                                         if (queryArray.Length == 2)
@@ -168,7 +168,7 @@ namespace AntSK.Domain.Domain.Service
                                     Console.WriteLine(msg);
                                     RestClient client = new RestClient();
                                     RestRequest request = new RestRequest(api.Url, Method.Post);
-                                    foreach (var header in api.Header.Split("\n"))
+                                    foreach (var header in api.Header.ConvertToString().Split("\n"))
                                     {
                                         var headerArray = header.Split(":");
                                         if (headerArray.Length == 2)
@@ -177,7 +177,7 @@ namespace AntSK.Domain.Domain.Service
                                         }
                                     }
                                     //这里应该还要处理一次参数提取，等后面再迭代
-                                    request.AddJsonBody(api.JsonBody);
+                                    request.AddJsonBody(api.JsonBody.ConvertToString());
                                     var result = client.Execute(request);
                                     return result.Content;
                                 }

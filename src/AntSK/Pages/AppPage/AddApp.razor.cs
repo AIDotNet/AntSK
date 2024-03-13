@@ -2,6 +2,7 @@
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Model.Enum;
 using AntSK.Domain.Repositories;
+using AntSK.Domain.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.SemanticKernel;
 
@@ -26,7 +27,7 @@ namespace AntSK.Pages.AppPage
         protected MessageService? Message { get; set; }
         [Inject]
         protected IAIModels_Repositories _aimodels_Repositories { get; set; }
-        [Inject] 
+        [Inject]
         protected FunctionService _functionService { get; set; }
 
         private Apps _appModel = new Apps();
@@ -35,11 +36,11 @@ namespace AntSK.Pages.AppPage
 
         private List<Kmss> _kmsList = new List<Kmss>();
 
-        IEnumerable<string> apiIds=[];
+        IEnumerable<string> apiIds = [];
 
         private List<Apis> _apiList = new List<Apis>();
 
-        IEnumerable<string> funIds=[];
+        IEnumerable<string> funIds = [];
 
         public Dictionary<string, string> _funList = new Dictionary<string, string>();
 
@@ -55,10 +56,10 @@ namespace AntSK.Pages.AppPage
             _functionService.SearchMarkedMethods();
             foreach (var func in _functionService.Functions)
             {
-                var methodInfo = _functionService.MethodInfos[func.Key];   
+                var methodInfo = _functionService.MethodInfos[func.Key];
                 _funList.Add(func.Key, methodInfo.Description);
             }
-             
+
 
             if (!string.IsNullOrEmpty(AppId))
             {
@@ -66,7 +67,7 @@ namespace AntSK.Pages.AppPage
                 _appModel = _apps_Repositories.GetFirst(p => p.Id == AppId);
                 kmsIds = _appModel.KmsIdList?.Split(",");
                 apiIds = _appModel.ApiFunctionList?.Split(",");
-                funIds= _appModel.NativeFunctionList?.Split(",");
+                funIds = _appModel.NativeFunctionList?.Split(",");
             }
 
 
@@ -85,9 +86,15 @@ namespace AntSK.Pages.AppPage
                 _appModel.KmsIdList = string.Join(",", kmsIds);
             }
 
-            _appModel.ApiFunctionList = string.Join(",", apiIds);
+            if (apiIds.IsNotNull())
+            {
+                _appModel.ApiFunctionList = string.Join(",", apiIds);
+            }
+            if (funIds.IsNotNull())
+            {
 
-            _appModel.NativeFunctionList = string.Join(",", funIds);
+                _appModel.NativeFunctionList = string.Join(",", funIds);
+            }
 
             if (string.IsNullOrEmpty(AppId))
             {

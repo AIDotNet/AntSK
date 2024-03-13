@@ -64,7 +64,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private void HandleSubmit()
         {
-            if (_aimodels_Repositories.IsAny(p => p.Id!=_aiModel.Id&& p.AIModelType == _aiModel.AIModelType && p.EndPoint == _aiModel.EndPoint.ConvertToString() && p.ModelKey == _aiModel.ModelKey && p.ModelName == _aiModel.ModelName))
+            if (_aimodels_Repositories.IsAny(p => p.Id!=_aiModel.Id.ConvertToString()&& p.AIModelType == _aiModel.AIModelType && p.EndPoint == _aiModel.EndPoint.ConvertToString() && p.ModelKey == _aiModel.ModelKey && p.ModelName == _aiModel.ModelName))
             {
                 _ = Message.Error("模型已存在！", 2);
                 return;

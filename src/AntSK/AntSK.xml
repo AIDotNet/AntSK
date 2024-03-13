@@ -115,6 +115,12 @@
             <param name="id">订单号</param>
             <returns>订单信息</returns>
         </member>
+        <member name="M:AntSK.plugins.Functions.FunctionTest.GetAiModel">
+            <summary>
+            查询AI模型
+            </summary>
+            <returns>返回模型列表</returns>
+        </member>
         <member name="T:AntSK.Services.LLamaSharp.LLamaChatService">
             <summary>
             
