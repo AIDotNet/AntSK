@@ -82,23 +82,38 @@ namespace AntSK.LLM.SparkDesk
                     {
                         var func = functions.Where(x => x.Name == msg.FunctionCall.Name).FirstOrDefault();
 
+                        if (func == null)
+                        {
+                            yield return new($"插件{msg.FunctionCall.Name}未注册");
+                            yield break;
+                        }
+
                         if (kernel.Plugins.TryGetFunction(func.PluginName, func.Name, out var function))
                         {
-                            var funcArgs = new Dictionary<string, object?>();
+                            var arguments = new KernelArguments();
 
                             var JsonElement = JsonDocument.Parse(msg.FunctionCall.Arguments).RootElement;
                             foreach (var parameter in func.Parameters)
                             {
-                                if (JsonElement.TryGetProperty(parameter.Name, out var property))
+                                var error = "";
+                                try
                                 {
-                                    funcArgs.Add(parameter.Name, property.Deserialize(parameter.ParameterType!, _jsonSerializerOptions));
+                                    if (JsonElement.TryGetProperty(parameter.Name, out var property))
+                                    {
+                                        arguments.Add(parameter.Name, property.Deserialize(parameter.ParameterType!, _jsonSerializerOptions));
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    error = $"参数{parameter.Name}解析错误:{ex.Message}";
+                                }
+                             
+                                if (!string.IsNullOrEmpty(error))
+                                {
+                                    yield return new(error);
+                                    yield break;
                                 }
                             }
-
-                            var arguments = new KernelArguments
-                            {
-                                { "args", funcArgs.Values.ToArray() }
-                            };
 
                             var result = (await function.InvokeAsync(kernel, arguments, cancellationToken)).GetValue<object>() ?? string.Empty;
                             var stringResult = ProcessFunctionResult(result, chatExecutionSettings.ToolCallBehavior);

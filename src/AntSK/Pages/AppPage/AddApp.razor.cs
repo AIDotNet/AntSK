@@ -85,9 +85,9 @@ namespace AntSK.Pages.AppPage
                 _appModel.KmsIdList = string.Join(",", kmsIds);
             }
 
-            _appModel.ApiFunctionList = string.Join(",", apiIds);
+            _appModel.ApiFunctionList = apiIds == null ? "" : string.Join(",", apiIds);
 
-            _appModel.NativeFunctionList = string.Join(",", funIds);
+            _appModel.NativeFunctionList = funIds == null ? "" : string.Join(",", funIds);
 
             if (string.IsNullOrEmpty(AppId))
             {
