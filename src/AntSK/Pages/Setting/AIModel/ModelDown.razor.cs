@@ -6,6 +6,7 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using RestSharp;
+using AntSK.Domain.Utils;
 
 namespace AntSK.Pages.Setting.AIModel
 {
@@ -24,7 +25,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private void InitData(string searchKey)
         {
-            var param = searchKey.Split(" ");
+            var param = searchKey.ConvertToString().Split(" ");
 
             string urlBase = "https://hf-mirror.com/models-json?sort=trending&search=gguf";
             if (param.Count() > 0)
