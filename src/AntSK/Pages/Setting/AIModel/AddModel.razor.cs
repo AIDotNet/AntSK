@@ -165,6 +165,7 @@ namespace AntSK.Pages.Setting.AIModel
         {
             _downloadStarted=false;
             _download?.Stop();
+            InvokeAsync(StateHasChanged);
         }
     }
 }
