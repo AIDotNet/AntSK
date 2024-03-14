@@ -1,5 +1,5 @@
-﻿using AntSK.Domain.Domain.Dto;
-using AntSK.Domain.Domain.Interface;
+﻿using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Model.Dto;
 using Microsoft.AspNetCore.Components;
 
 namespace AntSK.Pages.KmsPage

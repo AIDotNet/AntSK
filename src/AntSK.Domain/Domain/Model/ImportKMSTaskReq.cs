@@ -1,6 +1,6 @@
 ﻿using AntSK.Domain.Repositories;
 
-namespace AntSK.Domain.Model
+namespace AntSK.Domain.Domain.Model
 {
     public class ImportKMSTaskDTO
     {

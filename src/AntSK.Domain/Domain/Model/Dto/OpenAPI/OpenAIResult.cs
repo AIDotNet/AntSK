@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace AntSK.Domain.Domain.Dto
+namespace AntSK.Domain.Domain.Model.Dto.OpenAPI
 {
     public class OpenAIResult
     {

@@ -1,7 +1,7 @@
 ﻿using AntDesign;
 using AntSK.BackgroundTask;
 using AntSK.Domain.Domain.Interface;
-using AntSK.Domain.Model;
+using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Repositories;
 using AntSK.Models;
 using DocumentFormat.OpenXml.Drawing.Diagrams;

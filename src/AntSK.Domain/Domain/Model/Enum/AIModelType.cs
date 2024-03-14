@@ -1,4 +1,4 @@
-﻿namespace AntSK.Domain.Model.Enum
+﻿namespace AntSK.Domain.Domain.Model.Enum
 {
     /// <summary>
     /// AI类型
@@ -7,9 +7,9 @@
     {
         OpenAI = 1,
         AzureOpenAI = 2,
-        LLamaSharp=3,
-        SparkDesk=4,
-        Mock=5,
+        LLamaSharp = 3,
+        SparkDesk = 4,
+        Mock = 5,
     }
 
     /// <summary>

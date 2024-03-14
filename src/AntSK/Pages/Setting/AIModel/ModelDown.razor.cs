@@ -1,5 +1,4 @@
 ﻿using AntDesign;
-using AntSK.Domain.Model.hfmirror;
 using AntSK.Models;
 using AntSK.Services;
 using DocumentFormat.OpenXml.Office2010.Excel;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using RestSharp;
 using AntSK.Domain.Utils;
+using AntSK.Domain.Domain.Model.hfmirror;
 
 namespace AntSK.Pages.Setting.AIModel
 {

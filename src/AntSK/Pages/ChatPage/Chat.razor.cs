@@ -1,7 +1,5 @@
 ﻿using AntDesign;
-using AntSK.Domain.Domain.Dto;
 using AntSK.Domain.Domain.Interface;
-using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using Microsoft.AspNetCore.Components;
@@ -13,6 +11,8 @@ using RestSharp;
 using System.Text;
 using AntSK.Domain.Utils;
 using Markdig;
+using AntSK.Domain.Domain.Model;
+using AntSK.Domain.Domain.Model.Dto;
 
 namespace AntSK.Pages.ChatPage
 {

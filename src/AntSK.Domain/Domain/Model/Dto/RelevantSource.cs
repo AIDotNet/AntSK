@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AntSK.Domain.Domain.Dto
+namespace AntSK.Domain.Domain.Model.Dto
 {
     public class RelevantSource
     {

@@ -1,4 +1,4 @@
-﻿namespace AntSK.Domain.Domain.Dto
+﻿namespace AntSK.Domain.Domain.Model.Dto
 {
     public class KMFile
     {

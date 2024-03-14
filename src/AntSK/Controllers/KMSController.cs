@@ -1,8 +1,8 @@
 ﻿using AntSK.BackgroundTask;
+using AntSK.Domain.Common.Map;
 using AntSK.Domain.Domain.Interface;
-using AntSK.Domain.Map;
-using AntSK.Domain.Model;
-using AntSK.Domain.Model.Enum;
+using AntSK.Domain.Domain.Model;
+using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

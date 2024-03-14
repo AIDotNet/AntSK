@@ -48,6 +48,36 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="T:AntSK.Domain.Domain.Model.Enum.AIType">
+            <summary>
+            AI类型
+            </summary>
+        </member>
+        <member name="T:AntSK.Domain.Domain.Model.Enum.AIModelType">
+            <summary>
+            模型类型
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.MessageInfo.IsSend">
+            <summary>
+            发送是true  接收是false
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.PageList`1.PageIndex">
+            <summary>
+            当前页，从1开始
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.PageList`1.PageSize">
+            <summary>
+            每页数量
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.PageList`1.TotalCount">
+            <summary>
+            总数
+            </summary>
+        </member>
         <member name="F:AntSK.Domain.Domain.Other.LLamaConfig.dicLLamaWeights">
             <summary>
             避免模型重复加载，本地缓存
@@ -96,61 +126,6 @@
             <param name="questions"></param>
             <param name="history"></param>
             <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Map.MapperExtend.ToDTOList``1(System.Object)">
-            <summary>
-            Entity集合转DTO集合
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Map.MapperExtend.ToDTO``1(System.Object)">
-            <summary>
-            Entity转DTO
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AntSK.Domain.Map.MapperExtend.MapTo``1(System.Object,``0)">
-            <summary>
-            给已有对象map,适合update场景，如需过滤空值需要在AutoMapProfile 设置
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <param name="result"></param>
-            <returns></returns>
-        </member>
-        <member name="T:AntSK.Domain.Model.Enum.AIType">
-            <summary>
-            AI类型
-            </summary>
-        </member>
-        <member name="T:AntSK.Domain.Model.Enum.AIModelType">
-            <summary>
-            模型类型
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Model.MessageInfo.IsSend">
-            <summary>
-            发送是true  接收是false
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Model.PageList`1.PageIndex">
-            <summary>
-            当前页，从1开始
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Model.PageList`1.PageSize">
-            <summary>
-            每页数量
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Model.PageList`1.TotalCount">
-            <summary>
-            总数
-            </summary>
         </member>
         <member name="P:AntSK.Domain.Options.DBConnectionOption.DbType">
             <summary>

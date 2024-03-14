@@ -1,4 +1,4 @@
-﻿namespace AntSK.Domain.Model.Enum
+﻿namespace AntSK.Domain.Domain.Model.Enum
 {
     public enum ImportKmsStatus
     {

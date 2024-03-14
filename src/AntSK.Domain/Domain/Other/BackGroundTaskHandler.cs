@@ -1,6 +1,6 @@
 ﻿using AntSK.BackgroundTask;
 using AntSK.Domain.Domain.Interface;
-using AntSK.Domain.Model;
+using AntSK.Domain.Domain.Model;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AntSK.Domain.Domain.Other

@@ -1,4 +1,4 @@
-﻿using AntSK.Domain.Domain.Dto;
+﻿using AntSK.Domain.Domain.Model.Dto.OpenAPI;
 using AntSK.Domain.Utils;
 using AntSK.Services.OpenApi;
 using Microsoft.AspNetCore.Mvc;

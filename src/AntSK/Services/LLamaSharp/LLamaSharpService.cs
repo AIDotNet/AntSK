@@ -1,5 +1,5 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
-using AntSK.Domain.Domain.Dto;
+using AntSK.Domain.Domain.Model.Dto.OpenAPI;
 using AntSK.Domain.Utils;
 using Newtonsoft.Json;
 using System.Text;

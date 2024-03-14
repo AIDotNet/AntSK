@@ -10,9 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AntSK.Domain.Utils;
 using Microsoft.KernelMemory;
-using AntSK.Domain.Model;
-using AntSK.Domain.Domain.Dto;
 using Markdig;
+using AntSK.Domain.Domain.Model;
+using AntSK.Domain.Domain.Model.Dto;
 
 namespace AntSK.Domain.Domain.Service
 {

@@ -1,4 +1,4 @@
-﻿using AntSK.Domain.Model;
+﻿using AntSK.Domain.Domain.Model;
 using SqlSugar;
 using System.Linq.Expressions;
 

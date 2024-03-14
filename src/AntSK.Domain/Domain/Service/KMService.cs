@@ -1,6 +1,6 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
-using AntSK.Domain.Domain.Dto;
 using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Model.Dto;
 using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;

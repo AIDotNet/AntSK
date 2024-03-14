@@ -1,4 +1,4 @@
-﻿using AntSK.Domain.Model;
+﻿using AntSK.Domain.Domain.Model;
 
 namespace AntSK.Domain.Domain.Interface
 {

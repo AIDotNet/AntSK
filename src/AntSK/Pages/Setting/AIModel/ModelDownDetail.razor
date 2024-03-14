@@ -3,7 +3,8 @@
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
 @using Microsoft.AspNetCore.Authorization
-@using AntSK.Domain.Model.hfmirror
+@using AntSK.Domain.Domain.Model.hfmirror;
+    using AntSK.Domain.Domain.Model.hfmirror
 @attribute [Authorize(Roles = "AntSKAdmin")]
 
 

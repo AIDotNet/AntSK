@@ -2,7 +2,6 @@
 using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Other;
-using AntSK.Domain.Model;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using LLama;
@@ -15,6 +14,7 @@ using RestSharp;
 using System;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 using AntSK.LLM.Mock;
+using AntSK.Domain.Domain.Model.Enum;
 
 namespace AntSK.Domain.Domain.Service
 {

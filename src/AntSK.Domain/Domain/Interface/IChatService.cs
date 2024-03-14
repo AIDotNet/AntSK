@@ -1,4 +1,4 @@
-﻿using AntSK.Domain.Domain.Dto;
+﻿using AntSK.Domain.Domain.Model.Dto;
 using AntSK.Domain.Repositories;
 using Microsoft.SemanticKernel;
 using System;

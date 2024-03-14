@@ -1,5 +1,6 @@
 ﻿using AntDesign;
 using AntDesign.ProLayout;
+using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
@@ -50,7 +51,7 @@ namespace AntSK.Pages.Setting.AIModel
                 if (!string.IsNullOrEmpty(ModelPath))
                 {
                     //下载页跳入
-                    _aiModel.AIType = Domain.Model.Enum.AIType.LLamaSharp;
+                    _aiModel.AIType = AIType.LLamaSharp;
                     _downloadModalVisible = true;
 
                     _downloadUrl = $"https://hf-mirror.com{ModelPath.Replace("---","/")}";

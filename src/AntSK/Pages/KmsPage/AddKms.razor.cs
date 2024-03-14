@@ -1,5 +1,5 @@
 ﻿using AntDesign;
-using AntSK.Domain.Model.Enum;
+using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Repositories;
 using Microsoft.AspNetCore.Components;
 

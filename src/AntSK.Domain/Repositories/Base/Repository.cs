@@ -1,5 +1,6 @@
-﻿using AntSK.Domain.Map;
-using AntSK.Domain.Model;
+﻿using AntSK.Domain.Common.Map;
+using AntSK.Domain.Domain.Model;
+
 using SqlSugar;
 using System.Linq.Expressions;
 

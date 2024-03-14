@@ -1,5 +1,5 @@
 ﻿using AntDesign;
-using AntSK.Domain.Domain.Dto;
+using AntSK.Domain.Domain.Model.Dto.OpenAPI;
 using AntSK.Domain.Repositories;
 using AntSK.Models;
 using Microsoft.AspNetCore.Components;

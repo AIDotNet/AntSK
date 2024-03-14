@@ -1,4 +1,4 @@
-﻿namespace AntSK.Domain.Model
+﻿namespace AntSK.Domain.Domain.Model
 {
     public class PageList<T>
     {

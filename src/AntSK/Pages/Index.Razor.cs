@@ -1,4 +1,4 @@
-﻿using AntSK.Domain.Model.Enum;
+﻿using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using Microsoft.AspNetCore.Components;

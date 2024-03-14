@@ -1,4 +1,4 @@
-﻿using AntSK.Domain.Model.hfmirror;
+﻿using AntSK.Domain.Domain.Model.hfmirror;
 using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Spreadsheet;
 using HtmlAgilityPack;
