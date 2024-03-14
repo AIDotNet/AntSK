@@ -222,7 +222,7 @@ namespace AntSK.Domain.Domain.Service
         private void RegisterPluginsWithKernel(Kernel kernel)
         {
             kernel.ImportPluginFromObject(new ConversationSummaryPlugin(), "ConversationSummaryPlugin");
-            kernel.ImportPluginFromObject(new TimePlugin(), "TimePlugin");
+            //kernel.ImportPluginFromObject(new TimePlugin(), "TimePlugin");
             kernel.ImportPluginFromPromptDirectory(Path.Combine(RepoFiles.SamplePluginsPath(), "KMSPlugin"));
         }
 
