@@ -45,7 +45,7 @@ builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSet
 builder.Services.AddServicesFromAssemblies("AntSK");
 builder.Services.AddServicesFromAssemblies("AntSK.Domain");
 builder.Services.AddSingleton(sp => new FunctionService(sp, [typeof(AntSK.App).Assembly, typeof(AntSK.Domain.Common.AntSkFunctionAttribute).Assembly]));
-builder.Services.AddSingleton<FunctionTest>();
+builder.Services.AddScoped<FunctionTest>();
 
 builder.Services.AddSwaggerGen(c =>
 {

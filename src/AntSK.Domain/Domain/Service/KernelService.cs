@@ -24,19 +24,20 @@ namespace AntSK.Domain.Domain.Service
         private readonly IApis_Repositories _apis_Repositories;
         private readonly IAIModels_Repositories _aIModels_Repositories;
         private readonly FunctionService _functionService;
+        private readonly IServiceProvider _serviceProvider;
+        private Kernel _kernel;
 
         public KernelService(
               IApis_Repositories apis_Repositories,
               IAIModels_Repositories aIModels_Repositories,
-              FunctionService functionService)
+              FunctionService functionService,
+              IServiceProvider serviceProvider)
         {
             _apis_Repositories = apis_Repositories;
             _aIModels_Repositories = aIModels_Repositories;
             _functionService = functionService;
+            _serviceProvider = serviceProvider;
         }
-
-        private Kernel _kernel;
-
 
         /// <summary>
         /// 获取kernel实例，依赖注入不好按每个用户去Import不同的插件，所以每次new一个新的kernel
@@ -197,6 +198,8 @@ namespace AntSK.Domain.Domain.Service
                 var nativeIdList = app.NativeFunctionList.Split(",");
 
                 _functionService.SearchMarkedMethods();
+                using var scope= _serviceProvider.CreateScope();
+
                 foreach (var func in _functionService.Functions)
                 {
                     if (nativeIdList.Contains(func.Key))
@@ -204,7 +207,8 @@ namespace AntSK.Domain.Domain.Service
                         var methodInfo = _functionService.MethodInfos[func.Key];
                         var parameters = methodInfo.Parameters.Select(x => new KernelParameterMetadata(x.ParameterName) { ParameterType = x.ParameterType, Description = x.Description });
                         var returnType = new KernelReturnParameterMetadata() { ParameterType = methodInfo.ReturnType.ParameterType, Description = methodInfo.ReturnType.Description };
-                        apiFunctions.Add(_kernel.CreateFunctionFromMethod((object[] args) => func.Value(args), func.Key, methodInfo.Description, parameters, returnType));
+                        var target = ActivatorUtilities.CreateInstance(scope.ServiceProvider, func.Value.DeclaringType);
+                        apiFunctions.Add(_kernel.CreateFunctionFromMethod(func.Value, target, func.Key, methodInfo.Description, parameters, returnType));
                     }
                 }
             }
