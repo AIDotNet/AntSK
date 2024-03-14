@@ -70,7 +70,8 @@ namespace AntSK.LLM.SparkDesk
             IList<KernelFunctionMetadata> functions = kernel?.Plugins.GetFunctionsMetadata().Where(x => x.PluginName == "AntSkFunctions").ToList() ?? [];
             var functionDefs = functions.Select(func => new FunctionDef(func.Name, func.Description, func.Parameters.Select(p => new FunctionParametersDef(p.Name, p.ParameterType?.IsClass == true ? "object" : "string", func.Description, p.IsRequired)).ToList())).ToList();
 
-            var messages = GetHistories(prompt);
+            //var messages = GetHistories(prompt);
+            var messages = new ChatMessage[] { new ChatMessage("user", prompt)  };
 
             return GetStreamingMessageAsync(messages, parameters, functionDefs, cancellationToken);
 
