@@ -341,3 +341,4 @@ ASALocalRun/
 /src/AntSK/appsettings.Development.json
 /src/AntSK.db
 /src/AntSK/llama_models
+/src/AntSK/AntSK.xml
