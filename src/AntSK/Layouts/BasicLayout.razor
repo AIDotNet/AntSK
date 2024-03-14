@@ -5,16 +5,25 @@
 @using AntSK.Domain.Options
 @using AntSK.Domain.Repositories
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject INotificationService _notice
 @inherits LayoutComponentBase
 
-<AntDesign.ProLayout.BasicLayout 
-    Logo="@("https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg")"
-    MenuData="_menuData">
+<AntDesign.ProLayout.BasicLayout Logo="@("https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg")"
+                                 MenuData="_menuData">
     <RightContentRender>
         <AntSK.Components.RightContent />
     </RightContentRender>
     <ChildContent>
-        @Body
+        <ErrorBoundary @ref="errorBoundary">
+            <ChildContent>
+                @Body
+            </ChildContent>
+            <ErrorContent Context="ex">
+                @{
+                    ShowNotification(ex);
+                }
+            </ErrorContent>
+        </ErrorBoundary>
     </ChildContent>
     <FooterRender>
         <FooterView Copyright="2024 许泽宇的技术分享" Links="Links"></FooterView>
@@ -24,6 +33,7 @@
 
 @code
 {
+    ErrorBoundary errorBoundary;
     private MenuDataItem[] _menuData = { };
 
     [Inject] public HttpClient HttpClient { get; set; }
@@ -36,7 +46,7 @@
     {
         await base.OnInitializedAsync();
         //菜单权限控制
-        var menuList  = await HttpClient.GetFromJsonAsync<MenuDataItem[]>("data/menu.json");
+        var menuList = await HttpClient.GetFromJsonAsync<MenuDataItem[]>("data/menu.json");
 
         var userSessionStorageResult = await _protectedSessionStore.GetAsync<UserSession>("UserSession");
         var userSession = userSessionStorageResult.Success ? userSessionStorageResult.Value : null;
@@ -54,7 +64,7 @@
 
             }
 
-            if (username == LoginOption.User )
+            if (username == LoginOption.User)
             {
                 _menuData = menuList;
             }
@@ -67,6 +77,17 @@
         }
     }
 
+
+    void ShowNotification(Exception ex)
+    {
+        _ = _notice.Error(new()
+            {
+                Message = ex.Message,
+                Description = ex.StackTrace
+            });
+
+        errorBoundary.Recover();
+    }
 
     public LinkItem[] Links { get; set; } =
     {
@@ -84,6 +105,6 @@
             Href = "https://github.com/xuzeyu91/Xzy.AntSK.KnowledgeBase",
             BlankTarget = true,
         }
-      
+
     };
 }
