@@ -7,6 +7,6 @@
 
         public static string Embedding { get; set; }
 
-        public static string FileDirectory { get; set; }
+        public static string FileDirectory { get; set; } = Directory.GetCurrentDirectory();
     }
 }
