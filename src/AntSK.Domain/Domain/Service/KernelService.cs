@@ -97,6 +97,11 @@ namespace AntSK.Domain.Domain.Service
                     var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelKey, ApiKey = chatModel.ModelName, ModelVersion = Sdcb.SparkDesk.ModelVersion.V3_5 };
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, app.Id));
                     break;
+
+                case Model.Enum.AIType.DashScope:
+                    builder.Services.AddDashScopeChatCompletion(chatModel.ModelKey, chatModel.ModelName);
+                    break;
+
                 case Model.Enum.AIType.Mock:
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("mock", new MockTextCompletion());
                     break;
