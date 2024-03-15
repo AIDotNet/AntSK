@@ -27,7 +27,7 @@ namespace AntSK.plugins.Functions
         /// 获取模型
         /// </summary>
         /// <returns>模型列表</returns>
-        [AntSkFunction]
+        [Description("AntSK")]
         public string GetModels()
         {
             var models = Repository.GetList();
