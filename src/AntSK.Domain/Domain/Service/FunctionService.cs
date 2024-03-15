@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 using System.Xml;
 using AntSK.Domain.Common;
 using AntSK.Domain.Utils;
@@ -39,7 +40,11 @@ namespace AntSK.Domain.Domain.Service
                 // 从缓存中获取标记了ActionAttribute的方法
                 foreach (var type in assembly.GetTypes())
                 {
-                    markedMethods.AddRange(type.GetMethods().Where(m => m.GetCustomAttributes(typeof(AntSkFunctionAttribute), true).Length > 0));
+                    markedMethods.AddRange(type.GetMethods().Where(m =>
+                    {
+                        DescriptionAttribute da = (DescriptionAttribute)m.GetCustomAttributes(typeof(DescriptionAttribute), true).FirstOrDefault();
+                        return da != null && da.Description == "AntSK";
+                    }));
                 }
             }
 

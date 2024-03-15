@@ -1,5 +1,6 @@
 ﻿using AntSK.Domain.Common;
 using AntSK.Domain.Repositories;
+using System.ComponentModel;
 
 namespace AntSK.plugins.Functions
 {
@@ -10,7 +11,7 @@ namespace AntSK.plugins.Functions
         /// </summary>
         /// <param name="id">订单号</param>
         /// <returns>订单信息</returns>
-        [AntSkFunction]
+        [Description("AntSK")]
         public string GetOrder(int id)
         {
             return $"""
