@@ -2,7 +2,9 @@
 using AntSK.Domain.Domain.Model.Fun;
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Repositories;
+using AntSK.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.SemanticKernel;
 
 namespace AntSK.Pages.ApiPage
@@ -17,6 +19,14 @@ namespace AntSK.Pages.ApiPage
         IServiceProvider _serviceProvider { get; set; }
         [Inject]
         IConfirmService _confirmService { get; set; }
+
+        [Inject]
+        protected MessageService? _message { get; set; }
+
+        bool _fileVisible = false;
+        bool _fileConfirmLoading = false;
+        List<FileInfoModel> fileList = new List<FileInfoModel>();
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -55,6 +65,57 @@ namespace AntSK.Pages.ApiPage
         {
             await InitData(searchKey);
         }
-    
+
+        private async Task AddFun() {
+            _fileVisible = true;
+        }
+
+
+        private async Task FileHandleOk(MouseEventArgs e)
+        {
+            try
+            {
+                
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+            }
+        }
+        private void FileHandleCancel(MouseEventArgs e)
+        {
+            _fileVisible = false;
+        }
+        private void FileShowModal()
+        {
+            _fileVisible = true;
+        }
+
+        bool BeforeUpload(UploadFileItem file)
+        {
+            if (file.Ext != ".dll")
+            {
+                _message.Error("请上传dll文件!");
+            }
+            var IsLt500K = file.Size < 1024 * 1024 * 100;
+            if (!IsLt500K)
+            {
+                _message.Error("文件需不大于100MB!");
+            }
+
+            return  IsLt500K;
+        }
+        private void OnSingleCompleted(UploadInfo fileinfo)
+        {
+            if (fileinfo.File.State == UploadState.Success)
+            {
+                //文件列表
+                fileList.Add(new FileInfoModel()
+                {
+                    FileName = fileinfo.File.FileName,
+                    FilePath = fileinfo.File.Url = fileinfo.File.Response
+                });
+            }
+        }
     }
 }

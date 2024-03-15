@@ -26,7 +26,7 @@
                 <ListItem NoFlex>
                     @if (string.IsNullOrEmpty(context.Name))
                     {
-                        <Button Type="dashed" class="newButton" @onclick="NavigateToAddApp">
+                        <Button Type="dashed" class="newButton" @onclick="AddFun">
                             <Icon Type="plus" Theme="outline" /> 创建函数
                         </Button>
                     }
@@ -55,8 +55,29 @@
     </ChildContent>
 </PageContainer>
 
+
+<Modal Title="插件导入"
+       Visible="@_fileVisible"
+       OnOk="@FileHandleOk"
+       OnCancel="@FileHandleCancel"
+       ConfirmLoading="@_fileConfirmLoading">
+    <Upload Action="@("api/File/UploadFile")"
+            Name="file"
+            Drag
+            Multiple
+             Accept="*/*"
+             BeforeUpload="BeforeUpload"
+             OnSingleCompleted="OnSingleCompleted">
+         <p class="ant-upload-drag-icon">
+             <Icon Type="inbox" />
+         </p>
+         <p class="ant-upload-text">单击或拖动文件到此区域进行上传</p>
+         <p class="ant-upload-hint">
+             请上传dll文件
+         </p>
+     </Upload>
+ </Modal>
 @code
 {
-    RenderFragment info(Action clickAction) =>@<a key="info" @onclick="@clickAction">查看</a>;
-    RenderFragment delete(Action clickAction) => @<a key="delete" @onclick="@clickAction">删除</a> ;
+ 
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AntSK.Domain.Options;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AntSK.Controllers
 {
@@ -20,7 +21,7 @@ namespace AntSK.Controllers
             }
 
             // 创建文件存储的路径
-            var uploadsFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "files"); // 给定的文件夹名称
+            var uploadsFolderPath = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory), "files");// 给定的文件夹名称
 
             // 如果路径不存在，则创建一个新的目录
             if (!Directory.Exists(uploadsFolderPath))
