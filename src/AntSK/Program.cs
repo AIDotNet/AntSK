@@ -140,6 +140,7 @@ void InitDB(WebApplication app)
         _repository.GetDB().CodeFirst.InitTables(typeof(Users));
         _repository.GetDB().CodeFirst.InitTables(typeof(Apis));
         _repository.GetDB().CodeFirst.InitTables(typeof(AIModels));
+        _repository.GetDB().CodeFirst.InitTables(typeof(Funs));
         //创建vector插件如果数据库没有则需要提供支持向量的数据库
         _repository.GetDB().Ado.ExecuteCommandAsync($"CREATE EXTENSION IF NOT EXISTS vector;");
     }

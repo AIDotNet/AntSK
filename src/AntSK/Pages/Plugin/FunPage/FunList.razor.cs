@@ -11,7 +11,7 @@ namespace AntSK.Pages.ApiPage
 {
     public partial class FunList
     {
-        private Funs[] _data = { };
+        private FunDto[] _data = { };
 
         [Inject]
         FunctionService _functionService { get; set; }
@@ -19,6 +19,8 @@ namespace AntSK.Pages.ApiPage
         IServiceProvider _serviceProvider { get; set; }
         [Inject]
         IConfirmService _confirmService { get; set; }
+        [Inject]
+        IFuns_Repositories _funs_Repositories { get; set; }
 
         [Inject]
         protected MessageService? _message { get; set; }
@@ -36,7 +38,7 @@ namespace AntSK.Pages.ApiPage
 
         private async Task InitData(string searchKey)
         {
-            var list = new List<Funs> { new Funs() };
+            var list = new List<FunDto> { new FunDto() };
 
             _functionService.SearchMarkedMethods();
             using var scope = _serviceProvider.CreateScope();
@@ -50,7 +52,7 @@ namespace AntSK.Pages.ApiPage
             {
 
                 var methodInfo = _functionService.MethodInfos[func.Key];
-                list.Add(new Funs() { Name = func.Key, Description = methodInfo.Description });
+                list.Add(new FunDto() { Name = func.Key, Description = methodInfo.Description });
             }
             _data = list.ToArray();
             await InvokeAsync(StateHasChanged);
@@ -75,7 +77,12 @@ namespace AntSK.Pages.ApiPage
         {
             try
             {
-                
+                foreach (var file in fileList)
+                {
+                    _funs_Repositories.Insert(new Funs() { Id = Guid.NewGuid().ToString(), Name = file.FileName, Path = file.FilePath });
+                }
+                _message.Info("上传成功");
+                _fileVisible = false;
             }
             catch (System.Exception ex)
             {

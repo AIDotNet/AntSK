@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AntSK.Domain.Domain.Model.Fun
 {
-    public class Funs
+    public class FunDto
     {
         public string Name { get; set; }
 
