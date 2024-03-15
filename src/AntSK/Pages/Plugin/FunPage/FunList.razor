@@ -1,0 +1,62 @@
+﻿@namespace AntSK.Pages.ApiPage
+@using AntSK.Domain.Repositories
+@using AntSK.Domain.Domain.Model.Enum
+@using AntSK.Domain.Domain.Model.Fun
+@page "/plugins/funlist"
+@inject NavigationManager NavigationManager
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
+
+<PageContainer Title="函数列表">
+    <Content>
+        <div style="text-align: center;">
+            <Search Placeholder="输入回车"
+                    EnterButton="@("搜索")"
+                    Size="large"
+                    Style="max-width: 522px; width: 100%;"
+                    OnSearch="Search" />
+        </div>
+    </Content>
+    <ChildContent>
+        <div class="cardList">
+            <AntList TItem="Funs"
+                     DataSource="_data"
+                     ItemLayout="ListItemLayout.Horizontal"
+                     Grid="LayoutModel._listGridType">
+                <ListItem NoFlex>
+                    @if (string.IsNullOrEmpty(context.Name))
+                    {
+                        <Button Type="dashed" class="newButton" @onclick="NavigateToAddApp">
+                            <Icon Type="plus" Theme="outline" /> 创建函数
+                        </Button>
+                    }
+                    else
+                    {
+                        <Card Hoverable Bordered Class="card"  Style="max-height:247px;">
+                             <CardMeta>
+                                 <AvatarTemplate>
+
+                                 </AvatarTemplate>
+                                 <TitleTemplate>
+                                     <a>@context.Name</a>
+                                </TitleTemplate>
+                                <DescriptionTemplate>
+                                    <Paragraph class="item" Ellipsis>
+                                     <!--todo: Ellipsis not working-->
+                                     @context.Description
+                                    </Paragraph>
+                                </DescriptionTemplate>
+                            </CardMeta>
+                        </Card>
+                    }
+                </ListItem>
+            </AntList>
+        </div>
+    </ChildContent>
+</PageContainer>
+
+@code
+{
+    RenderFragment info(Action clickAction) =>@<a key="info" @onclick="@clickAction">查看</a>;
+    RenderFragment delete(Action clickAction) => @<a key="delete" @onclick="@clickAction">删除</a> ;
+}

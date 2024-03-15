@@ -27,6 +27,11 @@
         "path": "/plugins/apilist",
         "name": "Api管理",
         "key": "plugins.apilist"
+      },
+      {
+        "path": "/plugins/funlist",
+        "name": "函数管理",
+        "key": "plugins.funlist"
       }
     ]
   },
