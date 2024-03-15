@@ -262,7 +262,7 @@ namespace AntSK.Pages.ChatPage
                 }
                 else
                 {
-                    var msg = $"history：{history.ToString()}{Environment.NewLine}";
+                    var msg = $"history：{Environment.NewLine}{history.ToString()}{Environment.NewLine}{Environment.NewLine}";
                     return msg;
                 }
             }
