@@ -247,11 +247,6 @@
             API调用秘钥
             </summary>
         </member>
-        <member name="P:AntSK.Domain.Repositories.Funs.Name">
-            <summary>
-            接口名称
-            </summary>
-        </member>
         <member name="P:AntSK.Domain.Repositories.Funs.Path">
             <summary>
             接口描述

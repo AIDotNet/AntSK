@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Xml;
 using AntSK.Domain.Common;
 using AntSK.Domain.Utils;
+using System.Text.RegularExpressions;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -12,7 +14,8 @@ namespace AntSK.Domain.Domain.Service
         private readonly Dictionary<string, (string Description, (Type ParameterType, string Description) ReturnType, (string ParameterName, Type ParameterType, string Description)[] Parameters)> _methodInfos;
 
         private readonly IServiceProvider _serviceProvider;
-        private readonly Assembly[] _assemblies;
+        private Assembly[] _assemblies;
+        private readonly AssemblyLoadContext loadContext;
 
         public FunctionService(IServiceProvider serviceProvider, Assembly[] assemblies)
         {
@@ -20,6 +23,7 @@ namespace AntSK.Domain.Domain.Service
             _methodInfos = [];
             _serviceProvider = serviceProvider;
             _assemblies = assemblies;
+            loadContext = new AssemblyLoadContext("AntSKLoadContext", true);
         }
 
         public Dictionary<string, MethodInfo> Functions => _methodCache;
@@ -48,11 +52,29 @@ namespace AntSK.Domain.Domain.Service
                 }
             }
 
+            //动态加载部分
+            var loadedAssemblies = loadContext.Assemblies.ToList();
+            foreach (var assembly in loadedAssemblies)
+            {
+                // 从缓存中获取标记了ActionAttribute的方法
+                foreach (var type in assembly.GetTypes())
+                {
+                    markedMethods.AddRange(type.GetMethods().Where(m =>
+                    {
+                        DescriptionAttribute da = (DescriptionAttribute)m.GetCustomAttributes(typeof(DescriptionAttribute), true).FirstOrDefault();
+                        return da != null && da.Description == "AntSK";
+                    }));
+                }
+            }
+
             // 构建方法调用
             foreach (var method in markedMethods)
             {
                 var key = $"{method.DeclaringType.Assembly.GetName().Name}_{method.DeclaringType.Name}_{method.Name}";
-                _methodCache.TryAdd(key,  method);
+                string pattern = "[^a-zA-Z0-9_]";
+                // 使用 '-' 替换非ASCII的正则表达式的字符
+                key = Regex.Replace(key, pattern, "_");
+                _methodCache.TryAdd(key, method);
 
                 var xmlCommentHelper = new XmlCommentHelper();
                 xmlCommentHelper.LoadAll();
@@ -63,7 +85,43 @@ namespace AntSK.Domain.Domain.Service
                 var parameters = method.GetParameters().Select(x => (x.Name, x.ParameterType, dict[x.Name])).ToArray();
                 var returnType = xmlCommentHelper.GetMethodReturnComment(method);
 
+                if (string.IsNullOrEmpty(description))
+                {
+                    description = "导入插件";
+                }
                 _methodInfos.TryAdd(key, (description, (method.ReflectedType, returnType), parameters));
+            }
+        }
+
+
+        public void FuncLoad(string pluginPath)
+        {
+            try
+            {
+                if (File.Exists(pluginPath))
+                {
+                    string directory = Path.GetDirectoryName(pluginPath);
+                    string fileName = Path.GetFileName(pluginPath);
+                    var resolver = new AssemblyDependencyResolver(directory);
+
+                    // Create a custom AssemblyLoadContext
+
+                    loadContext.Resolving += (context, assemblyName) =>
+                    {
+                        string assemblyPath = resolver.ResolveAssemblyToPath(assemblyName);
+                        if (assemblyPath != null)
+                        {
+                            return context.LoadFromAssemblyPath(assemblyPath);
+                        }
+                        return null;
+                    };
+                    // Load your assembly
+                    Assembly pluginAssembly = loadContext.LoadFromAssemblyPath(pluginPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
             }
         }
     }

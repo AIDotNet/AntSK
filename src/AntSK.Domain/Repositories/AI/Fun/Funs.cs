@@ -11,12 +11,6 @@ namespace AntSK.Domain.Repositories
         public string Id { get; set; }
 
         /// <summary>
-        /// 接口名称
-        /// </summary>
-        [Required]
-        public string Name { get; set; }
-
-        /// <summary>
         /// 接口描述
         /// </summary>
         [Required]

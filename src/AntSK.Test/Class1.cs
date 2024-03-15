@@ -7,6 +7,10 @@ namespace AntSK.Test
     /// </summary>
     public class TestFunctionImport
     {
+        /// <summary>
+        /// 获取名称
+        /// </summary>
+        /// <returns>返回名称</returns>
         [Description("AntSK")]
         public string GetName()
         {

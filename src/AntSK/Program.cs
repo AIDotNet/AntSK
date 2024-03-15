@@ -44,7 +44,7 @@ builder.Services.AddScoped(sp => new HttpClient
 builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSettings"));
 builder.Services.AddServicesFromAssemblies("AntSK");
 builder.Services.AddServicesFromAssemblies("AntSK.Domain");
-builder.Services.AddSingleton(sp => new FunctionService(sp, [typeof(AntSK.App).Assembly, typeof(AntSK.Domain.Common.AntSkFunctionAttribute).Assembly]));
+builder.Services.AddSingleton(sp => new FunctionService(sp, [typeof(AntSK.App).Assembly]));
 builder.Services.AddScoped<FunctionTest>();
 
 builder.Services.AddSwaggerGen(c =>
@@ -111,6 +111,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 InitDB(app);
+LoadFun(app);
 
 app.UseRouting();
 
@@ -143,5 +144,27 @@ void InitDB(WebApplication app)
         _repository.GetDB().CodeFirst.InitTables(typeof(Funs));
         //创建vector插件如果数据库没有则需要提供支持向量的数据库
         _repository.GetDB().Ado.ExecuteCommandAsync($"CREATE EXTENSION IF NOT EXISTS vector;");
+    }
+}
+
+void LoadFun(WebApplication app)
+{
+    try
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            //codefirst 创建表
+            var funRep = scope.ServiceProvider.GetRequiredService<IFuns_Repositories>();
+            var functionService = scope.ServiceProvider.GetRequiredService<FunctionService>();
+            var funs= funRep.GetList();
+            foreach (var fun in funs)
+            {
+                functionService.FuncLoad(fun.Path);
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
     }
 }

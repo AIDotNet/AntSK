@@ -3,6 +3,7 @@ using AntSK.Domain.Domain.Model.Fun;
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Repositories;
 using AntSK.Models;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.SemanticKernel;
@@ -50,7 +51,6 @@ namespace AntSK.Pages.ApiPage
             }
             foreach (var func in funList)
             {
-
                 var methodInfo = _functionService.MethodInfos[func.Key];
                 list.Add(new FunDto() { Name = func.Key, Description = methodInfo.Description });
             }
@@ -79,9 +79,11 @@ namespace AntSK.Pages.ApiPage
             {
                 foreach (var file in fileList)
                 {
-                    _funs_Repositories.Insert(new Funs() { Id = Guid.NewGuid().ToString(), Name = file.FileName, Path = file.FilePath });
+                    _funs_Repositories.Insert(new Funs() { Id = Guid.NewGuid().ToString(), Path = file.FilePath });
+                    _functionService.FuncLoad(file.FilePath);
                 }
                 _message.Info("上传成功");
+                await InitData("");
                 _fileVisible = false;
             }
             catch (System.Exception ex)
