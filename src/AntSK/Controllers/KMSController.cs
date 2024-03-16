@@ -9,26 +9,29 @@ using Microsoft.AspNetCore.Mvc;
 namespace AntSK.Controllers
 {
     /// <summary>
-    /// 
+    /// KMSController
     /// </summary>
-    /// <param name="_taskBroker"></param>
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class KMSController : ControllerBase
     {
-        private readonly IKmsDetails_Repositories _kmsDetails_Repositories;
-        private readonly IKMService _iKMService;
+        private readonly IKmsDetails_Repositories _kmsDetailsRepositories;
         private readonly BackgroundTaskBroker<ImportKMSTaskReq> _taskBroker;
+
         public KMSController(
-            IKmsDetails_Repositories kmsDetails_Repositories,
-            IKMService iKMService,
+            IKmsDetails_Repositories kmsDetailsRepositories,
             BackgroundTaskBroker<ImportKMSTaskReq> taskBroker
-            )
+        )
         {
-            _kmsDetails_Repositories = kmsDetails_Repositories;
-            _iKMService = iKMService;
+            _kmsDetailsRepositories = kmsDetailsRepositories;
             _taskBroker = taskBroker;
         }
+
+        /// <summary>
+        /// 导入任务
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ImportKMSTask(ImportKMSTaskDTO model)
         {
@@ -43,7 +46,7 @@ namespace AntSK.Controllers
                 Type = model.ImportType.ToString().ToLower()
             };
 
-            _kmsDetails_Repositories.Insert(detail);
+            await _kmsDetailsRepositories.InsertAsync(detail);
             req.KmsDetail = detail;
             _taskBroker.QueueWorkItem(req);
             Console.WriteLine("api/kms/ImportKMSTask  结束");

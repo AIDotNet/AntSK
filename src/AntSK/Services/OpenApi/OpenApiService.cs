@@ -21,12 +21,10 @@ namespace AntSK.Services.OpenApi
     [ServiceDescription(typeof(IOpenApiService), ServiceLifetime.Scoped)]
     public class OpenApiService(
         IApps_Repositories _apps_Repositories,
-        IKmss_Repositories _kmss_Repositories,
-        IKmsDetails_Repositories _kmsDetails_Repositories,
         IKernelService _kernelService,
         IKMService _kMService,
         IChatService _chatService
-        ) : IOpenApiService
+    ) : IOpenApiService
     {
         public async Task Chat(OpenAIModel model, string sk, HttpContext HttpContext)
         {
@@ -46,7 +44,8 @@ namespace AntSK.Services.OpenApi
                         {
                             OpenAIStreamResult result1 = new OpenAIStreamResult();
                             result1.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                            result1.choices = new List<StreamChoicesModel>() { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
+                            result1.choices = new List<StreamChoicesModel>()
+                                { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
                             await SendChatStream(HttpContext, result1, app, msg);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result1));
@@ -57,12 +56,14 @@ namespace AntSK.Services.OpenApi
                         {
                             OpenAIResult result2 = new OpenAIResult();
                             result2.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                            result2.choices = new List<ChoicesModel>() { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
+                            result2.choices = new List<ChoicesModel>()
+                                { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
                             result2.choices[0].message.content = await SendChat(msg, app);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result2));
                             await HttpContext.Response.CompleteAsync();
                         }
+
                         break;
 
                     case "kms":
@@ -71,7 +72,8 @@ namespace AntSK.Services.OpenApi
                         {
                             OpenAIStreamResult result3 = new OpenAIStreamResult();
                             result3.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                            result3.choices = new List<StreamChoicesModel>() { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
+                            result3.choices = new List<StreamChoicesModel>()
+                                { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
                             await SendKmsStream(HttpContext, result3, app, msg);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result3));
@@ -81,12 +83,14 @@ namespace AntSK.Services.OpenApi
                         {
                             OpenAIResult result4 = new OpenAIResult();
                             result4.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                            result4.choices = new List<ChoicesModel>() { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
+                            result4.choices = new List<ChoicesModel>()
+                                { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
                             result4.choices[0].message.content = await SendKms(msg, app);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result4));
                             await HttpContext.Response.CompleteAsync();
                         }
+
                         break;
                 }
             }
@@ -96,7 +100,6 @@ namespace AntSK.Services.OpenApi
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
             var chatResult = _chatService.SendChatByAppAsync(app, msg, "");
-            int i = 0;
             await foreach (var content in chatResult)
             {
                 result.choices[0].delta.content = content.ConvertToString();
@@ -116,7 +119,6 @@ namespace AntSK.Services.OpenApi
         /// <summary>
         /// 发送普通对话
         /// </summary>
-        /// <param name="questions"></param>
         /// <param name="msg"></param>
         /// <param name="app"></param>
         /// <returns></returns>
@@ -128,8 +130,9 @@ namespace AntSK.Services.OpenApi
                 //如果模板为空，给默认提示词
                 app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
             }
+
             var _kernel = _kernelService.GetKernelByApp(app);
-            var temperature = app.Temperature / 100;//存的是0~100需要缩小
+            var temperature = app.Temperature / 100; //存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
 
             _kernelService.ImportFunctionsByApp(app, _kernel);
@@ -139,12 +142,14 @@ namespace AntSK.Services.OpenApi
             var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
 
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult = await _kernel.InvokeAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
+            var chatResult =
+                await _kernel.InvokeAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
             if (chatResult.IsNotNull())
             {
                 string answers = chatResult.GetValue<string>();
                 result = answers;
             }
+
             return result;
         }
 
@@ -172,35 +177,23 @@ namespace AntSK.Services.OpenApi
         /// <summary>
         /// 发送知识库问答
         /// </summary>
-        /// <param name="questions"></param>
         /// <param name="msg"></param>
         /// <param name="app"></param>
         /// <returns></returns>
         private async Task<string> SendKms(string msg, Apps app)
         {
-            var _kernel = _kernelService.GetKernelByApp(app);
-            var _memory = _kMService.GetMemoryByKMS(app.KmsIdList.Split(",").FirstOrDefault());
             string result = "";
-            //知识库问答
-            var filters = new List<MemoryFilter>();
+            var _kernel = _kernelService.GetKernelByApp(app);
 
-            var kmsidList = app.KmsIdList.Split(",");
-            foreach (var kmsid in kmsidList)
+            var relevantSource = await _kMService.GetRelevantSourceList(app.KmsIdList, msg);
+            var dataMsg = new StringBuilder();
+            if (relevantSource.Any())
             {
-                filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
-            }
-
-            var xlresult = await _memory.SearchAsync(msg, index: "kms", filters: filters);
-            string dataMsg = "";
-            if (xlresult != null)
-            {
-                foreach (var item in xlresult.Results)
+                foreach (var item in relevantSource)
                 {
-                    foreach (var part in item.Partitions)
-                    {
-                        dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
-                    }
+                    dataMsg.AppendLine(item.ToString());
                 }
+
                 KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
                 var chatResult = await _kernel.InvokeAsync(function: jsonFun,
                     arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = "", ["questions"] = msg });
@@ -210,14 +203,15 @@ namespace AntSK.Services.OpenApi
                     result = answers;
                 }
             }
+
             return result;
         }
 
         /// <summary>
         /// 历史会话的会话总结
         /// </summary>
-        /// <param name="questions"></param>
-        /// <param name="msg"></param>
+        /// <param name="app"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         private async Task<string> HistorySummarize(Apps app, OpenAIModel model)
         {
@@ -238,7 +232,8 @@ namespace AntSK.Services.OpenApi
             }
             else
             {
-                var msg = $"history：{history.ToString()}{Environment.NewLine} user：{questions}"; ;
+                var msg = $"history：{history.ToString()}{Environment.NewLine} user：{questions}";
+                ;
                 return msg;
             }
         }

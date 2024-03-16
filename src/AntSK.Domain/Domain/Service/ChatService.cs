@@ -3,15 +3,8 @@ using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Repositories;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using AntSK.Domain.Utils;
-using Microsoft.KernelMemory;
-using Markdig;
-using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Dto;
 
 namespace AntSK.Domain.Domain.Service
@@ -56,46 +49,30 @@ namespace AntSK.Domain.Domain.Service
         public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history, List<RelevantSource> relevantSources = null)
         {
             var _kernel = _kernelService.GetKernelByApp(app);
-            //知识库问答
-            var filters = new List<MemoryFilter>();
-            var kmsidList = app.KmsIdList.Split(",");
-            //只取第一个知识库的配置
-            var _memory = _kMService.GetMemoryByKMS(kmsidList.FirstOrDefault());
-            foreach (var kmsid in kmsidList)
+            
+            
+            var relevantSourceList = await _kMService.GetRelevantSourceList(app.KmsIdList, questions);
+            var dataMsg = new StringBuilder();
+            if (relevantSourceList.Any())
             {
-                filters.Add(new MemoryFilter().ByTag("kmsid", kmsid));
-            }
-            var xlresult = await _memory.SearchAsync(questions, index: "kms", filters: filters);
-            string dataMsg = "";
-            if (xlresult != null)
-            {
-                foreach (var item in xlresult.Results)
+                relevantSources?.AddRange(relevantSourceList);
+                foreach (var item in relevantSources)
                 {
-                    foreach (var part in item.Partitions)
-                    {
-                        dataMsg += $"[file:{item.SourceName};Relevance:{(part.Relevance * 100).ToString("F2")}%]:{part.Text}{Environment.NewLine}";
-
-                        if (relevantSources.IsNotNull())
-                        {
-                            string sourceName = item.SourceName;
-                            var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == item.SourceName);
-                            if (fileDetail.IsNotNull())
-                            {
-                                sourceName = fileDetail.FileName;
-                            }
-                            relevantSources.Add(new RelevantSource() { SourceName = sourceName, Text = Markdown.ToHtml(part.Text), Relevance = part.Relevance });
-                        }
-                    }
+                    dataMsg.AppendLine(item.ToString());
                 }
+                
                 KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
                 var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
                     arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = history, ["questions"] = questions });
 
-                MessageInfo info = null;
                 await foreach (var content in chatResult)
                 {
                     yield return content;
                 }
+            }
+            else
+            {
+                yield return  new StreamingTextContent("知识库未搜索到相关内容");
             }
         }
     }
