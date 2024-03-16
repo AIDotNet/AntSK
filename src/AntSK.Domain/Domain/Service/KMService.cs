@@ -10,8 +10,9 @@ using Markdig;
 using Microsoft.Extensions.Configuration;
 using Microsoft.KernelMemory;
 using Microsoft.KernelMemory.Configuration;
-using Microsoft.KernelMemory.ContentStorage.DevTools;
 using Microsoft.KernelMemory.FileSystem.DevTools;
+using Microsoft.KernelMemory.MemoryStorage;
+using Microsoft.KernelMemory.MemoryStorage.DevTools;
 using Microsoft.KernelMemory.Postgres;
 
 namespace AntSK.Domain.Domain.Service
@@ -58,7 +59,7 @@ namespace AntSK.Domain.Domain.Service
                         MaxTokensPerParagraph = kms.MaxTokensPerParagraph,
                         OverlappingTokens = kms.OverlappingTokens
                     });
-                //加载huihu 模型
+                //加载会话模型
                 WithTextGenerationByAIType(memoryBuild, chatModel, chatHttpClient);
                 //加载向量模型
                 WithTextEmbeddingGenerationByAIType(memoryBuild, embedModel, embeddingHttpClient);
@@ -149,14 +150,13 @@ namespace AntSK.Domain.Domain.Service
                     });
                     break;
                 case "Disk":
-                    memory.WithSimpleFileStorage(new SimpleFileStorageConfig()
+                    memory.WithSimpleVectorDb(new SimpleVectorDbConfig()
                     {
-                        Directory = "wwwroot/kmsMemory",
                         StorageType = FileSystemTypes.Disk,
                     });
                     break;
                 case "Memory":
-                    memory.WithSimpleFileStorage(new SimpleFileStorageConfig()
+                    memory.WithSimpleVectorDb(new SimpleVectorDbConfig()
                     {
                         StorageType = FileSystemTypes.Volatile
                     });
@@ -164,32 +164,26 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        public async Task<List<KMFile>> GetDocumentByFileID(string kmsid, string fileid)
+        public async Task<List<KMFile>> GetDocumentByFileID(string kmsId, string fileId)
         {
-            var _memory = GetMemoryByKMS(kmsid);
-            var memories = await _memory.ListIndexesAsync();
-            var memoryDbs = _memory.Orchestrator.GetMemoryDbs();
-            List<KMFile> docTextList = new List<KMFile>();
+            var memory = GetMemoryByKMS(kmsId);
+            var memories = await memory.ListIndexesAsync();
+            var memoryDbs = memory.Orchestrator.GetMemoryDbs();
+            var docTextList = new List<KMFile>();
 
             foreach (var memoryIndex in memories)
             {
                 foreach (var memoryDb in memoryDbs)
                 {
-                    var items = await memoryDb.GetListAsync(memoryIndex.Name,
-                        new List<MemoryFilter>() { new MemoryFilter().ByDocument(fileid) }, 100, true).ToListAsync();
-                    foreach (var item in items)
+                    var items = await memoryDb.GetListAsync(memoryIndex.Name, new List<MemoryFilter>() { new MemoryFilter().ByDocument(fileId) }, 100, true).ToListAsync();
+                    docTextList.AddRange(items.Select(item => new KMFile()
                     {
-                        KMFile file = new KMFile()
-                        {
-                            Text = item.Payload.FirstOrDefault(p => p.Key == "text").Value.ConvertToString(),
-                            Url = item.Payload.FirstOrDefault(p => p.Key == "url").Value.ConvertToString(),
-                            LastUpdate = item.Payload.FirstOrDefault(p => p.Key == "last_update").Value
-                                .ConvertToString(),
-                            Schema = item.Payload.FirstOrDefault(p => p.Key == "schema").Value.ConvertToString(),
-                            File = item.Payload.FirstOrDefault(p => p.Key == "file").Value.ConvertToString(),
-                        };
-                        docTextList.Add(file);
-                    }
+                        DocumentId = item.GetDocumentId(),
+                        Text = item.GetPartitionText(),
+                        Url = item.GetWebPageUrl(),
+                        LastUpdate = item.GetLastUpdate().LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                        File = item.GetFileName()
+                    }));
                 }
             }
 
@@ -201,10 +195,10 @@ namespace AntSK.Domain.Domain.Service
             var result = new List<RelevantSource>();
             var kmsIdList = kmsIdListStr.Split(",");
             if (!kmsIdList.Any()) return result;
-            
+
             var memory = GetMemoryByKMS(kmsIdList.FirstOrDefault()!);
-                
-            var filters = kmsIdList.Select(kmsId => new MemoryFilter().ByTag("kmsid", kmsId)).ToList();
+
+            var filters = kmsIdList.Select(kmsId => new MemoryFilter().ByTag("kmsId", kmsId)).ToList();
 
             var searchResult = await memory.SearchAsync(msg, index: "kms", filters: filters);
             if (!searchResult.NoResult) ;
@@ -213,7 +207,7 @@ namespace AntSK.Domain.Domain.Service
                 {
                     result.AddRange(item.Partitions.Select(part => new RelevantSource()
                     {
-                        SourceName = item.SourceName, 
+                        SourceName = item.SourceName,
                         Text = Markdown.ToHtml(part.Text),
                         Relevance = part.Relevance
                     }));
