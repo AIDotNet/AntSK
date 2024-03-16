@@ -6,6 +6,7 @@ using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using LLama;
 using LLamaSharp.KernelMemory;
+using Markdig;
 using Microsoft.Extensions.Configuration;
 using Microsoft.KernelMemory;
 using Microsoft.KernelMemory.Configuration;
@@ -17,10 +18,10 @@ namespace AntSK.Domain.Domain.Service
 {
     [ServiceDescription(typeof(IKMService), ServiceLifetime.Scoped)]
     public class KMService(
-           IConfiguration _config,
-           IKmss_Repositories _kmss_Repositories,
-           IAIModels_Repositories _aIModels_Repositories
-        ) : IKMService
+        IConfiguration _config,
+        IKmss_Repositories _kmss_Repositories,
+        IAIModels_Repositories _aIModels_Repositories
+    ) : IKMService
     {
         private MemoryServerless _memory;
 
@@ -50,13 +51,13 @@ namespace AntSK.Domain.Domain.Service
                 }
 
                 var memoryBuild = new KernelMemoryBuilder()
-                .WithSearchClientConfig(searchClientConfig)
-                .WithCustomTextPartitioningOptions(new TextPartitioningOptions
-                {
-                    MaxTokensPerLine = kms.MaxTokensPerLine,
-                    MaxTokensPerParagraph = kms.MaxTokensPerParagraph,
-                    OverlappingTokens = kms.OverlappingTokens
-                });
+                    .WithSearchClientConfig(searchClientConfig)
+                    .WithCustomTextPartitioningOptions(new TextPartitioningOptions
+                    {
+                        MaxTokensPerLine = kms.MaxTokensPerLine,
+                        MaxTokensPerParagraph = kms.MaxTokensPerParagraph,
+                        OverlappingTokens = kms.OverlappingTokens
+                    });
                 //加载huihu 模型
                 WithTextGenerationByAIType(memoryBuild, chatModel, chatHttpClient);
                 //加载向量模型
@@ -70,10 +71,10 @@ namespace AntSK.Domain.Domain.Service
             //else {
             //    return _memory;
             //}
-
         }
 
-        private void WithTextEmbeddingGenerationByAIType(IKernelMemoryBuilder memory, AIModels embedModel, HttpClient embeddingHttpClient)
+        private void WithTextEmbeddingGenerationByAIType(IKernelMemoryBuilder memory, AIModels embedModel,
+            HttpClient embeddingHttpClient)
         {
             switch (embedModel.AIType)
             {
@@ -102,7 +103,8 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        private void WithTextGenerationByAIType(IKernelMemoryBuilder memory, AIModels chatModel, HttpClient chatHttpClient)
+        private void WithTextGenerationByAIType(IKernelMemoryBuilder memory, AIModels chatModel,
+            HttpClient chatHttpClient)
         {
             switch (chatModel.AIType)
             {
@@ -149,7 +151,8 @@ namespace AntSK.Domain.Domain.Service
                 case "Disk":
                     memory.WithSimpleFileStorage(new SimpleFileStorageConfig()
                     {
-                        StorageType = FileSystemTypes.Disk
+                        Directory = "wwwroot/kmsMemory",
+                        StorageType = FileSystemTypes.Disk,
                     });
                     break;
                 case "Memory":
@@ -172,15 +175,16 @@ namespace AntSK.Domain.Domain.Service
             {
                 foreach (var memoryDb in memoryDbs)
                 {
-
-                    var items = await memoryDb.GetListAsync(memoryIndex.Name, new List<MemoryFilter>() { new MemoryFilter().ByDocument(fileid) }, 100, true).ToListAsync();
+                    var items = await memoryDb.GetListAsync(memoryIndex.Name,
+                        new List<MemoryFilter>() { new MemoryFilter().ByDocument(fileid) }, 100, true).ToListAsync();
                     foreach (var item in items)
                     {
                         KMFile file = new KMFile()
                         {
                             Text = item.Payload.FirstOrDefault(p => p.Key == "text").Value.ConvertToString(),
                             Url = item.Payload.FirstOrDefault(p => p.Key == "url").Value.ConvertToString(),
-                            LastUpdate = item.Payload.FirstOrDefault(p => p.Key == "last_update").Value.ConvertToString(),
+                            LastUpdate = item.Payload.FirstOrDefault(p => p.Key == "last_update").Value
+                                .ConvertToString(),
                             Schema = item.Payload.FirstOrDefault(p => p.Key == "schema").Value.ConvertToString(),
                             File = item.Payload.FirstOrDefault(p => p.Key == "file").Value.ConvertToString(),
                         };
@@ -188,9 +192,35 @@ namespace AntSK.Domain.Domain.Service
                     }
                 }
             }
+
             return docTextList;
         }
 
+        public async Task<List<RelevantSource>> GetRelevantSourceList(string kmsIdListStr, string msg)
+        {
+            var result = new List<RelevantSource>();
+            var kmsIdList = kmsIdListStr.Split(",");
+            if (!kmsIdList.Any()) return result;
+            
+            var memory = GetMemoryByKMS(kmsIdList.FirstOrDefault()!);
+                
+            var filters = kmsIdList.Select(kmsId => new MemoryFilter().ByTag("kmsid", kmsId)).ToList();
 
+            var searchResult = await memory.SearchAsync(msg, index: "kms", filters: filters);
+            if (!searchResult.NoResult) ;
+            {
+                foreach (var item in searchResult.Results)
+                {
+                    result.AddRange(item.Partitions.Select(part => new RelevantSource()
+                    {
+                        SourceName = item.SourceName, 
+                        Text = Markdown.ToHtml(part.Text),
+                        Relevance = part.Relevance
+                    }));
+                }
+            }
+
+            return result;
+        }
     }
 }

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AntSK.Controllers
 {
-
     /// <summary>
     /// 对外接口
     /// </summary>
@@ -18,7 +17,7 @@ namespace AntSK.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/v1/chat/completions")]
-        public async Task chat(OpenAIModel model)
+        public async Task Chat(OpenAIModel model)
         {
             string sk = HttpContext.Request.Headers["Authorization"].ConvertToString();
             await _openApiService.Chat(model, sk, HttpContext);

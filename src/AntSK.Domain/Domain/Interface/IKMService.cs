@@ -7,5 +7,7 @@ namespace AntSK.Domain.Domain.Interface
     {
         MemoryServerless GetMemoryByKMS(string kmsID, SearchClientConfig searchClientConfig = null);
         Task<List<KMFile>> GetDocumentByFileID(string kmsid, string fileid);
+
+        Task<List<RelevantSource>> GetRelevantSourceList(string kmsIdListStr, string msg);
     }
 }
