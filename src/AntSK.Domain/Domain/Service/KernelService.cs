@@ -215,7 +215,7 @@ namespace AntSK.Domain.Domain.Service
                                 {
                                     return "调用失败：" + ex.Message;
                                 }
-                            }, api.Name, "这是一个Http Post方法:" + api.Describe, postParametes, returnType));
+                            }, api.Name, api.Describe, postParametes, returnType));
                             break;
                     }
                 }
