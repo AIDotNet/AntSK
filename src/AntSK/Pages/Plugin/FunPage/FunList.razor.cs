@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.SemanticKernel;
 
-namespace AntSK.Pages.ApiPage
+namespace AntSK.Pages.FunPage
 {
     public partial class FunList
     {

@@ -11,5 +11,13 @@ namespace AntSK.Domain.Domain.Model.Fun
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public FunType FunType { get; set; }
+    }
+
+    public enum FunType
+    {
+        System=1,
+        Import=2
     }
 }
