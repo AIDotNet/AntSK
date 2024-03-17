@@ -5,6 +5,9 @@ using System.Xml;
 using AntSK.Domain.Common;
 using AntSK.Domain.Utils;
 using System.Text.RegularExpressions;
+using Microsoft.SemanticKernel;
+using HtmlAgilityPack;
+using System.Collections.Generic;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -47,7 +50,7 @@ namespace AntSK.Domain.Domain.Service
                     markedMethods.AddRange(type.GetMethods().Where(m =>
                     {
                         DescriptionAttribute da = (DescriptionAttribute)m.GetCustomAttributes(typeof(DescriptionAttribute), true).FirstOrDefault();
-                        return da != null && da.Description == "AntSK";
+                        return da != null && da.Description.Contains( "AntSK");
                     }));
                 }
             }
@@ -62,7 +65,7 @@ namespace AntSK.Domain.Domain.Service
                     markedMethods.AddRange(type.GetMethods().Where(m =>
                     {
                         DescriptionAttribute da = (DescriptionAttribute)m.GetCustomAttributes(typeof(DescriptionAttribute), true).FirstOrDefault();
-                        return da != null && da.Description == "AntSK";
+                        return da != null && da.Description.Contains("AntSK");
                     }));
                 }
             }
@@ -76,19 +79,10 @@ namespace AntSK.Domain.Domain.Service
                 key = Regex.Replace(key, pattern, "_");
                 _methodCache.TryAdd(key, method);
 
-                var xmlCommentHelper = new XmlCommentHelper();
-                xmlCommentHelper.LoadAll();
-
-                var description = xmlCommentHelper.GetMethodComment(method);
-                var dict = xmlCommentHelper.GetParameterComments(method);
-
-                var parameters = method.GetParameters().Select(x => (x.Name, x.ParameterType, dict[x.Name])).ToArray();
-                var returnType = xmlCommentHelper.GetMethodReturnComment(method);
-
-                if (string.IsNullOrEmpty(description))
-                {
-                    description = "导入插件";
-                }
+                var description= method.GetCustomAttribute<DescriptionAttribute>().Description.ConvertToString().Replace("AntSK:","");
+                var returnType = method.ReturnParameter.GetCustomAttribute<DescriptionAttribute>().Description.ConvertToString();
+                var parameters = method.GetParameters().Select(x => (x.Name, x.ParameterType,x.GetCustomAttribute<DescriptionAttribute>()?.Description)).ToArray();
+                // 假设 _methodInfos 是一个已经定义好的字典，用来保存方法的相关信息
                 _methodInfos.TryAdd(key, (description, (method.ReflectedType, returnType), parameters));
             }
         }

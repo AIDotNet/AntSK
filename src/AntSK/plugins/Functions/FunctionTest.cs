@@ -6,13 +6,9 @@ namespace AntSK.plugins.Functions
 {
     public class FunctionTest(IAIModels_Repositories Repository)
     {
-        /// <summary>
-        /// 获取订单信息
-        /// </summary>
-        /// <param name="id">订单号</param>
-        /// <returns>订单信息</returns>
-        [Description("AntSK")]
-        public string GetOrder(int id)
+        [Description("AntSK:获取订单信息")]
+        [return: Description("订单信息")]
+        public string GetOrder([Description("订单号")]  string id)
         {
             return $"""
                     订单ID: {id}
@@ -23,11 +19,10 @@ namespace AntSK.plugins.Functions
                 """;
         }
 
-        /// <summary>
-        /// 获取模型
-        /// </summary>
-        /// <returns>模型列表</returns>
-        [Description("AntSK")]
+
+
+        [Description("AntSK:获取模型")]
+        [return: Description("模型列表")]
         public string GetModels()
         {
             var models = Repository.GetList();
