@@ -112,6 +112,20 @@
             <param name="app"></param>
             <param name="_kernel"></param>
         </member>
+        <member name="M:AntSK.Domain.Domain.Service.KernelService.ImportApiFunction(AntSK.Domain.Repositories.Apps,System.Collections.Generic.List{Microsoft.SemanticKernel.KernelFunction})">
+            <summary>
+            导入API插件
+            </summary>
+            <param name="app"></param>
+            <param name="functions"></param>
+        </member>
+        <member name="M:AntSK.Domain.Domain.Service.KernelService.ImportNativeFunction(AntSK.Domain.Repositories.Apps,System.Collections.Generic.List{Microsoft.SemanticKernel.KernelFunction})">
+            <summary>
+            导入原生插件
+            </summary>
+            <param name="app"></param>
+            <param name="functions"></param>
+        </member>
         <member name="M:AntSK.Domain.Domain.Service.KernelService.RegisterPluginsWithKernel(Microsoft.SemanticKernel.Kernel)">
             <summary>
             注册默认插件
