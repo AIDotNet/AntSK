@@ -6,6 +6,7 @@ using Microsoft.SemanticKernel;
 using System.Text;
 using AntSK.Domain.Utils;
 using AntSK.Domain.Domain.Model.Dto;
+using AntSK.Domain.Domain.Model.Constant;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -72,7 +73,7 @@ namespace AntSK.Domain.Domain.Service
             }
             else
             {
-                yield return  new StreamingTextContent("知识库未搜索到相关内容");
+                yield return  new StreamingTextContent(KmsConstantcs.KmsSearchNull);
             }
         }
     }

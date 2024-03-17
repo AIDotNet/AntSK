@@ -1,5 +1,6 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Dto;
 using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Repositories;
@@ -47,7 +48,7 @@ namespace AntSK.Domain.Domain.Service
                         MaxAskPromptSize = 2048,
                         MaxMatchesCount = 3,
                         AnswerTokens = 1000,
-                        EmptyAnswer = "知识库未搜索到相关内容"
+                        EmptyAnswer = KmsConstantcs.KmsSearchNull
                     };
                 }
 
@@ -198,10 +199,10 @@ namespace AntSK.Domain.Domain.Service
 
             var memory = GetMemoryByKMS(kmsIdList.FirstOrDefault()!);
 
-            var filters = kmsIdList.Select(kmsId => new MemoryFilter().ByTag("kmsId", kmsId)).ToList();
+            var filters = kmsIdList.Select(kmsId => new MemoryFilter().ByTag(KmsConstantcs.KmsIdTag, kmsId)).ToList();
 
-            var searchResult = await memory.SearchAsync(msg, index: "kms", filters: filters);
-            if (!searchResult.NoResult) ;
+            var searchResult = await memory.SearchAsync(msg, index: KmsConstantcs.KmsIndex, filters: filters);
+            if (!searchResult.NoResult) 
             {
                 foreach (var item in searchResult.Results)
                 {
