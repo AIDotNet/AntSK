@@ -738,6 +738,13 @@
             <param name="stream"></param>
             <returns></returns>
         </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ToQueryString(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            json参数转化querystring参数
+            </summary>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
         <member name="M:AntSK.Domain.Utils.RepoFiles.SamplePluginsPath">
             <summary>
             Scan the local folders from the repo, looking for "samples/plugins" folder.

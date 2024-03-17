@@ -1,4 +1,6 @@
-﻿namespace AntSK.Domain.Utils
+﻿using System.Web;
+
+namespace AntSK.Domain.Utils
 {
     public static class ConvertUtils
     {
@@ -230,6 +232,23 @@
         public static string JsonToMarkDown(this string s)
         {
             return $"{Environment.NewLine}```json{Environment.NewLine}{s}{Environment.NewLine}```{Environment.NewLine}";
+        }
+
+        /// <summary>
+        /// json参数转化querystring参数
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static string ToQueryString(this Dictionary<string, string> parameters)
+        {
+            var nameValueCollection = HttpUtility.ParseQueryString(string.Empty);
+
+            foreach (var param in parameters)
+            {
+                nameValueCollection[param.Key] = param.Value;
+            }
+
+            return nameValueCollection.ToString();
         }
     }
 }

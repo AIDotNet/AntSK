@@ -35,7 +35,7 @@
                  @if (context.Method == HttpMethodType.Get)
                 {
                     <FormItem Label="Query" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <TextArea Placeholder="一个一行，以等号分割。例如:name=a" @bind-Value="@context.Query" MinRows="5" />
+                        <TextArea Placeholder="把query构造成json格式，便于大模型识别" @bind-Value="@context.Query" MinRows="5" />
                     </FormItem>
                 }
                 else if (context.Method == HttpMethodType.Post)

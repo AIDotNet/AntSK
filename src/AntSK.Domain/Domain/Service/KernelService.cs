@@ -145,11 +145,19 @@ namespace AntSK.Domain.Domain.Service
                     {
                         case HttpMethodType.Get:
 
-                            functions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
+                            var getParametes = new List<KernelParameterMetadata>() {
+                                     new KernelParameterMetadata("jsonbody"){
+                                      Name="json参数字符串",
+                                      ParameterType=typeof(string),
+                                      Description=$"需要根据背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.Query}"
+                                    }
+                                };
+                            functions.Add(_kernel.CreateFunctionFromMethod((string jsonbody) =>
                             {
                                 try
                                 {
-                                    Console.WriteLine(msg);
+                                    //将json 转换为query参数
+                                    var queryString = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonbody);
                                     RestClient client = new RestClient();
                                     RestRequest request = new RestRequest(api.Url, Method.Get);
                                     foreach (var header in api.Header.ConvertToString().Split("\n"))
@@ -161,13 +169,9 @@ namespace AntSK.Domain.Domain.Service
                                         }
                                     }
                                     //这里应该还要处理一次参数提取，等后面再迭代
-                                    foreach (var query in api.Query.ConvertToString().Split("\n"))
+                                    foreach (var q in queryString)
                                     {
-                                        var queryArray = query.Split("=");
-                                        if (queryArray.Length == 2)
-                                        {
-                                            request.AddQueryParameter(queryArray[0], queryArray[1]);
-                                        }
+                                        request.AddQueryParameter(q.Key, q.Value);
                                     }
                                     var result = client.Execute(request);
                                     return result.Content;
@@ -176,18 +180,17 @@ namespace AntSK.Domain.Domain.Service
                                 {
                                     return "调用失败：" + ex.Message;
                                 }
-                            }, api.Name, api.Describe, new List<KernelParameterMetadata>(), returnType));
+                            }, api.Name, api.Describe, getParametes, returnType));
                             break;
-
                         case HttpMethodType.Post:
                             //处理json body
-                            var parametes = new List<KernelParameterMetadata>() {
-                                new KernelParameterMetadata("jsonbody"){ 
-                                  Name="json参数字符串",
-                                  ParameterType=typeof(string),
-                                  Description=$"需要根据背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下:{Environment.NewLine}{api.JsonBody}"
-                                }
-                            };
+                            var postParametes = new List<KernelParameterMetadata>() {
+                                    new KernelParameterMetadata("jsonbody"){
+                                      Name="json参数字符串",
+                                      ParameterType=typeof(string),
+                                      Description=$"需要根据背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.JsonBody}"
+                                    }
+                                };
                             functions.Add(_kernel.CreateFunctionFromMethod((string jsonBody) =>
                             {
                                 try
@@ -212,7 +215,7 @@ namespace AntSK.Domain.Domain.Service
                                 {
                                     return "调用失败：" + ex.Message;
                                 }
-                            }, api.Name, "这是一个http post方法"+api.Describe, parametes, returnType));
+                            }, api.Name, "这是一个Http Post方法:" + api.Describe, postParametes, returnType));
                             break;
                     }
                 }
@@ -246,7 +249,7 @@ namespace AntSK.Domain.Domain.Service
                     }
                 }
             }
-        }   
+        }
 
         /// <summary>
         /// 注册默认插件
