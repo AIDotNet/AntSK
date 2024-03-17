@@ -117,6 +117,6 @@ namespace AntSK.Domain.Domain.Service
             {
                 Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
             }
-        }
+        }    
     }
 }

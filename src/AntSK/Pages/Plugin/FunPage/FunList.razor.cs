@@ -1,8 +1,10 @@
 ﻿using AntDesign;
+using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Fun;
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Repositories;
 using AntSK.Models;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -25,6 +27,7 @@ namespace AntSK.Pages.FunPage
 
         [Inject]
         protected MessageService? _message { get; set; }
+
 
         bool _fileVisible = false;
         bool _fileConfirmLoading = false;
@@ -70,6 +73,17 @@ namespace AntSK.Pages.FunPage
 
         private async Task AddFun() {
             _fileVisible = true;
+        }
+        private async Task ClearFun()
+        {
+            var content = "清空自定义函数将会删除全部导入函数，并且需要程序重启后下次生效，如不是DLL冲突等原因不建议清空，是否要清空？";
+            var title = "清空自定义函数";
+            var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
+            if (result == ConfirmResult.Yes)
+            {
+                await _funs_Repositories.DeleteAsync(p=>true);
+                await InitData("");
+            }
         }
 
 
