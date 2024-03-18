@@ -134,16 +134,14 @@ namespace AntSK.Services.OpenApi
             var _kernel = _kernelService.GetKernelByApp(app);
             var temperature = app.Temperature / 100; //存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
-
-            _kernelService.ImportFunctionsByApp(app, _kernel);
-            settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
-
-            var promptTemplateFactory = new KernelPromptTemplateFactory();
-            var promptTemplate = promptTemplateFactory.Create(new PromptTemplateConfig(app.Prompt));
+            if (!string.IsNullOrEmpty(app.ApiFunctionList) || !string.IsNullOrEmpty(app.NativeFunctionList))//这里还需要加上本地插件的
+            {
+                _kernelService.ImportFunctionsByApp(app, _kernel);
+                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
+            }
 
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult =
-                await _kernel.InvokeAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
+            var chatResult =await _kernel.InvokeAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
             if (chatResult.IsNotNull())
             {
                 string answers = chatResult.GetValue<string>();
