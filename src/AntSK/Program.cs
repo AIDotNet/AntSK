@@ -13,6 +13,7 @@ using LLama.Native;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using System.Text.Encodings.Web;
@@ -70,6 +71,26 @@ builder.Services.AddSwaggerGen(c =>
             return actionVersion.Any(v => v == docName);
         return version.Any(v => v == docName);
     });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Description = "Directly enter bearer {token} in the box below (note that there is a space between bearer and token)",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference()
+                            {
+                                Id = "Bearer",
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        }, Array.Empty<string>()
+                    }
+                });
 });
 //Mapper
 builder.Services.AddMapper();
