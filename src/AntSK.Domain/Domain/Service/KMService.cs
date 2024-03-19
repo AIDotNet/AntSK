@@ -4,6 +4,7 @@ using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Dto;
 using AntSK.Domain.Domain.Other;
+using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
@@ -23,7 +24,6 @@ namespace AntSK.Domain.Domain.Service
 {
     [ServiceDescription(typeof(IKMService), ServiceLifetime.Scoped)]
     public class KMService(
-        IConfiguration _config,
         IKmss_Repositories _kmss_Repositories,
         IAIModels_Repositories _aIModels_Repositories,
         IMessageService? _message
@@ -64,7 +64,7 @@ namespace AntSK.Domain.Domain.Service
             //加载向量模型
             WithTextEmbeddingGenerationByAIType(memoryBuild, embedModel, embeddingHttpClient);
             //加载向量库
-            WithMemoryDbByVectorDB(memoryBuild, _config);
+            WithMemoryDbByVectorDB(memoryBuild);
 
             _memory = memoryBuild.Build<MemoryServerless>();
             return _memory;
@@ -108,7 +108,7 @@ namespace AntSK.Domain.Domain.Service
                 //加载向量模型
                 WithTextEmbeddingGenerationByAIType(memoryBuild, embedModel, embeddingHttpClient);
                 //加载向量库
-                WithMemoryDbByVectorDB(memoryBuild, _config);
+                WithMemoryDbByVectorDB(memoryBuild);
 
                 _memory = memoryBuild.Build<MemoryServerless>();
                 return _memory;
@@ -192,11 +192,11 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        private void WithMemoryDbByVectorDB(IKernelMemoryBuilder memory, IConfiguration _config)
+        private void WithMemoryDbByVectorDB(IKernelMemoryBuilder memory)
         {
-            string VectorDb = _config["KernelMemory:VectorDb"].ConvertToString();
-            string ConnectionString = _config["KernelMemory:ConnectionString"].ConvertToString();
-            string TableNamePrefix = _config["KernelMemory:TableNamePrefix"].ConvertToString();
+            string VectorDb = KernelMemoryOption.VectorDb.ConvertToString();
+            string ConnectionString = KernelMemoryOption.ConnectionString.ConvertToString();
+            string TableNamePrefix = KernelMemoryOption.TableNamePrefix.ConvertToString();
             switch (VectorDb)
             {
                 case "Postgres":

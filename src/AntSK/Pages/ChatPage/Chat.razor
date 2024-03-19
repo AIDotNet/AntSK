@@ -23,7 +23,7 @@
                     <a href="@( NavigationManager.BaseUri + "openchat/" + AppId)" target="_blank">分享使用</a>
                 </TitleTemplate>
                 <Body>
-                    <div id="scrollDiv" style="height: calc(75vh - 170px); overflow-y: auto; overflow-x: hidden;">
+                    <div id="scrollDiv" style="height: calc(75vh - 190px); overflow-y: auto; overflow-x: hidden;">
                         <GridRow Gutter="(8, 8)" Style="margin:0">
                             <Virtualize Items="@(MessageList.OrderBy(o => o.CreateTime).ToList())" Context="item">
                                 @if (item.IsSend)

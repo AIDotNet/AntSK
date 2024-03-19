@@ -101,6 +101,7 @@ builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGrou
     builder.Configuration.GetSection("DBConnection").Get<DBConnectionOption>();
     builder.Configuration.GetSection("Login").Get<LoginOption>();
     builder.Configuration.GetSection("LLamaSharp").Get<LLamaSharpOption>();
+    builder.Configuration.GetSection("KernelMemory").Get<KernelMemoryOption>();
     if (LLamaSharpOption.RunType.ToUpper() == "CPU")
     {
         NativeLibraryConfig
