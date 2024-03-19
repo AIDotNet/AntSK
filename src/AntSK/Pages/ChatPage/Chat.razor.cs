@@ -150,6 +150,7 @@ namespace AntSK.Pages.ChatPage
         /// </summary>
         /// <param name="questions"></param>
         /// <param name="msg"></param>
+        /// <param name="filePath"></param>
         /// <param name="app"></param>
         /// <returns></returns>
         private async Task SendKms(string questions, string msg, string filePath, Apps app)
