@@ -72,6 +72,15 @@
                         <InputPassword @bind-Value="@context.ModelKey" Placeholder="APISecret" Size="@InputSize.Large" />
                     </FormItem>
                 }
+                @if (context.AIType == AIType.DashScope)
+                {
+                    <FormItem Label="API KEY" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="请输入API KEY" @bind-Value="@context.ModelKey" />
+                    </FormItem>
+                    <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" />
+                    </FormItem>
+                }
                 @if (context.AIType == AIType.LLamaSharp)
                 {
                     <FormItem Label="模型路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
@@ -79,7 +88,6 @@
                             <AutoComplete Options="_modelFiles" Placeholder="请输入模型路径" @bind-Value="@context.ModelName" />
                             <Button OnClick="()=>_downloadModalVisible=true">从Haggingface下载</Button>
                         </InputGroup>
-
                     </FormItem>
                 }
                 @if (context.AIType == AIType.Mock)

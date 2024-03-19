@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.4.0" />
+    <PackageReference Include="Cnblogs.KernelMemory.AI.DashScope" Version="0.1.0" />
+    <PackageReference Include="Cnblogs.SemanticKernel.Connectors.DashScope" Version="0.2.0" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.6.2" />
     <PackageReference Include="Sdcb.SparkDesk" Version="3.0.0" />
   </ItemGroup>
 
