@@ -231,6 +231,11 @@
             会话模型ID
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.EmbeddingModelID">
+            <summary>
+            Embedding 模型Id
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Apps.Temperature">
             <summary>
             温度
