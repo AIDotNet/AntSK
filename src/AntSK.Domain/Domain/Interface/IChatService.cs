@@ -13,6 +13,6 @@ namespace AntSK.Domain.Domain.Interface
     {
         IAsyncEnumerable<StreamingKernelContent> SendChatByAppAsync(Apps app, string questions, string history);
 
-        IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history, List<RelevantSource> relevantSources = null);
+        IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history, string filePath, List<RelevantSource> relevantSources = null);
     }
 }

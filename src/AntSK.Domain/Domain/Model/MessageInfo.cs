@@ -10,7 +10,11 @@
         /// 发送是true  接收是false
         /// </summary>
         public bool IsSend { get; set; } = false;
+
         public DateTime CreateTime { get; set; }
 
+        public string? FilePath { get; set; }
+
+        public string? FileName { get; set; }
     }
 }

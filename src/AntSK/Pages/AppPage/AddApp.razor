@@ -38,6 +38,14 @@
                      </Select>
                      <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
                  </FormItem>
+                <FormItem Label="Embedding模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Select DataSource="@_embedignList"
+                            @bind-Value="@context.EmbeddingModelID"
+                            ValueProperty="c=>c.Id"
+                            LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
+                    </Select>
+                    <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
+                </FormItem>
                  @if (@context.Type == AppType.chat.ToString())
                 {
 
