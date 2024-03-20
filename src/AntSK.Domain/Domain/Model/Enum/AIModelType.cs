@@ -21,6 +21,9 @@ namespace AntSK.Domain.Domain.Model.Enum
 
         [Display(Name = "灵积大模型")]
         DashScope = 5,
+        
+        [Display(Name = "LLamaFactory")]
+        LLamaFactory = 6,
 
         [Display(Name = "模拟输出")]
         Mock = 100,

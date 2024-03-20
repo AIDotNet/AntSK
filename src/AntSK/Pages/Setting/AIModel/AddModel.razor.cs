@@ -1,5 +1,6 @@
 ﻿using AntDesign;
 using AntDesign.ProLayout;
+using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
@@ -20,10 +21,16 @@ namespace AntSK.Pages.Setting.AIModel
         [Inject] protected MessageService? Message { get; set; }
         [Inject] public HttpClient HttpClient { get; set; }
 
+
+        [Inject] protected ILLamaFactoryService _ILLamaFactoryService { get; set; }
+
         private AIModels _aiModel = new AIModels();
 
         private string _downloadUrl;
         private bool _downloadModalVisible;
+
+        private bool _isComplete;
+
         private double _downloadProgress;
         private bool _downloadFinished;
         private bool _downloadStarted;
@@ -62,6 +69,23 @@ namespace AntSK.Pages.Setting.AIModel
                 _ = Message.Error("LLamaSharp.FileDirectory目录配置不正确！", 2);
             }
         }
+
+        /// <summary>
+        /// 启动服务
+        /// </summary>
+        private void HandleStartService()
+        {
+            _ILLamaFactoryService.StartProcess(_aiModel.ModelName, "default");
+        }
+
+        /// <summary>
+        /// 停止服务
+        /// </summary>
+        private void HandleStopService()
+        {
+            _ILLamaFactoryService.KillProcess();
+        }
+
 
         private void HandleSubmit()
         {

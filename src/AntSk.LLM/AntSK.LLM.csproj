@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="Cnblogs.KernelMemory.AI.DashScope" Version="0.1.0" />
     <PackageReference Include="Cnblogs.SemanticKernel.Connectors.DashScope" Version="0.2.0" />
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.6.2" />
