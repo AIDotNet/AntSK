@@ -82,6 +82,25 @@
 
                     </FormItem>
                 }
+                @if (context.AIType == AIType.LLamaFactory)
+                {
+                    <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <InputGroup>
+                            <AutoComplete Options="_modelFiles" Placeholder="Qwen/Qwen1.5-0.5B-Chat" @bind-Value="@context.ModelName" />
+                        </InputGroup>
+
+                    </FormItem>
+                    <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="请输入请求地址" @bind-Value="@context.EndPoint" />
+                    </FormItem>
+                    <FormItem Label="llama factory服务" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <InputGroup>
+                            <Button Type="primary" OnClick="HandleStartService">启动</Button>
+                            <Button OnClick="HandleStopService">停止</Button>
+                        </InputGroup>
+
+                    </FormItem>
+                }
                 @if (context.AIType == AIType.Mock)
                 {
                 }

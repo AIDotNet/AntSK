@@ -10,6 +10,7 @@
         LLamaSharp = 3,
         SparkDesk = 4,
         Mock = 5,
+        LLamaFactory = 6,
     }
 
     /// <summary>
