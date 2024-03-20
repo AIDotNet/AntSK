@@ -19,12 +19,12 @@ namespace AntSK.Pages.ChatPage
         [Inject] protected IApis_Repositories _apis_Repositories { get; set; }
         [Inject] protected IKmss_Repositories _kmss_Repositories { get; set; }
         [Inject] protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
-        [Inject] IJSRuntime _JSRuntime { get; set; }
+        [Inject] private IJSRuntime _JSRuntime { get; set; }
 
         [Inject] protected IKernelService _kernelService { get; set; }
         [Inject] protected IKMService _kMService { get; set; }
-        [Inject] IConfirmService _confirmService { get; set; }
-        [Inject] IChatService _chatService { get; set; }
+        [Inject] private IConfirmService _confirmService { get; set; }
+        [Inject] private IChatService _chatService { get; set; }
 
         [Inject] private ILogger<Chat> Logger { get; set; }
 
@@ -34,9 +34,13 @@ namespace AntSK.Pages.ChatPage
         protected string _json = "";
         protected bool Sendding = false;
 
-        List<RelevantSource> _relevantSources = new List<RelevantSource>();
+        private List<RelevantSource> _relevantSources = new List<RelevantSource>();
 
         protected List<Apps> _list = new List<Apps>();
+
+        private List<UploadFileItem> fileList = [];
+
+        private Upload _uploadRef;
 
         protected override async Task OnInitializedAsync()
         {
@@ -60,17 +64,27 @@ namespace AntSK.Pages.ChatPage
                     return;
                 }
 
+                var filePath = fileList.FirstOrDefault()?.Url;
+                var fileName = fileList.FirstOrDefault()?.FileName;
+
                 MessageList.Add(new MessageInfo()
                 {
                     ID = Guid.NewGuid().ToString(),
                     Context = _messageInput,
                     CreateTime = DateTime.Now,
-                    IsSend = true
+                    IsSend = true,
+                    FilePath = filePath,
+                    FileName = fileName
                 });
 
-                Sendding = true;
-                await SendAsync(_messageInput);
+                var prompt = _messageInput;
                 _messageInput = "";
+                fileList.Clear();
+
+                Sendding = true;
+        
+                await SendAsync(prompt, filePath);
+
                 Sendding = false;
             }
             catch (System.Exception ex)
@@ -105,7 +119,7 @@ namespace AntSK.Pages.ChatPage
             }
         }
 
-        protected async Task<bool> SendAsync(string questions)
+        protected async Task<bool> SendAsync(string questions, string? filePath)
         {
             string msg = "";
             //处理多轮会话
@@ -117,13 +131,14 @@ namespace AntSK.Pages.ChatPage
 
             switch (app.Type)
             {
-                case "chat":
+                case "chat" when filePath == null:
                     //普通会话
                     await SendChat(questions, msg, app);
                     break;
-                case "kms":
+
+                default:
                     //知识库问答
-                    await SendKms(questions, msg, app);
+                    await SendKms(questions, msg, filePath, app);
                     break;
             }
 
@@ -135,12 +150,13 @@ namespace AntSK.Pages.ChatPage
         /// </summary>
         /// <param name="questions"></param>
         /// <param name="msg"></param>
+        /// <param name="filePath"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        private async Task SendKms(string questions, string msg, Apps app)
+        private async Task SendKms(string questions, string msg, string filePath, Apps app)
         {
             MessageInfo info = null;
-            var chatResult = _chatService.SendKmsByAppAsync(app, questions, msg, _relevantSources);
+            var chatResult = _chatService.SendKmsByAppAsync(app, questions, msg, filePath, _relevantSources);
             await foreach (var content in chatResult)
             {
                 if (info == null)
@@ -255,6 +271,25 @@ namespace AntSK.Pages.ChatPage
             {
                 return "";
             }
+        }
+
+        private void OnSingleCompleted(UploadInfo fileInfo)
+        {
+            fileList.Add(new()
+            {
+                FileName = fileInfo.File.FileName,
+                Url = fileInfo.File.Url = fileInfo.File.Response,
+                Ext = fileInfo.File.Ext,
+                State = UploadState.Success,
+            });
+            _kMService.OnSingleCompleted(fileInfo);
+        }
+
+        private async Task<bool> HandleFileRemove(UploadFileItem file)
+        {
+            fileList.RemoveAll(x => x.FileName == file.FileName);
+            await Task.Yield();
+            return true;
         }
     }
 }

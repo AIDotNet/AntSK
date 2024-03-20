@@ -16,6 +16,8 @@ using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 using AntSK.LLM.Mock;
 using AntSK.Domain.Domain.Model.Enum;
 using AntSK.LLM.LLamaFactory;
+using System.Reflection;
+using DocumentFormat.OpenXml.Drawing;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -96,6 +98,11 @@ namespace AntSK.Domain.Domain.Service
                     var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelKey, ApiKey = chatModel.ModelName, ModelVersion = Sdcb.SparkDesk.ModelVersion.V3_5 };
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, app.Id));
                     break;
+
+                case Model.Enum.AIType.DashScope:
+                    builder.Services.AddDashScopeChatCompletion(chatModel.ModelKey, chatModel.ModelName);
+                    break;
+
                 case Model.Enum.AIType.Mock:
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("mock", new MockTextCompletion());
                     break;
@@ -121,9 +128,23 @@ namespace AntSK.Domain.Domain.Service
             {
                 return;
             }
-            List<KernelFunction> apiFunctions = new List<KernelFunction>();
+            List<KernelFunction> functions = new List<KernelFunction>();
 
             //API插件
+            ImportApiFunction(app, functions);
+            //本地函数插件
+            ImportNativeFunction(app, functions);
+
+            _kernel.ImportPluginFromFunctions("AntSkFunctions", functions);
+        }
+
+        /// <summary>
+        /// 导入API插件
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="functions"></param>
+        private void ImportApiFunction(Apps app, List<KernelFunction> functions)
+        {
             if (!string.IsNullOrWhiteSpace(app.ApiFunctionList))
             {
                 //开启自动插件调用
@@ -132,14 +153,24 @@ namespace AntSK.Domain.Domain.Service
 
                 foreach (var api in apiList)
                 {
+                    var returnType = new KernelReturnParameterMetadata() { Description = api.OutputPrompt };
                     switch (api.Method)
                     {
                         case HttpMethodType.Get:
-                            apiFunctions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
+
+                            var getParametes = new List<KernelParameterMetadata>() {
+                                     new KernelParameterMetadata("jsonbody"){
+                                      Name="json参数字符串",
+                                      ParameterType=typeof(string),
+                                      Description=$"需要根据背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.Query}"
+                                    }
+                                };
+                            functions.Add(_kernel.CreateFunctionFromMethod((string jsonbody) =>
                             {
                                 try
                                 {
-                                    Console.WriteLine(msg);
+                                    //将json 转换为query参数
+                                    var queryString = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonbody);
                                     RestClient client = new RestClient();
                                     RestRequest request = new RestRequest(api.Url, Method.Get);
                                     foreach (var header in api.Header.ConvertToString().Split("\n"))
@@ -151,13 +182,9 @@ namespace AntSK.Domain.Domain.Service
                                         }
                                     }
                                     //这里应该还要处理一次参数提取，等后面再迭代
-                                    foreach (var query in api.Query.ConvertToString().Split("\n"))
+                                    foreach (var q in queryString)
                                     {
-                                        var queryArray = query.Split("=");
-                                        if (queryArray.Length == 2)
-                                        {
-                                            request.AddQueryParameter(queryArray[0], queryArray[1]);
-                                        }
+                                        request.AddQueryParameter(q.Key, q.Value);
                                     }
                                     var result = client.Execute(request);
                                     return result.Content;
@@ -166,15 +193,22 @@ namespace AntSK.Domain.Domain.Service
                                 {
                                     return "调用失败：" + ex.Message;
                                 }
-                            }, api.Name, $"{api.Describe}"));
+                            }, api.Name, api.Describe, getParametes, returnType));
                             break;
-
                         case HttpMethodType.Post:
-                            apiFunctions.Add(_kernel.CreateFunctionFromMethod((string msg) =>
+                            //处理json body
+                            var postParametes = new List<KernelParameterMetadata>() {
+                                    new KernelParameterMetadata("jsonbody"){
+                                      Name="json参数字符串",
+                                      ParameterType=typeof(string),
+                                      Description=$"需要根据背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.JsonBody}"
+                                    }
+                                };
+                            functions.Add(_kernel.CreateFunctionFromMethod((string jsonBody) =>
                             {
                                 try
                                 {
-                                    Console.WriteLine(msg);
+                                    Console.WriteLine(jsonBody);
                                     RestClient client = new RestClient();
                                     RestRequest request = new RestRequest(api.Url, Method.Post);
                                     foreach (var header in api.Header.ConvertToString().Split("\n"))
@@ -186,7 +220,7 @@ namespace AntSK.Domain.Domain.Service
                                         }
                                     }
                                     //这里应该还要处理一次参数提取，等后面再迭代
-                                    request.AddJsonBody(api.JsonBody.ConvertToString());
+                                    request.AddJsonBody(jsonBody.ConvertToString());
                                     var result = client.Execute(request);
                                     return result.Content;
                                 }
@@ -194,19 +228,27 @@ namespace AntSK.Domain.Domain.Service
                                 {
                                     return "调用失败：" + ex.Message;
                                 }
-                            }, api.Name, $"{api.Describe}"));
+                            }, api.Name, api.Describe, postParametes, returnType));
                             break;
                     }
                 }
             }
 
-            //本地函数插件
+        }
+
+        /// <summary>
+        /// 导入原生插件
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="functions"></param>
+        private void ImportNativeFunction(Apps app, List<KernelFunction> functions)
+        {
             if (!string.IsNullOrWhiteSpace(app.NativeFunctionList))//需要添加判断应用是否开启了本地函数插件
             {
                 var nativeIdList = app.NativeFunctionList.Split(",");
 
                 _functionService.SearchMarkedMethods();
-                using var scope= _serviceProvider.CreateScope();
+                using var scope = _serviceProvider.CreateScope();
 
                 foreach (var func in _functionService.Functions)
                 {
@@ -216,11 +258,10 @@ namespace AntSK.Domain.Domain.Service
                         var parameters = methodInfo.Parameters.Select(x => new KernelParameterMetadata(x.ParameterName) { ParameterType = x.ParameterType, Description = x.Description });
                         var returnType = new KernelReturnParameterMetadata() { ParameterType = methodInfo.ReturnType.ParameterType, Description = methodInfo.ReturnType.Description };
                         var target = ActivatorUtilities.CreateInstance(scope.ServiceProvider, func.Value.DeclaringType);
-                        apiFunctions.Add(_kernel.CreateFunctionFromMethod(func.Value, target, func.Key, methodInfo.Description, parameters, returnType));
+                        functions.Add(_kernel.CreateFunctionFromMethod(func.Value, target, func.Key, methodInfo.Description, parameters, returnType));
                     }
                 }
             }
-            _kernel.ImportPluginFromFunctions("AntSkFunctions", apiFunctions);
         }
 
         /// <summary>
@@ -231,7 +272,7 @@ namespace AntSK.Domain.Domain.Service
         {
             kernel.ImportPluginFromObject(new ConversationSummaryPlugin(), "ConversationSummaryPlugin");
             //kernel.ImportPluginFromObject(new TimePlugin(), "TimePlugin");
-            kernel.ImportPluginFromPromptDirectory(Path.Combine(RepoFiles.SamplePluginsPath(), "KMSPlugin"));
+            kernel.ImportPluginFromPromptDirectory(System.IO.Path.Combine(RepoFiles.SamplePluginsPath(), "KMSPlugin"));
         }
 
         /// <summary>

@@ -152,7 +152,7 @@ namespace AntSK.Pages.ChatPage
         private async Task SendKms(string questions, string msg, Apps app)
         {
             MessageInfo info = null;
-            var chatResult=_chatService.SendKmsByAppAsync(app, questions, msg);
+            var chatResult=_chatService.SendKmsByAppAsync(app, questions, "" ,msg);
             await foreach (var content in chatResult)
             {
                 if (info == null)

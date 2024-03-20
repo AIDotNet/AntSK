@@ -44,15 +44,17 @@ namespace AntSK.Pages.AppPage
 
         public Dictionary<string, string> _funList = new Dictionary<string, string>();
 
-        private List<AIModels> _chatList { get; set; }
-
+        private List<AIModels> _chatList;
+        private List<AIModels> _embedignList;
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             _kmsList = _kmss_Repositories.GetList();
             _apiList = _apis_Repositories.GetList();
+            var models=_aimodels_Repositories.GetList();
+            _chatList = models.Where(p => p.AIModelType == AIModelType.Chat).ToList();
+            _embedignList = models.Where(p => p.AIModelType == AIModelType.Embedding).ToList();
 
-            _chatList = _aimodels_Repositories.GetList(p => p.AIModelType == AIModelType.Chat);
             _functionService.SearchMarkedMethods();
             foreach (var func in _functionService.Functions)
             {
