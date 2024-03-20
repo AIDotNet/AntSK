@@ -34,6 +34,7 @@
     
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AntSK.LLamaFactory\AntSK.LLamaFactory.csproj" />
     <ProjectReference Include="..\AntSk.LLM\AntSK.LLM.csproj" />
     <ProjectReference Include="..\MiddleWare\AntSK.BackgroundTask\AntSK.BackgroundTask.csproj" />
   </ItemGroup>
