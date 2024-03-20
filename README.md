@@ -39,10 +39,10 @@ AntSK 适用于多种业务场景，例如：
 
 ### 在线演示
 ```
-antsk.ai-dotnet.com
-admin
-xuzeyu
+https://antsk.ai-dotnet.com/
 ```
+默认账号：admin
+默认密码：xuzeyu
 
 ### 其他功能示例
 [视频示例](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
