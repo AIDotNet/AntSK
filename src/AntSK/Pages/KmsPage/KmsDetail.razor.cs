@@ -212,6 +212,19 @@ namespace AntSK.Pages.KmsPage
             _fileVisible = true;
         }
 
+        private void OnSingleCompleted(UploadInfo fileinfo)
+        {
+            if (fileinfo.File.State == UploadState.Success)
+            {
+                //文件列表
+                fileList.Add(new FileInfoModel()
+                {
+                    FileName = fileinfo.File.FileName,
+                    FilePath = fileinfo.File.Url = fileinfo.File.Response
+                });
+            }
+        }
+
         private void FileDetail(string fileid)
         {
             NavigationManager.NavigateTo($"/kms/detaillist/{KmsId}/{fileid}");
