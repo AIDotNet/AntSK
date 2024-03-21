@@ -1,41 +1,42 @@
 [简体中文](./README.md) | English
 # AntSK
 
-## Based on AI knowledge base/agent created by Net8+AntBlazor+SemanticKernel
+## An AI knowledge base/intelligent agent built with .Net 8+AntBlazor+SemanticKernel
 
 
 
-## Core functions
+## Core Features
 
 
 
-- **Semantic Kernel**: It uses advanced natural language processing technology to accurately understand, process and respond to complex semantic queries, and provides users with accurate information retrieval and recommendation services.
+- **Semantic Kernel**: Utilizes advanced natural language processing technologies to accurately understand, process, and respond to complex semantic queries, providing users with precise information retrieval and recommendation services.
 
 
-
-- **Kernel Memory**: It has the ability to continuously learn and store knowledge points. AntSK has a long-term memory function to accumulate experience and provide a more personalized interactive experience.
-
+- **Kernel Memory**: Capable of continuous learning and knowledge storage, AntSK has a long-term memory function, accumulating experience to offer more personalized interaction experiences.
 
 
-- **Knowledge base**: Knowledge base documents can be created by importing knowledge base documents (Word, PDF, Excel, Txt, Markdown, Json, PPT) and other forms.
+- **Knowledge base**: Import knowledge into the database through documents (Word, PDF, Excel, Txt, Markdown, Json, PPT) and manage knowledge base documents.
 
 
-
-- **API plug-in system**: an open API plug-in system that allows third-party developers or service providers to easily integrate their services into AntSK and continuously enhance application functions.
-
+- **GPTs Generation**：The platform supports the creation of personalized GPT models, try building your own GPT model.
 
 
-- **Online search**: AntSK can obtain the latest information in real time to ensure that the information received by users is always the most timely and relevant.
+- **API Interface Release**: Internal functions are provided as APIs for developers to integrate AntSK into other applications, enhancing application intelligence.
 
 
-
-- **GPTs generation**: This platform supports the creation of personalized GPT models and attempts to build your own GPT models.
-
+- **API Plugin System**: An open API plugin system allows third-party developers or service providers to easily integrate their services into AntSK, continuously enhancing application functions.
 
 
-- **API interface publishing**: internal functions are provided externally in the form of API, so that developers can easily translate Xzy AntSK KnowledgeBase is integrated into other applications to enhance application intelligence.
+- **.Net Plugin System**: An open dll plugin system allows third-party developers or service providers to integrate their business functions into AntSK by generating dlls with the standard format codes, continuously enhancing application functions.
 
-- **Model management**: Adapt and manage different models from different vendors.
+
+- **Internet Search**: AntSK can retrieve the latest information in real-time, ensuring that the information users receive is always timely and relevant.
+
+
+- **Model management**: Adapts and manages different models from various manufacturers. It also supports offline running of models in 'gguf' format supported by llama.cpp.
+
+
+- **National Information Creation**: AntSK supports domestic models and databases, and can operate under information creation conditions.
 
 
 
@@ -43,11 +44,11 @@
 
 
 
-AntSK is applicable to a variety of business scenarios, such as:
+AntSK is suitable for various business scenarios, such as:
 
-- Enterprise level knowledge management system
+- Corporate knowledge management systems
 
-- Automatic customer service and chat robot
+- Automated customer service and chatbots
 
 - Enterprise Search Engine
 
@@ -57,7 +58,7 @@ AntSK is applicable to a variety of business scenarios, such as:
 
 - Education and online learning platform
 
-- Other interesting AI Apps
+- Other interesting AI applications
 
 
 
@@ -115,25 +116,71 @@ Let's see the effect
 
 ## How do I get started?
 
-Login is the default login account and password
+Here I am using Postgres as a data and vector store, because the Semantic Kernel and Kernel Memory both support it, though you can switch to others.
 
-Here I use Postgres as data storage and vector storage, because both the Semantic Kernel and Kernel Memory support it. Of course, you can switch to other ones.
+The model by default supports local models in 'gguf' format from openai, azure openai, and llama. If you need to use other models, you can integrate them using the one-api.
 
-The model supports openai by default. If you need to use azure openai and need to adjust the dependency injection of SK, you can also use one api for integration.
+The login configuration in the configuration file is the default account and password.
 
-The following configuration files need to be configured
+The following configuration files are needed:
 
 ## Using Docker Compose
-Provided pg version appsettings. json and simplified version (Sqlite+disk) Docker Compose. simple. yml
-Download Docker Compose.yml from the project root directory, and then place the configuration file appsettings.json and it in a unified directory,
-The image of PG has been prepared here. You can modify the default account password in Docker Compose.yml, and your appsettings. json database connection needs to be consistent.
-Then you can enter the directory and execute it
+A appsettings.json for the pg version and a simplified version (Sqlite+disk) docker-compose.simple.yml are provided.
+
+Download docker-compose.yml from the project root directory, then place the configuration file appsettings.json in the same directory,
+
+The pg image has already been prepared. You can modify the default account and password in the docker-compose.yml, and then your appsettings.json database connection needs to be consistent.
+
+Then you can enter the directory and execute
 ```
 docker compose up - d
 ```
-To start AntSK
+to start AntSK.
 
-Some meanings of configuration files
+How to mount local models and model download directories in docker
+
+```
+# Non-host version, does not use local proxy
+version: '3.8'
+services:
+  antsk:
+    container_name: antsk
+    image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.2.1
+    ports:
+      - 5000:5000
+    networks:
+      - antsk
+    depends_on:
+      - antskpg
+    restart: always
+    environment:
+      - ASPNETCORE_URLS=http://*:5000
+    volumes:
+      - ./appsettings.json:/app/appsettings.json # local configuration file must be placed in the same directory
+      - D://model:/app/model
+networks:
+  antsk:
+
+```
+Using this as an example, the meaning is to mount the local folder D://model from Windows into the container /app/model. If so, your appsettings.json model directory should be configured as
+
+```
+model/xxx.gguf
+```
+Some meanings of the configuration file
+// (The rest of the information is omitted as it's unnecessary for the translation example context.)
+
+Solving the missing style issue:
+Execute under AntSK/src/AntSK:
+```
+dotnet clean
+dotnet build
+dotnet publish "AntSK.csproj"
+```
+Then go to AntSK/src/AntSK/bin/Release/net8.0/publish
+```
+dotnet AntSK.dll
+```
 
 ```
 
@@ -141,12 +188,6 @@ Some meanings of configuration files
   "DBConnection": {
     "DbType": "Sqlite", 
     "ConnectionStrings": "Data Source=AntSK.db;"
-  },
-  "OpenAIOption": {
-    "EndPoint": "http://localhost:5000/llama/",
-    "Key": "NotNull",
-    "Model": "gpt4-turbo",
-    "EmbeddingModel": "text-embedding-ada-002"
   },
   "KernelMemory": {
     "VectorDb": "Disk", 
@@ -156,7 +197,8 @@ Some meanings of configuration files
   "LLamaSharp": {
     "RunType": "GPU", 
     "Chat": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf",
-    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf"
+    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf",
+    "FileDirectory": "D:\\Code\\AI\\AntBlazor\\model\\"
   },
   "Login": {
     "User": "admin",
@@ -176,10 +218,6 @@ Some meanings of configuration files
 DBConnection DbType
 //Connection string, corresponding strings need to be used according to different DB types
 DBConnection ConnectionStrings
-//You can use an online API that conforms to the OpenAI format (domestic models use one API adapter), or you can use AntSK's built-in llama API, with the IP and port being the AntSK startup address
-OpenAIOption EndPoint
-//Model key, if using a local model, it can default to Notnull. Chinese cannot be used here
-OpenAIOption Key
 //The type of vector storage supports Postgres Disk Memory, where Postgres requires the configuration of ConnectionString
 KernelMemory VectorDb
 //The running mode used by the local model is GUP CPU. If using an online API, you can freely use one

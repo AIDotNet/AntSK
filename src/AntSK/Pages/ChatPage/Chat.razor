@@ -23,7 +23,7 @@
                     <a href="@( NavigationManager.BaseUri + "openchat/" + AppId)" target="_blank">分享使用</a>
                 </TitleTemplate>
                 <Body>
-                    <div id="scrollDiv" style="height: calc(75vh - 170px); overflow-y: auto; overflow-x: hidden;">
+                    <div id="scrollDiv" style="height: calc(75vh - 190px); overflow-y: auto; overflow-x: hidden;">
                         <GridRow Gutter="(8, 8)" Style="margin:0">
                             <Virtualize Items="@(MessageList.OrderBy(o => o.CreateTime).ToList())" Context="item">
                                 @if (item.IsSend)
@@ -32,7 +32,17 @@
                                         <GridCol Span="23">
                                             <div class="chat-bubble sent">
                                                 <Popover Title="@item.CreateTime.ToString()">
-                                                    @(item.Context)
+                                                    <Unbound>
+                                                        <Flex Vertical RefBack="context">
+                                                            @if (item.FileName != null)
+                                                            {
+                                                                <p class="message-file">
+                                                                    <Upload DefaultFileList="[new(){ FileName= item.FileName }]" />
+                                                                </p>
+                                                            }
+                                                            <p>@(item.Context)</p>
+                                                        </Flex>
+                                                    </Unbound>
                                                 </Popover>
                                             </div>
                                             <Icon Style="float:right;margin-top:10px;" Type="copy" Theme="outline" OnClick="async () =>await OnCopyAsync(item)" />
@@ -58,13 +68,27 @@
                             </Virtualize>
                         </GridRow>
                     </div>
-                    <div style="height: 10px;"></div>
-                    <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding">
-                        <Suffix>
-                            <Button Icon="clear" Type="@(ButtonType.Link)" OnClick="@(async () => await OnClearAsync())" Disabled="@Sendding"></Button>
-                            <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
-                        </Suffix>
-                    </AntDesign.Input>
+
+                    <Flex Vertical>
+                        @if (fileList.Count > 0)
+                        {
+                            <Upload DefaultFileList="fileList" OnRemove="HandleFileRemove" />
+                        }
+                        <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding"></AntDesign.Input>
+                    </Flex>
+                    <Flex Justify="end">
+                        <Upload Action="@("api/File/UploadFile")"
+                                Name="file"
+                                Accept="*/*"
+                                ShowUploadList="false"
+                                BeforeUpload="_kMService.BeforeUpload"
+                                OnSingleCompleted="OnSingleCompleted">
+                            <Button Icon="@IconType.Outline.Upload" Type="@(ButtonType.Link)" />
+                        </Upload>
+                        <Button Icon="clear" Type="@(ButtonType.Link)" OnClick="@(async () => await OnClearAsync())" Disabled="@Sendding"></Button>
+                        <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
+                    </Flex>
+
                 </Body>
             </Card>
         </Spin>
@@ -79,61 +103,61 @@
             </Extra>
             <Body>
                 <AntList Bordered DataSource="@_relevantSources" Style="padding:10px;">
-                     <ChildContent Context="item">
-                         <span> <b>@item.SourceName </b>  相似度：<Text Mark> @item.Relevance</Text></span>
-                            <Body>
-                                @((MarkupString)(@item.Text))
-                            </Body>
-                        </ChildContent>
-                    </AntList>
-                </Body>
-            </Card>
-        </GridCol>
-    </GridRow>
+                    <ChildContent Context="item">
+                        <span> <b>@item.SourceName </b>  相似度：<Text Mark> @item.Relevance</Text></span>
+                        <Body>
+                            @((MarkupString)(@item.Text))
+                        </Body>
+                    </ChildContent>
+                </AntList>
+            </Body>
+        </Card>
+    </GridCol>
+</GridRow>
 
-    <style>
+<style>
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
-        }
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        justify-content: center;
+        align-items: flex-start;
+        height: 100vh;
+    }
 
-        .chat-container {
-            width: 350px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            background-color: #fff;
-            padding-bottom: 15px;
-        }
+    .chat-container {
+        width: 350px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        padding-bottom: 15px;
+    }
 
-        .chat-bubble {
-            padding: 10px;
-            margin: 10px;
-            margin-bottom: 0;
-            border-radius: 5px;
-            max-width: 70%;
-            position: relative;
-        }
+    .chat-bubble {
+        padding: 10px;
+        margin: 10px;
+        margin-bottom: 0;
+        border-radius: 5px;
+        max-width: 70%;
+        position: relative;
+    }
 
-        .received {
-            background-color: #f0f0f0;
-            align-self: flex-start;
-            float: left;
-        }
+    .received {
+        background-color: #f0f0f0;
+        align-self: flex-start;
+        float: left;
+    }
 
-        .sent {
-            background-color: #daf8cb;
-            align-self: flex-end;
-            float: right;
-            position: relative;
-        }
-    </style>
-    @code {
+    .sent {
+        background-color: #daf8cb;
+        align-self: flex-end;
+        float: right;
+        position: relative;
+    }
+</style>
+@code {
 
 }

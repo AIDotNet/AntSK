@@ -14,7 +14,7 @@
                   Style="margin-top: 8px;"
                   OnFinish="HandleSubmit">
                 <FormItem Label="注意" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <h1>API插件需要使用FunctionCall能力，建议使用GPT4，国产模型可能不太行</h1>
+                    <h3>API插件需要使用Function Call能力，建议使用GPT4，国产模型可能不太行</h3>
                 </FormItem>
                 <FormItem Label="Api名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入Api名称" @bind-Value="@context.Name" />
@@ -35,7 +35,7 @@
                  @if (context.Method == HttpMethodType.Get)
                 {
                     <FormItem Label="Query" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <TextArea Placeholder="一个一行，以等号分割。例如:name=a" @bind-Value="@context.Query" MinRows="5" />
+                        <TextArea Placeholder="把query构造成json格式，便于大模型识别" @bind-Value="@context.Query" MinRows="5" />
                     </FormItem>
                 }
                 else if (context.Method == HttpMethodType.Post)

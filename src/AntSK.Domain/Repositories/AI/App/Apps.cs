@@ -20,6 +20,7 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         [Required]
         public string Describe { get; set; }
+
         /// <summary>
         /// 图标
         /// </summary>
@@ -37,6 +38,11 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         [Required]
         public string? ChatModelID { get; set; }
+
+        /// <summary>
+        /// Embedding 模型Id
+        /// </summary>
+        public string? EmbeddingModelID { get; set; }
 
         /// <summary>
         /// 温度
@@ -61,11 +67,11 @@ namespace AntSK.Domain.Repositories
         [SugarColumn(ColumnDataType = "varchar(1000)")]
         public string? NativeFunctionList { get; set; }
 
-
         /// <summary>
         /// 知识库ID列表
         /// </summary>
         public string? KmsIdList { get; set; }
+
         /// <summary>
         /// API调用秘钥
         /// </summary>

@@ -6,6 +6,12 @@ using Microsoft.SemanticKernel;
 using System.Text;
 using AntSK.Domain.Utils;
 using AntSK.Domain.Domain.Model.Dto;
+using AntSK.Domain.Domain.Model.Constant;
+using DocumentFormat.OpenXml.Drawing;
+using System.Reflection.Metadata;
+using Microsoft.KernelMemory;
+using System.Collections.Generic;
+using Markdig;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -33,7 +39,7 @@ namespace AntSK.Domain.Domain.Service
             var _kernel = _kernelService.GetKernelByApp(app);
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
-            if (!string.IsNullOrEmpty(app.ApiFunctionList)|| !string.IsNullOrEmpty(app.NativeFunctionList))//这里还需要加上本地插件的
+            if (!string.IsNullOrEmpty(app.ApiFunctionList) || !string.IsNullOrEmpty(app.NativeFunctionList))//这里还需要加上本地插件的
             {
                 _kernelService.ImportFunctionsByApp(app, _kernel);
                 settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
@@ -46,12 +52,29 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history, List<RelevantSource> relevantSources = null)
+        public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, string history, string filePath, List<RelevantSource> relevantSources = null)
         {
-            var _kernel = _kernelService.GetKernelByApp(app);
-            
-            
             var relevantSourceList = await _kMService.GetRelevantSourceList(app.KmsIdList, questions);
+            var _kernel = _kernelService.GetKernelByApp(app);
+            if (!string.IsNullOrWhiteSpace(filePath))
+            {
+                var memory = _kMService.GetMemory(app);
+                var fileId = Guid.NewGuid().ToString();
+                var result = await memory.ImportDocumentAsync(new Microsoft.KernelMemory.Document(fileId).AddFile(filePath)
+                          .AddTag(KmsConstantcs.KmsIdTag, app.Id)
+                          , index: KmsConstantcs.KmsIndex);
+
+                var filters = new MemoryFilter().ByTag(KmsConstantcs.KmsIdTag, app.Id);
+
+                var searchResult = await memory.SearchAsync(questions, index: KmsConstantcs.KmsIndex, filters: [filters]);
+                relevantSourceList.AddRange(searchResult.Results.SelectMany(item => item.Partitions.Select(part => new RelevantSource()
+                {
+                    SourceName = item.SourceName,
+                    Text = Markdown.ToHtml(part.Text),
+                    Relevance = part.Relevance
+                })));
+            }
+
             var dataMsg = new StringBuilder();
             if (relevantSourceList.Any())
             {
@@ -60,7 +83,7 @@ namespace AntSK.Domain.Domain.Service
                 {
                     dataMsg.AppendLine(item.ToString());
                 }
-                
+
                 KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
                 var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
                     arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = history, ["questions"] = questions });
@@ -72,7 +95,7 @@ namespace AntSK.Domain.Domain.Service
             }
             else
             {
-                yield return  new StreamingTextContent("知识库未搜索到相关内容");
+                yield return new StreamingTextContent(KmsConstantcs.KmsSearchNull);
             }
         }
     }

@@ -112,6 +112,20 @@
             <param name="app"></param>
             <param name="_kernel"></param>
         </member>
+        <member name="M:AntSK.Domain.Domain.Service.KernelService.ImportApiFunction(AntSK.Domain.Repositories.Apps,System.Collections.Generic.List{Microsoft.SemanticKernel.KernelFunction})">
+            <summary>
+            导入API插件
+            </summary>
+            <param name="app"></param>
+            <param name="functions"></param>
+        </member>
+        <member name="M:AntSK.Domain.Domain.Service.KernelService.ImportNativeFunction(AntSK.Domain.Repositories.Apps,System.Collections.Generic.List{Microsoft.SemanticKernel.KernelFunction})">
+            <summary>
+            导入原生插件
+            </summary>
+            <param name="app"></param>
+            <param name="functions"></param>
+        </member>
         <member name="M:AntSK.Domain.Domain.Service.KernelService.RegisterPluginsWithKernel(Microsoft.SemanticKernel.Kernel)">
             <summary>
             注册默认插件
@@ -215,6 +229,11 @@
         <member name="P:AntSK.Domain.Repositories.Apps.ChatModelID">
             <summary>
             会话模型ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.EmbeddingModelID">
+            <summary>
+            Embedding 模型Id
             </summary>
         </member>
         <member name="P:AntSK.Domain.Repositories.Apps.Temperature">
@@ -722,6 +741,13 @@
             流转byte
             </summary>
             <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ToQueryString(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            json参数转化querystring参数
+            </summary>
+            <param name="parameters"></param>
             <returns></returns>
         </member>
         <member name="M:AntSK.Domain.Utils.RepoFiles.SamplePluginsPath">
