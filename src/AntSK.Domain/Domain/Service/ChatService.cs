@@ -79,7 +79,7 @@ namespace AntSK.Domain.Domain.Service
             if (relevantSourceList.Any())
             {
                 relevantSources?.AddRange(relevantSourceList);
-                foreach (var item in relevantSources)
+                foreach (var item in relevantSourceList)
                 {
                     dataMsg.AppendLine(item.ToString());
                 }
