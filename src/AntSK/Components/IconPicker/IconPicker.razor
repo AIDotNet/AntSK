@@ -9,7 +9,7 @@
         DropdownMatchSelectWidth="false"
         Value="@Value"
         OnSelectedItemChanged="OnSelectedItemChangedHandler"
-        ListboxStyle="display:flex;height: 200px;flex-flow: wrap; max-width: 500px; align-content: baseline;">
+        ListboxStyle="display:flex;height: 200px;flex-flow: wrap; max-width: 500px; align-content: baseline; padding-left:10px;">
     <ItemTemplate>
         <Icon Type="@context" />
     </ItemTemplate>
@@ -20,14 +20,19 @@
         <Tabs OnChange="OnChange">
             @foreach (var item in _lstIcons)
             {
-                <TabPane Key="@item.Key" Tab="@item.Key"> </TabPane>
+                    <TabPane Key="@item.Key" Tab="@item.Key"> </TabPane>
             }
         </Tabs>
         @context
     </DropdownRender>
 </Select>
 
-
+<style>
+    .ant-tabs-nav-list
+    {
+        padding-left:10px;
+    }
+</style>
 
 @code
 {
