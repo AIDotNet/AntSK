@@ -132,8 +132,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-InitDB(app);
-LoadFun(app);
+//扩展初始化实现
+app.CodeFirst();
+app.LoadFun();
 
 app.UseRouting();
 
@@ -150,43 +151,4 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 app.Run();
-void InitDB(WebApplication app)
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        //codefirst 创建表
-        var _repository = scope.ServiceProvider.GetRequiredService<IApps_Repositories>();
-        _repository.GetDB().DbMaintenance.CreateDatabase();
-        _repository.GetDB().CodeFirst.InitTables(typeof(Apps));
-        _repository.GetDB().CodeFirst.InitTables(typeof(Kmss));
-        _repository.GetDB().CodeFirst.InitTables(typeof(KmsDetails));
-        _repository.GetDB().CodeFirst.InitTables(typeof(Users));
-        _repository.GetDB().CodeFirst.InitTables(typeof(Apis));
-        _repository.GetDB().CodeFirst.InitTables(typeof(AIModels));
-        _repository.GetDB().CodeFirst.InitTables(typeof(Funs));
-        //创建vector插件如果数据库没有则需要提供支持向量的数据库
-        _repository.GetDB().Ado.ExecuteCommandAsync($"CREATE EXTENSION IF NOT EXISTS vector;");
-    }
-}
 
-void LoadFun(WebApplication app)
-{
-    try
-    {
-        using (var scope = app.Services.CreateScope())
-        {
-            //codefirst 创建表
-            var funRep = scope.ServiceProvider.GetRequiredService<IFuns_Repositories>();
-            var functionService = scope.ServiceProvider.GetRequiredService<FunctionService>();
-            var funs= funRep.GetList();
-            foreach (var fun in funs)
-            {
-                functionService.FuncLoad(fun.Path);
-            }
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
-    }
-}
