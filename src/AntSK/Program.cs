@@ -47,7 +47,7 @@ builder.Services.AddServicesFromAssemblies("AntSK");
 builder.Services.AddServicesFromAssemblies("AntSK.Domain");
 builder.Services.AddSingleton(sp => new FunctionService(sp, [typeof(AntSK.App).Assembly]));
 builder.Services.AddScoped<FunctionTest>();
-
+builder.Services.AddSingleton<LLamaFactoryService>();
 builder.Services.AddAntSKSwagger();
 //Mapper
 builder.Services.AddMapper();
