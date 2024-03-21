@@ -2,9 +2,11 @@
 using AntDesign.ProLayout;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Enum;
+using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
+using AntSK.LLamaFactory.Model;
 using Downloader;
 using Microsoft.AspNetCore.Components;
 using System.ComponentModel;
@@ -43,6 +45,7 @@ namespace AntSK.Pages.Setting.AIModel
         IEnumerable<string> _menuKeys;
 
         private List<MenuDataItem> menuList = new List<MenuDataItem>();
+        private List<LLamaModel> modelList=new List<LLamaModel>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -63,6 +66,7 @@ namespace AntSK.Pages.Setting.AIModel
 
                     _downloadUrl = $"https://hf-mirror.com{ModelPath.Replace("---","/")}";
                 }
+                modelList = _ILLamaFactoryService.GetLLamaFactoryModels();
             }
             catch 
             {
@@ -191,6 +195,11 @@ namespace AntSK.Pages.Setting.AIModel
             _downloadStarted=false;
             _download?.Stop();
             InvokeAsync(StateHasChanged);
+        }
+
+        private void OnSearch(string value)
+        {
+            modelList = _ILLamaFactoryService.GetLLamaFactoryModels().Where(p => p.Name.Contains(value)).ToList();
         }
     }
 }

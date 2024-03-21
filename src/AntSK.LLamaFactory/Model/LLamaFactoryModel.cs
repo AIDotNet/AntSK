@@ -12,14 +12,16 @@ namespace AntSK.LLamaFactory.Model
         public string MODELSCOPE { get; set; }
     }
 
-    public class Model
-    {
-        public ModelInfo DownloadSource { get; set; }
-    }
 
     public class LLamaFactoryModel
     {
-        public Dictionary<string, Model> Models { get; set; }
+        public Dictionary<string, ModelInfo> Models { get; set; }
         public string Template { get; set; }
+    }
+
+    public class LLamaModel
+    { 
+        public string Name { get; set; }
+        public string ModelScope { get; set; }
     }
 }

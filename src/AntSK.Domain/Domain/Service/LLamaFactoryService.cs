@@ -1,11 +1,15 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Dto;
+using AntSK.Domain.Options;
+using AntSK.LLamaFactory.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace AntSK.Domain.Domain.Service
@@ -18,6 +22,7 @@ namespace AntSK.Domain.Domain.Service
         public static bool isProcessComplete = false;
 
         private readonly object _syncLock = new object();
+        private List<LLamaModel> modelList = new List<LLamaModel>();
 
         public LLamaFactoryService() { }
 
@@ -90,6 +95,25 @@ namespace AntSK.Domain.Domain.Service
                 // Process already exited.
             }
 
+        }
+
+        public List<LLamaModel> GetLLamaFactoryModels()
+        {
+            if (modelList.Count==0)
+            {
+                string jsonString = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modelList.json"));
+
+                // 反序列化 JSON 字符串到相应的 C# 对象
+                var Models = JsonConvert.DeserializeObject<List<LLamaFactoryModel>>(jsonString);
+                foreach (var model in Models)
+                {
+                    foreach (var m in model.Models)
+                    {
+                        modelList.Add(new LLamaModel() { Name=m.Key, ModelScope=m.Value.MODELSCOPE });
+                    }
+                }
+            }         
+            return modelList;
         }
     }
 }

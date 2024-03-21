@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AntSK.LLamaFactory.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,7 @@ namespace AntSK.Domain.Domain.Interface
         Task<bool> StartProcess(string modelName, string templateName);
 
         void KillProcess();
+
+        List<LLamaModel> GetLLamaFactoryModels();
     }
 }

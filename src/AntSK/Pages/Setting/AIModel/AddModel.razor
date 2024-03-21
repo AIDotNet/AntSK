@@ -2,6 +2,8 @@
 @using AntSK.Domain.Repositories
 @using AntSK.Models
 @using AntSK.Domain.Domain.Model.Enum
+@using AntSK.LLamaFactory.Model
+@using AntSK.LLamaFactory
 @page "/setting/model/add"
 @page "/setting/model/add/{ModelId}"
 @page "/setting/model/addbypath/{ModelPath}"
@@ -94,9 +96,19 @@
                 {
                     <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputGroup>
-                            <AutoComplete Options="_modelFiles" Placeholder="Qwen/Qwen1.5-0.5B-Chat" @bind-Value="@context.ModelName" />
+                          @*   <AutoComplete Options="_modelFiles" Placeholder="Qwen/Qwen1.5-0.5B-Chat" @bind-Value="@context.ModelName" /> *@
+                            <Select TItem="LLamaModel"
+                                    TItemValue="string"
+                                    DataSource="@modelList"
+                                    @bind-Value="@context.ModelName"
+                                    LabelName="@nameof(LLamaModel.Name)"
+                                    ValueName="@nameof(LLamaModel.ModelScope)"
+                                    Placeholder="选择模型"
+                                    DefaultActiveFirstOption="false"
+                                    EnableSearch
+                                    OnSearch="OnSearch">
+                            </Select>
                         </InputGroup>
-
                     </FormItem>
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="请输入请求地址" @bind-Value="@context.EndPoint" />
