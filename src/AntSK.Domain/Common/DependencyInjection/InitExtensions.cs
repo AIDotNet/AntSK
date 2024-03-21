@@ -1,11 +1,16 @@
 ﻿using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Repositories;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using SqlSugar;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -80,6 +85,60 @@ namespace AntSK.Domain.Common.DependencyInjection
         {
             // 检查类型是否具有SugarTable特性
             return type.GetCustomAttributes(typeof(SugarTable), inherit: false).Length > 0;
+        }
+
+        /// <summary>
+        /// swagger 初始化
+        /// </summary>
+        /// <param name="serviceCollection"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddAntSKSwagger(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new() { Title = "AntSK.Api", Version = "v1" });
+                //添加Api层注释（true表示显示控制器注释）
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath, true);
+                //添加Domain层注释（true表示显示控制器注释）
+                var xmlFile1 = $"{Assembly.GetExecutingAssembly().GetName().Name.Replace("Api", "Domain")}.xml";
+                var xmlPath1 = Path.Combine(AppContext.BaseDirectory, xmlFile1);
+                c.IncludeXmlComments(xmlPath1, true);
+                c.DocInclusionPredicate((docName, apiDes) =>
+                {
+                    if (!apiDes.TryGetMethodInfo(out MethodInfo method))
+                        return false;
+                    var version = method.DeclaringType.GetCustomAttributes(true).OfType<ApiExplorerSettingsAttribute>().Select(m => m.GroupName);
+                    if (docName == "v1" && !version.Any())
+                        return true;
+                    var actionVersion = method.GetCustomAttributes(true).OfType<ApiExplorerSettingsAttribute>().Select(m => m.GroupName);
+                    if (actionVersion.Any())
+                        return actionVersion.Any(v => v == docName);
+                    return version.Any(v => v == docName);
+                });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Description = "Directly enter bearer {token} in the box below (note that there is a space between bearer and token)",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference()
+                            {
+                                Id = "Bearer",
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        }, Array.Empty<string>()
+                    }
+                });
+            });
+            return serviceCollection;
         }
     }
 }

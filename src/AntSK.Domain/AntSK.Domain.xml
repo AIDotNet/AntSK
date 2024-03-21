@@ -31,6 +31,13 @@
             <param name="services"></param>
             <returns></returns>
         </member>
+        <member name="M:AntSK.Domain.Common.DependencyInjection.InitExtensions.AddAntSKSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            swagger 初始化
+            </summary>
+            <param name="serviceCollection"></param>
+            <returns></returns>
+        </member>
         <member name="F:AntSK.Domain.Common.DependencyInjection.ServiceLifetime.Scoped">
             <summary>
             作用域
