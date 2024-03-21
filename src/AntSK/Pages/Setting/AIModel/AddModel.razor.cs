@@ -46,6 +46,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private List<MenuDataItem> menuList = new List<MenuDataItem>();
         private List<LLamaModel> modelList=new List<LLamaModel>();
+        bool llamaFactoryIsStart = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -79,6 +80,7 @@ namespace AntSK.Pages.Setting.AIModel
         /// </summary>
         private void HandleStartService()
         {
+            llamaFactoryIsStart=true;
             _ILLamaFactoryService.StartProcess(_aiModel.ModelName, "default");
         }
 
@@ -87,6 +89,7 @@ namespace AntSK.Pages.Setting.AIModel
         /// </summary>
         private void HandleStopService()
         {
+            llamaFactoryIsStart = false;
             _ILLamaFactoryService.KillProcess();
         }
 
