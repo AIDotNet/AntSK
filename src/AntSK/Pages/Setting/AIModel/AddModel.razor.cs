@@ -80,7 +80,12 @@ namespace AntSK.Pages.Setting.AIModel
         /// </summary>
         private void HandleStartService()
         {
-            llamaFactoryIsStart=true;
+            if (string.IsNullOrEmpty(_aiModel.ModelName))
+            {
+                _ = Message.Error("请先选择模型！", 2);
+                return;
+            }             
+            llamaFactoryIsStart =true;       
             _ILLamaFactoryService.StartProcess(_aiModel.ModelName, "default");
         }
 
