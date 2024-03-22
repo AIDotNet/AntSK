@@ -25,6 +25,12 @@ namespace AntSK.Domain.Domain.Service
         private List<LLamaModel> modelList = new List<LLamaModel>();
 
         public LLamaFactoryService() { }
+        public delegate Task LogMessageHandler(string message);
+        public event LogMessageHandler LogMessageReceived;
+        protected virtual async Task OnLogMessageReceived(string message)
+        {
+            LogMessageReceived?.Invoke(message);
+        }
 
         public async Task<bool> StartProcess(string modelName, string templateName)
         {
@@ -51,46 +57,17 @@ namespace AntSK.Domain.Domain.Service
                 process.OutputDataReceived += (sender, eventArgs) =>
                 {
                     Console.WriteLine($"Output: {eventArgs.Data}");
+                    OnLogMessageReceived(eventArgs.Data);
                 };
                 process.ErrorDataReceived += (sender, eventArgs) =>
                 {
                     Console.WriteLine($"Error: {eventArgs.Data}");
+                    OnLogMessageReceived(eventArgs.Data);
                 };
                 process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
                 process.WaitForExit();
-
-                //using (Process start = Process.Start(process.StartInfo))
-                //{
-
-                //    using (StreamReader reader = start.StandardOutput)
-                //    {
-                //        string result = reader.ReadToEnd();
-                //        if (result != null)
-                //        {
-                //            if (result.Contains(":8000"))
-                //            {
-                //                isProcessComplete = true;
-                //            }
-                //        }
-                //        Console.WriteLine(result);
-                //    }
-                //    using (StreamReader reader = start.StandardError)
-                //    {
-                //        string result = reader.ReadToEnd();
-                //        if (result != null)
-                //        {
-                //            if (result.Contains(":8000"))
-                //            {
-                //                isProcessComplete = true;
-                //            }
-                //        }
-                //        Console.WriteLine(result);
-                //    }
-                //    start.WaitForExit();
-                //}
-
             }, TaskCreationOptions.LongRunning);
             return true;
         }

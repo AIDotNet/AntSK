@@ -7,6 +7,7 @@ using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using AntSK.LLamaFactory.Model;
+using BlazorComponents.Terminal;
 using Downloader;
 using Microsoft.AspNetCore.Components;
 using System.ComponentModel;
@@ -30,6 +31,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private string _downloadUrl;
         private bool _downloadModalVisible;
+        private bool _logModalVisible;
 
         private bool _isComplete;
 
@@ -47,6 +49,8 @@ namespace AntSK.Pages.Setting.AIModel
         private List<MenuDataItem> menuList = new List<MenuDataItem>();
         private List<LLamaModel> modelList=new List<LLamaModel>();
         bool llamaFactoryIsStart = false;
+        private  BlazorTerminal blazorTerminal = new BlazorTerminal();
+        private TerminalParagraph para;
 
         protected override async Task OnInitializedAsync()
         {
@@ -68,36 +72,13 @@ namespace AntSK.Pages.Setting.AIModel
                     _downloadUrl = $"https://hf-mirror.com{ModelPath.Replace("---","/")}";
                 }
                 modelList = _ILLamaFactoryService.GetLLamaFactoryModels();
+              
             }
             catch 
             {
                 _ = Message.Error("LLamaSharp.FileDirectory目录配置不正确！", 2);
             }
         }
-
-        /// <summary>
-        /// 启动服务
-        /// </summary>
-        private void HandleStartService()
-        {
-            if (string.IsNullOrEmpty(_aiModel.ModelName))
-            {
-                _ = Message.Error("请先选择模型！", 2);
-                return;
-            }             
-            llamaFactoryIsStart =true;       
-            _ILLamaFactoryService.StartProcess(_aiModel.ModelName, "default");
-        }
-
-        /// <summary>
-        /// 停止服务
-        /// </summary>
-        private void HandleStopService()
-        {
-            llamaFactoryIsStart = false;
-            _ILLamaFactoryService.KillProcess();
-        }
-
 
         private void HandleSubmit()
         {
@@ -159,7 +140,7 @@ namespace AntSK.Pages.Setting.AIModel
 
             _download.DownloadProgressChanged += DownloadProgressChanged;
             _download.DownloadFileCompleted += DownloadFileCompleted;
-            _download.DownloadStarted += DownloadStarted;
+            _download.DownloadStarted += StartedDownload;
 
             await _download.StartAsync();
 
@@ -182,13 +163,13 @@ namespace AntSK.Pages.Setting.AIModel
             InvokeAsync(StateHasChanged);
         }
 
-        private void DownloadStarted(object? sender, DownloadStartedEventArgs e)
+        private void StartedDownload(object? sender, DownloadStartedEventArgs e)
         {
             _downloadStarted = true;
             InvokeAsync(StateHasChanged);
         }
 
-        private void OnCancel()
+        private void OnCancelDownload()
         {
             if (_downloadStarted)
             {
@@ -198,7 +179,7 @@ namespace AntSK.Pages.Setting.AIModel
             _downloadModalVisible = false;
         }
 
-        private void Stop()
+        private void StopDownload()
         {
             _downloadStarted=false;
             _download?.Stop();
@@ -207,7 +188,51 @@ namespace AntSK.Pages.Setting.AIModel
 
         private void OnSearch(string value)
         {
-            modelList = _ILLamaFactoryService.GetLLamaFactoryModels().Where(p => p.Name.Contains(value)).ToList();
+            if (string.IsNullOrEmpty(value))
+            { 
+                modelList = _ILLamaFactoryService.GetLLamaFactoryModels(); 
+            }
+            else
+            {
+                modelList = _ILLamaFactoryService.GetLLamaFactoryModels().Where(p => p.Name.ToLower().Contains(value.ToLower())).ToList();
+            }
+
+        }
+      
+        /// <summary>
+        /// 启动服务
+        /// </summary>
+        private void HandleStartService()
+        {
+            if (string.IsNullOrEmpty(_aiModel.ModelName))
+            {
+                _ = Message.Error("请先选择模型！", 2);
+                return;
+            }
+            llamaFactoryIsStart = true;
+            _logModalVisible = true;
+            _ILLamaFactoryService.LogMessageReceived += ExternalLogHandler;
+            _ILLamaFactoryService.StartProcess(_aiModel.ModelName, "default");
+        }
+        private async Task ExternalLogHandler(string message)
+        {
+            await InvokeAsync(() =>
+            {
+                para = blazorTerminal.RespondText("");
+                para.AddTextLine(message);          
+            });
+        }
+        /// <summary>
+        /// 停止服务
+        /// </summary>
+        private void HandleStopService()
+        {
+            llamaFactoryIsStart = false;
+            _ILLamaFactoryService.KillProcess();
+        }
+
+        private void OnCancelLog() {
+            _logModalVisible = false;
         }
     }
 }

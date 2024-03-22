@@ -4,6 +4,7 @@
 @using AntSK.Domain.Domain.Model.Enum
 @using AntSK.LLamaFactory.Model
 @using AntSK.LLamaFactory
+@using BlazorComponents.Terminal
 @page "/setting/model/add"
 @page "/setting/model/add/{ModelId}"
 @page "/setting/model/addbypath/{ModelPath}"
@@ -136,7 +137,7 @@
     </ChildContent>
 </PageContainer>
 
-<Modal @ref="_modal" Visible="_downloadModalVisible" Footer="null" Closable Title="模型下载" OnCancel="OnCancel" DestroyOnClose>
+<Modal @ref="_modal" Visible="_downloadModalVisible" Footer="null" Closable Title="模型下载" OnCancel="OnCancelDownload" DestroyOnClose>
     <Flex Gap="10" Vertical>
         <InputGroup>
             <Input Disabled="_downloadStarted" Placeholder="请输入下载地址" @bind-Value="_downloadUrl" Style="width:80%"></Input>
@@ -146,10 +147,16 @@
             }
             else
             {
-                <Button OnClick="Stop">停止</Button>
+                <Button OnClick="StopDownload">停止</Button>
             }
         </InputGroup>
         <AntDesign.Progress Percent="_downloadProgress"></AntDesign.Progress>
 
     </Flex>
 </Modal>
+
+<Modal Visible="_logModalVisible" Footer="null" Closable Title="日志输出" OnCancel="OnCancelLog" DestroyOnClose>
+    <BlazorTerminal @ref="blazorTerminal" Style="height:600px;" ></BlazorTerminal>
+</Modal>
+
+
