@@ -41,32 +41,63 @@ namespace AntSK.Domain.Domain.Service
                         Arguments = "api_demo.py --model_name_or_path " + modelName + " --template " + templateName + " ",
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
+                        RedirectStandardError=true,
                         WorkingDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "llamafactory"),
                     }
                 };
                 process.StartInfo.Environment["CUDA_VISIBLE_DEVICES"] = "0";
                 process.StartInfo.Environment["API_PORT"] = "8000";
                 process.StartInfo.EnvironmentVariables["USE_MODELSCOPE_HUB"] = "1";
-
-                using (Process start = Process.Start(process.StartInfo))
+                process.OutputDataReceived += (sender, eventArgs) =>
                 {
-                    using (StreamReader reader = start.StandardOutput)
-                    {
-                        string result = reader.ReadToEnd();
-                        if (result != null)
-                        {
-                            if (result.Contains(":8000"))
-                            {
-                                isProcessComplete = true;
-                            }
-                        }
-                        Console.WriteLine(result);
-                    }
-                    start.WaitForExit();
-                }
+                    Console.WriteLine($"Output: {eventArgs.Data}");
+                };
+                process.ErrorDataReceived += (sender, eventArgs) =>
+                {
+                    Console.WriteLine($"Error: {eventArgs.Data}");
+                };
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                process.WaitForExit();
+
+                //using (Process start = Process.Start(process.StartInfo))
+                //{
+
+                //    using (StreamReader reader = start.StandardOutput)
+                //    {
+                //        string result = reader.ReadToEnd();
+                //        if (result != null)
+                //        {
+                //            if (result.Contains(":8000"))
+                //            {
+                //                isProcessComplete = true;
+                //            }
+                //        }
+                //        Console.WriteLine(result);
+                //    }
+                //    using (StreamReader reader = start.StandardError)
+                //    {
+                //        string result = reader.ReadToEnd();
+                //        if (result != null)
+                //        {
+                //            if (result.Contains(":8000"))
+                //            {
+                //                isProcessComplete = true;
+                //            }
+                //        }
+                //        Console.WriteLine(result);
+                //    }
+                //    start.WaitForExit();
+                //}
 
             }, TaskCreationOptions.LongRunning);
             return true;
+        }
+
+        private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public string WaitForProcessExit()
