@@ -82,8 +82,8 @@
                                 Accept="*/*"
                                 ShowUploadList="false"
                                 BeforeUpload="_kMService.BeforeUpload"
-                                OnSingleCompleted="OnSingleCompleted">
-                            <Button Icon="@IconType.Outline.Upload" Type="@(ButtonType.Link)" />
+                                OnSingleCompleted="OnSingleCompleted" >
+                            <Button Icon="@IconType.Outline.Upload" Type="@(ButtonType.Link)" Disabled="@Sendding" />
                         </Upload>
                         <Button Icon="clear" Type="@(ButtonType.Link)" OnClick="@(async () => await OnClearAsync())" Disabled="@Sendding"></Button>
                         <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>

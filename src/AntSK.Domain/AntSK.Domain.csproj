@@ -11,6 +11,8 @@
     <PackageReference Include="AntDesign.Charts" Version="0.5.1" />
     <PackageReference Include="AntDesign.ProLayout" Version="0.18.0" />
     
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    
     <PackageReference Include="AutoMapper" Version="8.1.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Markdig" Version="0.36.2" />

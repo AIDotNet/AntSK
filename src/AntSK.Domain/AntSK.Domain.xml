@@ -17,6 +17,27 @@
             <param name="assemblies">程序集集合</param>
             <returns></returns>
         </member>
+        <member name="M:AntSK.Domain.Common.DependencyInjection.InitExtensions.CodeFirst(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            使用codefirst创建数据库表
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Common.DependencyInjection.InitExtensions.LoadFun(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            加载数据库的插件
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Common.DependencyInjection.InitExtensions.AddAntSKSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            swagger 初始化
+            </summary>
+            <param name="serviceCollection"></param>
+            <returns></returns>
+        </member>
         <member name="F:AntSK.Domain.Common.DependencyInjection.ServiceLifetime.Scoped">
             <summary>
             作用域

@@ -48,50 +48,7 @@ builder.Services.AddServicesFromAssemblies("AntSK.Domain");
 builder.Services.AddSingleton(sp => new FunctionService(sp, [typeof(AntSK.App).Assembly]));
 builder.Services.AddScoped<FunctionTest>();
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new() { Title = "AntSK.Api", Version = "v1" });
-    //添加Api层注释（true表示显示控制器注释）
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath, true);
-    //添加Domain层注释（true表示显示控制器注释）
-    var xmlFile1 = $"{Assembly.GetExecutingAssembly().GetName().Name.Replace("Api", "Domain")}.xml";
-    var xmlPath1 = Path.Combine(AppContext.BaseDirectory, xmlFile1);
-    c.IncludeXmlComments(xmlPath1, true);
-    c.DocInclusionPredicate((docName, apiDes) =>
-    {
-        if (!apiDes.TryGetMethodInfo(out MethodInfo method))
-            return false;
-        var version = method.DeclaringType.GetCustomAttributes(true).OfType<ApiExplorerSettingsAttribute>().Select(m => m.GroupName);
-        if (docName == "v1" && !version.Any())
-            return true;
-        var actionVersion = method.GetCustomAttributes(true).OfType<ApiExplorerSettingsAttribute>().Select(m => m.GroupName);
-        if (actionVersion.Any())
-            return actionVersion.Any(v => v == docName);
-        return version.Any(v => v == docName);
-    });
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    {
-        Description = "Directly enter bearer {token} in the box below (note that there is a space between bearer and token)",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference()
-                            {
-                                Id = "Bearer",
-                                Type = ReferenceType.SecurityScheme
-                            }
-                        }, Array.Empty<string>()
-                    }
-                });
-});
+builder.Services.AddAntSKSwagger();
 //Mapper
 builder.Services.AddMapper();
 //后台队列任务
@@ -132,8 +89,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-InitDB(app);
-LoadFun(app);
+//扩展初始化实现
+app.CodeFirst();
+app.LoadFun();
 
 app.UseRouting();
 
@@ -150,43 +108,4 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 app.Run();
-void InitDB(WebApplication app)
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        //codefirst 创建表
-        var _repository = scope.ServiceProvider.GetRequiredService<IApps_Repositories>();
-        _repository.GetDB().DbMaintenance.CreateDatabase();
-        _repository.GetDB().CodeFirst.InitTables(typeof(Apps));
-        _repository.GetDB().CodeFirst.InitTables(typeof(Kmss));
-        _repository.GetDB().CodeFirst.InitTables(typeof(KmsDetails));
-        _repository.GetDB().CodeFirst.InitTables(typeof(Users));
-        _repository.GetDB().CodeFirst.InitTables(typeof(Apis));
-        _repository.GetDB().CodeFirst.InitTables(typeof(AIModels));
-        _repository.GetDB().CodeFirst.InitTables(typeof(Funs));
-        //创建vector插件如果数据库没有则需要提供支持向量的数据库
-        _repository.GetDB().Ado.ExecuteCommandAsync($"CREATE EXTENSION IF NOT EXISTS vector;");
-    }
-}
 
-void LoadFun(WebApplication app)
-{
-    try
-    {
-        using (var scope = app.Services.CreateScope())
-        {
-            //codefirst 创建表
-            var funRep = scope.ServiceProvider.GetRequiredService<IFuns_Repositories>();
-            var functionService = scope.ServiceProvider.GetRequiredService<FunctionService>();
-            var funs= funRep.GetList();
-            foreach (var fun in funs)
-            {
-                functionService.FuncLoad(fun.Path);
-            }
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
-    }
-}

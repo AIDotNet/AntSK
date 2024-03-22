@@ -3,7 +3,7 @@ version: '3.8'
 services:
   antsk:
     container_name: antsk
-    image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.2.2
+    image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.2.1
     ports:
       - 5000:5000
     networks:
