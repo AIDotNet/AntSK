@@ -3,6 +3,7 @@ using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Dto;
 using AntSK.Domain.Options;
 using AntSK.LLamaFactory.Model;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,44 @@ namespace AntSK.Domain.Domain.Service
             LogMessageReceived?.Invoke(message);
         }
 
-        public async Task<bool> StartLLamaFactory(string modelName, string templateName)
+        public async Task PipInstall()
+        {
+
+            var cmdTask = Task.Factory.StartNew(() =>
+            {
+
+                var isProcessComplete = false;
+
+                process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "pip",
+                        Arguments = "install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple",
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                    }
+                };  
+                process.OutputDataReceived += (sender, eventArgs) =>
+                {
+                    Console.WriteLine($"{eventArgs.Data}");
+                    OnLogMessageReceived(eventArgs.Data);
+                };
+                process.ErrorDataReceived += (sender, eventArgs) =>
+                {
+                    Console.WriteLine($"{eventArgs.Data}");
+                    OnLogMessageReceived(eventArgs.Data);
+                };
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                process.WaitForExit();
+            }, TaskCreationOptions.LongRunning);
+        }
+
+        public async Task StartLLamaFactory(string modelName, string templateName)
         {
             var cmdTask = Task.Factory.StartNew(() =>
             {
@@ -69,7 +107,6 @@ namespace AntSK.Domain.Domain.Service
                 process.BeginErrorReadLine();
                 process.WaitForExit();
             }, TaskCreationOptions.LongRunning);
-            return true;
         }
 
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)

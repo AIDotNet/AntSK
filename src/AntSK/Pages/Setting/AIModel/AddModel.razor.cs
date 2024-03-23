@@ -9,6 +9,7 @@ using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using AntSK.LLamaFactory.Model;
 using BlazorComponents.Terminal;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Downloader;
 using Microsoft.AspNetCore.Components;
 using System.ComponentModel;
@@ -25,9 +26,10 @@ namespace AntSK.Pages.Setting.AIModel
         [Inject] protected MessageService? Message { get; set; }
         [Inject] public HttpClient HttpClient { get; set; }
 
-
         [Inject] protected ILLamaFactoryService _ILLamaFactoryService { get; set; }
         [Inject] protected IDics_Repositories _IDics_Repositories { get; set; }
+
+        [Inject] IConfirmService _confirmService { get; set; }
 
         private AIModels _aiModel = new AIModels();
 
@@ -211,7 +213,7 @@ namespace AntSK.Pages.Setting.AIModel
         /// <summary>
         /// 启动服务
         /// </summary>
-        private void HandleStartService()
+        private void StartLFService()
         {
             if (string.IsNullOrEmpty(_aiModel.ModelName))
             {
@@ -226,14 +228,25 @@ namespace AntSK.Pages.Setting.AIModel
             _ILLamaFactoryService.StartLLamaFactory(_aiModel.ModelName, "default");
         }
 
-        private void HandleStopService()
+        private void StopLFService()
         {
             llamaFactoryIsStart = false;
             llamaFactoryDic.Value = "false";
             _IDics_Repositories.Update(llamaFactoryDic);
             _ILLamaFactoryService.KillProcess();
         }
-
+        private async Task PipInstall()
+        {
+            var content = "初次使用需要执行pip install，点击确认后可自动执行，是否执行";
+            var title = "提示";
+            var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
+            if (result == ConfirmResult.Yes)
+            {
+                _logModalVisible = true;
+                _ILLamaFactoryService.LogMessageReceived += CmdLogHandler;
+                _ILLamaFactoryService.PipInstall();
+            }
+        }
         private async Task CmdLogHandler(string message)
         {
             await InvokeAsync(() =>

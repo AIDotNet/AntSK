@@ -117,13 +117,16 @@
                         <InputGroup>
                             @if (!llamaFactoryIsStart)
                             {
-                                <Button Type="primary" OnClick="HandleStartService" Disabled="@(llamaFactoryIsStart)">启动</Button>
+                                <Button Type="primary" OnClick="StartLFService" Disabled="@(llamaFactoryIsStart)">启动</Button>
                             }
                             else
                             {
-                                <Button OnClick="HandleStopService" Disabled="@(!llamaFactoryIsStart)">停止</Button>
+                                <Button OnClick="StopLFService" Disabled="@(!llamaFactoryIsStart)">停止</Button>
                             }
                         </InputGroup>
+                    </FormItem>
+                     <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Button Type="primary" OnClick="PipInstall" >初始化</Button>
                     </FormItem>
                 }
                 @if (context.AIType == AIType.Mock)

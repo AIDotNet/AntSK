@@ -11,7 +11,8 @@ namespace AntSK.Domain.Domain.Interface
     public interface ILLamaFactoryService
     {
         public event LogMessageHandler LogMessageReceived;
-        Task<bool> StartLLamaFactory(string modelName, string templateName);
+        Task PipInstall();
+        Task StartLLamaFactory(string modelName, string templateName);
 
         void KillProcess();
 
