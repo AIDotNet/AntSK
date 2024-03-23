@@ -8,7 +8,7 @@
 
 - **内存内核 (Kernel Memory)**：具备持续学习和存储知识点的能力，AntSK 拥有长期记忆功能，累积经验，提供更个性化的交互体验。
 
-- **知识库**：通过文档（Word、PDF、Excel、Txt、Markdown、Json、PPT）等形式导入知识库，可以进行知识库文档。
+- **知识库**：通过文档（Word、PDF、Excel、Txt、Markdown、Json、PPT）等形式导入知识库，可以进行知识库问答。
 
 - **GPTs 生成**：此平台支持创建个性化的GPT模型，尝试构建您自己的GPT模型。
 
