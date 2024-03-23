@@ -1,25 +1,28 @@
-# Build stage
+# 1. Define the Python image to use for getting pip
+FROM pytorch/pytorch AS python-base
+
+# 2. Define the .NET SDK image to build your application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-
-# Copy csproj and restore as distinct layers
 COPY ["src/AntSK/AntSK.csproj", "AntSK/"]
-RUN dotnet restore "AntSK/AntSK.csproj"
-
-# Copy everything else and build
 COPY src/ .
 WORKDIR "/src/AntSK"
+RUN dotnet restore "AntSK.csproj"
 RUN dotnet build "AntSK.csproj" -c Release -o /app/build
 RUN dotnet publish "AntSK.csproj" -c Release -o /app/publish
 
-# Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /service
-EXPOSE 5000
+# 3. Define the final image that will contain both .NET runtime and Python
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 
-FROM base AS final
+# Copy the Python/pip installation from the official Python image
+COPY --from=python-base /usr/local /usr/local
+COPY --from=python-base /opt/conda/ /opt/conda/
 WORKDIR /app
 COPY --from=build /app/publish .
+# Make sure the app and Python directories are in PATH
+ENV PATH="/app:/opt/conda/bin:/usr/local/bin:${PATH}"
+# ÉèÖÃÊ±Çø
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo 'Asia/Shanghai' >/etc/timezone
+RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ENTRYPOINT ["dotnet", "AntSK.dll"]
