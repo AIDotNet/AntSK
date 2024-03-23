@@ -3,7 +3,9 @@ version: '3.8'
 services:
   antsk:
     container_name: antsk
-    image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.2.1
+    image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.2.3
+    # 如果需要pytorch环境需要使用下面这个镜像，镜像比较大
+    # image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.2.3.2
     ports:
       - 5000:5000
     networks:
