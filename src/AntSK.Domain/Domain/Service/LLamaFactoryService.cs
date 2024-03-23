@@ -32,7 +32,7 @@ namespace AntSK.Domain.Domain.Service
             LogMessageReceived?.Invoke(message);
         }
 
-        public async Task<bool> StartProcess(string modelName, string templateName)
+        public async Task<bool> StartLLamaFactory(string modelName, string templateName)
         {
             var cmdTask = Task.Factory.StartNew(() =>
             {
@@ -56,12 +56,12 @@ namespace AntSK.Domain.Domain.Service
                 process.StartInfo.EnvironmentVariables["USE_MODELSCOPE_HUB"] = "1";
                 process.OutputDataReceived += (sender, eventArgs) =>
                 {
-                    Console.WriteLine($"Output: {eventArgs.Data}");
+                    Console.WriteLine($"{eventArgs.Data}");
                     OnLogMessageReceived(eventArgs.Data);
                 };
                 process.ErrorDataReceived += (sender, eventArgs) =>
                 {
-                    Console.WriteLine($"Error: {eventArgs.Data}");
+                    Console.WriteLine($"{eventArgs.Data}");
                     OnLogMessageReceived(eventArgs.Data);
                 };
                 process.Start();

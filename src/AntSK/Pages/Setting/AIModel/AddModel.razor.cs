@@ -211,10 +211,10 @@ namespace AntSK.Pages.Setting.AIModel
             }
             llamaFactoryIsStart = true;
             _logModalVisible = true;
-            _ILLamaFactoryService.LogMessageReceived += ExternalLogHandler;
-            _ILLamaFactoryService.StartProcess(_aiModel.ModelName, "default");
+            _ILLamaFactoryService.LogMessageReceived += CmdLogHandler;
+            _ILLamaFactoryService.StartLLamaFactory(_aiModel.ModelName, "default");
         }
-        private async Task ExternalLogHandler(string message)
+        private async Task CmdLogHandler(string message)
         {
             await InvokeAsync(() =>
             {
