@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="AntDesign.Charts" Version="0.5.1" />
     <PackageReference Include="AntDesign.ProLayout" Version="0.18.0" />
+    <PackageReference Include="BlazorComponents.Terminal" Version="0.6.0" />
     
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     
@@ -36,6 +37,7 @@
     
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AntSK.LLamaFactory\AntSK.LLamaFactory.csproj" />
     <ProjectReference Include="..\AntSk.LLM\AntSK.LLM.csproj" />
     <ProjectReference Include="..\MiddleWare\AntSK.BackgroundTask\AntSK.BackgroundTask.csproj" />
   </ItemGroup>

@@ -15,6 +15,7 @@ using System;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 using AntSK.LLM.Mock;
 using AntSK.Domain.Domain.Model.Enum;
+using AntSK.LLM.LLamaFactory;
 using System.Reflection;
 using DocumentFormat.OpenXml.Drawing;
 
@@ -104,6 +105,13 @@ namespace AntSK.Domain.Domain.Service
 
                 case Model.Enum.AIType.Mock:
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("mock", new MockTextCompletion());
+                    break;
+                case Model.Enum.AIType.LLamaFactory:
+                    builder.AddOpenAIChatCompletion(
+                     modelId: chatModel.ModelName,
+                     apiKey: "123",
+                     httpClient: chatHttpClient
+                       );
                     break;
             }
         }

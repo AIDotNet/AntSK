@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntSK.LLM", "AntSk.LLM\AntS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntSK.Test", "AntSK.Test\AntSK.Test.csproj", "{6AD71410-127F-4C83-95A8-F699C39B44FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntSK.LLamaFactory", "AntSK.LLamaFactory\AntSK.LLamaFactory.csproj", "{664DFA1F-68B7-49C7-B889-FA14D1756D3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{6AD71410-127F-4C83-95A8-F699C39B44FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AD71410-127F-4C83-95A8-F699C39B44FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AD71410-127F-4C83-95A8-F699C39B44FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{664DFA1F-68B7-49C7-B889-FA14D1756D3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{664DFA1F-68B7-49C7-B889-FA14D1756D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{664DFA1F-68B7-49C7-B889-FA14D1756D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{664DFA1F-68B7-49C7-B889-FA14D1756D3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

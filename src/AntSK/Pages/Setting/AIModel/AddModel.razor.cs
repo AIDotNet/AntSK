@@ -1,9 +1,15 @@
 ﻿using AntDesign;
 using AntDesign.ProLayout;
+using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Enum;
+using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
+using AntSK.LLamaFactory.Model;
+using BlazorComponents.Terminal;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Downloader;
 using Microsoft.AspNetCore.Components;
 using System.ComponentModel;
@@ -20,22 +26,37 @@ namespace AntSK.Pages.Setting.AIModel
         [Inject] protected MessageService? Message { get; set; }
         [Inject] public HttpClient HttpClient { get; set; }
 
+        [Inject] protected ILLamaFactoryService _ILLamaFactoryService { get; set; }
+        [Inject] protected IDics_Repositories _IDics_Repositories { get; set; }
+
+        [Inject] IConfirmService _confirmService { get; set; }
+
         private AIModels _aiModel = new AIModels();
 
+        //llamasharp download
         private string _downloadUrl;
         private bool _downloadModalVisible;
+        private bool _isComplete;
         private double _downloadProgress;
         private bool _downloadFinished;
         private bool _downloadStarted;
-        IDownload _download;
+        private IDownload _download;
 
         private Modal _modal;
+        private string[] _modelFiles;
 
-        string[] _modelFiles;
-
-        IEnumerable<string> _menuKeys;
-
+        //menu
+        private IEnumerable<string> _menuKeys;
         private List<MenuDataItem> menuList = new List<MenuDataItem>();
+
+        //llamafactory
+        private List<LLamaModel> modelList=new List<LLamaModel>();
+        private bool llamaFactoryIsStart = false;
+        private Dics llamaFactoryDic= new Dics();
+        //日志输出
+        private  BlazorTerminal blazorTerminal = new BlazorTerminal();
+        private TerminalParagraph para;
+        private bool _logModalVisible;
 
         protected override async Task OnInitializedAsync()
         {
@@ -55,6 +76,13 @@ namespace AntSK.Pages.Setting.AIModel
                     _downloadModalVisible = true;
 
                     _downloadUrl = $"https://hf-mirror.com{ModelPath.Replace("---","/")}";
+                }
+
+                modelList = _ILLamaFactoryService.GetLLamaFactoryModels();
+                llamaFactoryDic = await _IDics_Repositories.GetFirstAsync(p => p.Type == LLamaFactoryConstantcs.LLamaFactorDic && p.Key == LLamaFactoryConstantcs.IsStartKey);
+                if (llamaFactoryDic != null)
+                {
+                    llamaFactoryIsStart= llamaFactoryDic.Value== "false" ? false:true;
                 }
             }
             catch 
@@ -123,7 +151,7 @@ namespace AntSK.Pages.Setting.AIModel
 
             _download.DownloadProgressChanged += DownloadProgressChanged;
             _download.DownloadFileCompleted += DownloadFileCompleted;
-            _download.DownloadStarted += DownloadStarted;
+            _download.DownloadStarted += StartedDownload;
 
             await _download.StartAsync();
 
@@ -146,13 +174,13 @@ namespace AntSK.Pages.Setting.AIModel
             InvokeAsync(StateHasChanged);
         }
 
-        private void DownloadStarted(object? sender, DownloadStartedEventArgs e)
+        private void StartedDownload(object? sender, DownloadStartedEventArgs e)
         {
             _downloadStarted = true;
             InvokeAsync(StateHasChanged);
         }
 
-        private void OnCancel()
+        private void OnCancelDownload()
         {
             if (_downloadStarted)
             {
@@ -162,11 +190,77 @@ namespace AntSK.Pages.Setting.AIModel
             _downloadModalVisible = false;
         }
 
-        private void Stop()
+        private void StopDownload()
         {
             _downloadStarted=false;
             _download?.Stop();
             InvokeAsync(StateHasChanged);
+        }
+
+        private void OnSearch(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            { 
+                modelList = _ILLamaFactoryService.GetLLamaFactoryModels(); 
+            }
+            else
+            {
+                modelList = _ILLamaFactoryService.GetLLamaFactoryModels().Where(p => p.Name.ToLower().Contains(value.ToLower())).ToList();
+            }
+
+        }
+      
+        /// <summary>
+        /// 启动服务
+        /// </summary>
+        private void StartLFService()
+        {
+            if (string.IsNullOrEmpty(_aiModel.ModelName))
+            {
+                _ = Message.Error("请先选择模型！", 2);
+                return;
+            }
+            llamaFactoryIsStart = true;
+            _logModalVisible = true;
+            llamaFactoryDic.Value = "true";
+            _IDics_Repositories.Update(llamaFactoryDic);
+            _ILLamaFactoryService.LogMessageReceived += CmdLogHandler;
+            _ILLamaFactoryService.StartLLamaFactory(_aiModel.ModelName, "default");
+        }
+
+        private void StopLFService()
+        {
+            llamaFactoryIsStart = false;
+            llamaFactoryDic.Value = "false";
+            _IDics_Repositories.Update(llamaFactoryDic);
+            _ILLamaFactoryService.KillProcess();
+        }
+        private async Task PipInstall()
+        {
+            var content = "初次使用需要执行pip install，点击确认后可自动执行，是否执行";
+            var title = "提示";
+            var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
+            if (result == ConfirmResult.Yes)
+            {
+                _logModalVisible = true;
+                _ILLamaFactoryService.LogMessageReceived += CmdLogHandler;
+                _ILLamaFactoryService.PipInstall();
+            }
+        }
+        private async Task CmdLogHandler(string message)
+        {
+            await InvokeAsync(() =>
+            {
+                para = blazorTerminal.RespondText("");
+                para.AddTextLine(message);          
+            });
+        }
+        /// <summary>
+        /// 停止服务
+        /// </summary>
+   
+        private void OnCancelLog() {
+            _logModalVisible = false;
         }
     }
 }
