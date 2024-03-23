@@ -3,8 +3,11 @@ FROM pytorch/pytorch AS python-base
 
 # 2. Define the .NET SDK image to build your application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["src/AntSK/AntSK.csproj", "AntSK/"]
+RUN dotnet restore "AntSK/AntSK.csproj"
+COPY src/ .
 WORKDIR "/src/AntSK"
-RUN dotnet restore "AntSK.csproj"
 RUN dotnet build "AntSK.csproj" -c Release -o /app/build
 RUN dotnet publish "AntSK.csproj" -c Release -o /app/publish
 
