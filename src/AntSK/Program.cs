@@ -91,6 +91,7 @@ app.UseStaticFiles();
 //扩展初始化实现
 app.CodeFirst();
 app.LoadFun();
+app.InitDbData();
 
 app.UseRouting();
 

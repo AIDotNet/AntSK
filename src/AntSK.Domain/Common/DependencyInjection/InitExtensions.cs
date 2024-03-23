@@ -1,4 +1,5 @@
-﻿using AntSK.Domain.Domain.Service;
+﻿using AntSK.Domain.Domain.Model.Constant;
+using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Repositories;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.AspNetCore.Builder;
@@ -53,7 +54,26 @@ namespace AntSK.Domain.Common.DependencyInjection
             return app;
         }
 
+        public static WebApplication InitDbData(this WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                // 初始化字典
+                var _dic_Repository = scope.ServiceProvider.GetRequiredService<IDics_Repositories>();
+                var llamafactoryStart = _dic_Repository.GetFirst(p => p.Type == LLamaFactoryConstantcs.LLamaFactorDic && p.Key == LLamaFactoryConstantcs.IsStartKey);
+                if (llamafactoryStart==null)
+                {
+                    llamafactoryStart = new Dics();
+                    llamafactoryStart.Id=Guid.NewGuid().ToString();
+                    llamafactoryStart.Type = LLamaFactoryConstantcs.LLamaFactorDic;
+                    llamafactoryStart.Key = LLamaFactoryConstantcs.IsStartKey;
+                    llamafactoryStart.Value = "false";
+                    _dic_Repository.Insert(llamafactoryStart);
+                }
 
+            }
+            return app;
+        }
         /// <summary>
         /// 加载数据库的插件
         /// </summary>

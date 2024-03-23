@@ -1,6 +1,7 @@
 ﻿using AntDesign;
 using AntDesign.ProLayout;
 using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Options;
@@ -26,31 +27,34 @@ namespace AntSK.Pages.Setting.AIModel
 
 
         [Inject] protected ILLamaFactoryService _ILLamaFactoryService { get; set; }
+        [Inject] protected IDics_Repositories _IDics_Repositories { get; set; }
 
         private AIModels _aiModel = new AIModels();
 
+        //llamasharp download
         private string _downloadUrl;
         private bool _downloadModalVisible;
-        private bool _logModalVisible;
-
         private bool _isComplete;
-
         private double _downloadProgress;
         private bool _downloadFinished;
         private bool _downloadStarted;
-        IDownload _download;
+        private IDownload _download;
 
         private Modal _modal;
+        private string[] _modelFiles;
 
-        string[] _modelFiles;
-
-        IEnumerable<string> _menuKeys;
-
+        //menu
+        private IEnumerable<string> _menuKeys;
         private List<MenuDataItem> menuList = new List<MenuDataItem>();
+
+        //llamafactory
         private List<LLamaModel> modelList=new List<LLamaModel>();
-        bool llamaFactoryIsStart = false;
+        private bool llamaFactoryIsStart = false;
+        private Dics llamaFactoryDic= new Dics();
+        //日志输出
         private  BlazorTerminal blazorTerminal = new BlazorTerminal();
         private TerminalParagraph para;
+        private bool _logModalVisible;
 
         protected override async Task OnInitializedAsync()
         {
@@ -71,8 +75,13 @@ namespace AntSK.Pages.Setting.AIModel
 
                     _downloadUrl = $"https://hf-mirror.com{ModelPath.Replace("---","/")}";
                 }
+
                 modelList = _ILLamaFactoryService.GetLLamaFactoryModels();
-              
+                llamaFactoryDic = await _IDics_Repositories.GetFirstAsync(p => p.Type == LLamaFactoryConstantcs.LLamaFactorDic && p.Key == LLamaFactoryConstantcs.IsStartKey);
+                if (llamaFactoryDic != null)
+                {
+                    llamaFactoryIsStart= llamaFactoryDic.Value== "false" ? false:true;
+                }
             }
             catch 
             {
@@ -211,9 +220,20 @@ namespace AntSK.Pages.Setting.AIModel
             }
             llamaFactoryIsStart = true;
             _logModalVisible = true;
+            llamaFactoryDic.Value = "true";
+            _IDics_Repositories.Update(llamaFactoryDic);
             _ILLamaFactoryService.LogMessageReceived += CmdLogHandler;
             _ILLamaFactoryService.StartLLamaFactory(_aiModel.ModelName, "default");
         }
+
+        private void HandleStopService()
+        {
+            llamaFactoryIsStart = false;
+            llamaFactoryDic.Value = "false";
+            _IDics_Repositories.Update(llamaFactoryDic);
+            _ILLamaFactoryService.KillProcess();
+        }
+
         private async Task CmdLogHandler(string message)
         {
             await InvokeAsync(() =>
@@ -225,12 +245,7 @@ namespace AntSK.Pages.Setting.AIModel
         /// <summary>
         /// 停止服务
         /// </summary>
-        private void HandleStopService()
-        {
-            llamaFactoryIsStart = false;
-            _ILLamaFactoryService.KillProcess();
-        }
-
+   
         private void OnCancelLog() {
             _logModalVisible = false;
         }
