@@ -107,7 +107,7 @@ namespace AntSK.Domain.Domain.Service
                     dataMsg.AppendLine(item.ToString());
                 }
 
-                KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
+                KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
                 var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
                     arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["questions"] = questions });
 

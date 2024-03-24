@@ -11,7 +11,7 @@
 - 如果Markdown有图片则正常显示
 --------------------------
 
-历史聊天记录:{{$history}}
+历史聊天记录:{{ConversationSummaryPlugin.SummarizeConversation $history}}
 --------------------------
 用户问题: {{$questions}}
 
