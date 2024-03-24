@@ -97,10 +97,10 @@ namespace AntSK.Services.OpenApi
             }
         }
 
-        private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app,string msg, ChatHistory history)
+        private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app,string questions, ChatHistory history)
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
-            var chatResult = _chatService.SendChatByAppAsync(app, msg, history);
+            var chatResult = _chatService.SendChatByAppAsync(app, questions, history);
             await foreach (var content in chatResult)
             {
                 result.choices[0].delta.content = content.ConvertToString();
@@ -193,7 +193,7 @@ namespace AntSK.Services.OpenApi
         /// <summary>
         /// 发送知识库问答
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="questions"></param>
         /// <param name="app"></param>
         /// <returns></returns>
         private async Task<string> SendKms(string questions, ChatHistory history, Apps app)
