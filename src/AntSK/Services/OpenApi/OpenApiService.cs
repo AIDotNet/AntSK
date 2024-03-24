@@ -5,6 +5,7 @@ using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
 using System.Text;
@@ -99,7 +100,7 @@ namespace AntSK.Services.OpenApi
         private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
-            var chatResult = _chatService.SendChatByAppAsync(app, msg, "");
+            var chatResult = _chatService.SendChatByAppAsync(app, msg, new ChatHistory());
             await foreach (var content in chatResult)
             {
                 result.choices[0].delta.content = content.ConvertToString();
@@ -154,7 +155,7 @@ namespace AntSK.Services.OpenApi
         private async Task SendKmsStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
-            var chatResult = _chatService.SendKmsByAppAsync(app, msg,"", "");
+            var chatResult = _chatService.SendKmsByAppAsync(app, msg,new ChatHistory(), "");
             int i = 0;
             await foreach (var content in chatResult)
             {
