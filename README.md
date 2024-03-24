@@ -188,7 +188,17 @@ dotnet AntSK.dll
 
 DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是自动创建的
 
-
+## 使用llamafactory
+```
+1、首先需要确保你的环境已经安装了python和pip，如果使用镜像，例如v0.2.3.2版本已经包含了 python全套环境则无需此步骤
+2、进入模型添加页面选择llamafactory
+3、点击初始化，可以检查pip install 环境是否完成
+4、选择一个喜欢的模型
+5、点击启动,这会开始从魔塔下载模型，你可能需要有一个较为漫长的等待
+6、等待模型下载完毕后，在请求地址输入 http://localhost:8000/   这里默认是使用8000端口
+7、点击保存，然后就可以开始聊天了
+8、很多人会问 LLamaSharp与llamafactory有什么区别？其实这两者LLamaSharp是llama.cpp的 dotnet实现，但是只支持本地gguf模型，  而llamafactory 支持的模型种类更多，但使用的是python的实现，其主要差异在这里，另外llamafactory具有模型微调的能力，这也是我们下一步需要重点集成的部分。
+```
 
 想了解更多信息或开始使用 **AntSK**，可以关注我的公众号以及加入交流群。
 
