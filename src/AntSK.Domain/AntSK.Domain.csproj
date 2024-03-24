@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AntDesign.Charts" Version="0.5.1" />
-    <PackageReference Include="AntDesign.ProLayout" Version="0.18.0" />
+    <PackageReference Include="AntDesign.ProLayout" Version="0.18.1" />
     <PackageReference Include="BlazorComponents.Terminal" Version="0.6.0" />
     
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -18,15 +18,15 @@
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Markdig" Version="0.36.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SqlSugarCore" Version="5.1.4.145" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.148" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
     
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.6.2" />
-    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.6.2" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.6.2-alpha" />
-    <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.34.240313.1" />
-    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.34.240313.1" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.6.3" />
+    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.6.3" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.6.3-alpha" />
+    <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.35.240321.1" />
+    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.35.240321.1" />
 
     <PackageReference Include="LLamaSharp" Version="0.10.0" />
     <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.10.0" />
