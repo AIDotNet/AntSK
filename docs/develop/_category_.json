@@ -1,0 +1,14 @@
+{
+    "position": 2,
+    "label": "快速开发",
+    "collapsible": true,
+    "collapsed": false,
+    "className": "red",
+    "link": {
+        "type": "generated-index",
+        "title": "快速开发"
+    },
+    "customProps": {
+        "description": "快速基于项目二次开发！"
+    }
+}
