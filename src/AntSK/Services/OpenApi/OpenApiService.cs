@@ -5,6 +5,7 @@ using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
 using System.Text;
@@ -35,7 +36,7 @@ namespace AntSK.Services.OpenApi
             Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == token);
             if (app.IsNotNull())
             {
-                string msg = await HistorySummarize(app, model);
+                (string questions,ChatHistory history) = await GetHistory(model);
                 switch (app.Type)
                 {
                     case "chat":
@@ -46,7 +47,7 @@ namespace AntSK.Services.OpenApi
                             result1.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                             result1.choices = new List<StreamChoicesModel>()
                                 { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
-                            await SendChatStream(HttpContext, result1, app, msg);
+                            await SendChatStream(HttpContext, result1, app, questions,history);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result1));
                             await HttpContext.Response.CompleteAsync();
@@ -58,7 +59,7 @@ namespace AntSK.Services.OpenApi
                             result2.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                             result2.choices = new List<ChoicesModel>()
                                 { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
-                            result2.choices[0].message.content = await SendChat(msg, app);
+                            result2.choices[0].message.content = await SendChat(questions,history, app);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result2));
                             await HttpContext.Response.CompleteAsync();
@@ -74,7 +75,7 @@ namespace AntSK.Services.OpenApi
                             result3.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                             result3.choices = new List<StreamChoicesModel>()
                                 { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
-                            await SendKmsStream(HttpContext, result3, app, msg);
+                            await SendKmsStream(HttpContext, result3, app, questions,history);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result3));
                             await HttpContext.Response.CompleteAsync();
@@ -85,7 +86,7 @@ namespace AntSK.Services.OpenApi
                             result4.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                             result4.choices = new List<ChoicesModel>()
                                 { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
-                            result4.choices[0].message.content = await SendKms(msg, app);
+                            result4.choices[0].message.content = await SendKms(questions,history, app);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result4));
                             await HttpContext.Response.CompleteAsync();
@@ -96,10 +97,10 @@ namespace AntSK.Services.OpenApi
             }
         }
 
-        private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
+        private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app,string questions, ChatHistory history)
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
-            var chatResult = _chatService.SendChatByAppAsync(app, msg, "");
+            var chatResult = _chatService.SendChatByAppAsync(app, questions, history);
             await foreach (var content in chatResult)
             {
                 result.choices[0].delta.content = content.ConvertToString();
@@ -119,16 +120,34 @@ namespace AntSK.Services.OpenApi
         /// <summary>
         /// 发送普通对话
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="questions"></param>
+        /// <param name="history"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        private async Task<string> SendChat(string msg, Apps app)
+        private async Task<string> SendChat(string questions, ChatHistory history, Apps app)
         {
             string result = "";
+
             if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
             {
                 //如果模板为空，给默认提示词
                 app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
+            }
+            KernelArguments args = new KernelArguments();
+            if (history.Count > 10)
+            {
+                app.Prompt = @"${{ConversationSummaryPlugin.SummarizeConversation $history}}" + app.Prompt;
+                args = new() {
+                { "history", string.Join("\n", history.Select(x => x.Role + ": " + x.Content)) },
+                { "input", questions }
+                };
+            }
+            else
+            {
+                args = new()
+                {
+                { "input", $"{string.Join("\n", history.Select(x => x.Role + ": " + x.Content))}{Environment.NewLine} user:{questions}" }
+                };
             }
 
             var _kernel = _kernelService.GetKernelByApp(app);
@@ -139,9 +158,8 @@ namespace AntSK.Services.OpenApi
                 _kernelService.ImportFunctionsByApp(app, _kernel);
                 settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
             }
-
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult =await _kernel.InvokeAsync(function: func, arguments: new KernelArguments() { ["input"] = msg });
+            var chatResult =await _kernel.InvokeAsync(function: func, arguments: args);
             if (chatResult.IsNotNull())
             {
                 string answers = chatResult.GetValue<string>();
@@ -151,10 +169,10 @@ namespace AntSK.Services.OpenApi
             return result;
         }
 
-        private async Task SendKmsStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string msg)
+        private async Task SendKmsStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string questions,ChatHistory history)
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
-            var chatResult = _chatService.SendKmsByAppAsync(app, msg,"", "");
+            var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, "");
             int i = 0;
             await foreach (var content in chatResult)
             {
@@ -175,15 +193,15 @@ namespace AntSK.Services.OpenApi
         /// <summary>
         /// 发送知识库问答
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="questions"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        private async Task<string> SendKms(string msg, Apps app)
+        private async Task<string> SendKms(string questions, ChatHistory history, Apps app)
         {
             string result = "";
             var _kernel = _kernelService.GetKernelByApp(app);
 
-            var relevantSource = await _kMService.GetRelevantSourceList(app.KmsIdList, msg);
+            var relevantSource = await _kMService.GetRelevantSourceList(app.KmsIdList, questions);
             var dataMsg = new StringBuilder();
             if (relevantSource.Any())
             {
@@ -192,9 +210,9 @@ namespace AntSK.Services.OpenApi
                     dataMsg.AppendLine(item.ToString());
                 }
 
-                KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask");
+                KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
                 var chatResult = await _kernel.InvokeAsync(function: jsonFun,
-                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = "", ["questions"] = msg });
+                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["questions"] = questions });
                 if (chatResult.IsNotNull())
                 {
                     string answers = chatResult.GetValue<string>();
@@ -211,29 +229,27 @@ namespace AntSK.Services.OpenApi
         /// <param name="app"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        private async Task<string> HistorySummarize(Apps app, OpenAIModel model)
+        private async Task<(string,ChatHistory)> GetHistory(OpenAIModel model)
         {
-            var _kernel = _kernelService.GetKernelByApp(app);
-            StringBuilder history = new StringBuilder();
+            ChatHistory history = new ChatHistory();
             string questions = model.messages[model.messages.Count - 1].content;
             for (int i = 0; i < model.messages.Count() - 1; i++)
             {
                 var item = model.messages[i];
-                history.Append($"{item.role}:{item.content}{Environment.NewLine}");
+                if (item.role.ToLower() == "user")
+                {
+                    history.AddUserMessage(item.content);
+                }
+                else if (item.role.ToLower() == "assistant")
+                {
+                    history.AddAssistantMessage(item.content);
+                }
+                else if (item.role.ToLower() == "system")
+                {
+                    history.AddSystemMessage(item.content);
+                }
             }
-
-            if (model.messages.Count() > 10)
-            {
-                //历史会话大于10条，进行总结
-                var msg = await _kernelService.HistorySummarize(_kernel, questions, history.ToString());
-                return msg;
-            }
-            else
-            {
-                var msg = $"history：{history.ToString()}{Environment.NewLine} user：{questions}";
-                ;
-                return msg;
-            }
+            return (questions,history);
         }
     }
 }

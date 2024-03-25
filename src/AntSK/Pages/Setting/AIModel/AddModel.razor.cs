@@ -67,6 +67,14 @@ namespace AntSK.Pages.Setting.AIModel
                 {
                     _aiModel = _aimodels_Repositories.GetFirst(p => p.Id == ModelId);
                 }
+
+                modelList = _ILLamaFactoryService.GetLLamaFactoryModels();
+                llamaFactoryDic = await _IDics_Repositories.GetFirstAsync(p => p.Type == LLamaFactoryConstantcs.LLamaFactorDic && p.Key == LLamaFactoryConstantcs.IsStartKey);
+                if (llamaFactoryDic != null)
+                {
+                    llamaFactoryIsStart = llamaFactoryDic.Value == "false" ? false : true;
+                }
+
                 //目前只支持gguf的 所以筛选一下
                 _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory)).Where(p=>p.Contains(".gguf")).ToArray();
                 if (!string.IsNullOrEmpty(ModelPath))
@@ -76,14 +84,7 @@ namespace AntSK.Pages.Setting.AIModel
                     _downloadModalVisible = true;
 
                     _downloadUrl = $"https://hf-mirror.com{ModelPath.Replace("---","/")}";
-                }
-
-                modelList = _ILLamaFactoryService.GetLLamaFactoryModels();
-                llamaFactoryDic = await _IDics_Repositories.GetFirstAsync(p => p.Type == LLamaFactoryConstantcs.LLamaFactorDic && p.Key == LLamaFactoryConstantcs.IsStartKey);
-                if (llamaFactoryDic != null)
-                {
-                    llamaFactoryIsStart= llamaFactoryDic.Value== "false" ? false:true;
-                }
+                }        
             }
             catch 
             {
