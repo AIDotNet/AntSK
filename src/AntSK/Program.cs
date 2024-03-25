@@ -47,7 +47,6 @@ builder.Services.AddServicesFromAssemblies("AntSK");
 builder.Services.AddServicesFromAssemblies("AntSK.Domain");
 builder.Services.AddSingleton(sp => new FunctionService(sp, [typeof(AntSK.App).Assembly]));
 builder.Services.AddScoped<FunctionTest>();
-
 builder.Services.AddAntSKSwagger();
 //Mapper
 builder.Services.AddMapper();
@@ -92,6 +91,7 @@ app.UseStaticFiles();
 //扩展初始化实现
 app.CodeFirst();
 app.LoadFun();
+app.InitDbData();
 
 app.UseRouting();
 

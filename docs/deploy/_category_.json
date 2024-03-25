@@ -1,0 +1,14 @@
+{
+    "position": 3,
+    "label": "部署",
+    "collapsible": true,
+    "collapsed": false,
+    "className": "red",
+    "link": {
+        "type": "generated-index",
+        "title": "使用案例"
+    },
+    "customProps": {
+        "description": "提供快速使用AntSK的一些案例！"
+    }
+}

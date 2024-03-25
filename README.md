@@ -1,4 +1,4 @@
-中文|[English](https://github.com/xuzeyu91/AntSK/blob/main/README.en.md)
+中文|[English](https://github.com/AIDotNet/AntSK/blob/main/README.en.md)
 # AntSK
 ## 基于.Net8+AntBlazor+SemanticKernel 打造的AI知识库/智能体
 
@@ -8,7 +8,7 @@
 
 - **内存内核 (Kernel Memory)**：具备持续学习和存储知识点的能力，AntSK 拥有长期记忆功能，累积经验，提供更个性化的交互体验。
 
-- **知识库**：通过文档（Word、PDF、Excel、Txt、Markdown、Json、PPT）等形式导入知识库，可以进行知识库文档。
+- **知识库**：通过文档（Word、PDF、Excel、Txt、Markdown、Json、PPT）等形式导入知识库，可以进行知识库问答。
 
 - **GPTs 生成**：此平台支持创建个性化的GPT模型，尝试构建您自己的GPT模型。
 
@@ -20,9 +20,12 @@
 
 - **联网搜索**：AntSK，实时获取最新信息，确保用户接受到的资料总是最及时、最相关的。
 
-- **模型管理**：适配和管理集成不同厂商的不同模型。并且支持llama.cpp所支持的gguf类型的模型离线运行
+- **模型管理**：适配和管理集成不同厂商的不同模型。并且支持**llama.cpp**所支持的gguf类型，以及**llamafactory**所支持的模型离线运行
 
 - **国产信创**：AntSK支持国产模型，和国产数据库，可以在信创条件下运行
+
+- **模型微调**：规划中，基于llamafactory进行模型微调
+  
 
 ## 应用场景
 
@@ -36,42 +39,44 @@ AntSK 适用于多种业务场景，例如：
 - 其他有意思的AI App
 
 ## 功能示例
-
 ### 在线演示
 ```
 https://antsk.ai-dotnet.com/
 ```
-默认账号：admin
+```
+默认账号：test
 
-默认密码：xuzeyu
+默认密码：test
 
+由于云服务器配置较低，无法运行本地模型，所以把系统设置权限关闭了，大家看看界面即可，要使用本地模型，请下载自行使用
+```
 
 ### 其他功能示例
 [视频示例](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
 
 首先需要创建知识库
-![知识库](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93.png)
+![知识库](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93.png)
 
 在知识库里可以使用文档或者url进行导入
-![知识库详情](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93%E8%AF%A6%E6%83%85.png)
+![知识库详情](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93%E8%AF%A6%E6%83%85.png)
 
 点击查看可以查看知识库的文档切片情况
-![文档切片](https://github.com/xuzeyu91/AntSK/blob/main/images/%E6%96%87%E6%A1%A3%E5%88%87%E7%89%87.png)
+![文档切片](https://github.com/AIDotNet/AntSK/blob/main/images/%E6%96%87%E6%A1%A3%E5%88%87%E7%89%87.png)
 
 然后我们需要创建应用，可以创建对话应用和知识库。
-![应用](https://github.com/xuzeyu91/AntSK/blob/main/images/%E5%BA%94%E7%94%A8.png)
+![应用](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%BA%94%E7%94%A8.png)
 
 知识库应用需要选择已有的知识库，可以选多个
-![应用配置](https://github.com/xuzeyu91/AntSK/blob/main/images/%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE.png)
+![应用配置](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE.png)
 
 然后再对话中可以对知识库的文档进行提问
-![问答](https://github.com/xuzeyu91/AntSK/blob/main/images/%E9%97%AE%E7%AD%94.png)
+![问答](https://github.com/AIDotNet/AntSK/blob/main/images/%E9%97%AE%E7%AD%94.png)
 
 另外我们也可以创建对话应用，可以在对应应用中配置提示词模板
-![对话应用](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%AE%80%E5%8D%95%E5%AF%B9%E8%AF%9D.png)
+![对话应用](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%AE%80%E5%8D%95%E5%AF%B9%E8%AF%9D.png)
 
 下面来看看效果吧
-![对话效果](https://github.com/xuzeyu91/AntSK/blob/main/images/%E5%AF%B9%E8%AF%9D%E6%95%88%E6%9E%9C.png)
+![对话效果](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%AF%B9%E8%AF%9D%E6%95%88%E6%9E%9C.png)
 
 ## 如何开始？
 
@@ -104,7 +109,7 @@ version: '3.8'
 services:
   antsk:
     container_name: antsk
-    image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.1.5
+    image: registry.cn-hangzhou.aliyuncs.com/AIDotNet/antsk:v0.1.5
     ports:
       - 5000:5000
     networks:
@@ -193,13 +198,23 @@ dotnet AntSK.dll
 
 DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是自动创建的
 
-
+## 使用llamafactory
+```
+1、首先需要确保你的环境已经安装了python和pip，如果使用镜像，例如v0.2.3.2版本已经包含了 python全套环境则无需此步骤
+2、进入模型添加页面选择llamafactory
+3、点击初始化，可以检查pip install 环境是否完成
+4、选择一个喜欢的模型
+5、点击启动,这会开始从魔塔下载模型，你可能需要有一个较为漫长的等待
+6、等待模型下载完毕后，在请求地址输入 http://localhost:8000/   这里默认是使用8000端口
+7、点击保存，然后就可以开始聊天了
+8、很多人会问 LLamaSharp与llamafactory有什么区别？其实这两者LLamaSharp是llama.cpp的 dotnet实现，但是只支持本地gguf模型，  而llamafactory 支持的模型种类更多，但使用的是python的实现，其主要差异在这里，另外llamafactory具有模型微调的能力，这也是我们下一步需要重点集成的部分。
+```
 
 想了解更多信息或开始使用 **AntSK**，可以关注我的公众号以及加入交流群。
 
 ## 联系我
 如有任何问题或建议，请通过以下方式关注我的公众号，发消息与我联系，我们也有交流群，可以发送进群等消息，然后我会拉你进交流群
-![公众号](https://github.com/xuzeyu91/Avalonia-Assistant/blob/main/img/gzh.jpg)
+![公众号](https://github.com/AIDotNet/Avalonia-Assistant/blob/main/img/gzh.jpg)
 
 ---
 

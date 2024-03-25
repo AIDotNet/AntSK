@@ -8,6 +8,7 @@ using System.Text;
 using Markdig;
 using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Dto;
+using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace AntSK.Pages.ChatPage
 {
@@ -121,24 +122,24 @@ namespace AntSK.Pages.ChatPage
 
         protected async Task<bool> SendAsync(string questions, string? filePath)
         {
-            string msg = "";
+            ChatHistory history = new ChatHistory() ;
             //处理多轮会话
             Apps app = _apps_Repositories.GetFirst(p => p.Id == AppId);
             if (MessageList.Count > 0)
             {
-                msg = await HistorySummarize(app, questions);
+                history = await _chatService.GetChatHistory(MessageList);
             }
 
             switch (app.Type)
             {
                 case "chat" when filePath == null:
                     //普通会话
-                    await SendChat(questions, msg, app);
+                    await SendChat(questions, history, app);
                     break;
 
                 default:
                     //知识库问答
-                    await SendKms(questions, msg, filePath, app);
+                    await SendKms(questions, history, filePath, app);
                     break;
             }
 
@@ -149,14 +150,14 @@ namespace AntSK.Pages.ChatPage
         /// 发送知识库问答
         /// </summary>
         /// <param name="questions"></param>
-        /// <param name="msg"></param>
+        /// <param name="history"></param>
         /// <param name="filePath"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        private async Task SendKms(string questions, string msg, string filePath, Apps app)
+        private async Task SendKms(string questions, ChatHistory history, string filePath, Apps app)
         {
             MessageInfo info = null;
-            var chatResult = _chatService.SendKmsByAppAsync(app, questions, msg, filePath, _relevantSources);
+            var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, filePath, _relevantSources);
             await foreach (var content in chatResult)
             {
                 if (info == null)
@@ -189,7 +190,7 @@ namespace AntSK.Pages.ChatPage
         /// <param name="history"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        private async Task SendChat(string questions, string history, Apps app)
+        private async Task SendChat(string questions, ChatHistory history, Apps app)
         {
             MessageInfo info = null;
             var chatResult = _chatService.SendChatByAppAsync(app, questions, history);
@@ -222,6 +223,7 @@ namespace AntSK.Pages.ChatPage
         {
             if (info.IsNotNull())
             {
+                info!.Context = info!.HtmlAnswers;
                 // info!.HtmlAnswers = markdown.Transform(info.HtmlAnswers);
                 info!.HtmlAnswers = Markdown.ToHtml(info.HtmlAnswers);
             }
@@ -229,48 +231,6 @@ namespace AntSK.Pages.ChatPage
             await InvokeAsync(StateHasChanged);
             await _JSRuntime.InvokeVoidAsync("Prism.highlightAll");
             await _JSRuntime.ScrollToBottomAsync("scrollDiv");
-        }
-
-        /// <summary>
-        /// 历史会话的会话总结
-        /// </summary>
-        /// <param name="questions"></param>
-        /// <returns></returns>
-        private async Task<string> HistorySummarize(Apps app, string questions)
-        {
-            var _kernel = _kernelService.GetKernelByApp(app);
-            if (MessageList.Count > 1)
-            {
-                StringBuilder history = new StringBuilder();
-                foreach (var item in MessageList)
-                {
-                    if (item.IsSend)
-                    {
-                        history.Append($"user:{item.Context}{Environment.NewLine}");
-                    }
-                    else
-                    {
-                        history.Append($"assistant:{item.Context}{Environment.NewLine}");
-                    }
-                }
-
-                if (MessageList.Count > 10)
-                {
-                    //历史会话大于10条，进行总结
-                    var msg = await _kernelService.HistorySummarize(_kernel, questions, history.ToString());
-                    return msg;
-                }
-                else
-                {
-                    var msg =
-                        $"history：{Environment.NewLine}{history.ToString()}{Environment.NewLine}{Environment.NewLine}";
-                    return msg;
-                }
-            }
-            else
-            {
-                return "";
-            }
         }
 
         private void OnSingleCompleted(UploadInfo fileInfo)

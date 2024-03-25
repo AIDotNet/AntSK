@@ -2,6 +2,9 @@
 @using AntSK.Domain.Repositories
 @using AntSK.Models
 @using AntSK.Domain.Domain.Model.Enum
+@using AntSK.LLamaFactory.Model
+@using AntSK.LLamaFactory
+@using BlazorComponents.Terminal
 @page "/setting/model/add"
 @page "/setting/model/add/{ModelId}"
 @page "/setting/model/addbypath/{ModelPath}"
@@ -94,19 +97,36 @@
                 {
                     <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputGroup>
-                            <AutoComplete Options="_modelFiles" Placeholder="Qwen/Qwen1.5-0.5B-Chat" @bind-Value="@context.ModelName" />
+                            <Select TItem="LLamaModel"
+                                    TItemValue="string"
+                                    DataSource="@modelList"
+                                    @bind-Value="@context.ModelName"
+                                    LabelName="@nameof(LLamaModel.Name)"
+                                    ValueName="@nameof(LLamaModel.ModelScope)"
+                                    Placeholder="选择模型"
+                                    DefaultActiveFirstOption="false"
+                                    EnableSearch
+                                    OnSearch="OnSearch">
+                            </Select>
                         </InputGroup>
-
                     </FormItem>
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入请求地址" @bind-Value="@context.EndPoint" />
+                        <Input Placeholder="http://localhost:8080/" @bind-Value="@context.EndPoint" />
                     </FormItem>
                     <FormItem Label="llama factory服务" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputGroup>
-                            <Button Type="primary" OnClick="HandleStartService">启动</Button>
-                            <Button OnClick="HandleStopService">停止</Button>
+                            @if (!llamaFactoryIsStart)
+                            {
+                                <Button Type="primary" OnClick="StartLFService" Disabled="@(llamaFactoryIsStart)">启动</Button>
+                            }
+                            else
+                            {
+                                <Button OnClick="StopLFService" Disabled="@(!llamaFactoryIsStart)">停止</Button>
+                            }
                         </InputGroup>
-
+                    </FormItem>
+                     <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Button Type="primary" OnClick="PipInstall" >初始化</Button>
                     </FormItem>
                 }
                 @if (context.AIType == AIType.Mock)
@@ -125,7 +145,7 @@
     </ChildContent>
 </PageContainer>
 
-<Modal @ref="_modal" Visible="_downloadModalVisible" Footer="null" Closable Title="模型下载" OnCancel="OnCancel" DestroyOnClose>
+<Modal @ref="_modal" Visible="_downloadModalVisible" Footer="null" Closable Title="模型下载" OnCancel="OnCancelDownload" DestroyOnClose>
     <Flex Gap="10" Vertical>
         <InputGroup>
             <Input Disabled="_downloadStarted" Placeholder="请输入下载地址" @bind-Value="_downloadUrl" Style="width:80%"></Input>
@@ -135,10 +155,16 @@
             }
             else
             {
-                <Button OnClick="Stop">停止</Button>
+                <Button OnClick="StopDownload">停止</Button>
             }
         </InputGroup>
         <AntDesign.Progress Percent="_downloadProgress"></AntDesign.Progress>
 
     </Flex>
 </Modal>
+
+<Modal Visible="_logModalVisible" Footer="null" Closable Title="日志输出" OnCancel="OnCancelLog" DestroyOnClose Width="1000">
+    <BlazorTerminal @ref="blazorTerminal" Style="height:600px;"></BlazorTerminal>
+</Modal>
+
+

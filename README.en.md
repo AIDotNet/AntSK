@@ -68,49 +68,49 @@ AntSK is suitable for various business scenarios, such as:
 
 First, you need to create a knowledge base
 
-![Knowledge base](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93.png)
+![Knowledge base](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93.png)
 
 
 
 In the knowledge base, you can use documents or urls to import
 
-![Knowledge base details](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93%E8%AF%A6%E6%83%85.png)
+![Knowledge base details](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93%E8%AF%A6%E6%83%85.png)
 
 
 
 Click View to view the document slicing of the knowledge base
 
-![Document Slice](https://github.com/xuzeyu91/AntSK/blob/main/images/%E6%96%87%E6%A1%A3%E5%88%87%E7%89%87.png)
+![Document Slice](https://github.com/AIDotNet/AntSK/blob/main/images/%E6%96%87%E6%A1%A3%E5%88%87%E7%89%87.png)
 
 
 
 Then we need to create applications, which can create dialog applications and knowledge bases.
 
-![Application](https://github.com/xuzeyu91/AntSK/blob/main/images/%E5%BA%94%E7%94%A8.png)
+![Application](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%BA%94%E7%94%A8.png)
 
 
 
 The application of knowledge base needs to select the existing knowledge base, which can be multiple
 
-![Application Configuration](https://github.com/xuzeyu91/AntSK/blob/main/images/%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE.png)
+![Application Configuration](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE.png)
 
 
 
 Then you can ask questions about the knowledge base documents in the dialogue
 
-![Q&A](https://github.com/xuzeyu91/AntSK/blob/main/images/%E9%97%AE%E7%AD%94.png)
+![Q&A](https://github.com/AIDotNet/AntSK/blob/main/images/%E9%97%AE%E7%AD%94.png)
 
 
 
 In addition, we can also create dialogue applications, and configure prompt word templates in corresponding applications
 
-![Conversation application](https://github.com/xuzeyu91/AntSK/blob/main/images/%E7%AE%80%E5%8D%95%E5%AF%B9%E8%AF%9D.png)
+![Conversation application](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%AE%80%E5%8D%95%E5%AF%B9%E8%AF%9D.png)
 
 
 
 Let's see the effect
 
-![Conversation effect](https://github.com/xuzeyu91/AntSK/blob/main/images/%E5%AF%B9%E8%AF%9D%E6%95%88%E6%9E%9C.png)
+![Conversation effect](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%AF%B9%E8%AF%9D%E6%95%88%E6%9E%9C.png)
 
 
 
@@ -145,7 +145,7 @@ version: '3.8'
 services:
   antsk:
     container_name: antsk
-    image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.2.1
+    image: registry.cn-hangzhou.aliyuncs.com/AIDotNet/antsk:v0.2.1
     ports:
       - 5000:5000
     networks:
@@ -242,7 +242,7 @@ To learn more or start using**AntSK**, you can follow my public account and join
 
 If you have any questions or suggestions, please follow my public account through the following ways, and send a message to me. We also have an exchange group, which can send messages such as joining the group, and then I will bring you into the exchange group
 
-![Official account](https://github.com/xuzeyu91/Avalonia-Assistant/blob/main/img/gzh.jpg)
+![Official account](https://github.com/AIDotNet/Avalonia-Assistant/blob/main/img/gzh.jpg)
 
 
 

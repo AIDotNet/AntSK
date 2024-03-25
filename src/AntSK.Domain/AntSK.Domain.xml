@@ -104,7 +104,7 @@
             避免模型重复加载，本地缓存
             </summary>
         </member>
-        <member name="M:AntSK.Domain.Domain.Service.ChatService.SendChatByAppAsync(AntSK.Domain.Repositories.Apps,System.String,System.String)">
+        <member name="M:AntSK.Domain.Domain.Service.ChatService.SendChatByAppAsync(AntSK.Domain.Repositories.Apps,System.String,Microsoft.SemanticKernel.ChatCompletion.ChatHistory)">
             <summary>
             发送消息
             </summary>
