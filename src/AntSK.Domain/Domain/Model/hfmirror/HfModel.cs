@@ -18,7 +18,7 @@ namespace AntSK.Domain.Domain.Model.hfmirror
         public string Author { get; set; }
         public HfAuthorData AuthorData { get; set; }
         public int Downloads { get; set; }
-        public bool Gated { get; set; }
+        public object Gated { get; set; }
         public string Id { get; set; }
         public DateTime LastModified { get; set; }
         public int Likes { get; set; }
