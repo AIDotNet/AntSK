@@ -6,6 +6,7 @@
 @inject IMessageService _message
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
+@using AntSK.Components
 
 <PageContainer Title="新增知识库">
     <ChildContent>
@@ -17,8 +18,9 @@
                     <Input Placeholder="请输入知识库名称" @bind-Value="@context.Name" />
                 </FormItem>
                 <FormItem Label="图标" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <Input Placeholder="请输入图标" @bind-Value="@context.Icon" />
-                    <a href="https://antblazor.com/zh-CN/components/icon" target="_blank">图标库</a>
+                    @* <Input Placeholder="请输入图标" @bind-Value="@context.Icon" />
+                    <a href="https://antblazor.com/zh-CN/components/icon" target="_blank">图标库</a> *@
+                    <IconPicker @bind-Value="@context.Icon"></IconPicker>
                 </FormItem>
                 <FormItem Label="描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入描述" @bind-Value="@context.Describe" />

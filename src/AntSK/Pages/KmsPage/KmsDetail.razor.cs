@@ -180,20 +180,20 @@ namespace AntSK.Pages.KmsPage
         {
             try
             {
-                foreach (var item in fileList)
+                foreach (var item in iKMService.FileList)
                 {
                     var result = await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
                     {
                         ImportType = ImportType.File,
                         KmsId = KmsId,
-                        FilePath = item.FilePath,
+                        FilePath = item.Url,
                         FileName = item.FileName
                     });
                 }
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
                 //上传文档
                 _fileVisible = false;
-                fileList.Clear();
+                iKMService.FileList.Clear();
                 _ = _message.Info("加入队列，进入后台处理中！", 2);
             }
             catch (System.Exception ex)
