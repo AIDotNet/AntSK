@@ -43,11 +43,13 @@ AntSK 适用于多种业务场景，例如：
 ```
 https://antsk.ai-dotnet.com/
 ```
+```
 默认账号：test
 
 默认密码：test
 
 由于云服务器配置较低，无法运行本地模型，所以把系统设置权限关闭了，大家看看界面即可，要使用本地模型，请下载自行使用
+```
 
 ### 其他功能示例
 [视频示例](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
