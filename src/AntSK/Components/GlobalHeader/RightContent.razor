@@ -3,7 +3,7 @@
 @inherits AntDomComponentBase
 
 <Space Class="@ClassMapper.Class" Size="@("26")">
-    <Image Src="http://img.shields.io/github/stars/aidotnet/antsk?style=social" Width="88px" Height="20px;"></Image>
+    <button class="github_btn" onclick="window.open('https://github.com/AIDotNet/AntSK')"></button>
     <SpaceItem Style="margin-left:20px;">
         <AvatarDropdown Name="@context.Identity.Name"
                         Avatar="@_currentUser.Avatar"
@@ -12,3 +12,14 @@
 
     </SpaceItem>
 </Space>
+
+<style>
+    .github_btn
+    {
+        cursor:pointer;
+        border:none;
+        background-image: url('http://img.shields.io/github/stars/aidotnet/antsk?style=social');
+        width:88px;
+        height:20px;
+    }
+</style>

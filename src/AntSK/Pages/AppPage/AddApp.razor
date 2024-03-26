@@ -41,7 +41,7 @@
                      </Select>
                      <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
                  </FormItem>
-                <FormItem Label="Embedding模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                <FormItem Label="向量模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Select DataSource="@_embedignList"
                             @bind-Value="@context.EmbeddingModelID"
                             ValueProperty="c=>c.Id"
