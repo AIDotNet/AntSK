@@ -54,30 +54,6 @@ https://antsk.ai-dotnet.com/
 ### 其他功能示例
 [视频示例](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
 
-首先需要创建知识库
-![知识库](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93.png)
-
-在知识库里可以使用文档或者url进行导入
-![知识库详情](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93%E8%AF%A6%E6%83%85.png)
-
-点击查看可以查看知识库的文档切片情况
-![文档切片](https://github.com/AIDotNet/AntSK/blob/main/images/%E6%96%87%E6%A1%A3%E5%88%87%E7%89%87.png)
-
-然后我们需要创建应用，可以创建对话应用和知识库。
-![应用](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%BA%94%E7%94%A8.png)
-
-知识库应用需要选择已有的知识库，可以选多个
-![应用配置](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE.png)
-
-然后再对话中可以对知识库的文档进行提问
-![问答](https://github.com/AIDotNet/AntSK/blob/main/images/%E9%97%AE%E7%AD%94.png)
-
-另外我们也可以创建对话应用，可以在对应应用中配置提示词模板
-![对话应用](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%AE%80%E5%8D%95%E5%AF%B9%E8%AF%9D.png)
-
-下面来看看效果吧
-![对话效果](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%AF%B9%E8%AF%9D%E6%95%88%E6%9E%9C.png)
-
 ## 如何开始？
 
 在这里我使用的是Postgres 作为数据存储和向量存储，因为Semantic Kernel和Kernel Memory都支持他，当然你也可以换成其他的。
@@ -168,10 +144,7 @@ KernelMemory.VectorDb
 
 //本地模型使用的运行方式  GUP  CPU ,如果用在线API 这个随意使用一个即可
 LLamaSharp.RunType
-//本地会话模型的模型路径 注意区分linux和windows盘符不同
-LLamaSharp.Chat
-//本地向量模型的模型路径 注意区分linux和windows盘符不同
-LLamaSharp.Embedding
+
 //本地模型路径，用于在选择llama时可以快速选择目录下的模型，以及保存下载的模型
 LLamaSharp.FileDirectory
 
@@ -207,6 +180,25 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 7、点击保存，然后就可以开始聊天了
 8、很多人会问 LLamaSharp与llamafactory有什么区别？其实这两者LLamaSharp是llama.cpp的 dotnet实现，但是只支持本地gguf模型，  而llamafactory 支持的模型种类更多，但使用的是python的实现，其主要差异在这里，另外llamafactory具有模型微调的能力，这也是我们下一步需要重点集成的部分。
 ```
+
+## 🤝 贡献
+﻿
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/AIDotNet/AntSK/pulls)
+﻿
+如果你想贡献，可以创建一个[拉取请求](https://github.com/AIDotNet/AntSK/pulls), 或给我们[错误报告](https://github.com/AIDotNet/AntSK/issues/new).
+﻿
+﻿
+## 💕 贡献者
+﻿
+这个项目的存在要感谢所有的贡献者。
+﻿
+<a href="https://github.com/AIDotNet/AntSK/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=AIDotNet/AntSK&max=1000&columns=15&anon=1" />
+</a>
+﻿
+## 🚨 行为准则
+﻿
+该项目采用了贡献者公约定义的行为准则，以阐明我们社区的预期行为。有关更多信息，请参见 .NET Foundation 行为准则。 [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
 
 想了解更多信息或开始使用 **AntSK**，可以关注我的公众号以及加入交流群。
 
