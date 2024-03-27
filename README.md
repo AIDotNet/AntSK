@@ -204,7 +204,7 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 
 ## 联系我
 如有任何问题或建议，请通过以下方式关注我的公众号，发消息与我联系，我们也有交流群，可以发送进群等消息，然后我会拉你进交流群
-![公众号](https://github.com/AIDotNet/Avalonia-Assistant/blob/main/img/gzh.jpg)
+![公众号](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
 ---
 
