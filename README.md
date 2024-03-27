@@ -60,7 +60,7 @@ https://antsk.ai-dotnet.com/
 
 模型默认支持openai、azure openai 和llama支持的gguf本地模型,如果需要使用其他模型，可以使用one-api进行集成。
 
-配置文件中的Login配置是默认的登陆账号和密码
+配置文件中的Login配置是默认的登录账号和密码
 
 需要配置如下的配置文件
 
@@ -182,14 +182,14 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 ```
 
 ## 🤝 贡献
-﻿
+
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/AIDotNet/AntSK/pulls)
 ﻿
 如果你想贡献，可以创建一个[拉取请求](https://github.com/AIDotNet/AntSK/pulls), 或给我们[错误报告](https://github.com/AIDotNet/AntSK/issues/new).
 ﻿
 ﻿
 ## 💕 贡献者
-﻿
+
 这个项目的存在要感谢所有的贡献者。
 ﻿
 <a href="https://github.com/AIDotNet/AntSK/graphs/contributors">
@@ -197,7 +197,7 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 </a>
 ﻿
 ## 🚨 行为准则
-﻿
+
 该项目采用了贡献者公约定义的行为准则，以阐明我们社区的预期行为。有关更多信息，请参见 .NET Foundation 行为准则。 [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
 
 想了解更多信息或开始使用 **AntSK**，可以关注我的公众号以及加入交流群。
