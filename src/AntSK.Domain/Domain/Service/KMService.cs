@@ -222,17 +222,17 @@ namespace AntSK.Domain.Domain.Service
                     break;
                 case "Qdrant":
                     var qdrantConfig = ConnectionString.Split("|");
-                    memory.WithQdrantMemoryDb(new QdrantConfig() 
-                    { 
-                        Endpoint= qdrantConfig[0],
-                        APIKey= qdrantConfig[1],
-                    });
+                    memory.WithQdrantMemoryDb(qdrantConfig[0],qdrantConfig[1]);
                     break;
                 case "Redis":
                     memory.WithRedisMemoryDb(new RedisConfig()
                     {
                         ConnectionString = ConnectionString,
                     });
+                    break;
+                case "AzureAISearch":
+                    var aisearchConfig = ConnectionString.Split("|");
+                    memory.WithAzureAISearchMemoryDb(aisearchConfig[0], aisearchConfig[1]);
                     break;
             }
         }
