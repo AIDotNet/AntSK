@@ -139,7 +139,7 @@ DBConnection.DbType
 //连接字符串，需要根据不同DB类型，用对应的字符串
 DBConnection.ConnectionStrings
 
-//向量存储的类型，支持  Postgres  Disk  Memory ，其中Postgres需要配置 ConnectionString
+//向量存储的类型，支持  Postgres  Disk  Memory、Qdrant ，其中Postgres需要配置 ConnectionString， Qdrant 的 ConnectionString 使用 Endpoint|APIKey  
 KernelMemory.VectorDb
 
 //本地模型使用的运行方式  GUP  CPU ,如果用在线API 这个随意使用一个即可
