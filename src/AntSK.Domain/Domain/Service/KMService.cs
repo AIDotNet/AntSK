@@ -228,6 +228,12 @@ namespace AntSK.Domain.Domain.Service
                         APIKey= qdrantConfig[1],
                     });
                     break;
+                case "Redis":
+                    memory.WithRedisMemoryDb(new RedisConfig()
+                    {
+                        ConnectionString = ConnectionString,
+                    });
+                    break;
             }
         }
 
