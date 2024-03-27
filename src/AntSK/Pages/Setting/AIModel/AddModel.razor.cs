@@ -3,6 +3,7 @@ using AntDesign.ProLayout;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Enum;
+using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
@@ -247,6 +248,21 @@ namespace AntSK.Pages.Setting.AIModel
                 _ILLamaFactoryService.LogMessageReceived += CmdLogHandler;
                 _ILLamaFactoryService.PipInstall();
             }
+        }
+
+        private async Task BgeDownload()
+        {
+            if (string.IsNullOrEmpty(_aiModel.ModelName))
+            {
+                _ = Message.Error("请输入模型名称！", 2);
+                return;
+            }
+            if (string.IsNullOrEmpty(_aiModel.EndPoint))
+            {
+                _ = Message.Error("请输入正确的Python dll路径！", 2);
+                return;
+            }
+            EmbeddingConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
         }
         private async Task CmdLogHandler(string message)
         {
