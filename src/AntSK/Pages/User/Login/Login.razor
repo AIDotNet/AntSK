@@ -8,7 +8,7 @@
     <div class="login">
         <Form Model="@_model" OnFinish="HandleSubmit">
             <Tabs ActiveKey="@context.LoginType">
-                <TabPane Key="1" Tab="账号登陆">
+                <TabPane Key="1" Tab="账号登录">
                     <FormItem>
                         <AntDesign.Input Placeholder="请输入账号" Size="large" @bind-Value="@context.UserName">
                             <Prefix><Icon Type="user" /></Prefix>
@@ -21,7 +21,7 @@
                     </FormItem>
                 </TabPane>
             </Tabs>
-            <Button Type="primary" HtmlType="submit" Class="submit" Size="large" Block>登陆</Button>
+            <Button Type="primary" HtmlType="submit" Class="submit" Size="large" Block>登录</Button>
         </Form>
     </div>
 </div>
