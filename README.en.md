@@ -133,8 +133,13 @@ model/xxx.gguf
 ```
 // Supports various databases, you can check SqlSugar, MySql, SqlServer, Sqlite, Oracle, PostgreSQL, Dm, Kdbndp, Oscar, MySqlConnector, Access, OpenGauss, QuestDB, HG, ClickHouse, GBase, Odbc, OceanBaseForOracle, TDengine, GaussDB, OceanBase, Tidb, Vastbase, PolarDB, Custom
 DBConnection.DbType
+
 // Connection string, need to use the corresponding string according to the different DB types
-DBConnection.ConnectionStrings//Vector storage types, supporting Postgres, Disk, and Memory. Postgres requires configuring a ConnectionString.
+DBConnection.ConnectionStrings
+
+//The type of vector storage, supporting Postgres, Disk, Memory, Qdrant, Redis, AzureAISearch
+//Postgres and Redis require ConnectionString configuration
+//The ConnectionString of Qdrant and AzureAISearch uses Endpoint | APIKey
 KernelMemory.VectorDb
 
 //Local model execution options: GPU and CPU. When using the online API, any option can be used.
