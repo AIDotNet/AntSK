@@ -2,7 +2,7 @@
 # AntSK
 ## AI Knowledge Base/Intelligent Agent built on .Net8+AntBlazor+SemanticKernel
 
-## Core Features
+## ⭐Core Features
 
 - **Semantic Kernel**: Utilizes advanced natural language processing technology to accurately understand, process, and respond to complex semantic queries, providing users with precise information retrieval and recommendation services.
 
@@ -26,7 +26,7 @@
 
 - **Model Fine-Tuning**: Planned based on llamafactory for model fine-tuning.
 
-## Application Scenarios
+## ⛪Application Scenarios
 
 AntSK is suitable for various business scenarios, such as:
 - Enterprise knowledge management system
@@ -37,7 +37,7 @@ AntSK is suitable for various business scenarios, such as:
 - Education and online learning platforms
 - Other interesting AI Apps
 
-## Function Examples
+## ✏️Function Examples
 ### Online Demo
 ```
 https://antsk.ai-dotnet.com/
@@ -53,7 +53,7 @@ Due to the low configuration of the cloud server, the local model cannot be run,
 ### Other Function Examples
 [Video Demonstration](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
 
-## How to get started?
+## ❓How to get started?
 
 Here I am using Postgres as the data and vector storage because Semantic Kernel and Kernel Memory support it, but you can also use other options.
 
@@ -63,7 +63,7 @@ The Login configuration in the configuration file is the default login account a
 
 The following configuration file needs to be configured
 
-## Using docker-compose
+## 1️⃣Using docker-compose
 
 Provided the pg version **appsettings.json** and simplified version (Sqlite+disk) **docker-compose.simple.yml**
 
@@ -76,7 +76,7 @@ Then you can execute the following command in the directory to start AntSK
 docker-compose up -d
 ```
 
-## How to mount local models and model download directory in docker
+## 2️⃣How to mount local models and model download directory in docker
 ```
 # Non-host version, do not use local proxy
 version: '3.8'
@@ -103,7 +103,7 @@ Taking this as an example, it means mounting the local D://model folder of Windo
 model/xxx.gguf
 ```
 
-## Some meanings of configuration file
+## 3️⃣Some meanings of configuration file
 ```
 {
   "DBConnection": {
@@ -156,7 +156,7 @@ BackgroundTaskBroker.ImportKMSTask.WorkerCount
 
 ```
 
-## Fixing Style Issues:
+## ⚠️Fixing Style Issues:
 Run the following in AntSK/src/AntSK:
 ```
 dotnet clean
@@ -171,7 +171,7 @@ The styles should now be applied after starting.
 
 I'm using CodeFirst mode for the database, so as long as the database connection is properly configured, the table structure will be created automatically.
 
-## Using llamafactory
+## ✔️Using llamafactory
 ```
 1. First, ensure that Python and pip are installed in your environment. This step is not necessary if using an image, such as version v0.2.3.2, which already includes the complete Python environment.
 2. Go to the model add page and select llamafactory.
@@ -205,7 +205,7 @@ For more information see the [.NET Foundation Code of Conduct](https://dotnetfou
 
 To learn more or get started with **AntSK**, follow my official WeChat account and join the discussion group.
 
-## Contact Me
+## ☎️Contact Me
 If you have any questions or suggestions, please contact me through my official WeChat account. We also have a discussion group where you can send a message to join, and then I will add you to the group.
 ![Official WeChat Account](https://github.com/AIDotNet/Avalonia-Assistant/blob/main/img/gzh.jpg)
 
