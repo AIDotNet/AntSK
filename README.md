@@ -1,8 +1,8 @@
 中文|[English](https://github.com/AIDotNet/AntSK/blob/main/README.en.md)
 # AntSK
-## 基于.Net8+AntBlazor+SemanticKernel 打造的AI知识库/智能体
+## 使用.Net8+Blazor+SemanticKernel 打造的AI知识库/智能体
 
-## 核心功能
+## ⭐核心功能
 
 - **语义内核 (Semantic Kernel)**：采用领先的自然语言处理技术，准确理解、处理和响应复杂的语义查询，为用户提供精确的信息检索和推荐服务。
 
@@ -27,7 +27,7 @@
 - **模型微调**：规划中，基于llamafactory进行模型微调
   
 
-## 应用场景
+## ⛪应用场景
 
 AntSK 适用于多种业务场景，例如：
 - 企业级知识管理系统
@@ -38,7 +38,7 @@ AntSK 适用于多种业务场景，例如：
 - 教育与在线学习平台
 - 其他有意思的AI App
 
-## 功能示例
+## ✏️功能示例
 ### 在线演示
 ```
 https://antsk.ai-dotnet.com/
@@ -54,7 +54,7 @@ https://antsk.ai-dotnet.com/
 ### 其他功能示例
 [视频示例](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
 
-## 如何开始？
+## ❓如何开始？
 
 在这里我使用的是Postgres 作为数据存储和向量存储，因为Semantic Kernel和Kernel Memory都支持他，当然你也可以换成其他的。
 
@@ -64,7 +64,7 @@ https://antsk.ai-dotnet.com/
 
 需要配置如下的配置文件
 
-## 使用docker-compose 
+## 1️⃣使用docker-compose 
 
 提供了pg版本 **appsettings.json** 和 简化版本（Sqlite+disk） **docker-compose.simple.yml**
 
@@ -78,7 +78,7 @@ docker-compose up -d
 ```
 来启动AntSK
 
-## 如何在docker中挂载本地模型，和模型下载的目录
+## 2️⃣如何在docker中挂载本地模型，和模型下载的目录
 ```
 # 非 host 版本, 不使用本机代理
 version: '3.8'
@@ -106,7 +106,7 @@ networks:
 model/xxx.gguf
 ```
 
-## 配置文件的一些含义
+## 3️⃣配置文件的一些含义
 ```
 {
   "DBConnection": {
@@ -156,7 +156,7 @@ Login
 BackgroundTaskBroker.ImportKMSTask.WorkerCount
 ```
 
-## 找不到样式问题解决：
+## ⚠️找不到样式问题解决：
 AntSK/src/AntSK下执行:
 ```
 dotnet clean
@@ -171,7 +171,7 @@ dotnet AntSK.dll
 
 DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是自动创建的
 
-## 使用llamafactory
+## ✔️使用llamafactory
 ```
 1、首先需要确保你的环境已经安装了python和pip，如果使用镜像，例如v0.2.3.2版本已经包含了 python全套环境则无需此步骤
 2、进入模型添加页面选择llamafactory
@@ -204,7 +204,7 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 
 想了解更多信息或开始使用 **AntSK**，可以关注我的公众号以及加入交流群。
 
-## 联系我
+## ☎️联系我
 如有任何问题或建议，请通过以下方式关注我的公众号，发消息与我联系，我们也有交流群，可以发送进群等消息，然后我会拉你进交流群
 ![公众号](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
