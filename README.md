@@ -139,8 +139,8 @@ DBConnection.DbType
 //连接字符串，需要根据不同DB类型，用对应的字符串
 DBConnection.ConnectionStrings
 
-//向量存储的类型，支持  Postgres  Disk  Memory、Qdrant
-//Postgres需要配置 ConnectionString
+//向量存储的类型，支持  Postgres、Disk、Memory、Qdrant、Redis
+//Postgres、Redis需要配置 ConnectionString
 //Qdrant 的 ConnectionString 使用 Endpoint|APIKey  
 KernelMemory.VectorDb
 
