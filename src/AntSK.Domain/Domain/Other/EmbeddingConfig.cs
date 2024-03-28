@@ -14,7 +14,7 @@ namespace AntSK.Domain.Domain.Other
 
         static object lockobj = new object();
 
-        private static GILState GIL { get; set; }
+
 
         /// <summary>
         /// 模型写死
@@ -28,23 +28,27 @@ namespace AntSK.Domain.Domain.Other
                     //Runtime.PythonDLL = @"D:\Programs\Python\Python311\python311.dll";
                     Runtime.PythonDLL = pythondllPath;
                     PythonEngine.Initialize();
-                    GIL= Py.GIL();// 初始化Python环境的Global Interpreter Lock
+                    PythonEngine.BeginAllowThreads();
+                    
                     try
                     {
-                        dynamic modelscope = Py.Import("modelscope");
-                        //dynamic model_dir = modelscope.snapshot_download("AI-ModelScope/bge-large-zh-v1.5", revision: "master");
-                        dynamic model_dir = modelscope.snapshot_download(modelName, revision: "master");
-                        dynamic HuggingFaceBgeEmbeddingstemp = Py.Import("langchain.embeddings");
-                        dynamic HuggingFaceBgeEmbeddings = HuggingFaceBgeEmbeddingstemp.HuggingFaceBgeEmbeddings;
-                        string model_name = model_dir;
-                        dynamic model_kwargs = new PyDict();
-                        model_kwargs["device"] = new PyString("cpu");
-                        dynamic hugginmodel = HuggingFaceBgeEmbeddings(
-                  model_name: model_dir,
-                  model_kwargs: model_kwargs
-              );
-                        model = hugginmodel;
-                        return hugginmodel;
+                        using (Py.GIL())// 初始化Python环境的Global Interpreter Lock)
+                        {
+                            dynamic modelscope = Py.Import("modelscope");
+                            //dynamic model_dir = modelscope.snapshot_download("AI-ModelScope/bge-large-zh-v1.5", revision: "master");
+                            dynamic model_dir = modelscope.snapshot_download(modelName, revision: "master");
+                            dynamic HuggingFaceBgeEmbeddingstemp = Py.Import("langchain.embeddings");
+                            dynamic HuggingFaceBgeEmbeddings = HuggingFaceBgeEmbeddingstemp.HuggingFaceBgeEmbeddings;
+                            string model_name = model_dir;
+                            dynamic model_kwargs = new PyDict();
+                            model_kwargs["device"] = new PyString("cpu");
+                            dynamic hugginmodel = HuggingFaceBgeEmbeddings(
+                      model_name: model_dir,
+                      model_kwargs: model_kwargs
+                  );
+                            model = hugginmodel;
+                            return hugginmodel;
+                        }
                     }
                     catch
                     {
@@ -59,15 +63,17 @@ namespace AntSK.Domain.Domain.Other
 
         public static Task<float[]> GetEmbedding(string queryStr)
         {
-            PyObject queryResult = model.embed_query(queryStr);
-            var floatList = queryResult.As<float[]>();
-            return Task.FromResult(floatList); ;
+            using (Py.GIL())
+            {
+                PyObject queryResult = model.embed_query(queryStr);
+                var floatList = queryResult.As<float[]>();
+                return Task.FromResult(floatList); ;
+            }
         }
 
         public static void Dispose()
         {
             Console.WriteLine("python dispose");
-            GIL.Dispose();
         }
     }
 }
