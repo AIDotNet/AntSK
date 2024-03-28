@@ -58,7 +58,7 @@ https://antsk.ai-dotnet.com/
 
 在这里我使用的是Postgres 作为数据存储和向量存储，因为Semantic Kernel和Kernel Memory都支持他，当然你也可以换成其他的。
 
-模型默认支持openai、azure openai 和llama支持的gguf本地模型,如果需要使用其他模型，可以使用one-api进行集成。
+模型默认支持openai、azure openai、讯飞星火、阿里云积、 和llama支持的gguf本地模型 以及llamafactory的本地模型,如果需要使用其他模型，可以使用one-api进行集成。
 
 配置文件中的Login配置是默认的登录账号和密码
 
