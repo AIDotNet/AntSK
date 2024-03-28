@@ -50,7 +50,7 @@ namespace AntSK.Domain.Common.Embedding
 
         public int CountTokens(string text)
         {
-            return 1024;
+            return EmbeddingConfig.TokenCount(text);
         }
     }
 }

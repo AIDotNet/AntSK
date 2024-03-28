@@ -71,6 +71,16 @@ namespace AntSK.Domain.Domain.Other
             }
         }
 
+        public static int TokenCount(string queryStr)
+        {
+            using (Py.GIL())
+            {
+                PyObject queryResult = model.client.tokenize(queryStr);
+                int len = (int)(queryResult.Length());
+                return len; 
+            }
+        }
+
         public static void Dispose()
         {
             Console.WriteLine("python dispose");
