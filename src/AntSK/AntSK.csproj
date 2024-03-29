@@ -9,13 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="llamafactory\__init__.py" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="llamafactory\__init__.py">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Compile Remove="llamafactory\**" />
+    <Content Remove="llamafactory\**" />
+    <EmbeddedResource Remove="llamafactory\**" />
+    <None Remove="llamafactory\**" />
   </ItemGroup>
   <ItemGroup>
 

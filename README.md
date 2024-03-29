@@ -144,8 +144,6 @@ model/xxx.gguf
   },
   "LLamaSharp": {
     "RunType": "GPU", 
-    "Chat": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf",
-    "Embedding": "D:\\Code\\AI\\AntBlazor\\model\\qwen1_5-1_8b-chat-q8_0.gguf",
     "FileDirectory": "D:\\Code\\AI\\AntBlazor\\model\\"
   },
   "Login": {
