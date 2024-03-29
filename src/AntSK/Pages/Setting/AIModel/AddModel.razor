@@ -28,7 +28,10 @@
                 </FormItem>
                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.AIModelType">
+                         @if (context.AIType != AIType.BgeEmbedding)
+                {
                         <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
+                }
                         <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
                     </RadioGroup>
                 </FormItem>
@@ -141,7 +144,7 @@
                         <Input Placeholder="D:\Programs\Python\Python311\python311.dll"    @bind-Value="@context.EndPoint" />
                     </FormItem>   
                     <FormItem Label="下载并初始化" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Button Type="primary" OnClick="BgeDownload">初始化</Button>
+                        <Button Type="primary" Disabled="@(BgeIsStart)" OnClick="BgeDownload">@BgeBtnText</Button>
                     </FormItem>
                 }
 

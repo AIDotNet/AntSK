@@ -53,6 +53,11 @@ namespace AntSK.Pages.Setting.AIModel
         //llamafactory
         private List<LLamaModel> modelList=new List<LLamaModel>();
         private bool llamaFactoryIsStart = false;
+
+        private bool BgeIsStart = false;
+        
+        private string BgeBtnText = "初始化";
+
         private Dics llamaFactoryDic= new Dics();
         //日志输出
         private  BlazorTerminal blazorTerminal = new BlazorTerminal();
@@ -262,7 +267,11 @@ namespace AntSK.Pages.Setting.AIModel
                 _ = Message.Error("请输入正确的Python dll路径！", 2);
                 return;
             }
+            BgeIsStart = true;
+            BgeBtnText = "正在初始化...";
             EmbeddingConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
+            BgeBtnText = "初始化完成";
+            BgeIsStart = false;
         }
         private async Task CmdLogHandler(string message)
         {
