@@ -1,8 +1,8 @@
 中文|[English](https://github.com/AIDotNet/AntSK/blob/main/README.en.md)
 # AntSK
-## 基于.Net8+AntBlazor+SemanticKernel 打造的AI知识库/智能体
+## 使用.Net8+Blazor+SemanticKernel 打造的AI知识库/智能体
 
-## 核心功能
+## ⭐核心功能
 
 - **语义内核 (Semantic Kernel)**：采用领先的自然语言处理技术，准确理解、处理和响应复杂的语义查询，为用户提供精确的信息检索和推荐服务。
 
@@ -27,7 +27,7 @@
 - **模型微调**：规划中，基于llamafactory进行模型微调
   
 
-## 应用场景
+## ⛪应用场景
 
 AntSK 适用于多种业务场景，例如：
 - 企业级知识管理系统
@@ -38,7 +38,7 @@ AntSK 适用于多种业务场景，例如：
 - 教育与在线学习平台
 - 其他有意思的AI App
 
-## 功能示例
+## ✏️功能示例
 ### 在线演示
 ```
 https://antsk.ai-dotnet.com/
@@ -54,43 +54,19 @@ https://antsk.ai-dotnet.com/
 ### 其他功能示例
 [视频示例](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
 
-首先需要创建知识库
-![知识库](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93.png)
-
-在知识库里可以使用文档或者url进行导入
-![知识库详情](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93%E8%AF%A6%E6%83%85.png)
-
-点击查看可以查看知识库的文档切片情况
-![文档切片](https://github.com/AIDotNet/AntSK/blob/main/images/%E6%96%87%E6%A1%A3%E5%88%87%E7%89%87.png)
-
-然后我们需要创建应用，可以创建对话应用和知识库。
-![应用](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%BA%94%E7%94%A8.png)
-
-知识库应用需要选择已有的知识库，可以选多个
-![应用配置](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE.png)
-
-然后再对话中可以对知识库的文档进行提问
-![问答](https://github.com/AIDotNet/AntSK/blob/main/images/%E9%97%AE%E7%AD%94.png)
-
-另外我们也可以创建对话应用，可以在对应应用中配置提示词模板
-![对话应用](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%AE%80%E5%8D%95%E5%AF%B9%E8%AF%9D.png)
-
-下面来看看效果吧
-![对话效果](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%AF%B9%E8%AF%9D%E6%95%88%E6%9E%9C.png)
-
-## 如何开始？
+## ❓如何开始？
 
 在这里我使用的是Postgres 作为数据存储和向量存储，因为Semantic Kernel和Kernel Memory都支持他，当然你也可以换成其他的。
 
-模型默认支持openai、azure openai 和llama支持的gguf本地模型,如果需要使用其他模型，可以使用one-api进行集成。
+模型默认支持openai、azure openai、讯飞星火、阿里云积、 和llama支持的gguf本地模型 以及llamafactory的本地模型,如果需要使用其他模型，可以使用one-api进行集成。
 
-配置文件中的Login配置是默认的登陆账号和密码
+配置文件中的Login配置是默认的登录账号和密码
 
 需要配置如下的配置文件
 
-## 使用docker-compose 
+## 1️⃣使用docker-compose 
 
-提供了pg版本 **appsettings.json** 和 简化版本（Sqlite+disk） **docker-compose.simple.yml**
+提供了pg版本 **appsettings.json** 和 简化版本（**Sqlite+disk**） **docker-compose.simple.yml**
 
 从项目根目录下载**docker-compose.yml**,然后把配置文件**appsettings.json**和它放在统一目录，
 
@@ -102,14 +78,14 @@ docker-compose up -d
 ```
 来启动AntSK
 
-## 如何在docker中挂载本地模型，和模型下载的目录
+## 2️⃣如何在docker中挂载本地模型，和模型下载的目录
 ```
 # 非 host 版本, 不使用本机代理
 version: '3.8'
 services:
   antsk:
     container_name: antsk
-    image: registry.cn-hangzhou.aliyuncs.com/AIDotNet/antsk:v0.1.5
+    image: registry.cn-hangzhou.aliyuncs.com/AIDotNet/antsk:v0.2.3
     ports:
       - 5000:5000
     networks:
@@ -130,7 +106,7 @@ networks:
 model/xxx.gguf
 ```
 
-## 配置文件的一些含义
+## 3️⃣配置文件的一些含义
 ```
 {
   "DBConnection": {
@@ -163,15 +139,14 @@ DBConnection.DbType
 //连接字符串，需要根据不同DB类型，用对应的字符串
 DBConnection.ConnectionStrings
 
-//向量存储的类型，支持  Postgres  Disk  Memory ，其中Postgres需要配置 ConnectionString
+//向量存储的类型，支持  Postgres、Disk、Memory、Qdrant、Redis、AzureAISearch
+//Postgres、Redis需要配置 ConnectionString
+//Qdrant 和AzureAISearch 的 ConnectionString 使用 Endpoint|APIKey  
 KernelMemory.VectorDb
 
 //本地模型使用的运行方式  GUP  CPU ,如果用在线API 这个随意使用一个即可
 LLamaSharp.RunType
-//本地会话模型的模型路径 注意区分linux和windows盘符不同
-LLamaSharp.Chat
-//本地向量模型的模型路径 注意区分linux和windows盘符不同
-LLamaSharp.Embedding
+
 //本地模型路径，用于在选择llama时可以快速选择目录下的模型，以及保存下载的模型
 LLamaSharp.FileDirectory
 
@@ -181,7 +156,7 @@ Login
 BackgroundTaskBroker.ImportKMSTask.WorkerCount
 ```
 
-## 找不到样式问题解决：
+## ⚠️找不到样式问题解决：
 AntSK/src/AntSK下执行:
 ```
 dotnet clean
@@ -196,7 +171,7 @@ dotnet AntSK.dll
 
 DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是自动创建的
 
-## 使用llamafactory
+## ✔️使用llamafactory
 ```
 1、首先需要确保你的环境已经安装了python和pip，如果使用镜像，例如v0.2.3.2版本已经包含了 python全套环境则无需此步骤
 2、进入模型添加页面选择llamafactory
@@ -208,11 +183,30 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 8、很多人会问 LLamaSharp与llamafactory有什么区别？其实这两者LLamaSharp是llama.cpp的 dotnet实现，但是只支持本地gguf模型，  而llamafactory 支持的模型种类更多，但使用的是python的实现，其主要差异在这里，另外llamafactory具有模型微调的能力，这也是我们下一步需要重点集成的部分。
 ```
 
+## 🤝 贡献
+
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/AIDotNet/AntSK/pulls)
+﻿
+如果你想贡献，可以创建一个[拉取请求](https://github.com/AIDotNet/AntSK/pulls), 或给我们[错误报告](https://github.com/AIDotNet/AntSK/issues/new).
+﻿
+﻿
+## 💕 贡献者
+
+这个项目的存在要感谢所有的贡献者。
+﻿
+<a href="https://github.com/AIDotNet/AntSK/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=AIDotNet/AntSK&max=1000&columns=15&anon=1" />
+</a>
+﻿
+## 🚨 行为准则
+
+该项目采用了贡献者公约定义的行为准则，以阐明我们社区的预期行为。有关更多信息，请参见 .NET Foundation 行为准则。 [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
+
 想了解更多信息或开始使用 **AntSK**，可以关注我的公众号以及加入交流群。
 
-## 联系我
+## ☎️联系我
 如有任何问题或建议，请通过以下方式关注我的公众号，发消息与我联系，我们也有交流群，可以发送进群等消息，然后我会拉你进交流群
-![公众号](https://github.com/AIDotNet/Avalonia-Assistant/blob/main/img/gzh.jpg)
+![公众号](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
 ---
 

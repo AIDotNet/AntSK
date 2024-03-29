@@ -162,7 +162,7 @@ namespace AntSK.Domain.Domain.Service
                                      new KernelParameterMetadata("jsonbody"){
                                       Name="json参数字符串",
                                       ParameterType=typeof(string),
-                                      Description=$"需要根据背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.Query}"
+                                      Description=$"背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.Query}"
                                     }
                                 };
                             functions.Add(_kernel.CreateFunctionFromMethod((string jsonbody) =>
@@ -201,7 +201,7 @@ namespace AntSK.Domain.Domain.Service
                                     new KernelParameterMetadata("jsonbody"){
                                       Name="json参数字符串",
                                       ParameterType=typeof(string),
-                                      Description=$"需要根据背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.JsonBody}"
+                                      Description=$"背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.JsonBody}"
                                     }
                                 };
                             functions.Add(_kernel.CreateFunctionFromMethod((string jsonBody) =>

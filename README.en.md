@@ -2,7 +2,7 @@
 # AntSK
 ## AI Knowledge Base/Intelligent Agent built on .Net8+AntBlazor+SemanticKernel
 
-## Core Features
+## ⭐Core Features
 
 - **Semantic Kernel**: Utilizes advanced natural language processing technology to accurately understand, process, and respond to complex semantic queries, providing users with precise information retrieval and recommendation services.
 
@@ -26,7 +26,7 @@
 
 - **Model Fine-Tuning**: Planned based on llamafactory for model fine-tuning.
 
-## Application Scenarios
+## ⛪Application Scenarios
 
 AntSK is suitable for various business scenarios, such as:
 - Enterprise knowledge management system
@@ -37,7 +37,7 @@ AntSK is suitable for various business scenarios, such as:
 - Education and online learning platforms
 - Other interesting AI Apps
 
-## Function Examples
+## ✏️Function Examples
 ### Online Demo
 ```
 https://antsk.ai-dotnet.com/
@@ -53,29 +53,7 @@ Due to the low configuration of the cloud server, the local model cannot be run,
 ### Other Function Examples
 [Video Demonstration](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
 
-First, you need to create a knowledge base
-![Knowledge Base](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93.png)
-
-You can import documents or URLs into the knowledge base
-![Knowledge Base Details](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%9F%A5%E8%AF%86%E5%BA%93%E8%AF%A6%E6%83%85.png)Click to check the document slicing situation of the knowledge base
-![Document slicing](https://github.com/AIDotNet/AntSK/blob/main/images/%E6%96%87%E6%A1%A3%E5%88%87%E7%89%87.png)
-
-Then we need to create an application, which can be a dialogue application or a knowledge base.
-![Application](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%BA%94%E7%94%A8.png)
-
-For the knowledge base application, select the existing knowledge base, and multiple selections are possible
-![Application configuration](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE.png)
-
-Then in the dialogue, questions can be asked about the documents in the knowledge base
-![QA](https://github.com/AIDotNet/AntSK/blob/main/images/%E9%97%AE%E7%AD%94.png)
-
-Additionally, we can create dialogue applications and configure prompt word templates in the corresponding application
-![Dialogue application](https://github.com/AIDotNet/AntSK/blob/main/images/%E7%AE%80%E5%8D%95%E5%AF%B9%E8%AF%9D.png)
-
-Let's take a look at the effects below
-![Dialogue effects](https://github.com/AIDotNet/AntSK/blob/main/images/%E5%AF%B9%E8%AF%9D%E6%95%88%E6%9E%9C.png)
-
-## How to get started?
+## ❓How to get started?
 
 Here I am using Postgres as the data and vector storage because Semantic Kernel and Kernel Memory support it, but you can also use other options.
 
@@ -85,7 +63,7 @@ The Login configuration in the configuration file is the default login account a
 
 The following configuration file needs to be configured
 
-## Using docker-compose
+## 1️⃣Using docker-compose
 
 Provided the pg version **appsettings.json** and simplified version (Sqlite+disk) **docker-compose.simple.yml**
 
@@ -98,7 +76,7 @@ Then you can execute the following command in the directory to start AntSK
 docker-compose up -d
 ```
 
-## How to mount local models and model download directory in docker
+## 2️⃣How to mount local models and model download directory in docker
 ```
 # Non-host version, do not use local proxy
 version: '3.8'
@@ -125,7 +103,7 @@ Taking this as an example, it means mounting the local D://model folder of Windo
 model/xxx.gguf
 ```
 
-## Some meanings of configuration file
+## 3️⃣Some meanings of configuration file
 ```
 {
   "DBConnection": {
@@ -155,18 +133,17 @@ model/xxx.gguf
 ```
 // Supports various databases, you can check SqlSugar, MySql, SqlServer, Sqlite, Oracle, PostgreSQL, Dm, Kdbndp, Oscar, MySqlConnector, Access, OpenGauss, QuestDB, HG, ClickHouse, GBase, Odbc, OceanBaseForOracle, TDengine, GaussDB, OceanBase, Tidb, Vastbase, PolarDB, Custom
 DBConnection.DbType
+
 // Connection string, need to use the corresponding string according to the different DB types
-DBConnection.ConnectionStrings//Vector storage types, supporting Postgres, Disk, and Memory. Postgres requires configuring a ConnectionString.
+DBConnection.ConnectionStrings
+
+//The type of vector storage, supporting Postgres, Disk, Memory, Qdrant, Redis, AzureAISearch
+//Postgres and Redis require ConnectionString configuration
+//The ConnectionString of Qdrant and AzureAISearch uses Endpoint | APIKey
 KernelMemory.VectorDb
 
 //Local model execution options: GPU and CPU. When using the online API, any option can be used.
 LLamaSharp.RunType
-
-//Model path for local sessions. Note the distinction in file paths between Linux and Windows drives.
-LLamaSharp.Chat
-
-//Model path for local vector models. Note the distinction in file paths between Linux and Windows drives.
-LLamaSharp.Embedding
 
 //Local model path, used for quick selection of models under llama, as well as saving downloaded models.
 LLamaSharp.FileDirectory
@@ -179,7 +156,7 @@ BackgroundTaskBroker.ImportKMSTask.WorkerCount
 
 ```
 
-## Fixing Style Issues:
+## ⚠️Fixing Style Issues:
 Run the following in AntSK/src/AntSK:
 ```
 dotnet clean
@@ -194,7 +171,7 @@ The styles should now be applied after starting.
 
 I'm using CodeFirst mode for the database, so as long as the database connection is properly configured, the table structure will be created automatically.
 
-## Using llamafactory
+## ✔️Using llamafactory
 ```
 1. First, ensure that Python and pip are installed in your environment. This step is not necessary if using an image, such as version v0.2.3.2, which already includes the complete Python environment.
 2. Go to the model add page and select llamafactory.
@@ -206,9 +183,29 @@ I'm using CodeFirst mode for the database, so as long as the database connection
 8. Many people ask about the difference between LLamaSharp and llamafactory. In fact, LLamaSharp is a .NET implementation of llama.cpp, but only supports local gguf models, while llamafactory supports a wider variety of models and uses Python implementation. The main difference lies here. Additionally, llamafactory has the ability to fine-tune models, which is an area we will focus on integrating in the future.
 ```
 
+## 🤝 Contributing
+
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/AIDotNet/AntSK/pulls)
+
+If you would like to contribute, feel free to create a [Pull Request](https://github.com/AIDotNet/AntSK/pulls), or give us [Bug Report](https://github.com/AIDotNet/AntSK/issues/new).
+
+
+## 💕 Contributors
+
+This project exists thanks to all the people who contribute.
+
+<a href="https://github.com/AIDotNet/AntSK/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=AIDotNet/AntSK&max=1000&columns=15&anon=1" />
+</a>
+
+## 🚨 Code of Conduct
+
+This project has adopted the code of conduct defined by the Contributor Covenant to clarify expected behavior in our community.
+For more information see the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
+
 To learn more or get started with **AntSK**, follow my official WeChat account and join the discussion group.
 
-## Contact Me
+## ☎️Contact Me
 If you have any questions or suggestions, please contact me through my official WeChat account. We also have a discussion group where you can send a message to join, and then I will add you to the group.
 ![Official WeChat Account](https://github.com/AIDotNet/Avalonia-Assistant/blob/main/img/gzh.jpg)
 
