@@ -66,7 +66,7 @@ https://antsk.ai-dotnet.com/
 
 ## 1️⃣使用docker-compose 
 
-提供了pg版本 **appsettings.json** 和 简化版本（Sqlite+disk） **docker-compose.simple.yml**
+提供了pg版本 **appsettings.json** 和 简化版本（**Sqlite+disk**） **docker-compose.simple.yml**
 
 从项目根目录下载**docker-compose.yml**,然后把配置文件**appsettings.json**和它放在统一目录，
 
