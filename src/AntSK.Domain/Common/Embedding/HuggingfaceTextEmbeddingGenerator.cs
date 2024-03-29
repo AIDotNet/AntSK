@@ -1,0 +1,56 @@
+﻿using LLama.Common;
+using LLama;
+using LLamaSharp.KernelMemory;
+using Microsoft.KernelMemory.AI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AntSK.Domain.Domain.Other;
+
+namespace AntSK.Domain.Common.Embedding
+{
+    public class HuggingfaceTextEmbeddingGenerator : ITextEmbeddingGenerator, ITextTokenizer, IDisposable
+    {
+        public int MaxTokens => 1024;
+
+        public int MaxTokenTotal => 1024;
+
+  
+        private readonly dynamic _embedder;
+
+        public HuggingfaceTextEmbeddingGenerator(string pyDllPath,string modelName)
+        {
+            _embedder = EmbeddingConfig.LoadModel(pyDllPath, modelName);
+        }
+
+        public void Dispose()
+        {
+            EmbeddingConfig.Dispose();
+        }
+
+        //public async Task<IList<ReadOnlyMemory<float>>> GenerateEmbeddingAsync(IList<string> data, CancellationToken cancellationToken = default)
+        //{
+        //    IList<ReadOnlyMemory<float>> results = new List<ReadOnlyMemory<float>>();
+
+        //    foreach (var d in data)
+        //    {
+        //        var embeddings = await EmbeddingConfig.GetEmbedding(d);
+        //        results.Add(new ReadOnlyMemory<float>(embeddings));
+        //    }
+        //    return results;
+        //}
+
+        public async Task<Microsoft.KernelMemory.Embedding> GenerateEmbeddingAsync(string text, CancellationToken cancellationToken = default)
+        {
+            var embeddings = await EmbeddingConfig.GetEmbedding(text);
+            return new Microsoft.KernelMemory.Embedding(embeddings);
+        }
+
+        public int CountTokens(string text)
+        {
+            return EmbeddingConfig.TokenCount(text);
+        }
+    }
+}
