@@ -288,5 +288,10 @@ namespace AntSK.Pages.Setting.AIModel
         private void OnCancelLog() {
             _logModalVisible = false;
         }
+
+        private void AITypeModelChange() 
+        { 
+        
+        }
     }
 }

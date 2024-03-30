@@ -24,13 +24,13 @@
                 </FormItem>
 
                 <FormItem Label="AI类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <EnumRadioGroup @bind-Value="context.AIType"></EnumRadioGroup>
+                    <EnumRadioGroup @bind-Value="context.AIType" ButtonStyle="RadioButtonStyle.Solid"> </EnumRadioGroup>
                 </FormItem>
                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <RadioGroup @bind-Value="context.AIModelType">
+                    <RadioGroup @bind-Value="context.AIModelType" >
                         @if (context.AIType != AIType.BgeEmbedding)
                         {
-                        <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
+                            <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
                         }
                         @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock)
                         {
@@ -41,7 +41,7 @@
                 @if (context.AIModelType == AIModelType.Embedding)
                 {
                     <FormItem Label="注意事项" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <b>请不要使用不同维度的向量模型，否则会导致无法向量存储</b>
+                        <span style="color:red"><b>请不要使用不同维度的向量模型，否则会导致无法向量存储</b></span>
                     </FormItem>
                 }
 
@@ -131,8 +131,8 @@
                             }
                         </InputGroup>
                     </FormItem>
-                     <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Button Type="primary" OnClick="PipInstall" >初始化</Button>
+                    <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Button Type="primary" OnClick="PipInstall">初始化</Button>
                     </FormItem>
                 }
 
@@ -143,9 +143,9 @@
                             <Input Placeholder="AI-ModelScope/bge-large-zh-v1.5" @bind-Value="@context.ModelName" />
                         </InputGroup>
                     </FormItem>
-                    <FormItem Label="PythonDll路径"  LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="D:\Programs\Python\Python311\python311.dll"    @bind-Value="@context.EndPoint" />
-                    </FormItem>   
+                    <FormItem Label="PythonDll路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" />
+                    </FormItem>
                     <FormItem Label="下载并初始化" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Button Type="primary" Disabled="@(BgeIsStart)" OnClick="BgeDownload">@BgeBtnText</Button>
                     </FormItem>
