@@ -52,27 +52,32 @@
                     </GridCol>
                 </GridRow>
             }
-
         </Virtualize>
     </div>
-    <Flex Justify="end">
-        @if (fileList.Count > 0)
-        {
+
+    @if (fileList.Count > 0)
+    {
+        <Flex Vertical>
             <Upload DefaultFileList="fileList" OnRemove="HandleFileRemove" />
-        }
+        </Flex>
+    }
+    <Flex Justify="end">
+
         <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding"></AntDesign.Input>
-        <Upload Action="@("api/File/UploadFile")"
-                Name="file"
-                Accept="*/*"
-                ShowUploadList="false"
-                BeforeUpload="_kMService.BeforeUpload"
-                OnSingleCompleted="OnSingleCompleted">
-            <Button Icon="@IconType.Outline.Upload" Type="@(ButtonType.Link)" Disabled="@Sendding" />
-        </Upload>
+        @if (app.EmbeddingModelID!=null)
+        {
+            <Upload Action="@("api/File/UploadFile")"
+                    Name="file"
+                    Accept="*/*"
+                    ShowUploadList="false"
+                    BeforeUpload="_kMService.BeforeUpload"
+                    OnSingleCompleted="OnSingleCompleted">
+                <Button Icon="@IconType.Outline.Upload" Type="@(ButtonType.Link)" Disabled="@Sendding" />
+            </Upload>
+        }
         <Button Icon="clear" Type="@(ButtonType.Link)" OnClick="@(async () => await OnClearAsync())" Disabled="@Sendding"></Button>
         <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
     </Flex>
-
 </div>
 
 <style>
