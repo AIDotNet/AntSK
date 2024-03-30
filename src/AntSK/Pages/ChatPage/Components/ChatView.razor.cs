@@ -1,6 +1,7 @@
 ﻿using AntDesign;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model;
+using AntSK.Domain.Domain.Model.Dto;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using Markdig;
@@ -14,22 +15,19 @@ namespace AntSK.Pages.ChatPage.Components
     {
         [Parameter]
         public string AppId { get; set; }
-        [Inject]
-        protected MessageService? Message { get; set; }
-        [Inject]
-        protected IApps_Repositories _apps_Repositories { get; set; }
-        [Inject]
-        protected IKmss_Repositories _kmss_Repositories { get; set; }
-        [Inject]
-        protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
-        [Inject]
-        protected IKernelService _kernelService { get; set; }
-        [Inject]
-        protected IKMService _kMService { get; set; }
-        [Inject]
-        IConfirmService _confirmService { get; set; }
-        [Inject]
-        IChatService _chatService { get; set; }
+
+        [Parameter]
+        public bool ShowTitle { get; set; } = false;
+        [Parameter]
+        public EventCallback<List<RelevantSource>> OnRelevantSources { get; set; }
+        [Inject] protected MessageService? Message { get; set; }
+        [Inject] protected IApps_Repositories _apps_Repositories { get; set; }
+        [Inject] protected IKmss_Repositories _kmss_Repositories { get; set; }
+        [Inject] protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
+        [Inject] protected IKernelService _kernelService { get; set; }
+        [Inject] protected IKMService _kMService { get; set; }
+        [Inject] IConfirmService _confirmService { get; set; }
+        [Inject] IChatService _chatService { get; set; }
         [Inject] IJSRuntime _JSRuntime { get; set; }
 
 
@@ -42,6 +40,8 @@ namespace AntSK.Pages.ChatPage.Components
         protected Apps app = new Apps();
 
         private List<UploadFileItem> fileList = [];
+
+        private List<RelevantSource> _relevantSources = new List<RelevantSource>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -151,7 +151,7 @@ namespace AntSK.Pages.ChatPage.Components
         private async Task SendKms(string questions, ChatHistory history, Apps app, string? filePath)
         {
             MessageInfo info = null;
-            var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, filePath);
+            var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, filePath, _relevantSources);
             await foreach (var content in chatResult)
             {
                 if (info == null)
@@ -171,6 +171,7 @@ namespace AntSK.Pages.ChatPage.Components
                 }
                 await InvokeAsync(StateHasChanged);
             }
+            await OnRelevantSources.InvokeAsync(_relevantSources);
             //全部处理完后再处理一次Markdown
             await MarkDown(info);
         }
