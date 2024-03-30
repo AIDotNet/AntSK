@@ -208,7 +208,12 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 如有任何问题或建议，请通过以下方式关注我的公众号，发消息与我联系，我们也有交流群，可以发送进群等消息，然后我会拉你进交流群
 ![公众号](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
----
-
-我们对您在**AntSK**的兴趣表示感谢，并期待与您携手共创智能化的未来！
+## 🌟 Star History
+<a href="https://github.com/AIDotNet/AntSK/stargazers" target="_blank" style="display: block" align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=AIDotNet/AntSK&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=AIDotNet/AntSK&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=AIDotNet/AntSK&type=Date" />
+  </picture>
+</a>
 
