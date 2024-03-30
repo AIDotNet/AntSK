@@ -1,22 +1,16 @@
 ﻿using AntDesign;
 using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using Microsoft.AspNetCore.Components;
-using Microsoft.KernelMemory;
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
-using SqlSugar;
-using System.Text;
-using AntSK.Domain.Utils;
-using Microsoft.JSInterop;
 using Markdig;
-using AntSK.Domain.Domain.Model;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Microsoft.SemanticKernel.ChatCompletion;
 
-namespace AntSK.Pages.ChatPage
+namespace AntSK.Pages.ChatPage.Components
 {
-    public partial class OpenChat
+    public partial class ChatView
     {
         [Parameter]
         public string AppId { get; set; }
@@ -121,7 +115,7 @@ namespace AntSK.Pages.ChatPage
 
         protected async Task<bool> SendAsync(string questions)
         {
-            ChatHistory history=new ChatHistory();
+            ChatHistory history = new ChatHistory();
             //处理多轮会话
             Apps app = _apps_Repositories.GetFirst(p => p.Id == AppId);
             if (MessageList.Count > 0)
@@ -153,7 +147,7 @@ namespace AntSK.Pages.ChatPage
         private async Task SendKms(string questions, ChatHistory history, Apps app)
         {
             MessageInfo info = null;
-            var chatResult=_chatService.SendKmsByAppAsync(app, questions, history, "" );
+            var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, "");
             await foreach (var content in chatResult)
             {
                 if (info == null)
@@ -222,6 +216,6 @@ namespace AntSK.Pages.ChatPage
             await InvokeAsync(StateHasChanged);
             await _JSRuntime.InvokeVoidAsync("Prism.highlightAll");
             await _JSRuntime.ScrollToBottomAsync("scrollDiv");
-        } 
+        }
     }
 }

@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{9F2E19
 		..\docker-compose.simple.yml = ..\docker-compose.simple.yml
 		..\docker-compose.yml = ..\docker-compose.yml
 		..\Dockerfile = ..\Dockerfile
-		..\Dockerfile-py = ..\Dockerfile-py
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MiddleWare", "MiddleWare", "{40DDB1DC-571B-4A95-9F34-47F52981C511}"
