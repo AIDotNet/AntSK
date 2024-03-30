@@ -41,6 +41,8 @@ namespace AntSK.Pages.ChatPage.Components
 
         protected Apps app = new Apps();
 
+        private List<UploadFileItem> fileList = [];
+
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -74,6 +76,8 @@ namespace AntSK.Pages.ChatPage.Components
                     _ = Message.Info("请输入消息", 2);
                     return;
                 }
+                var filePath = fileList.FirstOrDefault()?.Url;
+                var fileName = fileList.FirstOrDefault()?.FileName;
 
                 MessageList.Add(new MessageInfo()
                 {
@@ -82,10 +86,9 @@ namespace AntSK.Pages.ChatPage.Components
                     CreateTime = DateTime.Now,
                     IsSend = true
                 });
-
-
+       
                 Sendding = true;
-                await SendAsync(_messageInput);
+                await SendAsync(_messageInput,filePath);
                 _messageInput = "";
                 Sendding = false;
             }
@@ -113,7 +116,7 @@ namespace AntSK.Pages.ChatPage.Components
             });
         }
 
-        protected async Task<bool> SendAsync(string questions)
+        protected async Task<bool> SendAsync(string questions, string? filePath)
         {
             ChatHistory history = new ChatHistory();
             //处理多轮会话
@@ -124,13 +127,14 @@ namespace AntSK.Pages.ChatPage.Components
             }
             switch (app.Type)
             {
-                case "chat":
+                case "chat" when filePath == null:
                     //普通会话
                     await SendChat(questions, history, app);
                     break;
-                case "kms":
+
+                default:
                     //知识库问答
-                    await SendKms(questions, history, app);
+                    await SendKms(questions, history,  app, filePath);
                     break;
             }
 
@@ -144,10 +148,10 @@ namespace AntSK.Pages.ChatPage.Components
         /// <param name="msg"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        private async Task SendKms(string questions, ChatHistory history, Apps app)
+        private async Task SendKms(string questions, ChatHistory history, Apps app, string? filePath)
         {
             MessageInfo info = null;
-            var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, "");
+            var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, filePath);
             await foreach (var content in chatResult)
             {
                 if (info == null)
@@ -216,6 +220,24 @@ namespace AntSK.Pages.ChatPage.Components
             await InvokeAsync(StateHasChanged);
             await _JSRuntime.InvokeVoidAsync("Prism.highlightAll");
             await _JSRuntime.ScrollToBottomAsync("scrollDiv");
+        }
+
+        private void OnSingleCompleted(UploadInfo fileInfo)
+        {
+            fileList.Add(new()
+            {
+                FileName = fileInfo.File.FileName,
+                Url = fileInfo.File.Url = fileInfo.File.Response,
+                Ext = fileInfo.File.Ext,
+                State = UploadState.Success,
+            });
+            _kMService.OnSingleCompleted(fileInfo);
+        }
+        private async Task<bool> HandleFileRemove(UploadFileItem file)
+        {
+            fileList.RemoveAll(x => x.FileName == file.FileName);
+            await Task.Yield();
+            return true;
         }
     }
 }

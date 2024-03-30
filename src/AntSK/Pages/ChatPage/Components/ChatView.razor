@@ -42,14 +42,26 @@
 
         </Virtualize>
     </div>
-    <div style="flex-shrink:0;margin:10px;">
-        <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding">
-            <Suffix>
-                <Button Icon="clear" Type="@(ButtonType.Link)" OnClick="@(async () => await OnClearAsync())" Disabled="@Sendding"></Button>
-                <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
-            </Suffix>
-        </AntDesign.Input>
-    </div>
+    <Flex Vertical>
+        @if (fileList.Count > 0)
+        {
+            <Upload DefaultFileList="fileList" OnRemove="HandleFileRemove" />
+        }
+        <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding"></AntDesign.Input>
+    </Flex>
+    <Flex Justify="end">
+        <Upload Action="@("api/File/UploadFile")"
+                Name="file"
+                Accept="*/*"
+                ShowUploadList="false"
+                BeforeUpload="_kMService.BeforeUpload"
+                OnSingleCompleted="OnSingleCompleted">
+            <Button Icon="@IconType.Outline.Upload" Type="@(ButtonType.Link)" Disabled="@Sendding" />
+        </Upload>
+        <Button Icon="clear" Type="@(ButtonType.Link)" OnClick="@(async () => await OnClearAsync())" Disabled="@Sendding"></Button>
+        <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
+    </Flex>
+
 </div>
 
 <style>
