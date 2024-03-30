@@ -27,7 +27,7 @@
                     <EnumRadioGroup @bind-Value="context.AIType" ButtonStyle="RadioButtonStyle.Solid"> </EnumRadioGroup>
                 </FormItem>
                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <RadioGroup @bind-Value="context.AIModelType" >
+                    <RadioGroup @bind-Value="context.AIModelType">
                         @if (context.AIType != AIType.BgeEmbedding)
                         {
                             <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
@@ -139,15 +139,19 @@
                 @if (context.AIType == AIType.BgeEmbedding)
                 {
                     <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <InputGroup>
-                            <Input Placeholder="AI-ModelScope/bge-large-zh-v1.5" @bind-Value="@context.ModelName" />
-                        </InputGroup>
+                        <Select DataSource="@bgeEmbeddingList"
+                                @bind-Value="@context.ModelName"
+                                ValueProperty="c=>c"
+                                LabelProperty="c=>c">
+                        </Select>
                     </FormItem>
                     <FormItem Label="PythonDll路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" />
                     </FormItem>
                     <FormItem Label="下载并初始化" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Button Type="primary" Disabled="@(BgeIsStart)" OnClick="BgeDownload">@BgeBtnText</Button>
+                        <Spin Tip="请等待..." Spinning="@(BgeIsStart)" >
+                            <Button Type="primary" Disabled="@(BgeIsStart)" OnClick="BgeDownload">@BgeBtnText</Button>
+                        </Spin>
                     </FormItem>
                 }
 
@@ -190,3 +194,7 @@
 </Modal>
 
 
+@code
+{
+
+}

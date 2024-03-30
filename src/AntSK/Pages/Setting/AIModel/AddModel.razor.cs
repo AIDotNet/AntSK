@@ -53,17 +53,15 @@ namespace AntSK.Pages.Setting.AIModel
         //llamafactory
         private List<LLamaModel> modelList=new List<LLamaModel>();
         private bool llamaFactoryIsStart = false;
-
-        private bool BgeIsStart = false;
-        
-        private string BgeBtnText = "初始化";
-
         private Dics llamaFactoryDic= new Dics();
         //日志输出
         private  BlazorTerminal blazorTerminal = new BlazorTerminal();
         private TerminalParagraph para;
         private bool _logModalVisible;
 
+        private List<string> bgeEmbeddingList = new List<string>() { "AI-ModelScope/bge-small-zh-v1.5", "AI-ModelScope/bge-base-zh-v1.5", "AI-ModelScope/bge-large-zh-v1.5" };
+        private bool BgeIsStart = false;
+        private string BgeBtnText = "初始化";
         protected override async Task OnInitializedAsync()
         {
             try
@@ -251,7 +249,7 @@ namespace AntSK.Pages.Setting.AIModel
             {
                 _logModalVisible = true;
                 _ILLamaFactoryService.LogMessageReceived += CmdLogHandler;
-                _ILLamaFactoryService.PipInstall();
+                await _ILLamaFactoryService.PipInstall();
             }
         }
 
@@ -267,11 +265,23 @@ namespace AntSK.Pages.Setting.AIModel
                 _ = Message.Error("请输入正确的Python dll路径！", 2);
                 return;
             }
+
             BgeIsStart = true;
             BgeBtnText = "正在初始化...";
-            EmbeddingConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
-            BgeBtnText = "初始化完成";
-            BgeIsStart = false;
+            await Task.Run(() =>
+            {
+                try
+                {
+                    EmbeddingConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
+                    BgeBtnText = "初始化完成";
+                    BgeIsStart = false;
+                }
+                catch (System.Exception ex)
+                {
+                    _ = Message.Error(ex.Message, 2);
+                    BgeIsStart = false;
+                }
+            });   
         }
         private async Task CmdLogHandler(string message)
         {

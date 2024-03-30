@@ -43,18 +43,17 @@ namespace AntSK.Domain.Domain.Other
                             dynamic model_kwargs = new PyDict();
                             model_kwargs["device"] = new PyString("cpu");
                             dynamic hugginmodel = HuggingFaceBgeEmbeddings(
-                      model_name: model_dir,
-                      model_kwargs: model_kwargs
-                  );
+                                  model_name: model_dir,
+                                  model_kwargs: model_kwargs
+                              );
                             model = hugginmodel;
                             return hugginmodel;
                         }
                     }
-                    catch
+                    catch(Exception ex)
                     {
-                        return null;
+                        throw ex;
                     }
-
                 }
                 else
                     return model;
