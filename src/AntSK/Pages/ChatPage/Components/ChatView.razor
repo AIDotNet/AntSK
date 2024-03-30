@@ -55,14 +55,12 @@
 
         </Virtualize>
     </div>
-    <Flex Vertical>
+    <Flex Justify="end">
         @if (fileList.Count > 0)
         {
             <Upload DefaultFileList="fileList" OnRemove="HandleFileRemove" />
         }
         <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding"></AntDesign.Input>
-    </Flex>
-    <Flex Justify="end">
         <Upload Action="@("api/File/UploadFile")"
                 Name="file"
                 Accept="*/*"
