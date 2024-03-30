@@ -30,8 +30,6 @@ namespace AntSK.Pages.ChatPage.Components
         [Inject] IChatService _chatService { get; set; }
         [Inject] IJSRuntime _JSRuntime { get; set; }
 
-
-        protected bool _loading = false;
         protected List<MessageInfo> MessageList = [];
         protected string? _messageInput;
         protected string _json = "";
@@ -46,7 +44,17 @@ namespace AntSK.Pages.ChatPage.Components
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            app = _apps_Repositories.GetFirst(p => p.Id == AppId);
+            await LoadApp();
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+           await LoadApp();
+        }
+
+        private async Task LoadApp()
+        {
+            app =await _apps_Repositories.GetFirstAsync(p => p.Id == AppId);
         }
 
         protected async Task OnClearAsync()
@@ -125,9 +133,10 @@ namespace AntSK.Pages.ChatPage.Components
             {
                 history = await _chatService.GetChatHistory(MessageList);
             }
+            
             switch (app.Type)
             {
-                case "chat" when filePath == null:
+                case "chat" when filePath == null||app.EmbeddingModelID.IsNull():
                     //普通会话
                     await SendChat(questions, history, app);
                     break;
