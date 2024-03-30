@@ -11,6 +11,7 @@
     <PackageReference Include="AntDesign.Charts" Version="0.5.1" />
     <PackageReference Include="AntDesign.ProLayout" Version="0.18.1" />
     <PackageReference Include="BlazorComponents.Terminal" Version="0.6.0" />
+    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
   
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     

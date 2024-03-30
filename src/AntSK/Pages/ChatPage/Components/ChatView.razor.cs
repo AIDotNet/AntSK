@@ -4,10 +4,12 @@ using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Dto;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
+using Blazored.LocalStorage;
 using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Microsoft.SemanticKernel.ChatCompletion;
+using Newtonsoft.Json;
 
 namespace AntSK.Pages.ChatPage.Components
 {
@@ -29,6 +31,7 @@ namespace AntSK.Pages.ChatPage.Components
         [Inject] IConfirmService _confirmService { get; set; }
         [Inject] IChatService _chatService { get; set; }
         [Inject] IJSRuntime _JSRuntime { get; set; }
+        [Inject] ILocalStorageService _localStorage { get; set; }
 
         protected List<MessageInfo> MessageList = [];
         protected string? _messageInput;
@@ -44,15 +47,20 @@ namespace AntSK.Pages.ChatPage.Components
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            await LoadApp();
+            await LoadData();
+            var msgs = await _localStorage.GetItemAsync<List<MessageInfo>>("msgs");
+            if (msgs != null && msgs.Count > 0)
+            {
+                MessageList = msgs;
+            }
         }
 
         protected override async Task OnParametersSetAsync()
         {
-           await LoadApp();
+           await LoadData();
         }
 
-        private async Task LoadApp()
+        private async Task LoadData()
         {
             app =await _apps_Repositories.GetFirstAsync(p => p.Id == AppId);
         }
@@ -67,6 +75,7 @@ namespace AntSK.Pages.ChatPage.Components
                 if (result == ConfirmResult.Yes)
                 {
                     MessageList.Clear();
+                    await _localStorage.SetItemAsync<List<MessageInfo>>("msgs", MessageList);
                     _ = Message.Info("清理成功");
                 }
             }
@@ -99,6 +108,8 @@ namespace AntSK.Pages.ChatPage.Components
                 await SendAsync(_messageInput,filePath);
                 _messageInput = "";
                 Sendding = false;
+
+                await _localStorage.SetItemAsync<List<MessageInfo>>("msgs", MessageList);
             }
             catch (System.Exception ex)
             {
