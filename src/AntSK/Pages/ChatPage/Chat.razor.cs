@@ -18,8 +18,6 @@ namespace AntSK.Pages.ChatPage
 
         [Inject] protected IApps_Repositories _apps_Repositories { get; set; }
       
-        protected bool _loading = false;
-  
         private List<RelevantSource> _relevantSources = new List<RelevantSource>();
 
         protected List<Apps> _list = new List<Apps>();
