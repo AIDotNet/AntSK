@@ -35,7 +35,6 @@ namespace AntSK.Controllers
         [HttpPost]
         public async Task<IActionResult> ImportKMSTask(ImportKMSTaskDTO model)
         {
-            Console.WriteLine("api/kms/ImportKMSTask  开始");
             ImportKMSTaskReq req = model.ToDTO<ImportKMSTaskReq>();
             KmsDetails detail = new KmsDetails()
             {
@@ -49,7 +48,6 @@ namespace AntSK.Controllers
             await _kmsDetailsRepositories.InsertAsync(detail);
             req.KmsDetail = detail;
             _taskBroker.QueueWorkItem(req);
-            Console.WriteLine("api/kms/ImportKMSTask  结束");
             return Ok();
         }
     }

@@ -771,6 +771,14 @@
             <param name="parameters"></param>
             <returns></returns>
         </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.ComparisonIgnoreCase(System.String,System.String)">
+            <summary>
+            忽略大小写匹配
+            </summary>
+            <param name="s"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
         <member name="M:AntSK.Domain.Utils.RepoFiles.SamplePluginsPath">
             <summary>
             Scan the local folders from the repo, looking for "samples/plugins" folder.
