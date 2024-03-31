@@ -61,7 +61,7 @@
   {
     "path": "http://antsk.cn/",
     "name": "文档",
-    "key": "doc",
+    "key": "antskdoc",
     "icon": "question-circle"
   }
 ]
