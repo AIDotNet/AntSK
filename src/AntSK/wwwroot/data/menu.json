@@ -57,5 +57,11 @@
         "key": "setting.modeldown"
       }
     ]
+  },
+  {
+    "path": "http://antsk.cn/",
+    "name": "文档",
+    "key": "doc",
+    "icon": "question-circle"
   }
 ]
