@@ -54,6 +54,8 @@ https://antsk.ai-dotnet.com/
 ### 其他功能示例
 [视频示例](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
 
+[在线文档：http://antsk.cn](http://antsk.cn)
+
 ## ❓如何开始？
 
 在这里我使用的是Postgres 作为数据存储和向量存储，因为Semantic Kernel和Kernel Memory都支持他，当然你也可以换成其他的。
