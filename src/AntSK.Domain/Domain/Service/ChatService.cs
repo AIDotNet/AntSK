@@ -29,7 +29,6 @@ namespace AntSK.Domain.Domain.Service
         IAIModels_Repositories _aIModels_Repositories
         ) : IChatService
     {
-        private readonly SDHelper helper = new SDHelper();
         /// <summary>
         /// 发送消息
         /// </summary>
@@ -141,7 +140,7 @@ namespace AntSK.Domain.Domain.Service
             if (chatResult.IsNotNull())
             {
                 string prompt = chatResult.GetValue<string>();
-                if (!helper.IsInitialized)
+                if (!SDHelper.IsInitialized)
                 {
                     Structs.ModelParams modelParams = new Structs.ModelParams
                     {
@@ -152,7 +151,7 @@ namespace AntSK.Domain.Domain.Service
                         //VaeTiling = vaeTiling,
                         //LoraModelDir = loraModelDir,
                     };
-                    bool result = helper.Initialize(modelParams);
+                    bool result = SDHelper.Initialize(modelParams);
                 }
 
                 Structs.TextToImageParams textToImageParams = new Structs.TextToImageParams
@@ -168,11 +167,12 @@ namespace AntSK.Domain.Domain.Service
                     SampleSteps = 20,
                     Seed = -1,
                 };
-                Bitmap[] outputImages = helper.TextToImage(textToImageParams);
-                var base64=ImageUtils.BitmapToBase64(outputImages[0]);
+                Bitmap[] outputImages = SDHelper.TextToImage(textToImageParams);
+                var base64 = ImageUtils.BitmapToBase64(outputImages[0]);
                 return base64;
             }
-            else {
+            else
+            {
                 return "";
             }
         }

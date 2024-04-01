@@ -80,7 +80,9 @@ namespace AntSK.Pages.ChatPage.Components
                 {
                     MessageList.Clear();
                     await _localStorage.SetItemAsync<List<MessageInfo>>("msgs", MessageList);
+                    await InvokeAsync(StateHasChanged);
                     _ = Message.Info("清理成功");
+            
                 }
             }
             else
