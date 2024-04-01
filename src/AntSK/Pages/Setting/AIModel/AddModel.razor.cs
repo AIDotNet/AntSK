@@ -62,6 +62,7 @@ namespace AntSK.Pages.Setting.AIModel
         private List<string> bgeEmbeddingList = new List<string>() { "AI-ModelScope/bge-small-zh-v1.5", "AI-ModelScope/bge-base-zh-v1.5", "AI-ModelScope/bge-large-zh-v1.5" };
         private bool BgeIsStart = false;
         private string BgeBtnText = "初始化";
+
         protected override async Task OnInitializedAsync()
         {
             try
@@ -79,8 +80,9 @@ namespace AntSK.Pages.Setting.AIModel
                     llamaFactoryIsStart = llamaFactoryDic.Value == "false" ? false : true;
                 }
 
+               
                 //目前只支持gguf的 所以筛选一下
-                _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory));//.Where(p=>p.Contains(".gguf")).ToArray();
+                _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory)).Where(p=> p.Contains(".gguf")||p.Contains(".ckpt")|| p.Contains(".safetensors")).ToArray();
                 if (!string.IsNullOrEmpty(ModelPath))
                 {
                     //下载页跳入
