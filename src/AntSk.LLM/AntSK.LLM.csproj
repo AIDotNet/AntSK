@@ -13,6 +13,13 @@
     <PackageReference Include="Cnblogs.SemanticKernel.Connectors.DashScope" Version="0.3.2" />
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.6.3" />
     <PackageReference Include="Sdcb.SparkDesk" Version="3.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="stable-diffusion.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -24,18 +24,32 @@
                 </FormItem>
 
                 <FormItem Label="AI类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <EnumRadioGroup @bind-Value="context.AIType"></EnumRadioGroup>
+                    <EnumRadioGroup @bind-Value="context.AIType" ButtonStyle="RadioButtonStyle.Solid"> </EnumRadioGroup>
                 </FormItem>
                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.AIModelType">
-                        <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
-                        <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
+                    
+                        @if (context.AIType == AIType.StableDiffusion)
+                        {
+                            <Radio RadioButton Value="@(AIModelType.Image)">图片模型</Radio>
+                        }
+                        else  
+                        {
+                            @if (context.AIType != AIType.BgeEmbedding)
+                            {
+                                <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
+                            }
+                            @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock)
+                            {
+                                <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
+                            }
+                        }
                     </RadioGroup>
                 </FormItem>
                 @if (context.AIModelType == AIModelType.Embedding)
                 {
                     <FormItem Label="注意事项" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <b>请不要使用不同维度的向量模型，否则会导致无法向量存储</b>
+                        <span style="color:red"><b>请不要使用不同维度的向量模型，否则会导致无法向量存储</b></span>
                     </FormItem>
                 }
 
@@ -84,7 +98,7 @@
                         <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" />
                     </FormItem>
                 }
-                @if (context.AIType == AIType.LLamaSharp)
+                @if (context.AIType == AIType.LLamaSharp || context.AIType == AIType.StableDiffusion)
                 {
                     <FormItem Label="模型路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputGroup>
@@ -125,10 +139,30 @@
                             }
                         </InputGroup>
                     </FormItem>
-                     <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Button Type="primary" OnClick="PipInstall" >初始化</Button>
+                    <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Button Type="primary" OnClick="PipInstall">初始化</Button>
                     </FormItem>
                 }
+
+                @if (context.AIType == AIType.BgeEmbedding)
+                {
+                    <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Select DataSource="@bgeEmbeddingList"
+                                @bind-Value="@context.ModelName"
+                                ValueProperty="c=>c"
+                                LabelProperty="c=>c">
+                        </Select>
+                    </FormItem>
+                    <FormItem Label="PythonDll路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" />
+                    </FormItem>
+                    <FormItem Label="下载并初始化" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Spin Tip="请等待..." Spinning="@(BgeIsStart)" >
+                            <Button Type="primary" Disabled="@(BgeIsStart)" OnClick="BgeDownload">@BgeBtnText</Button>
+                        </Spin>
+                    </FormItem>
+                }
+
                 @if (context.AIType == AIType.Mock)
                 {
                 }
@@ -168,3 +202,7 @@
 </Modal>
 
 
+@code
+{
+
+}

@@ -45,7 +45,8 @@ namespace AntSK.Pages.AppPage
         public Dictionary<string, string> _funList = new Dictionary<string, string>();
 
         private List<AIModels> _chatList;
-        private List<AIModels> _embedignList;
+        private List<AIModels> _embedingList;
+        private List<AIModels> _imageList;
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -53,7 +54,8 @@ namespace AntSK.Pages.AppPage
             _apiList = _apis_Repositories.GetList();
             var models=_aimodels_Repositories.GetList();
             _chatList = models.Where(p => p.AIModelType == AIModelType.Chat).ToList();
-            _embedignList = models.Where(p => p.AIModelType == AIModelType.Embedding).ToList();
+            _embedingList = models.Where(p => p.AIModelType == AIModelType.Embedding).ToList();
+            _imageList = models.Where(p => p.AIModelType == AIModelType.Image).ToList();
 
             _functionService.SearchMarkedMethods();
             foreach (var func in _functionService.Functions)

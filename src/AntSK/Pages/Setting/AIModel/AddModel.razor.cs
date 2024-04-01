@@ -3,6 +3,7 @@ using AntDesign.ProLayout;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Enum;
+using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
@@ -12,6 +13,7 @@ using BlazorComponents.Terminal;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Downloader;
 using Microsoft.AspNetCore.Components;
+using NRedisStack.Search;
 using System.ComponentModel;
 
 namespace AntSK.Pages.Setting.AIModel
@@ -58,6 +60,10 @@ namespace AntSK.Pages.Setting.AIModel
         private TerminalParagraph para;
         private bool _logModalVisible;
 
+        private List<string> bgeEmbeddingList = new List<string>() { "AI-ModelScope/bge-small-zh-v1.5", "AI-ModelScope/bge-base-zh-v1.5", "AI-ModelScope/bge-large-zh-v1.5" };
+        private bool BgeIsStart = false;
+        private string BgeBtnText = "初始化";
+
         protected override async Task OnInitializedAsync()
         {
             try
@@ -75,12 +81,25 @@ namespace AntSK.Pages.Setting.AIModel
                     llamaFactoryIsStart = llamaFactoryDic.Value == "false" ? false : true;
                 }
 
+               
                 //目前只支持gguf的 所以筛选一下
-                _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory)).Where(p=>p.Contains(".gguf")).ToArray();
+                _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory)).Where(p=> p.Contains(".gguf")||p.Contains(".ckpt")|| p.Contains(".safetensors")).ToArray();
                 if (!string.IsNullOrEmpty(ModelPath))
                 {
+                    string extension = Path.GetExtension(ModelPath);
+                    switch (extension)
+                    {
+                        case ".gguf":
+                            _aiModel.AIType = AIType.LLamaSharp;
+                            break;
+                        case ".safetensors":
+                        case ".ckpt":
+                            _aiModel.AIType = AIType.StableDiffusion;
+                            break;
+
+                    }
                     //下载页跳入
-                    _aiModel.AIType = AIType.LLamaSharp;
+                 
                     _downloadModalVisible = true;
 
                     _downloadUrl = $"https://hf-mirror.com{ModelPath.Replace("---","/")}";
@@ -245,8 +264,39 @@ namespace AntSK.Pages.Setting.AIModel
             {
                 _logModalVisible = true;
                 _ILLamaFactoryService.LogMessageReceived += CmdLogHandler;
-                _ILLamaFactoryService.PipInstall();
+                await _ILLamaFactoryService.PipInstall();
             }
+        }
+
+        private async Task BgeDownload()
+        {
+            if (string.IsNullOrEmpty(_aiModel.ModelName))
+            {
+                _ = Message.Error("请输入模型名称！", 2);
+                return;
+            }
+            if (string.IsNullOrEmpty(_aiModel.EndPoint))
+            {
+                _ = Message.Error("请输入正确的Python dll路径！", 2);
+                return;
+            }
+
+            BgeIsStart = true;
+            BgeBtnText = "正在初始化...";
+            await Task.Run(() =>
+            {
+                try
+                {
+                    EmbeddingConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
+                    BgeBtnText = "初始化完成";
+                    BgeIsStart = false;
+                }
+                catch (System.Exception ex)
+                {
+                    _ = Message.Error(ex.Message, 2);
+                    BgeIsStart = false;
+                }
+            });   
         }
         private async Task CmdLogHandler(string message)
         {
@@ -262,6 +312,11 @@ namespace AntSK.Pages.Setting.AIModel
    
         private void OnCancelLog() {
             _logModalVisible = false;
+        }
+
+        private void AITypeModelChange() 
+        { 
+        
         }
     }
 }

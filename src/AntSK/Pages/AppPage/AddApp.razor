@@ -26,30 +26,45 @@
                 <FormItem Label="类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.Type">
                         <Radio RadioButton Value="@AppType.chat.ToString()">会话应用</Radio>
-                         <Radio RadioButton Value="@AppType.kms.ToString()">知识库</Radio>
-                     </RadioGroup>
-                 </FormItem>
-                 <FormItem Label="描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                     <Input Placeholder="请输入描述" @bind-Value="@context.Describe" />
-                 </FormItem>
+                        <Radio RadioButton Value="@AppType.kms.ToString()">知识库</Radio>
+                        <Radio RadioButton Value="@AppType.img.ToString()">做图应用</Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem Label="描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入描述" @bind-Value="@context.Describe" />
+                </FormItem>
 
-                 <FormItem Label="会话模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                     <Select DataSource="@_chatList"
-                             @bind-Value="@context.ChatModelID"
-                             ValueProperty="c=>c.Id"
-                             LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
-                     </Select>
-                     <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
-                 </FormItem>
-                <FormItem Label="向量模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <Select DataSource="@_embedignList"
-                            @bind-Value="@context.EmbeddingModelID"
+                <FormItem Label="会话模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Select DataSource="@_chatList"
+                            @bind-Value="@context.ChatModelID"
                             ValueProperty="c=>c.Id"
                             LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
                     </Select>
                     <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
                 </FormItem>
-                 @if (@context.Type == AppType.chat.ToString())
+                @if (@context.Type != AppType.img.ToString())
+                {
+                    <FormItem Label="向量模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Select DataSource="@_embedingList"
+                                @bind-Value="@context.EmbeddingModelID"
+                                ValueProperty="c=>c.Id"
+                                LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
+                        </Select>
+                        <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
+                    </FormItem>
+                }
+                else              
+                {
+                    <FormItem Label="图片模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Select DataSource="@_imageList"
+                                @bind-Value="@context.ImageModelID"
+                                ValueProperty="c=>c.Id"
+                                LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
+                        </Select>
+                        <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
+                    </FormItem>
+                }
+                @if (@context.Type == AppType.chat.ToString())
                 {
 
                     <FormItem Label="提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
@@ -61,8 +76,8 @@
                         <Slider TValue="double" Style="display: inline-block;width: 300px; " Min="0" Max="100" DefaultValue="70" @bind-Value="@context.Temperature" />
                         <span>更发散</span>
                     </FormItem>
-                  
-                    <FormItem Label="API插件列表" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">                      
+
+                    <FormItem Label="API插件列表" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Select Mode="multiple"
                                 @bind-Values="apiIds"
                                 Placeholder="选择API插件, 选择后会开启自动调用"

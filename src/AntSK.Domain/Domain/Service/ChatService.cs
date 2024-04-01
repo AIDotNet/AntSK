@@ -16,6 +16,8 @@ using ChatHistory = Microsoft.SemanticKernel.ChatCompletion.ChatHistory;
 using Microsoft.SemanticKernel.Plugins.Core;
 using Azure.Core;
 using AntSK.Domain.Domain.Model;
+using AntSK.LLM.StableDiffusion;
+using System.Drawing;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -23,9 +25,11 @@ namespace AntSK.Domain.Domain.Service
     public class ChatService(
         IKernelService _kernelService,
         IKMService _kMService,
-        IKmsDetails_Repositories _kmsDetails_Repositories
+        IKmsDetails_Repositories _kmsDetails_Repositories,
+        IAIModels_Repositories _aIModels_Repositories
         ) : IChatService
     {
+        private readonly SDHelper helper = new SDHelper();
         /// <summary>
         /// 发送消息
         /// </summary>
@@ -119,6 +123,57 @@ namespace AntSK.Domain.Domain.Service
             else
             {
                 yield return new StreamingTextContent(KmsConstantcs.KmsSearchNull);
+            }
+        }
+
+
+        public async Task<string> SendImgByAppAsync(Apps app, string questions)
+        {
+            var imageModel = _aIModels_Repositories.GetFirst(p => p.Id == app.ImageModelID);
+            KernelArguments args = new() {
+                { "input", questions }
+            };
+            var _kernel = _kernelService.GetKernelByApp(app);
+            var temperature = app.Temperature / 100; //存的是0~100需要缩小
+            OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
+            var func = _kernel.CreateFunctionFromPrompt("你是一个StableDiffusion提示词助手,需要将用户问题转化为StableDiffusion的英文提示词并返回,请注意只返回提示词不要有其他多余内容,用户的问题是：{{$input}}", settings);
+            var chatResult = await _kernel.InvokeAsync(function: func, arguments: args);
+            if (chatResult.IsNotNull())
+            {
+                string prompt = chatResult.GetValue<string>();
+                if (!helper.IsInitialized)
+                {
+                    Structs.ModelParams modelParams = new Structs.ModelParams
+                    {
+                        ModelPath = imageModel.ModelName,
+                        RngType = Structs.RngType.CUDA_RNG,
+                        //VaePath = vaePath,
+                        //KeepVaeOnCpu = keepVaeOnCpu,
+                        //VaeTiling = vaeTiling,
+                        //LoraModelDir = loraModelDir,
+                    };
+                    bool result = helper.Initialize(modelParams);
+                }
+
+                Structs.TextToImageParams textToImageParams = new Structs.TextToImageParams
+                {
+                    Prompt = prompt,
+                    NegativePrompt = "2d, 3d, cartoon, paintings",
+                    SampleMethod = (Structs.SampleMethod)Enum.Parse(typeof(Structs.SampleMethod), "EULER_A"),
+                    Width = 256,
+                    Height = 256,
+                    NormalizeInput = true,
+                    ClipSkip = -1,
+                    CfgScale = 7,
+                    SampleSteps = 20,
+                    Seed = -1,
+                };
+                Bitmap[] outputImages = helper.TextToImage(textToImageParams);
+                var base64=ImageUtils.BitmapToBase64(outputImages[0]);
+                return base64;
+            }
+            else {
+                return "";
             }
         }
 

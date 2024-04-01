@@ -1,5 +1,6 @@
 ﻿using AntDesign;
 using AntSK.Domain.Common.DependencyInjection;
+using AntSK.Domain.Common.Embedding;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Dto;
@@ -147,6 +148,11 @@ namespace AntSK.Domain.Domain.Service
                     var embedder = new LLamaEmbedder(weights, parameters);
                     memory.WithLLamaSharpTextEmbeddingGeneration(new LLamaSharpTextEmbeddingGenerator(embedder));
                     break;
+                case Model.Enum.AIType.BgeEmbedding:
+                    string pyDll = embedModel.EndPoint;
+                    string bgeEmbeddingModelName = embedModel.ModelName;
+                    memory.WithBgeTextEmbeddingGeneration(new HuggingfaceTextEmbeddingGenerator(pyDll,bgeEmbeddingModelName));
+                    break;
                 case Model.Enum.AIType.DashScope:
                     memory.WithDashScopeDefaults(embedModel.ModelKey);
                     break;
@@ -182,6 +188,14 @@ namespace AntSK.Domain.Domain.Service
                     var context = weights.CreateContext(parameters);
                     var executor = new StatelessExecutor(weights, parameters);
                     memory.WithLLamaSharpTextGeneration(new LlamaSharpTextGenerator(weights, context, executor));
+                    break;
+                case Model.Enum.AIType.LLamaFactory:
+
+                    memory.WithOpenAITextGeneration(new OpenAIConfig()
+                    {
+                        APIKey = "123",
+                        TextModel = chatModel.ModelName
+                    }, null, chatHttpClient);
                     break;
                 case Model.Enum.AIType.DashScope:
                     memory.WithDashScopeTextGeneration(new Cnblogs.KernelMemory.AI.DashScope.DashScopeConfig

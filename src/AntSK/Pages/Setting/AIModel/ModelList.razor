@@ -70,6 +70,14 @@
                                             {
                                                 <Tag Color="@PresetColor.Cyan.ToString()">LLamaFactory</Tag>
                                             }
+                                            else if (context.AIType == AIType.BgeEmbedding)
+                                            {
+                                                <Tag Color="@PresetColor.Gold.ToString()">BgeEmbedding</Tag>
+                                            }
+                                            else if (context.AIType == AIType.StableDiffusion)
+                                            {
+                                                <Tag Color="@PresetColor.Lime.ToString()">StableDiffusion</Tag>
+                                            }
                                         </p>
                                     </div>
 
@@ -84,6 +92,10 @@
                                             else if (context.AIModelType == AIModelType.Embedding)
                                             {
                                                 <Tag Color="@PresetColor.Green.ToString()">向量模型</Tag>
+                                            }
+                                            else if (context.AIModelType == AIModelType.Image)
+                                            {
+                                                <Tag Color="@PresetColor.Lime.ToString()">图片模型</Tag>
                                             }
                                         </p>
                                     </div>

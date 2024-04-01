@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AntSK.Domain.Domain.Model.Enum
+namespace AntSK.LLM.StableDiffusion
 {
-    public enum AppType
+    public static class StableDiffusionService
     {
-        chat = 1,
-        kms = 2,
-        img=3
+
     }
 }
