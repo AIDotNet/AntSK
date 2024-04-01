@@ -2,13 +2,17 @@
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Dto;
+using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
+using AntSK.LLM.StableDiffusion;
 using Blazored.LocalStorage;
 using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
 
 namespace AntSK.Pages.ChatPage.Components
@@ -107,9 +111,7 @@ namespace AntSK.Pages.ChatPage.Components
                 Sendding = true;
                 await SendAsync(_messageInput,filePath);
                 _messageInput = "";
-                Sendding = false;
-
-                await _localStorage.SetItemAsync<List<MessageInfo>>("msgs", MessageList);
+                Sendding = false; 
             }
             catch (System.Exception ex)
             {
@@ -144,21 +146,46 @@ namespace AntSK.Pages.ChatPage.Components
             {
                 history = await _chatService.GetChatHistory(MessageList);
             }
-            
-            switch (app.Type)
-            {
-                case "chat" when filePath == null||app.EmbeddingModelID.IsNull():
-                    //普通会话
-                    await SendChat(questions, history, app);
-                    break;
 
-                default:
-                    //知识库问答
-                    await SendKms(questions, history,  app, filePath);
-                    break;
+            if (app.Type == AppType.chat.ToString() && (filePath == null || app.EmbeddingModelID.IsNull()))
+            {
+                await SendChat(questions, history, app);
+            }
+            else if (app.Type == AppType.kms.ToString() || filePath != null || app.EmbeddingModelID.IsNotNull())
+            {
+                await SendKms(questions, history, app, filePath);
+               
+            }
+            else if (app.Type == AppType.img.ToString())
+            {
+                await SendImg(questions,app);
             }
 
+            //缓存消息记录
+            if (app.Type != AppType.img.ToString())
+            {
+                await _localStorage.SetItemAsync<List<MessageInfo>>("msgs", MessageList);
+            }
+
+
             return await Task.FromResult(true);
+        }
+
+        private async Task SendImg(string questions,Apps app)
+        {
+            MessageInfo info = new MessageInfo();
+            info.ID = Guid.NewGuid().ToString();
+            info.CreateTime = DateTime.Now;
+            var base64= await _chatService.SendImgByAppAsync(app, questions);
+            if (string.IsNullOrEmpty(base64))
+            {
+                info.HtmlAnswers = "生成失败";
+            }
+            else 
+            {
+                info.HtmlAnswers = $"<img src=\"data:image/jpeg;base64,{base64}\" alt=\"Base64 Image\" />";
+            }
+            MessageList.Add(info);
         }
 
         /// <summary>

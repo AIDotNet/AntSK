@@ -45,8 +45,19 @@
                 @if (@context.Type != AppType.img.ToString())
                 {
                     <FormItem Label="向量模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Select DataSource="@_embedignList"
+                        <Select DataSource="@_embedingList"
                                 @bind-Value="@context.EmbeddingModelID"
+                                ValueProperty="c=>c.Id"
+                                LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
+                        </Select>
+                        <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
+                    </FormItem>
+                }
+                else              
+                {
+                    <FormItem Label="图片模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Select DataSource="@_imageList"
+                                @bind-Value="@context.ImageModelID"
                                 ValueProperty="c=>c.Id"
                                 LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
                         </Select>

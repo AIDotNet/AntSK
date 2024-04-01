@@ -44,6 +44,7 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         public string? EmbeddingModelID { get; set; }
 
+        public string? ImageModelID { get; set; }
         /// <summary>
         /// 温度
         /// </summary>
