@@ -71,7 +71,7 @@ namespace AntSK.LLM.SparkDesk
             var functionDefs = functions.Select(func => new FunctionDef(func.Name, func.Description, func.Parameters.Select(p => new FunctionParametersDef(p.Name, p.ParameterType?.IsClass == true ? "object" : "string", p.Description, p.IsRequired)).ToList())).ToList();
 
             //var messages = GetHistories(prompt);
-            var messages = new ChatMessage[] { new ChatMessage("user", prompt)  };
+            var messages = new ChatMessage[] { new ChatMessage("user", prompt) };
 
             return GetStreamingMessageAsync(messages, parameters, functionDefs, cancellationToken);
 
@@ -108,7 +108,7 @@ namespace AntSK.LLM.SparkDesk
                                 {
                                     error = $"参数{parameter.Name}解析错误:{ex.Message}";
                                 }
-                             
+
                                 if (!string.IsNullOrEmpty(error))
                                 {
                                     yield return new(error);
@@ -118,12 +118,13 @@ namespace AntSK.LLM.SparkDesk
 
                             var result = (await function.InvokeAsync(kernel, arguments, cancellationToken)).GetValue<object>() ?? string.Empty;
                             var stringResult = ProcessFunctionResult(result, chatExecutionSettings.ToolCallBehavior);
-                            messages = [.. messages, ChatMessage.FromUser($"""
-                                                                           function call result:
-                                                                           {stringResult}
-                                                                           """)];
+                            messages = [ChatMessage.FromSystem($"""
+                                用户意图{func.Description}结果是：{stringResult}
 
-                            functionDefs.RemoveAll(x => x.Name == msg.FunctionCall.Name);
+                                请结合用户的提问回复：
+                                """), ChatMessage.FromUser(prompt)];
+
+                            functionDefs.Clear();
 
                             await foreach (var content in GetStreamingMessageAsync(messages, parameters, functionDefs, cancellationToken))
                             {

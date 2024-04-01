@@ -250,5 +250,16 @@ namespace AntSK.Domain.Utils
 
             return nameValueCollection.ToString();
         }
+
+        /// <summary>
+        /// 忽略大小写匹配
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool ComparisonIgnoreCase(this string s, string value)
+        {
+            return s.Equals(value, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

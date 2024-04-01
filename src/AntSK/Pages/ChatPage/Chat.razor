@@ -2,6 +2,7 @@
 @using AntSK.Domain.Repositories
 @using AntSK.Models
 @using Microsoft.AspNetCore.Components.Web.Virtualization
+@using AntSK.Pages.ChatPage.Components
 @page "/Chat"
 @page "/Chat/{AppId}"
 @using AntSK.Services.Auth
@@ -9,89 +10,25 @@
 
 <GridRow Gutter="(16, 16)">
     <GridCol Span="12">
-        <Spin Size="large" Tip="请稍等..." Spinning="@(_loading)">
-            <Card Style="height:75vh;overflow: auto;">
-                <TitleTemplate>
-                    <Icon Type="setting" /> 选择应用
-                    <Select DataSource="@_list"
-                            @bind-Value="@AppId"
-                            DefaultValue="@("lucy")"
-                            ValueProperty="c=>c.Id"
-                            LabelProperty="c=>c.Name"
-                            Style="width:200px">
-                    </Select>
-                    <a href="@( NavigationManager.BaseUri + "openchat/" + AppId)" target="_blank">分享使用</a>
-                </TitleTemplate>
-                <Body>
-                    <div id="scrollDiv" style="height: calc(75vh - 190px); overflow-y: auto; overflow-x: hidden;">
-                        <GridRow Gutter="(8, 8)" Style="margin:0">
-                            <Virtualize Items="@(MessageList.OrderBy(o => o.CreateTime).ToList())" Context="item">
-                                @if (item.IsSend)
-                                {
-                                    <GridRow Style="width:100%">
-                                        <GridCol Span="23">
-                                            <div class="chat-bubble sent">
-                                                <Popover Title="@item.CreateTime.ToString()">
-                                                    <Unbound>
-                                                        <Flex Vertical RefBack="context">
-                                                            @if (item.FileName != null)
-                                                            {
-                                                                <p class="message-file">
-                                                                    <Upload DefaultFileList="[new(){ FileName= item.FileName }]" />
-                                                                </p>
-                                                            }
-                                                            <p>@(item.Context)</p>
-                                                        </Flex>
-                                                    </Unbound>
-                                                </Popover>
-                                            </div>
-                                            <Icon Style="float:right;margin-top:10px;" Type="copy" Theme="outline" OnClick="async () =>await OnCopyAsync(item)" />
-                                        </GridCol>
-                                        <GridCol Span="1">
-                                            <Image Width="25px" Height="25px" Style="margin-top:10px;margin-right:10px;" Src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
-                                        </GridCol>
-                                    </GridRow>
-                                }
-                                else
-                                {
-                                    <GridRow Style="width:100%">
-                                        <GridCol Span="1">
-                                            <Image Width="25px" Height="25px" Style="margin-top:10px;" Src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
-                                        </GridCol>
-                                        <GridCol Span="23">
-                                            <div class="chat-bubble received">
-                                                @((MarkupString)(item.HtmlAnswers))
-                                            </div>
-                                        </GridCol>
-                                    </GridRow>
-                                }
-                            </Virtualize>
-                        </GridRow>
-                    </div>
-
-                    <Flex Vertical>
-                        @if (fileList.Count > 0)
-                        {
-                            <Upload DefaultFileList="fileList" OnRemove="HandleFileRemove" />
-                        }
-                        <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding"></AntDesign.Input>
-                    </Flex>
-                    <Flex Justify="end">
-                        <Upload Action="@("api/File/UploadFile")"
-                                Name="file"
-                                Accept="*/*"
-                                ShowUploadList="false"
-                                BeforeUpload="_kMService.BeforeUpload"
-                                OnSingleCompleted="OnSingleCompleted" >
-                            <Button Icon="@IconType.Outline.Upload" Type="@(ButtonType.Link)" Disabled="@Sendding" />
-                        </Upload>
-                        <Button Icon="clear" Type="@(ButtonType.Link)" OnClick="@(async () => await OnClearAsync())" Disabled="@Sendding"></Button>
-                        <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
-                    </Flex>
-
-                </Body>
-            </Card>
-        </Spin>
+        <Card Style="height:75vh;overflow: auto;">
+            <TitleTemplate>
+                <Icon Type="setting" /> 选择应用
+                <Select DataSource="@_list"
+                        @bind-Value="@AppId"
+                        DefaultValue="@("lucy")"
+                        ValueProperty="c=>c.Id"
+                        LabelProperty="c=>c.Name"
+                        Style="width:200px">
+                </Select>
+                <a href="@( NavigationManager.BaseUri + "openchat/" + AppId)" target="_blank">分享使用</a>
+            </TitleTemplate>
+            <Body>
+                @if (!string.IsNullOrEmpty(AppId))
+                {
+                    <ChatView AppId="@AppId" ShowTitle=false OnRelevantSources="OnRelevantSources"></ChatView>
+                }
+            </Body>
+        </Card>
     </GridCol>
     <GridCol Span="12">
         <Card Style="height: 75vh;overflow: auto;">
@@ -116,6 +53,15 @@
 </GridRow>
 
 <style>
+    #chat {
+        height: calc(75vh - 120px);
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: auto;
+        font-family: Arial, sans-serif;
+        margin: 0;
+    }
 
     body {
         font-family: Arial, sans-serif;
@@ -123,39 +69,7 @@
         justify-content: center;
         align-items: flex-start;
         height: 100vh;
-    }
-
-    .chat-container {
-        width: 350px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        background-color: #fff;
-        padding-bottom: 15px;
-    }
-
-    .chat-bubble {
-        padding: 10px;
-        margin: 10px;
-        margin-bottom: 0;
-        border-radius: 5px;
-        max-width: 70%;
-        position: relative;
-    }
-
-    .received {
-        background-color: #f0f0f0;
-        align-self: flex-start;
-        float: left;
-    }
-
-    .sent {
-        background-color: #daf8cb;
-        align-self: flex-end;
-        float: right;
-        position: relative;
+        overflow-y: hidden;
     }
 </style>
 @code {

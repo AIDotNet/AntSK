@@ -236,15 +236,15 @@ namespace AntSK.Services.OpenApi
             for (int i = 0; i < model.messages.Count() - 1; i++)
             {
                 var item = model.messages[i];
-                if (item.role.ToLower() == "user")
+                if (item.role.ComparisonIgnoreCase("user"))
                 {
                     history.AddUserMessage(item.content);
                 }
-                else if (item.role.ToLower() == "assistant")
+                else if (item.role.ComparisonIgnoreCase("assistant"))
                 {
                     history.AddAssistantMessage(item.content);
                 }
-                else if (item.role.ToLower() == "system")
+                else if (item.role.ComparisonIgnoreCase("system"))
                 {
                     history.AddSystemMessage(item.content);
                 }

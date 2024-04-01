@@ -220,6 +220,20 @@ namespace AntSK.Domain.Domain.Service
                         StorageType = FileSystemTypes.Volatile
                     });
                     break;
+                case "Qdrant":
+                    var qdrantConfig = ConnectionString.Split("|");
+                    memory.WithQdrantMemoryDb(qdrantConfig[0],qdrantConfig[1]);
+                    break;
+                case "Redis":
+                    memory.WithRedisMemoryDb(new RedisConfig()
+                    {
+                        ConnectionString = ConnectionString,
+                    });
+                    break;
+                case "AzureAISearch":
+                    var aisearchConfig = ConnectionString.Split("|");
+                    memory.WithAzureAISearchMemoryDb(aisearchConfig[0], aisearchConfig[1]);
+                    break;
             }
         }
 

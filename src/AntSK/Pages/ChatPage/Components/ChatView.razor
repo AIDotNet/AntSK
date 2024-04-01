@@ -1,0 +1,132 @@
+﻿@namespace AntSK.Pages.ChatPage.Components
+@using AntSK.Domain.Repositories
+@using AntSK.Models
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@layout OpenLayout
+@inherits AntDomComponentBase
+
+<div id="chat">
+    @if (ShowTitle)
+    {
+        <PageHeader Class="site-page-header" Title="@app.Name" Subtitle="@app.Describe" />
+    }
+    <div id="scrollDiv" style="flex:1; width:100%; overflow-y:auto; overflow-x:hidden;padding:10px;">
+        <Virtualize Items="@(MessageList.OrderBy(o => o.CreateTime).ToList())" Context="item">
+            @if (item.IsSend)
+            {
+                <GridRow>
+                    <GridCol Span="23">
+                        <div class="chat-bubble sent">
+                            <Popover Title="@item.CreateTime.ToString()">
+                                <Unbound>
+                                    <Flex Vertical RefBack="context">
+                                        @if (item.FileName != null)
+                                        {
+                                            <p class="message-file">
+                                                <Upload DefaultFileList="[new(){ FileName= item.FileName }]" />
+                                            </p>
+                                        }
+                                        <p>@(item.Context)</p>
+                                    </Flex>
+                                </Unbound>
+                            </Popover>
+                        </div>
+                        <Icon Style="float:right;margin-top:10px;" Type="copy" Theme="outline" OnClick="async () =>await OnCopyAsync(item)" />
+                    </GridCol>
+                    <GridCol Span="1">
+                        <Image Width="25px" Height="25px" Style="margin-top:10px;" Src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+                    </GridCol>
+                </GridRow>
+            }
+            else
+            {
+                <GridRow>
+                    <GridCol Span="1">
+                        <Image Width="25px" Height="25px" Style="margin-top:10px;" Src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
+                    </GridCol>
+                    <GridCol Span="23">
+                        <div class="chat-bubble received">
+                            @((MarkupString)(item.HtmlAnswers))
+                        </div>
+
+                    </GridCol>
+                </GridRow>
+            }
+        </Virtualize>
+    </div>
+
+    @if (fileList.Count > 0)
+    {
+        <Flex Vertical>
+            <Upload DefaultFileList="fileList" OnRemove="HandleFileRemove" />
+        </Flex>
+    }
+    <Flex Justify="end">
+
+        <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding"></AntDesign.Input>
+        @if (app.EmbeddingModelID!=null)
+        {
+            <Upload Action="@("api/File/UploadFile")"
+                    Name="file"
+                    Accept="*/*"
+                    ShowUploadList="false"
+                    BeforeUpload="_kMService.BeforeUpload"
+                    OnSingleCompleted="OnSingleCompleted">
+                <Button Icon="@IconType.Outline.Upload" Type="@(ButtonType.Link)" Disabled="@Sendding" />
+            </Upload>
+        }
+        <Button Icon="clear" Type="@(ButtonType.Link)" OnClick="@(async () => await OnClearAsync())" Disabled="@Sendding"></Button>
+        <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
+    </Flex>
+</div>
+
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        justify-content: center;
+        align-items: flex-start;
+        height: 100vh;
+    }
+
+    .chat-container {
+        width: 350px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        padding-bottom: 15px;
+    }
+
+    .chat-bubble {
+        padding: 10px;
+        margin: 10px;
+        margin-bottom: 0;
+        border-radius: 5px;
+        max-width: 70%;
+        position: relative;
+    }
+
+    .received {
+        background-color: #f0f0f0;
+        align-self: flex-start;
+        float: left;
+    }
+
+    .sent {
+        background-color: #daf8cb;
+        align-self: flex-end;
+        float: right;
+    }
+
+    .ant-card-body {
+        height: 90% !important;
+    }
+</style>
+
+@code {
+
+}
