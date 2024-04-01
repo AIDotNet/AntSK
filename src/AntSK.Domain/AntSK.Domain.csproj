@@ -13,6 +13,8 @@
     <PackageReference Include="BlazorComponents.Terminal" Version="0.6.0" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
   
+    <PackageReference Include="pythonnet" Version="3.0.3" />
+    
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     
     <PackageReference Include="AutoMapper" Version="8.1.0" />
