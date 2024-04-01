@@ -80,7 +80,7 @@ namespace AntSK.Pages.Setting.AIModel
                 }
 
                 //目前只支持gguf的 所以筛选一下
-                _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory)).Where(p=>p.Contains(".gguf")).ToArray();
+                _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory));//.Where(p=>p.Contains(".gguf")).ToArray();
                 if (!string.IsNullOrEmpty(ModelPath))
                 {
                     //下载页跳入

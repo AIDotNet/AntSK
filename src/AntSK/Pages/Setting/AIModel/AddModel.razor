@@ -28,13 +28,21 @@
                 </FormItem>
                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.AIModelType">
-                        @if (context.AIType != AIType.BgeEmbedding)
+                    
+                        @if (context.AIType == AIType.StableDiffusion)
                         {
-                            <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
+                            <Radio RadioButton Value="@(AIModelType.Image)">图片模型</Radio>
                         }
-                        @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock)
+                        else  
                         {
-                            <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
+                            @if (context.AIType != AIType.BgeEmbedding)
+                            {
+                                <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
+                            }
+                            @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock)
+                            {
+                                <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
+                            }
                         }
                     </RadioGroup>
                 </FormItem>
@@ -90,7 +98,7 @@
                         <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" />
                     </FormItem>
                 }
-                @if (context.AIType == AIType.LLamaSharp)
+                @if (context.AIType == AIType.LLamaSharp || context.AIType == AIType.StableDiffusion)
                 {
                     <FormItem Label="模型路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputGroup>
