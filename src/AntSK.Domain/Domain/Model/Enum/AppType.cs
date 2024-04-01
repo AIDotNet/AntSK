@@ -9,6 +9,7 @@ namespace AntSK.Domain.Domain.Model.Enum
     public enum AppType
     {
         chat = 1,
-        kms = 2
+        kms = 2,
+        img=3
     }
 }
