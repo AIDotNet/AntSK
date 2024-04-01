@@ -18,7 +18,7 @@
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Markdig" Version="0.36.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SqlSugarCore" Version="5.1.4.148" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.149" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
     
@@ -28,11 +28,11 @@
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.35.240321.1" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.35.240321.1" />
 
-    <PackageReference Include="LLamaSharp" Version="0.10.0" />
-    <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.10.0" />
-    <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.10.0" />
-    <PackageReference Include="LLamaSharp.kernel-memory" Version="0.10.0" />
-    <PackageReference Include="LLamaSharp.semantic-kernel" Version="0.10.0" />
+    <PackageReference Include="LLamaSharp" Version="0.11.1" />
+    <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.11.1" />
+    <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.11.1" />
+    <PackageReference Include="LLamaSharp.kernel-memory" Version="0.11.1" />
+    <PackageReference Include="LLamaSharp.semantic-kernel" Version="0.11.1" />
     
     
   </ItemGroup>
