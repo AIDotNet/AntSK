@@ -16,7 +16,7 @@ namespace AntSK.Pages.Setting.AIModel
         private readonly IList<string> _selectCategories = new List<string>();
 
         private List<HfModels> _modelList = new List<HfModels>();
-
+        private string _modelType;
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -27,7 +27,7 @@ namespace AntSK.Pages.Setting.AIModel
         {
             var param = searchKey.ConvertToString().Split(" ");
 
-            string urlBase = "https://hf-mirror.com/models-json?sort=trending&search=gguf";
+            string urlBase = $"https://hf-mirror.com/models-json?sort=trending&search={_modelType}";
             if (param.Count() > 0)
             {
                 urlBase += "+" + string.Join("+", param);

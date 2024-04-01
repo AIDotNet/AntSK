@@ -10,12 +10,19 @@
 
 <PageContainer Title="模型列表">
     <Content>
+        <RadioGroup @bind-Value="@_modelType">
+            <Radio Value="@("gguf")" DefaultChecked=true>LLama本地模型(gguf)</Radio>
+            <Radio Value="@("safetensors")">StableDiffusion(safetensors)</Radio>
+            <Radio Value="@("ckpt")">StableDiffusion2(ckpt)</Radio>
+        </RadioGroup>
         <div style="text-align: center;">
+            
             <Search Placeholder="输入回车"
                     EnterButton="@("搜索")"
                     Size="large"
                     Style="max-width: 522px; width: 100%;"
                     OnSearch="Search" />
+          
         </div>
     </Content>
     <ChildContent>

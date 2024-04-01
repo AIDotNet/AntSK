@@ -13,6 +13,7 @@ using BlazorComponents.Terminal;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Downloader;
 using Microsoft.AspNetCore.Components;
+using NRedisStack.Search;
 using System.ComponentModel;
 
 namespace AntSK.Pages.Setting.AIModel
@@ -85,8 +86,20 @@ namespace AntSK.Pages.Setting.AIModel
                 _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory)).Where(p=> p.Contains(".gguf")||p.Contains(".ckpt")|| p.Contains(".safetensors")).ToArray();
                 if (!string.IsNullOrEmpty(ModelPath))
                 {
+                    string extension = Path.GetExtension(ModelPath);
+                    switch (extension)
+                    {
+                        case ".gguf":
+                            _aiModel.AIType = AIType.LLamaSharp;
+                            break;
+                        case ".safetensors":
+                        case ".ckpt":
+                            _aiModel.AIType = AIType.StableDiffusion;
+                            break;
+
+                    }
                     //下载页跳入
-                    _aiModel.AIType = AIType.LLamaSharp;
+                 
                     _downloadModalVisible = true;
 
                     _downloadUrl = $"https://hf-mirror.com{ModelPath.Replace("---","/")}";
