@@ -10,13 +10,13 @@ namespace AntSK.LLM.StableDiffusion
     using SDImagePtr = IntPtr;
     using UpscalerContext = IntPtr;
 
-    public class SDHelper
+    public static class SDHelper
     {
-        public bool IsInitialized => SdContext.Zero != sd_ctx;
-        public bool IsUpscalerInitialized => UpscalerContext.Zero != upscaler_ctx;
+        public static bool IsInitialized => SdContext.Zero != sd_ctx;
+        public static bool IsUpscalerInitialized => UpscalerContext.Zero != upscaler_ctx;
 
-        private SdContext sd_ctx = new SdContext();
-        private UpscalerContext upscaler_ctx = new UpscalerContext();
+        private static SdContext sd_ctx = new SdContext();
+        private static UpscalerContext upscaler_ctx = new UpscalerContext();
 
         public static event EventHandler<StableDiffusionEventArgs.StableDiffusionLogEventArgs> Log;
         public static event EventHandler<StableDiffusionEventArgs.StableDiffusionProgressEventArgs> Progress;
@@ -33,7 +33,7 @@ namespace AntSK.LLM.StableDiffusion
 
         }
 
-        public bool Initialize(ModelParams modelParams)
+        public static bool Initialize(ModelParams modelParams)
         {
             sd_ctx = Native.new_sd_ctx(modelParams.ModelPath,
                                         modelParams.VaePath,
@@ -55,13 +55,13 @@ namespace AntSK.LLM.StableDiffusion
             return SdContext.Zero != sd_ctx;
         }
 
-        public bool InitializeUpscaler(UpscalerParams @params)
+        public static bool InitializeUpscaler(UpscalerParams @params)
         {
             upscaler_ctx = Native.new_upscaler_ctx(@params.ESRGANPath, @params.Threads, @params.SdType);
             return UpscalerContext.Zero != upscaler_ctx;
         }
 
-        public void FreeSD()
+        public static void FreeSD()
         {
             if (SdContext.Zero != sd_ctx)
             {
@@ -70,7 +70,7 @@ namespace AntSK.LLM.StableDiffusion
             }
         }
 
-        public void FreeUpscaler()
+        public static void FreeUpscaler()
         {
             if (UpscalerContext.Zero != upscaler_ctx)
             {
@@ -79,7 +79,7 @@ namespace AntSK.LLM.StableDiffusion
             }
         }
 
-        public Bitmap[] TextToImage(TextToImageParams textToImageParams)
+        public static Bitmap[] TextToImage(TextToImageParams textToImageParams)
         {
             if (!IsInitialized) throw new ArgumentNullException("Model not loaded!");
 
@@ -110,7 +110,7 @@ namespace AntSK.LLM.StableDiffusion
         }
 
 
-        public Bitmap ImageToImage(ImageToImageParams imageToImageParams)
+        public static Bitmap ImageToImage(ImageToImageParams imageToImageParams)
         {
             if (!IsInitialized) throw new ArgumentNullException("Model not loaded!");
             SDImage input_sd_image = GetSDImageFromBitmap(imageToImageParams.InputImage);
@@ -133,7 +133,7 @@ namespace AntSK.LLM.StableDiffusion
             return GetBitmapFromSdImage(sdImg);
         }
 
-        public Bitmap UpscaleImage(Bitmap image, int upscaleFactor)
+        public static Bitmap UpscaleImage(Bitmap image, int upscaleFactor)
         {
             if (!IsUpscalerInitialized) throw new ArgumentNullException("Upscaler not loaded!");
             SDImage inputSDImg = GetSDImageFromBitmap(image);
@@ -141,7 +141,7 @@ namespace AntSK.LLM.StableDiffusion
             return GetBitmapFromSdImage(result);
         }
 
-        private Bitmap GetBitmapFromSdImage(SDImage sd_Image)
+        private static Bitmap GetBitmapFromSdImage(SDImage sd_Image)
         {
             int width = (int)sd_Image.Width;
             int height = (int)sd_Image.Height;
@@ -167,7 +167,7 @@ namespace AntSK.LLM.StableDiffusion
             return bmp;
         }
 
-        private SDImage GetSDImageFromBitmap(Bitmap bmp)
+        private static SDImage GetSDImageFromBitmap(Bitmap bmp)
         {
             int width = bmp.Width;
             int height = bmp.Height;
