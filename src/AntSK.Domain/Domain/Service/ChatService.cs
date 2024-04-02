@@ -135,7 +135,7 @@ namespace AntSK.Domain.Domain.Service
             var _kernel = _kernelService.GetKernelByApp(app);
             var temperature = app.Temperature / 100; //存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
-            var func = _kernel.CreateFunctionFromPrompt("你是一个StableDiffusion提示词助手,需要将用户问题转化为StableDiffusion的英文提示词并返回,请注意只返回提示词不要有其他多余内容,用户的问题是：{{$input}}", settings);
+            var func = _kernel.CreateFunctionFromPrompt("Translate this into English:{{$input}}", settings);
             var chatResult = await _kernel.InvokeAsync(function: func, arguments: args);
             if (chatResult.IsNotNull())
             {
