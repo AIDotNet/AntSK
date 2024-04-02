@@ -233,7 +233,7 @@ namespace AntSK.Pages.Setting.AIModel
         /// <summary>
         /// 启动服务
         /// </summary>
-        private void StartLFService()
+        private async Task StartLFService()
         {
             if (string.IsNullOrEmpty(_aiModel.ModelName))
             {
@@ -264,7 +264,7 @@ namespace AntSK.Pages.Setting.AIModel
             {
                 _logModalVisible = true;
                 _ILLamaFactoryService.LogMessageReceived += CmdLogHandler;
-                await _ILLamaFactoryService.PipInstall();
+                _ILLamaFactoryService.PipInstall();
             }
         }
 

@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -67,7 +68,9 @@ namespace AntSK.Domain.Domain.Service
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
                 process.WaitForExit();
+                OnLogMessageReceived("--------------------完成--------------------");
             }, TaskCreationOptions.LongRunning);
+            await cmdTask;
         }
 
         public async Task StartLLamaFactory(string modelName, string templateName)
@@ -106,7 +109,10 @@ namespace AntSK.Domain.Domain.Service
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
                 process.WaitForExit();
+
+                OnLogMessageReceived("--------------------完成--------------------");
             }, TaskCreationOptions.LongRunning);
+            await cmdTask;
         }
 
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)

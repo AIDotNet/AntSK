@@ -127,6 +127,9 @@
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="http://localhost:8080/" @bind-Value="@context.EndPoint" />
                     </FormItem>
+                    <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Button Type="primary" OnClick="PipInstall">环境安装</Button>
+                    </FormItem>
                     <FormItem Label="llama factory服务" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputGroup>
                             @if (!llamaFactoryIsStart)
@@ -138,10 +141,7 @@
                                 <Button OnClick="StopLFService" Disabled="@(!llamaFactoryIsStart)">停止</Button>
                             }
                         </InputGroup>
-                    </FormItem>
-                    <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Button Type="primary" OnClick="PipInstall">初始化</Button>
-                    </FormItem>
+                    </FormItem>               
                 }
 
                 @if (context.AIType == AIType.BgeEmbedding)
@@ -155,6 +155,9 @@
                     </FormItem>
                     <FormItem Label="PythonDll路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" />
+                    </FormItem>
+                    <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Button Type="primary" OnClick="PipInstall">环境安装</Button>
                     </FormItem>
                     <FormItem Label="下载并初始化" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Spin Tip="请等待..." Spinning="@(BgeIsStart)" >
