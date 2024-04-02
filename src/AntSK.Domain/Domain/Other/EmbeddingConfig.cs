@@ -37,7 +37,7 @@ namespace AntSK.Domain.Domain.Other
                             dynamic modelscope = Py.Import("modelscope");
                             //dynamic model_dir = modelscope.snapshot_download("AI-ModelScope/bge-large-zh-v1.5", revision: "master");
                             dynamic model_dir = modelscope.snapshot_download(modelName, revision: "master");
-                            dynamic HuggingFaceBgeEmbeddingstemp = Py.Import("langchain.embeddings");
+                            dynamic HuggingFaceBgeEmbeddingstemp = Py.Import("langchain_community.embeddings.huggingface");
                             dynamic HuggingFaceBgeEmbeddings = HuggingFaceBgeEmbeddingstemp.HuggingFaceBgeEmbeddings;
                             string model_name = model_dir;
                             dynamic model_kwargs = new PyDict();
