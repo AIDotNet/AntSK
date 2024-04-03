@@ -1,4 +1,5 @@
-﻿using Python.Runtime;
+﻿using Microsoft.KernelMemory.AI.OpenAI.GPT3;
+using Python.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,12 +73,18 @@ namespace AntSK.Domain.Domain.Other
 
         public static int TokenCount(string queryStr)
         {
-            using (Py.GIL())
-            {
-                PyObject queryResult = model.client.tokenize(queryStr);
-                int len = (int)(queryResult.Length());
-                return len; 
-            }
+            //using (Py.GIL())
+            //{
+            //    PyObject queryResult = model.client.tokenize(queryStr);
+            //    // 使用Python的内置len()函数获取长度
+            //    PyObject lenFunc = Py.Import("builtins").GetAttr("len");
+            //    PyObject length = lenFunc.Invoke(queryResult["input_ids"]);
+            //    int len = length.As<int>(); // 将PyObject转换为C#中的整数
+            //    return len;
+
+            //}
+            var tokenCount1 = GPT3Tokenizer.Encode(queryStr).Count;
+            return tokenCount1;
         }
 
         public static void Dispose()
