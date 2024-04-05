@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AntDesign.Charts" Version="0.5.1" />
-    <PackageReference Include="AntDesign.ProLayout" Version="0.18.1" />
+    <PackageReference Include="AntDesign.ProLayout" Version="0.18.2" />
     <PackageReference Include="BlazorComponents.Terminal" Version="0.6.0" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
   
@@ -21,7 +21,7 @@
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Markdig" Version="0.36.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SqlSugarCore" Version="5.1.4.149" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.151" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
     
