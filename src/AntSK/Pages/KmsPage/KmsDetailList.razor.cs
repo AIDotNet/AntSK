@@ -16,6 +16,9 @@ namespace AntSK.Pages.KmsPage
 
         private List<KMFile> _data = new List<KMFile>();
 
+        private bool _infolVisible=false;
+        private string _infoText = "";
+
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -25,6 +28,17 @@ namespace AntSK.Pages.KmsPage
         private void NavigateBack()
         {
             NavigationManager.NavigateTo($"/kms/detail/{KmsId}");
+        }
+
+        private void Info(string text)
+        {
+            _infoText = text;
+            _infolVisible = true;
+        }
+
+        private void OnCancelLog()
+        {
+            _infolVisible = false;
         }
     }
 }

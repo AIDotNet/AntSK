@@ -53,7 +53,7 @@
                                         <div>文件类型</div>
                                     </TitleTemplate>
                                 </ListItemMeta>
-                                @if (@context.Type == "file")
+                                @if (@context.Type == "file" || @context.Type == "excel")
                                 {
                                     <ListItemMeta Avatar="" Description="@context.FileName">
                                         <TitleTemplate>
