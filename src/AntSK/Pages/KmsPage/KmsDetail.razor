@@ -23,6 +23,7 @@
                                     @(_fileUpload(() => FileShowModal()))
                                     @(_urlUpload(() => UrlShowModal()))
                                     @(_textUpload(() => TextShowModal()))
+                                    @(_excelUpload(() => ExcelShowModal()))
                                 </Menu>
                             </Overlay>
                             <ChildContent>
@@ -153,9 +154,29 @@
     </Upload>
 </Modal>
 
-
+<Modal Title="Excel导入"
+       Visible="@_excelVisible"
+       OnOk="@ExcelHandleOk"
+       OnCancel="@ExcelHandleCancel"
+       ConfirmLoading="@_excelConfirmLoading">
+    <a>下载模板</a>
+    <Upload Action="@("api/File/UploadFile")"
+            Name="file"
+            Drag
+            Multiple
+            Accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            BeforeUpload="iKMService.BeforeUpload"
+            OnSingleCompleted="iKMService.OnSingleCompleted">
+        <p class="ant-upload-drag-icon">
+            <Icon Type="inbox" />
+        </p>
+        <p class="ant-upload-text">单击或拖动文件到此区域进行上传</p>
+        <p class="ant-upload-hint">
+            支持excel文件。
+        </p>
+    </Upload>
+</Modal>
 @code {
-
     RenderFragment _fileUpload(Action clickAction) =>@<MenuItem>
         <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
             文件导入
@@ -171,6 +192,12 @@
     RenderFragment _textUpload(Action clickAction) =>@<MenuItem>
         <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
             文本导入
+        </a>
+    </MenuItem>;
+
+    RenderFragment _excelUpload(Action clickAction) =>@<MenuItem>
+        <a target="_blank" rel="noopener noreferrer" @onclick="@clickAction">
+            Excel导入
         </a>
     </MenuItem>;
 
