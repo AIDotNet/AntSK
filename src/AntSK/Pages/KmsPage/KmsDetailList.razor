@@ -8,16 +8,36 @@
 
 
 <Button Type="@ButtonType.Primary" OnClick="NavigateBack">返回</Button>
-<AntList DataSource="@_data" TItem="KMFile">
+<Divider />
+<AntList DataSource="@_data" TItem="KMFile" ItemLayout="ListItemLayout.Horizontal" Grid="LayoutModel._listGridType">
     <ListItem  >
-        <ListItemMeta   Description="@context.Text">
-            <TitleTemplate>
-                <a>@context.LastUpdate</a>
-            </TitleTemplate>
-        </ListItemMeta>
+        <Card Hoverable Bordered Class="card" Style="max-height:247px;" Actions="(new[] {
+                            info(()=> Info(context.Text)) ,
+                             })">
+            <CardMeta>
+                <AvatarTemplate>
+
+                </AvatarTemplate>
+                <TitleTemplate>
+                    <a>@context.LastUpdate</a>
+                </TitleTemplate>
+                <DescriptionTemplate>
+                    <Paragraph class="item" Ellipsis Style=" white-space: nowrap; ">
+                        <!--todo: Ellipsis not working-->
+                        @context.Text
+                    </Paragraph>
+                </DescriptionTemplate>
+            </CardMeta>
+        </Card>
     </ListItem>
 </AntList>
 
-@code {
+<Modal Visible="_infolVisible" Footer="null" Closable Title="详情" OnCancel="OnCancelLog" DestroyOnClose Width="1000" MaxBodyHeight="600">
+   <Paragraph>
+        @_infoText
+   </Paragraph> 
+</Modal>
 
+@code {
+    RenderFragment info(Action clickAction) =>@<a key="info" @onclick="@clickAction">查看</a>;
 }

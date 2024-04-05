@@ -1,0 +1,84 @@
+﻿@namespace AntSK.Pages.KmsPage
+@using AntSK.Domain.Repositories
+@using System.ComponentModel.DataAnnotations
+@using AntSK.Domain.Domain.Model.Dto
+@using AntSK.Domain.Domain.Interface
+@using AntSK.Domain.Domain.Model.Constant
+@using Microsoft.KernelMemory
+@inherits AntDomComponentBase
+
+<GridContent>
+    <Row Gutter="24">
+        <Col Lg="7" Md="24">
+        <TextArea @bind-Value="_msg"  MinRows="8"/>
+        <Button Type="@ButtonType.Primary" Style="margin-top:10px;" OnClick="Search">搜索</Button>
+        </Col>
+        <Col Lg="17" Md="24">
+        <AntList DataSource="@_data" TItem="RelevantSource">
+                <ListItem>
+                    <ListItemMeta Description="@context.Text">
+                        <TitleTemplate>
+                        <a>@("文件：" + context.SourceName + " 相似度：" + context.Relevance)</a>
+                        </TitleTemplate>
+                    </ListItemMeta>
+                </ListItem>
+            </AntList>
+
+        </Col>
+    </Row>
+</GridContent>
+
+@code {
+    [Parameter]
+    public string KmsId { get; set; }
+
+    [Inject]
+    IKMService _kMService { get; set; }
+    [Inject]
+    IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
+    private MemoryServerless _memory { get; set; }
+    private List<RelevantSource> _data = new List<RelevantSource>();
+    private string _msg;
+    private Dictionary<string, string> fileNameDic = new Dictionary<string, string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _memory=_kMService.GetMemoryByKMS(KmsId);
+    }
+
+    private async Task Search()
+    {
+        _data.Clear();
+        var filters = new MemoryFilter().ByTag(KmsConstantcs.KmsIdTag, KmsId);
+        var searchResult = await _memory.SearchAsync(_msg, index: KmsConstantcs.KmsIndex, filters: [filters]);
+
+        _data.AddRange(
+            searchResult.Results.SelectMany(item => item.Partitions.Select(part => new RelevantSource()
+            {
+                SourceName = GetFileName(item.SourceName),
+                Text = part.Text,
+                Relevance = part.Relevance
+            })).Take(10).ToList()
+        );
+    }
+
+
+    private string GetFileName(string fileGuidName)
+    {
+        if (fileNameDic.ContainsKey(fileGuidName))
+        {
+            return fileNameDic[fileGuidName];
+        }
+
+        var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == fileGuidName);
+        if (fileDetail == null)
+        {
+            return fileGuidName;
+        }
+        var fileName = fileDetail.FileName;
+        fileNameDic.Add(fileGuidName, fileName);
+        return fileName;     
+    }
+
+}
