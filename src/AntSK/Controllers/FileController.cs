@@ -1,4 +1,6 @@
-﻿using AntSK.Domain.Options;
+﻿using AntSK.Domain;
+using AntSK.Domain.Domain.Model.Excel;
+using AntSK.Domain.Options;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AntSK.Controllers
@@ -40,6 +42,18 @@ namespace AntSK.Controllers
             await uploadStream.CopyToAsync(fileStream);
 
             return Ok(uploads);
+        }
+
+        /// <summary>
+        /// 下载模板
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownExcelTemplate()
+        {
+            var list = new List<KMSExcelModel>();
+            var file = ExeclHelper.ListToExcel<KMSExcelModel>(list.ToArray(), "AntSK导入模板");
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "AntSK导入模板.xlsx");
         }
     }
 }

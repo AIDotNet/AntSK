@@ -226,7 +226,7 @@ namespace AntSK.Pages.KmsPage
                 {
                     var result = await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
                     {
-                        ImportType = ImportType.File,
+                        ImportType = ImportType.Excel,
                         KmsId = KmsId,
                         FilePath = item.Url,
                         FileName = item.FileName

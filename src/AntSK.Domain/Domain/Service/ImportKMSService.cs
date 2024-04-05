@@ -2,6 +2,7 @@
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Constant;
+using AntSK.Domain.Domain.Model.Excel;
 using AntSK.Domain.Repositories;
 using Microsoft.KernelMemory;
 
@@ -56,13 +57,30 @@ namespace AntSK.Domain.Domain.Service
                         //导入文本
                         {
                             var importResult = _memory.ImportTextAsync(req.Text, fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
-                       , index: KmsConstantcs.KmsIndex).Result;
+                                , index: KmsConstantcs.KmsIndex).Result;
                             //查询文档数量
                             var docTextList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
                             req.KmsDetail.Url = req.Url;
                             req.KmsDetail.DataCount = docTextList.Count;
 
                         }
+                        break;
+                    case ImportType.Excel:
+                        using (var fs = File.OpenRead(req.FilePath))
+                        {
+                           var excelList= ExeclHelper.ExcelToList<KMSExcelModel>(fs);
+                            foreach (var item in excelList)
+                            {
+                                var text = @$"Question:{item.Question}{Environment.NewLine} Answer:{item.Answer}";
+                                var importResult = _memory.ImportTextAsync(text, fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
+                                    , index: KmsConstantcs.KmsIndex).Result;
+                            }
+                            var testList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
+                            req.KmsDetail.FileName = req.FileName;
+                            string fileGuidName = Path.GetFileName(req.FilePath);
+                            req.KmsDetail.FileGuidName = fileGuidName;
+                            req.KmsDetail.DataCount = excelList.Count();
+                        }                        
                         break;
                 }
                 req.KmsDetail.Status = Model.Enum.ImportKmsStatus.Success;
