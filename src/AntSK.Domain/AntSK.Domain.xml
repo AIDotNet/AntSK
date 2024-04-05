@@ -182,6 +182,12 @@
             模型写死
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Domain.Other.KMExcelHandler.StepName">
+            <inheritdoc />
+        </member>
+        <member name="M:AntSK.Domain.Domain.Other.KMExcelHandler.InvokeAsync(Microsoft.KernelMemory.Pipeline.DataPipeline,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="F:AntSK.Domain.Domain.Other.LLamaConfig.dicLLamaWeights">
             <summary>
             避免模型重复加载，本地缓存

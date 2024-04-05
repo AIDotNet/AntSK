@@ -3,8 +3,11 @@ using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Excel;
+using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Repositories;
 using Microsoft.KernelMemory;
+using Microsoft.KernelMemory.Handlers;
+using System.Text;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -68,14 +71,28 @@ namespace AntSK.Domain.Domain.Service
                     case ImportType.Excel:
                         using (var fs = File.OpenRead(req.FilePath))
                         {
-                           var excelList= ExeclHelper.ExcelToList<KMSExcelModel>(fs);
+                            var excelList= ExeclHelper.ExcelToList<KMSExcelModel>(fs);
+                            
+                            _memory.Orchestrator.AddHandler<TextExtractionHandler>("extract_text");
+                            _memory.Orchestrator.AddHandler<KMExcelHandler>("antsk_excel_split");
+                            _memory.Orchestrator.AddHandler<GenerateEmbeddingsHandler>("generate_embeddings");
+                            _memory.Orchestrator.AddHandler<SaveRecordsHandler>("save_memory_records");
+
+                            StringBuilder text = new StringBuilder();
                             foreach (var item in excelList)
                             {
-                                var text = @$"Question:{item.Question}{Environment.NewLine} Answer:{item.Answer}";
-                                var importResult = _memory.ImportTextAsync(text, fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
-                                    , index: KmsConstantcs.KmsIndex).Result;
+                                text.AppendLine(@$"Question:{item.Question}{Environment.NewLine}Answer:{item.Answer}{KmsConstantcs.KMExcelSplit}");                            
                             }
-                            var testList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
+                            var importResult = _memory.ImportTextAsync(text.ToString(), fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
+                                  , index: KmsConstantcs.KmsIndex,
+                                  steps: new[]
+                                  {
+                                        "extract_text",
+                                        "antsk_excel_split",
+                                        "generate_embeddings",
+                                        "save_memory_records"
+                                  }
+                                  ).Result;
                             req.KmsDetail.FileName = req.FileName;
                             string fileGuidName = Path.GetFileName(req.FilePath);
                             req.KmsDetail.FileGuidName = fileGuidName;
