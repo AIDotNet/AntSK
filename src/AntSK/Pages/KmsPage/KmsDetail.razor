@@ -16,8 +16,7 @@
                     <div class="standardList">
                         <Card Class="listCard"
                               Title="知识库文档"
-                              Style="margin-top: 24px;"
-                              BodyStyle="padding: 0 32px 40px 32px">
+                              >
 
                             <Extra>
                                 <Button Type="@ButtonType.Primary" Style="position: absolute; right:360px; margin-bottom: 8px;" OnClick="Refresh">刷新 </Button>
@@ -42,7 +41,7 @@
                             <ChildContent>
                                 <AntList TItem="KmsDetails"
                                          DataSource="_data"
-                                         ItemLayout="ListItemLayout.Horizontal">
+                                         ItemLayout="ListItemLayout.Horizontal" Size="small">
                                     <ListItem Actions="@(new[] {
                             detail(()=> FileDetail(context.Id)) ,
                             delete(async ()=>await DeleteFile(context.Id)) ,
