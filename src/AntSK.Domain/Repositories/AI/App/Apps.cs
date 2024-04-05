@@ -54,6 +54,7 @@ namespace AntSK.Domain.Repositories
         /// <summary>
         /// 提示词
         /// </summary>
+        [SugarColumn(ColumnDataType = "varchar(2000)")]
         public string? Prompt { get; set; }
 
         /// <summary>
