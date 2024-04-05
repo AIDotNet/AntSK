@@ -80,11 +80,12 @@ namespace AntSK.Domain.Domain.Service
 
         public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, ChatHistory history, string filePath, List<RelevantSource> relevantSources = null)
         {
+            relevantSources?.Clear();
             var relevantSourceList = await _kMService.GetRelevantSourceList(app, questions);
             var _kernel = _kernelService.GetKernelByApp(app);
             if (!string.IsNullOrWhiteSpace(filePath))
             {
-                var memory = _kMService.GetMemory(app);
+                var memory = _kMService.GetMemoryByApp(app);
                 var fileId = Guid.NewGuid().ToString();
                 var result = await memory.ImportDocumentAsync(new Microsoft.KernelMemory.Document(fileId).AddFile(filePath)
                           .AddTag(KmsConstantcs.KmsIdTag, app.Id)
@@ -104,7 +105,6 @@ namespace AntSK.Domain.Domain.Service
             var dataMsg = new StringBuilder();
             if (relevantSourceList.Any())
             {
-                relevantSources?.AddRange(relevantSourceList);
                 bool isSearch=false;
                 foreach (var item in relevantSourceList)
                 {
@@ -115,11 +115,19 @@ namespace AntSK.Domain.Domain.Service
                         isSearch=true;
                     }
                 }
+
+                //处理markdown显示
+                relevantSources?.AddRange(relevantSourceList);
+                foreach (var item in relevantSourceList)
+                {
+                    item.Text = Markdown.ToHtml(item.Text);
+                }
+
                 if (isSearch)
                 {
                     KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
                     var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
-                        arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["questions"] = questions });
+                        arguments: new KernelArguments() { ["doc"] = dataMsg.ToString(), ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["questions"] = questions });
 
                     await foreach (var content in chatResult)
                     {
