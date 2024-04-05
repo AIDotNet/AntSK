@@ -201,7 +201,7 @@ namespace AntSK.Services.OpenApi
             string result = "";
             var _kernel = _kernelService.GetKernelByApp(app);
 
-            var relevantSource = await _kMService.GetRelevantSourceList(app.KmsIdList, questions);
+            var relevantSource = await _kMService.GetRelevantSourceList(app, questions);
             var dataMsg = new StringBuilder();
             if (relevantSource.Any())
             {

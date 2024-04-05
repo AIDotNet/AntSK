@@ -77,5 +77,28 @@ namespace AntSK.Domain.Repositories
         /// API调用秘钥
         /// </summary>
         public string? SecretKey { get; set; }
+
+        /// <summary>
+        /// 相似度
+        /// </summary>
+        [SugarColumn(DefaultValue = "70")]
+        public double Relevance { get; set; } = 70;
+
+        /// <summary>
+        /// 提问最大token数
+        /// </summary>
+        [SugarColumn(DefaultValue = "2048")]
+        public int MaxAskPromptSize { get; set; } = 2048;
+        /// <summary>
+        /// 向量匹配数
+        /// </summary>
+        [SugarColumn(DefaultValue = "3")]
+        public int MaxMatchesCount { get; set; } = 3;
+
+        /// <summary>
+        /// 回答最大token数
+        /// </summary>
+        [SugarColumn(DefaultValue = "2048")]
+        public int AnswerTokens { get; set; } = 2048;
     }
 }

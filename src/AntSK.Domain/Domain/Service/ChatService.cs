@@ -80,7 +80,7 @@ namespace AntSK.Domain.Domain.Service
 
         public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, ChatHistory history, string filePath, List<RelevantSource> relevantSources = null)
         {
-            var relevantSourceList = await _kMService.GetRelevantSourceList(app.KmsIdList, questions);
+            var relevantSourceList = await _kMService.GetRelevantSourceList(app, questions);
             var _kernel = _kernelService.GetKernelByApp(app);
             if (!string.IsNullOrWhiteSpace(filePath))
             {
@@ -105,19 +105,31 @@ namespace AntSK.Domain.Domain.Service
             if (relevantSourceList.Any())
             {
                 relevantSources?.AddRange(relevantSourceList);
+                bool isSearch=false;
                 foreach (var item in relevantSourceList)
                 {
-                    dataMsg.AppendLine(item.ToString());
+                    //匹配相似度
+                    if (item.Relevance >= app.Relevance/100)
+                    {
+                        dataMsg.AppendLine(item.ToString());
+                        isSearch=true;
+                    }
                 }
-
-                KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
-                var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
-                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["questions"] = questions });
-
-                await foreach (var content in chatResult)
+                if (isSearch)
                 {
-                    yield return content;
+                    KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
+                    var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
+                        arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["questions"] = questions });
+
+                    await foreach (var content in chatResult)
+                    {
+                        yield return content;
+                    }
                 }
+                else 
+                {
+                    yield return new StreamingTextContent(KmsConstantcs.KmsSearchNull);
+                }             
             }
             else
             {

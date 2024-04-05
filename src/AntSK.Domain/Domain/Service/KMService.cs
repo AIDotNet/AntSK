@@ -45,9 +45,9 @@ namespace AntSK.Domain.Domain.Service
 
             var searchClientConfig = new SearchClientConfig
             {
-                MaxAskPromptSize = 2048,
-                MaxMatchesCount = 3,
-                AnswerTokens = 1000,
+                MaxAskPromptSize = app.MaxAskPromptSize,
+                MaxMatchesCount = app.MaxMatchesCount,
+                AnswerTokens = app.AnswerTokens,
                 EmptyAnswer = KmsConstantcs.KmsSearchNull
             };
 
@@ -277,15 +277,15 @@ namespace AntSK.Domain.Domain.Service
             return docTextList;
         }
 
-        public async Task<List<RelevantSource>> GetRelevantSourceList(string kmsIdListStr, string msg)
+        public async Task<List<RelevantSource>> GetRelevantSourceList(Apps app, string msg)
         {
             var result = new List<RelevantSource>();
-            if (string.IsNullOrWhiteSpace(kmsIdListStr))
+            if (string.IsNullOrWhiteSpace(app.KmsIdList))
                 return result;
-            var kmsIdList = kmsIdListStr.Split(",");
+            var kmsIdList = app.KmsIdList.Split(",");
             if (!kmsIdList.Any()) return result;
 
-            var memory = GetMemoryByKMS(kmsIdList.FirstOrDefault()!);
+            var memory = GetMemory(app);
 
             var filters = kmsIdList.Select(kmsId => new MemoryFilter().ByTag(KmsConstantcs.KmsIdTag, kmsId)).ToList();
 
