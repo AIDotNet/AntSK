@@ -48,5 +48,10 @@ namespace AntSK.Pages.Setting.AIModel
         {
             NavigationManager.NavigateTo($"/setting/modeldown/detail/{modelPath}");
         }
+
+        private void OnModelTypeChange(string value)
+        {
+            InitData("");
+        }
     }
 }

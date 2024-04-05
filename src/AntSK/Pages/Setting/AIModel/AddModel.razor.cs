@@ -314,9 +314,27 @@ namespace AntSK.Pages.Setting.AIModel
             _logModalVisible = false;
         }
 
-        private void AITypeModelChange() 
-        { 
-        
+        private void AITypeChange(AIType aiType) 
+        {
+            switch (aiType)
+            { 
+                case AIType.LLamaFactory:
+                    _aiModel.EndPoint = "http://localhost:8080/";
+                    _aiModel.AIModelType=AIModelType.Chat;
+                    break;
+                case AIType.StableDiffusion:
+                    _aiModel.AIModelType = AIModelType.Image;
+                    break;
+                case AIType.Mock:
+                    _aiModel.AIModelType = AIModelType.Chat;
+                    break ;
+                case AIType.BgeEmbedding:
+                    _aiModel.AIModelType = AIModelType.Embedding;
+                    break;
+                default:
+                    _aiModel.AIModelType = AIModelType.Chat;
+                    break;
+            }
         }
     }
 }

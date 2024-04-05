@@ -17,7 +17,7 @@
 
                     <Extra>
                         <Button Type="@ButtonType.Primary" Style="position: absolute; right:360px; margin-bottom: 8px;" OnClick="Refresh">刷新 </Button>
-                        <Dropdown Style="position: absolute; right: 20px; margin-bottom: 8px;">
+                        <Dropdown Style="position: absolute; right: 20px; margin-bottom: 8px;" Trigger="@(new Trigger[] { Trigger.Click })">
                             <Overlay>
                                 <Menu>
                                     @(_fileUpload(() => FileShowModal()))

@@ -80,11 +80,12 @@ namespace AntSK.Domain.Domain.Service
 
         public async IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, ChatHistory history, string filePath, List<RelevantSource> relevantSources = null)
         {
-            var relevantSourceList = await _kMService.GetRelevantSourceList(app.KmsIdList, questions);
+            relevantSources?.Clear();
+            var relevantSourceList = await _kMService.GetRelevantSourceList(app, questions);
             var _kernel = _kernelService.GetKernelByApp(app);
             if (!string.IsNullOrWhiteSpace(filePath))
             {
-                var memory = _kMService.GetMemory(app);
+                var memory = _kMService.GetMemoryByApp(app);
                 var fileId = Guid.NewGuid().ToString();
                 var result = await memory.ImportDocumentAsync(new Microsoft.KernelMemory.Document(fileId).AddFile(filePath)
                           .AddTag(KmsConstantcs.KmsIdTag, app.Id)
@@ -104,20 +105,43 @@ namespace AntSK.Domain.Domain.Service
             var dataMsg = new StringBuilder();
             if (relevantSourceList.Any())
             {
+                bool isSearch=false;
+                foreach (var item in relevantSourceList)
+                {
+                    //匹配相似度
+                    if (item.Relevance >= app.Relevance/100)
+                    {
+                        dataMsg.AppendLine(item.ToString());
+                        isSearch=true;
+                    }
+                }
+
+                //处理markdown显示
                 relevantSources?.AddRange(relevantSourceList);
                 foreach (var item in relevantSourceList)
                 {
-                    dataMsg.AppendLine(item.ToString());
+                    item.Text = Markdown.ToHtml(item.Text);
                 }
 
-                KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
-                var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
-                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["questions"] = questions });
-
-                await foreach (var content in chatResult)
+                if (isSearch)
                 {
-                    yield return content;
+                    //KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
+                    var temperature = app.Temperature / 100;//存的是0~100需要缩小
+                    OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
+                    var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
+
+                    var chatResult = _kernel.InvokeStreamingAsync(function: func,
+                        arguments: new KernelArguments() { ["doc"] = dataMsg.ToString(), ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["input"] = questions });
+
+                    await foreach (var content in chatResult)
+                    {
+                        yield return content;
+                    }
                 }
+                else 
+                {
+                    yield return new StreamingTextContent(KmsConstantcs.KmsSearchNull);
+                }             
             }
             else
             {

@@ -36,7 +36,7 @@ namespace AntSK.Domain.Domain.Service
 
         public List<UploadFileItem> FileList => _fileList;
 
-        public MemoryServerless GetMemory(Apps app)
+        public MemoryServerless GetMemoryByApp(Apps app)
         {
             var chatModel = _aIModels_Repositories.GetFirst(p => p.Id == app.ChatModelID);
             var embedModel = _aIModels_Repositories.GetFirst(p => p.Id == app.EmbeddingModelID);
@@ -45,9 +45,9 @@ namespace AntSK.Domain.Domain.Service
 
             var searchClientConfig = new SearchClientConfig
             {
-                MaxAskPromptSize = 2048,
-                MaxMatchesCount = 3,
-                AnswerTokens = 1000,
+                MaxAskPromptSize = app.MaxAskPromptSize,
+                MaxMatchesCount = app.MaxMatchesCount,
+                AnswerTokens = app.AnswerTokens,
                 EmptyAnswer = KmsConstantcs.KmsSearchNull
             };
 
@@ -71,7 +71,7 @@ namespace AntSK.Domain.Domain.Service
             return _memory;
         }
 
-        public MemoryServerless GetMemoryByKMS(string kmsID, SearchClientConfig searchClientConfig = null)
+        public MemoryServerless GetMemoryByKMS(string kmsID)
         {
             //if (_memory.IsNull())
             {
@@ -85,19 +85,19 @@ namespace AntSK.Domain.Domain.Service
                 var embeddingHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(embedModel.EndPoint);
 
                 //搜索配置
-                if (searchClientConfig.IsNull())
-                {
-                    searchClientConfig = new SearchClientConfig
-                    {
-                        MaxAskPromptSize = 2048,
-                        MaxMatchesCount = 3,
-                        AnswerTokens = 1000,
-                        EmptyAnswer = KmsConstantcs.KmsSearchNull
-                    };
-                }
+                //if (searchClientConfig.IsNull())
+                //{
+                //    searchClientConfig = new SearchClientConfig
+                //    {
+                //        MaxAskPromptSize = 2048,
+                //        MaxMatchesCount = 3,
+                //        AnswerTokens = 1000,
+                //        EmptyAnswer = KmsConstantcs.KmsSearchNull
+                //    };
+                //}
 
                 var memoryBuild = new KernelMemoryBuilder()
-                    .WithSearchClientConfig(searchClientConfig)
+                    //.WithSearchClientConfig(searchClientConfig)
                     .WithCustomTextPartitioningOptions(new TextPartitioningOptions
                     {
                         MaxTokensPerLine = kms.MaxTokensPerLine,
@@ -277,15 +277,15 @@ namespace AntSK.Domain.Domain.Service
             return docTextList;
         }
 
-        public async Task<List<RelevantSource>> GetRelevantSourceList(string kmsIdListStr, string msg)
+        public async Task<List<RelevantSource>> GetRelevantSourceList(Apps app ,string msg)
         {
             var result = new List<RelevantSource>();
-            if (string.IsNullOrWhiteSpace(kmsIdListStr))
+            if (string.IsNullOrWhiteSpace(app.KmsIdList))
                 return result;
-            var kmsIdList = kmsIdListStr.Split(",");
+            var kmsIdList = app.KmsIdList.Split(",");
             if (!kmsIdList.Any()) return result;
 
-            var memory = GetMemoryByKMS(kmsIdList.FirstOrDefault()!);
+            var memory = GetMemoryByApp(app);
 
             var filters = kmsIdList.Select(kmsId => new MemoryFilter().ByTag(KmsConstantcs.KmsIdTag, kmsId)).ToList();
 
@@ -297,7 +297,7 @@ namespace AntSK.Domain.Domain.Service
                     result.AddRange(item.Partitions.Select(part => new RelevantSource()
                     {
                         SourceName = item.SourceName,
-                        Text = Markdown.ToHtml(part.Text),
+                        Text = part.Text,
                         Relevance = part.Relevance
                     }));
                 }

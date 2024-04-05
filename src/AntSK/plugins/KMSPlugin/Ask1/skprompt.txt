@@ -13,5 +13,5 @@
 
 历史聊天记录:{{ConversationSummaryPlugin.SummarizeConversation $history}}
 --------------------------
-用户问题: {{$questions}}
+用户问题: {{$input}}
 

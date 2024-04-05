@@ -24,7 +24,7 @@
                     <IconPicker @bind-Value="@context.Icon"></IconPicker>
                 </FormItem>
                 <FormItem Label="类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <RadioGroup @bind-Value="context.Type">
+                    <RadioGroup @bind-Value="context.Type" OnChange="OnAppTypeChange" TValue="string">
                         <Radio RadioButton Value="@AppType.chat.ToString()">会话应用</Radio>
                         <Radio RadioButton Value="@AppType.kms.ToString()">知识库</Radio>
                         <Radio RadioButton Value="@AppType.img.ToString()">做图应用</Radio>
@@ -52,6 +52,14 @@
                         </Select>
                         <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
                     </FormItem>
+                    <FormItem Label="提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <TextArea MinRows="4" Placeholder="请输入提示词,用户输入使用{{$input}} 来做占位符" @bind-Value="@context.Prompt" />
+                    </FormItem>
+                    <FormItem Label="温度系数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <span>更确定</span>
+                        <Slider TValue="double" Style="display: inline-block;width: 300px; " Min="0" Max="100" DefaultValue="70" @bind-Value="@context.Temperature" />
+                        <span>更发散</span>
+                    </FormItem>
                 }
                 else              
                 {
@@ -66,17 +74,6 @@
                 }
                 @if (@context.Type == AppType.chat.ToString())
                 {
-
-                    <FormItem Label="提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <TextArea MinRows="4" Placeholder="请输入提示词,用户输入使用{{$input}} 来做占位符" @bind-Value="@context.Prompt" />
-                    </FormItem>
-
-                    <FormItem Label="温度系数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <span>更确定</span>
-                        <Slider TValue="double" Style="display: inline-block;width: 300px; " Min="0" Max="100" DefaultValue="70" @bind-Value="@context.Temperature" />
-                        <span>更发散</span>
-                    </FormItem>
-
                     <FormItem Label="API插件列表" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Select Mode="multiple"
                                 @bind-Values="apiIds"
@@ -125,6 +122,19 @@
                                 }
                             </SelectOptions>
                         </Select>
+                        <Button Type="@ButtonType.Link" OnClick="NavigateKmsList">去创建</Button>
+                    </FormItem>
+                    <FormItem Label="提问最大token数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <AntDesign.InputNumber @bind-Value="context.MaxAskPromptSize" PlaceHolder="提问最大token数"></AntDesign.InputNumber>
+                    </FormItem>              
+                    <FormItem Label="回答最大token数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <AntDesign.InputNumber @bind-Value="context.AnswerTokens" PlaceHolder="回答最大token数"></AntDesign.InputNumber>
+                    </FormItem>
+                    <FormItem Label="向量匹配数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <AntDesign.InputNumber @bind-Value="context.MaxMatchesCount" PlaceHolder="向量匹配数"></AntDesign.InputNumber>
+                    </FormItem>
+                    <FormItem Label="最低相似度（%）" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Slider TValue="double" Style="display: inline-block;width: 300px; " Min="0" Max="100" DefaultValue="70" @bind-Value="@context.Relevance" />
                     </FormItem>
                 }
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">

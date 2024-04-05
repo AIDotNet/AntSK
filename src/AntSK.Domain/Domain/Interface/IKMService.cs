@@ -7,13 +7,13 @@ namespace AntSK.Domain.Domain.Interface
 {
     public interface IKMService
     {
-        MemoryServerless GetMemory(Apps app);
+        MemoryServerless GetMemoryByApp(Apps app);
 
-        MemoryServerless GetMemoryByKMS(string kmsID, SearchClientConfig searchClientConfig = null);
+        MemoryServerless GetMemoryByKMS(string kmsID);
 
         Task<List<KMFile>> GetDocumentByFileID(string kmsId, string fileId);
 
-        Task<List<RelevantSource>> GetRelevantSourceList(string kmsIdListStr, string msg);
+        Task<List<RelevantSource>> GetRelevantSourceList(Apps app, string msg);
 
         List<UploadFileItem> FileList { get; }
 

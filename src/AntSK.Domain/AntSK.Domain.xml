@@ -292,6 +292,26 @@
             API调用秘钥
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.Relevance">
+            <summary>
+            相似度
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.MaxAskPromptSize">
+            <summary>
+            提问最大token数
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.MaxMatchesCount">
+            <summary>
+            向量匹配数
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Apps.AnswerTokens">
+            <summary>
+            回答最大token数
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Funs.Path">
             <summary>
             接口描述

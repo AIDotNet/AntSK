@@ -201,7 +201,7 @@ namespace AntSK.Services.OpenApi
             string result = "";
             var _kernel = _kernelService.GetKernelByApp(app);
 
-            var relevantSource = await _kMService.GetRelevantSourceList(app.KmsIdList, questions);
+            var relevantSource = await _kMService.GetRelevantSourceList(app, questions);
             var dataMsg = new StringBuilder();
             if (relevantSource.Any())
             {
@@ -210,9 +210,12 @@ namespace AntSK.Services.OpenApi
                     dataMsg.AppendLine(item.ToString());
                 }
 
-                KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
-                var chatResult = await _kernel.InvokeAsync(function: jsonFun,
-                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["questions"] = questions });
+                //KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
+                var temperature = app.Temperature / 100;//存的是0~100需要缩小
+                OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
+                var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
+                var chatResult = await _kernel.InvokeAsync(function: func,
+                    arguments: new KernelArguments() { ["doc"] = dataMsg, ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["input"] = questions });
                 if (chatResult.IsNotNull())
                 {
                     string answers = chatResult.GetValue<string>();
