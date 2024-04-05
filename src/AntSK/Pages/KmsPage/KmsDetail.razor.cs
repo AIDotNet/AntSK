@@ -30,6 +30,9 @@ namespace AntSK.Pages.KmsPage
         private bool _textVisible = false;
         private bool _textConfirmLoading = false;
 
+        private bool _excelVisible = false;
+        private bool _excelConfirmLoading = false;
+
         private List<FileInfoModel> fileList = new List<FileInfoModel>();
 
         private Form<UrlModel> _urlForm;
@@ -212,18 +215,46 @@ namespace AntSK.Pages.KmsPage
             _fileVisible = true;
         }
 
-        private void OnSingleCompleted(UploadInfo fileinfo)
+        #endregion File
+
+        #region Excel
+        private async Task ExcelHandleOk(MouseEventArgs e)
         {
-            if (fileinfo.File.State == UploadState.Success)
+            try
             {
-                //文件列表
-                fileList.Add(new FileInfoModel()
+                foreach (var item in iKMService.FileList)
                 {
-                    FileName = fileinfo.File.FileName,
-                    FilePath = fileinfo.File.Url = fileinfo.File.Response
-                });
+                    var result = await _httpService.PostAsync(NavigationManager.BaseUri + "api/KMS/ImportKMSTask", new ImportKMSTaskDTO()
+                    {
+                        ImportType = ImportType.Excel,
+                        KmsId = KmsId,
+                        FilePath = item.Url,
+                        FileName = item.FileName
+                    });
+                }
+                _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
+                //上传文档
+                _excelVisible = false;
+                iKMService.FileList.Clear();
+                _ = _message.Info("加入队列，进入后台处理中！", 2);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
             }
         }
+
+        private void ExcelHandleCancel(MouseEventArgs e)
+        {
+            _excelVisible = false;
+        }
+
+        private void ExcelShowModal()
+        {
+            _excelVisible = true;
+        }
+
+        #endregion
 
         private void FileDetail(string fileid)
         {
@@ -256,7 +287,5 @@ namespace AntSK.Pages.KmsPage
                 await InvokeAsync(StateHasChanged);
             }
         }
-
-        #endregion File
     }
 }

@@ -29,6 +29,7 @@ namespace AntSK.Domain.Domain.Model
     {
         File = 1,
         Url = 2,
-        Text = 3
+        Text = 3,
+        Excel=4
     }
 }

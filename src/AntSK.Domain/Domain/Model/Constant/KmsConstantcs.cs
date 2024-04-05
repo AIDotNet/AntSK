@@ -28,5 +28,7 @@ namespace AntSK.Domain.Domain.Model.Constant
 历史聊天记录:{{ConversationSummaryPlugin.SummarizeConversation $history}}
 --------------------------
 用户问题: {{$input}}";
+
+        public const string KMExcelSplit = "*&antsk_excel&*";
     }
 }

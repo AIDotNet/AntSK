@@ -2,8 +2,12 @@
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Constant;
+using AntSK.Domain.Domain.Model.Excel;
+using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Repositories;
 using Microsoft.KernelMemory;
+using Microsoft.KernelMemory.Handlers;
+using System.Text;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -56,13 +60,44 @@ namespace AntSK.Domain.Domain.Service
                         //导入文本
                         {
                             var importResult = _memory.ImportTextAsync(req.Text, fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
-                       , index: KmsConstantcs.KmsIndex).Result;
+                                , index: KmsConstantcs.KmsIndex).Result;
                             //查询文档数量
                             var docTextList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
                             req.KmsDetail.Url = req.Url;
                             req.KmsDetail.DataCount = docTextList.Count;
 
                         }
+                        break;
+                    case ImportType.Excel:
+                        using (var fs = File.OpenRead(req.FilePath))
+                        {
+                            var excelList= ExeclHelper.ExcelToList<KMSExcelModel>(fs);
+                            
+                            _memory.Orchestrator.AddHandler<TextExtractionHandler>("extract_text");
+                            _memory.Orchestrator.AddHandler<KMExcelHandler>("antsk_excel_split");
+                            _memory.Orchestrator.AddHandler<GenerateEmbeddingsHandler>("generate_embeddings");
+                            _memory.Orchestrator.AddHandler<SaveRecordsHandler>("save_memory_records");
+
+                            StringBuilder text = new StringBuilder();
+                            foreach (var item in excelList)
+                            {
+                                text.AppendLine(@$"Question:{item.Question}{Environment.NewLine}Answer:{item.Answer}{KmsConstantcs.KMExcelSplit}");                            
+                            }
+                            var importResult = _memory.ImportTextAsync(text.ToString(), fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
+                                  , index: KmsConstantcs.KmsIndex,
+                                  steps: new[]
+                                  {
+                                        "extract_text",
+                                        "antsk_excel_split",
+                                        "generate_embeddings",
+                                        "save_memory_records"
+                                  }
+                                  ).Result;
+                            req.KmsDetail.FileName = req.FileName;
+                            string fileGuidName = Path.GetFileName(req.FilePath);
+                            req.KmsDetail.FileGuidName = fileGuidName;
+                            req.KmsDetail.DataCount = excelList.Count();
+                        }                        
                         break;
                 }
                 req.KmsDetail.Status = Model.Enum.ImportKmsStatus.Success;
