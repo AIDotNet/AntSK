@@ -144,6 +144,12 @@ namespace AntSK.Pages.AppPage
             NavigationManager.NavigateTo("/setting/modellist");
         }
 
+        private void NavigateKmsList()
+        {
+            NavigationManager.NavigateTo("/KmsList");
+        }
+
+
         private void OnAppTypeChange(string value)
         {
             if (value == AppType.kms.ToString() && string.IsNullOrEmpty( _appModel.Prompt))

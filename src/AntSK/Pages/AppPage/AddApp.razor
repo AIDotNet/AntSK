@@ -122,6 +122,7 @@
                                 }
                             </SelectOptions>
                         </Select>
+                        <Button Type="@ButtonType.Link" OnClick="NavigateKmsList">去创建</Button>
                     </FormItem>
                     <FormItem Label="提问最大token数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <AntDesign.InputNumber @bind-Value="context.MaxAskPromptSize" PlaceHolder="提问最大token数"></AntDesign.InputNumber>
@@ -132,7 +133,7 @@
                     <FormItem Label="向量匹配数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <AntDesign.InputNumber @bind-Value="context.MaxMatchesCount" PlaceHolder="向量匹配数"></AntDesign.InputNumber>
                     </FormItem>
-                    <FormItem Label="相似度（%）" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <FormItem Label="最低相似度（%）" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Slider TValue="double" Style="display: inline-block;width: 300px; " Min="0" Max="100" DefaultValue="70" @bind-Value="@context.Relevance" />
                     </FormItem>
                 }

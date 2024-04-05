@@ -24,11 +24,10 @@
                 </FormItem>
 
                 <FormItem Label="AI类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <EnumRadioGroup @bind-Value="context.AIType" ButtonStyle="RadioButtonStyle.Solid"> </EnumRadioGroup>
+                    <EnumRadioGroup @bind-Value="context.AIType" ButtonStyle="RadioButtonStyle.Solid" OnChange="AITypeChange" TEnum="AIType"> </EnumRadioGroup>
                 </FormItem>
                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <RadioGroup @bind-Value="context.AIModelType">
-                    
+                    <RadioGroup @bind-Value="context.AIModelType">                  
                         @if (context.AIType == AIType.StableDiffusion)
                         {
                             <Radio RadioButton Value="@(AIModelType.Image)">图片模型</Radio>
@@ -39,7 +38,7 @@
                             {
                                 <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
                             }
-                            @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock)
+                            @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock && context.AIType != AIType.SparkDesk)
                             {
                                 <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
                             }
