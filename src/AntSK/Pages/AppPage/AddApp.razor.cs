@@ -1,4 +1,5 @@
 ﻿using AntDesign;
+using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Repositories;
@@ -89,7 +90,14 @@ namespace AntSK.Pages.AppPage
                 }
                 _appModel.KmsIdList = string.Join(",", kmsIds);
             }
-
+            if (_appModel.Type == AppType.kms.ToString())
+            {
+                if (string.IsNullOrEmpty(_appModel.Prompt)|| !_appModel.Prompt.Contains("{{$doc}}") || !_appModel.Prompt.Contains("{{$input}}"))
+                {
+                    _ = Message.Error("知识库提示词必须包含 {{$doc}} 和 {{$input}}", 2);
+                    return;
+                }
+            }
             if (apiIds.IsNotNull())
             {
                 _appModel.ApiFunctionList = string.Join(",", apiIds);
@@ -99,7 +107,7 @@ namespace AntSK.Pages.AppPage
 
                 _appModel.NativeFunctionList = string.Join(",", funIds);
             }
-
+ 
             if (string.IsNullOrEmpty(AppId))
             {
                 //新增
@@ -138,28 +146,12 @@ namespace AntSK.Pages.AppPage
 
         private void OnAppTypeChange(string value)
         {
-            if (value == "kms"&& string.IsNullOrEmpty( _appModel.Prompt))
+            if (value == AppType.kms.ToString() && string.IsNullOrEmpty( _appModel.Prompt))
             {
-                _appModel.Prompt = 
-@"使用<data></data>标记的内容作为你的知识：
-<data>
-{{$doc}}
-</data>
---------------------------
-回答要求：
-- 如果你不清楚答案，你需要澄清
-- 避免提及你是从<data></data>获取的知识
-- 保持答案与<data></data>众描述一致
-- 使用Markdown语法优化回答格式。
-- 如果Markdown有图片则正常显示
---------------------------
-
-历史聊天记录:{{ConversationSummaryPlugin.SummarizeConversation $history}}
---------------------------
-用户问题: {{$questions}}";
+                _appModel.Prompt = KmsConstantcs.KmsPrompt;
             }
 
-            if (value == "chat")
+            if (value == AppType.chat.ToString())
             {
                 _appModel.Prompt = "";
             }

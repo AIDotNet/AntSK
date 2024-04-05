@@ -125,9 +125,13 @@ namespace AntSK.Domain.Domain.Service
 
                 if (isSearch)
                 {
-                    KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
-                    var chatResult = _kernel.InvokeStreamingAsync(function: jsonFun,
-                        arguments: new KernelArguments() { ["doc"] = dataMsg.ToString(), ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["questions"] = questions });
+                    //KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
+                    var temperature = app.Temperature / 100;//存的是0~100需要缩小
+                    OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
+                    var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
+
+                    var chatResult = _kernel.InvokeStreamingAsync(function: func,
+                        arguments: new KernelArguments() { ["doc"] = dataMsg.ToString(), ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["input"] = questions });
 
                     await foreach (var content in chatResult)
                     {

@@ -55,6 +55,11 @@
                     <FormItem Label="提示词" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <TextArea MinRows="4" Placeholder="请输入提示词,用户输入使用{{$input}} 来做占位符" @bind-Value="@context.Prompt" />
                     </FormItem>
+                    <FormItem Label="温度系数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <span>更确定</span>
+                        <Slider TValue="double" Style="display: inline-block;width: 300px; " Min="0" Max="100" DefaultValue="70" @bind-Value="@context.Temperature" />
+                        <span>更发散</span>
+                    </FormItem>
                 }
                 else              
                 {
@@ -69,12 +74,6 @@
                 }
                 @if (@context.Type == AppType.chat.ToString())
                 {
-                    <FormItem Label="温度系数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <span>更确定</span>
-                        <Slider TValue="double" Style="display: inline-block;width: 300px; " Min="0" Max="100" DefaultValue="70" @bind-Value="@context.Temperature" />
-                        <span>更发散</span>
-                    </FormItem>
-
                     <FormItem Label="API插件列表" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Select Mode="multiple"
                                 @bind-Values="apiIds"
