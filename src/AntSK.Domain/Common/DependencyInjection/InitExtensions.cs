@@ -50,6 +50,8 @@ namespace AntSK.Domain.Common.DependencyInjection
                         _repository.GetDB().CodeFirst.InitTables(type);
                     }
                 }
+                //安装向量插件
+                _repository.GetDB().Ado.ExecuteCommandAsync($"CREATE EXTENSION IF NOT EXISTS vector;");
             }
             return app;
         }
