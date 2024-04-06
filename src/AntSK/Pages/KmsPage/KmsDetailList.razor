@@ -15,14 +15,8 @@
                             info(()=> Info(context.Text)) ,
                              })">
             <CardMeta>
-                <AvatarTemplate>
-
-                </AvatarTemplate>
-                <TitleTemplate>
-                    <a>@context.LastUpdate</a>
-                </TitleTemplate>
                 <DescriptionTemplate>
-                    <Paragraph class="item" Ellipsis Style=" white-space: nowrap; ">
+                    <Paragraph class="item" Ellipsis Style="display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden; text-overflow: ellipsis;white-space: normal;height:65px;">
                         <!--todo: Ellipsis not working-->
                         @context.Text
                     </Paragraph>

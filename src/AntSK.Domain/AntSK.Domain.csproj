@@ -24,11 +24,11 @@
     <PackageReference Include="SqlSugarCore" Version="5.1.4.151" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
-    <PackageReference Include="NPOI" Version="2.5.5" />
+    <PackageReference Include="NPOI" Version="2.7.0" />
     
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.6.3" />
-    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.6.3" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.6.3-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.7.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.7.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.7.1-alpha" />
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.35.240321.1" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.35.240321.1" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Qdrant" Version="0.35.240321.1" />
