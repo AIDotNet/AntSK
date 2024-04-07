@@ -66,7 +66,7 @@ namespace AntSK.Pages.ChatPage.Components
 
         private async Task LoadData()
         {
-            app =await _apps_Repositories.GetFirstAsync(p => p.Id == AppId);
+            app = _apps_Repositories.GetFirst(p => p.Id == AppId);
         }
 
         protected async Task OnClearAsync()
