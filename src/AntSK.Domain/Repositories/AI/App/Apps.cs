@@ -83,7 +83,7 @@ namespace AntSK.Domain.Repositories
         /// 相似度
         /// </summary>
         [SugarColumn(DefaultValue = "70")]
-        public double Relevance { get; set; } = 70;
+        public int Relevance { get; set; } = 70;
 
         /// <summary>
         /// 提问最大token数
