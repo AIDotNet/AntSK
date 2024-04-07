@@ -134,7 +134,7 @@
                         <AntDesign.InputNumber @bind-Value="context.MaxMatchesCount" PlaceHolder="向量匹配数"></AntDesign.InputNumber>
                     </FormItem>
                     <FormItem Label="最低相似度（%）" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Slider TValue="int" Style="display: inline-block;width: 300px; " Min="0" Max="100" DefaultValue="70" @bind-Value="@context.Relevance" />
+                        <Slider TValue="double" Style="display: inline-block;width: 300px; " Min="0" Max="100" DefaultValue="70" @bind-Value="@context.Relevance" />
                     </FormItem>
                 }
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
