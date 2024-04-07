@@ -102,6 +102,7 @@ services:
     volumes:
       - ./appsettings.json:/app/appsettings.json # 本地配置文件 需要放在同级目录
       - D://model:/app/model
+      - D://model:/root/.cache/modelscope/hub/AI-ModelScope #使用Llamafactory时需要挂载 否则初始化的环境重启后会丢失
 networks:
   antsk:
 ```
