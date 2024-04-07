@@ -73,7 +73,8 @@ builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGrou
         NativeLibraryConfig
         .Instance
         .WithCuda(true)
-        .WithLogs(true);
+        .WithLogs(true)
+        .WithAvx(NativeLibraryConfig.AvxLevel.Avx);
     }
 }
 
