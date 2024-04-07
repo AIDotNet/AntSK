@@ -55,6 +55,7 @@ namespace AntSK.Domain.Repositories
         [SugarColumn(DefaultValue = "49")]
         public int OverlappingTokens { get; set; } = 49;
 
-
+        [SugarColumn(DefaultValue = "0")]
+        public int IsOCR { get; set; } = 0;
     }
 }

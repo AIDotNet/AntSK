@@ -50,6 +50,9 @@
                 <FormItem Label="重叠部分(token)" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <AntDesign.InputNumber @bind-Value="context.OverlappingTokens" PlaceHolder="重叠部分"></AntDesign.InputNumber>
                 </FormItem>
+                <FormItem Label="是否开启OCR" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Switch @bind-Value="@isOcr" />
+                </FormItem>
 
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
                     <Button Type="primary" HtmlType="submit">
