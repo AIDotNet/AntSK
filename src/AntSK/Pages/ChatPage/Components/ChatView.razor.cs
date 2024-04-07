@@ -51,7 +51,7 @@ namespace AntSK.Pages.ChatPage.Components
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            await LoadData();
+            LoadData();
             var msgs = await _localStorage.GetItemAsync<List<MessageInfo>>("msgs");
             if (msgs != null && msgs.Count > 0)
             {
@@ -61,10 +61,10 @@ namespace AntSK.Pages.ChatPage.Components
 
         protected override async Task OnParametersSetAsync()
         {
-           await LoadData();
+            LoadData();
         }
 
-        private async Task LoadData()
+        private void LoadData()
         {
             app = _apps_Repositories.GetFirst(p => p.Id == AppId);
         }
