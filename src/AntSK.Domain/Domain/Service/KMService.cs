@@ -8,6 +8,7 @@ using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
+using AntSK.OCR;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
 using LLama;
 using LLamaSharp.KernelMemory;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.KernelMemory;
 using Microsoft.KernelMemory.Configuration;
+using Microsoft.KernelMemory.DataFormats;
 using Microsoft.KernelMemory.FileSystem.DevTools;
 using Microsoft.KernelMemory.MemoryStorage;
 using Microsoft.KernelMemory.MemoryStorage.DevTools;
@@ -110,13 +112,22 @@ namespace AntSK.Domain.Domain.Service
                 WithTextEmbeddingGenerationByAIType(memoryBuild, embedModel, embeddingHttpClient);
                 //加载向量库
                 WithMemoryDbByVectorDB(memoryBuild);
-
+                //加载OCR
+                WithOcr(memoryBuild, kms);
                 _memory = memoryBuild.Build<MemoryServerless>();
                 return _memory;
             }
             //else {
             //    return _memory;
             //}
+        }
+
+        private static void WithOcr(IKernelMemoryBuilder memoryBuild, Kmss kms)
+        {
+            if (kms.IsOCR == 1)
+            {
+                memoryBuild.WithCustomImageOcr(new AntSKOcrEngine());
+            }
         }
 
         private void WithTextEmbeddingGenerationByAIType(IKernelMemoryBuilder memory, AIModels embedModel,
@@ -262,7 +273,7 @@ namespace AntSK.Domain.Domain.Service
             {
                 foreach (var memoryDb in memoryDbs)
                 {
-                    var items = await memoryDb.GetListAsync(memoryIndex.Name, new List<MemoryFilter>() { new MemoryFilter().ByDocument(fileId) }, 100, true).ToListAsync();
+                    var items = await memoryDb.GetListAsync(memoryIndex.Name, new List<MemoryFilter>() { new MemoryFilter().ByDocument(fileId) }, 1000, true).ToListAsync();
                     docTextList.AddRange(items.Select(item => new KMFile()
                     {
                         DocumentId = item.GetDocumentId(),
