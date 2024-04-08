@@ -106,14 +106,15 @@ namespace AntSK.Domain.Domain.Service
                         MaxTokensPerParagraph = kms.MaxTokensPerParagraph,
                         OverlappingTokens = kms.OverlappingTokens
                     });
+                //加载OCR
+                WithOcr(memoryBuild, kms);
                 //加载会话模型
                 WithTextGenerationByAIType(memoryBuild, chatModel, chatHttpClient);
                 //加载向量模型
                 WithTextEmbeddingGenerationByAIType(memoryBuild, embedModel, embeddingHttpClient);
                 //加载向量库
                 WithMemoryDbByVectorDB(memoryBuild);
-                //加载OCR
-                WithOcr(memoryBuild, kms);
+              
                 _memory = memoryBuild.Build<MemoryServerless>();
                 return _memory;
             }

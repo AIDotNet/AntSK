@@ -12,11 +12,11 @@ namespace AntSK.OCR
     public class AntSKOcrEngine : IOcrEngine
     {
         FullOcrModel model;
-        public async Task<string> ExtractTextFromImageAsync(Stream imageContent, CancellationToken cancellationToken = default)
+        public Task<string> ExtractTextFromImageAsync(Stream imageContent, CancellationToken cancellationToken = default)
         {
             if (model == null)
             {
-                model = await OnlineFullModels.ChineseV4.DownloadAsync();
+                model =  OnlineFullModels.ChineseV4.DownloadAsync().Result;
             }
             using (PaddleOcrAll all = new(model)
             {
@@ -26,7 +26,7 @@ namespace AntSK.OCR
             {
                 Mat src = Cv2.ImDecode(StreamToByte(imageContent), ImreadModes.Color);
                 PaddleOcrResult result = all.Run(src);
-                return await Task.FromResult(result.Text);
+                return  Task.FromResult(result.Text);
             }
         }
 
