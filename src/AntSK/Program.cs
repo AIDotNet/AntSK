@@ -65,15 +65,13 @@ builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGrou
     {
         NativeLibraryConfig
            .Instance
-           .WithCuda(false)
-           .WithLogs(true);
+           .WithCuda(false);
     }
     else if (LLamaSharpOption.RunType.ToUpper() == "GPU")
     {
         NativeLibraryConfig
         .Instance
         .WithCuda(true)
-        .WithLogs(true)
         .WithAvx(NativeLibraryConfig.AvxLevel.Avx);
     }
 }
