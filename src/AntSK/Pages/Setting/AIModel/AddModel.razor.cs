@@ -319,7 +319,7 @@ namespace AntSK.Pages.Setting.AIModel
             switch (aiType)
             { 
                 case AIType.LLamaFactory:
-                    _aiModel.EndPoint = "http://localhost:8080/";
+                    _aiModel.EndPoint = "http://localhost:8000/";
                     _aiModel.AIModelType=AIModelType.Chat;
                     break;
                 case AIType.StableDiffusion:
