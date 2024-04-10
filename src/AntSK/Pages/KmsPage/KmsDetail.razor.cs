@@ -19,6 +19,31 @@ namespace AntSK.Pages.KmsPage
         [Parameter]
         public string KmsId { get; set; }
 
+        [Inject]
+        protected IConfirmService _confirmService { get; set; }
+
+        [Inject]
+        protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
+
+        [Inject]
+        protected IKmss_Repositories _kmss_Repositories { get; set; }
+
+        private MemoryServerless _memory { get; set; }
+
+        [Inject]
+        protected IKMService iKMService { get; set; }
+
+        [Inject]
+        protected MessageService? _message { get; set; }
+
+        [Inject]
+        protected BackgroundTaskBroker<ImportKMSTaskReq> _taskBroker { get; set; }
+
+        [Inject]
+        protected IHttpService _httpService { get; set; }
+
+        private Kmss km;
+
         private readonly KmsDetails _model = new KmsDetails();
 
         private bool _urlVisible = false;
@@ -51,34 +76,15 @@ namespace AntSK.Pages.KmsPage
 
         private List<KmsDetails> _data = new List<KmsDetails>();
 
-        [Inject]
-        protected IConfirmService _confirmService { get; set; }
+       
 
-        [Inject]
-        protected IKmsDetails_Repositories _kmsDetails_Repositories { get; set; }
 
-        [Inject]
-        protected IKmss_Repositories _kmss_Repositories { get; set; }
-
-        private MemoryServerless _memory { get; set; }
-
-        [Inject]
-        protected IKMService iKMService { get; set; }
-
-        [Inject]
-        protected MessageService? _message { get; set; }
-
-        [Inject]
-        protected BackgroundTaskBroker<ImportKMSTaskReq> _taskBroker { get; set; }
-
-        [Inject]
-        protected IHttpService _httpService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
-            var km = _kmss_Repositories.GetFirst(p => p.Id == KmsId);
+            km = _kmss_Repositories.GetFirst(p => p.Id == KmsId);
             //使用知识库设置的参数，
             _memory = iKMService.GetMemoryByKMS(km.Id);
         }

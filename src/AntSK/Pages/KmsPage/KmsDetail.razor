@@ -159,9 +159,19 @@
             <Icon Type="inbox" />
         </p>
         <p class="ant-upload-text">单击或拖动文件到此区域进行上传</p>
-        <p class="ant-upload-hint">
-            支持txt、word、pdf、md、excel、ppt等文件。
-        </p>
+        @if (km.IsOCR == 1)
+        {
+            <p class="ant-upload-hint">
+                支持 txt、word、pdf、md、excel、ppt、jpeg、png、tiff 等文件。
+            </p>
+        }
+        else    
+        {
+            <p class="ant-upload-hint">
+                支持 txt、word、pdf、md、excel、ppt 等文件。
+            </p>
+        }
+
     </Upload>
 </Modal>
 

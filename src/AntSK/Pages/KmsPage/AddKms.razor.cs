@@ -25,6 +25,8 @@ namespace AntSK.Pages.KmsPage
 
         private List<AIModels> _chatList { get; set; }
         private List<AIModels> _embeddingList { get; set; }
+
+        private bool isOcr { get; set; }
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -36,6 +38,7 @@ namespace AntSK.Pages.KmsPage
             {
                 //查看
                 _kmsModel = await _kmss_Repositories.GetFirstAsync(p => p.Id == KmsId);
+                isOcr = _kmsModel.IsOCR == 1;
             }
         }
         private void HandleSubmit()
@@ -50,6 +53,10 @@ namespace AntSK.Pages.KmsPage
             {
                 _ = Message.Error("行切片需小于段落切片！", 2);
                 return;
+            }
+            if (isOcr)
+            {
+                _kmsModel.IsOCR = 1;
             }
 
             if (string.IsNullOrEmpty(KmsId))
