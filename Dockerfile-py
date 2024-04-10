@@ -25,4 +25,5 @@ ENV PATH="/app:/opt/conda/bin:/usr/local/bin:${PATH}"
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo 'Asia/Shanghai' >/etc/timezone
 RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN apt update && apt install -y libpugixml-dev libtbb-dev
 ENTRYPOINT ["dotnet", "AntSK.dll"]
