@@ -193,7 +193,7 @@ namespace AntSK.Domain.Domain.Service
 
                     memory.WithOpenAITextGeneration(new OpenAIConfig()
                     {
-                        APIKey = "123",
+                        APIKey = "NotNull",
                         TextModel = chatModel.ModelName
                     }, null, chatHttpClient);
                     break;
@@ -319,7 +319,10 @@ namespace AntSK.Domain.Domain.Service
                 "application/pdf",
                 "application/json",
                 "text/x-markdown",
-                "text/markdown"
+                "text/markdown",
+                "image/jpeg",
+                "image/png",
+                "image/tiff"
             };
 
             string[] exceptExts = [".md", ".pdf"];
