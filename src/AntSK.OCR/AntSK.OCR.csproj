@@ -11,6 +11,8 @@
     <PackageReference Include="Sdcb.OpenVINO" Version="0.6.4" />
     <PackageReference Include="Sdcb.OpenVINO.PaddleOCR.Models.Online" Version="0.6.2" />
     <PackageReference Include="Sdcb.OpenVINO.PaddleOCR" Version="0.6.3" />
+    <PackageReference Include="Sdcb.OpenVINO.runtime.centos.7-x64" Version="2024.0.0" />
+    <PackageReference Include="Sdcb.OpenVINO.runtime.ubuntu.22.04-x64" Version="2024.0.0" />
     <PackageReference Include="Sdcb.OpenVINO.runtime.win-x64" Version="2024.0.0" />
   </ItemGroup>
 </Project>
