@@ -331,7 +331,10 @@ namespace AntSK.Domain.Domain.Service
                 "application/pdf",
                 "application/json",
                 "text/x-markdown",
-                "text/markdown"
+                "text/markdown",
+                "image/jpeg",
+                "image/png",
+                "image/tiff"
             };
 
             string[] exceptExts = [".md", ".pdf"];
