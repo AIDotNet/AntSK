@@ -3,6 +3,7 @@ using Sdcb.OpenVINO.PaddleOCR;
 using Sdcb.OpenVINO.PaddleOCR.Models.Online;
 using Sdcb.OpenVINO.PaddleOCR.Models;
 using OpenCvSharp;
+using static Microsoft.KernelMemory.DataFormats.WebPages.WebScraper;
 
 namespace AntSK.OCR
 {
@@ -14,19 +15,27 @@ namespace AntSK.OCR
         FullOcrModel model;
         public Task<string> ExtractTextFromImageAsync(Stream imageContent, CancellationToken cancellationToken = default)
         {
-            if (model == null)
+            try
             {
-                model =  OnlineFullModels.ChineseV4.DownloadAsync().Result;
+                if (model == null)
+                {
+                    model = OnlineFullModels.ChineseV4.DownloadAsync().Result;
+                }
+                using (PaddleOcrAll all = new(model)
+                {
+                    AllowRotateDetection = true,
+                    Enable180Classification = true,
+                })
+                {
+                    Mat src = Cv2.ImDecode(StreamToByte(imageContent), ImreadModes.Color);
+                    PaddleOcrResult result = all.Run(src);
+                    return Task.FromResult(result.Text);
+                }
             }
-            using (PaddleOcrAll all = new(model)
+            catch (Exception ex)
             {
-                AllowRotateDetection = true,
-                Enable180Classification = true,
-            })
-            {
-                Mat src = Cv2.ImDecode(StreamToByte(imageContent), ImreadModes.Color);
-                PaddleOcrResult result = all.Run(src);
-                return  Task.FromResult(result.Text);
+                Console.WriteLine(ex.Message);
+                return Task.FromResult("");
             }
         }
 
