@@ -22,4 +22,5 @@ WORKDIR /app
 COPY --from=build /app/publish .
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo 'Asia/Shanghai' >/etc/timezone
+RUN apt update && apt install -y libpugixml-dev libtbb-dev
 ENTRYPOINT ["dotnet", "AntSK.dll"]
