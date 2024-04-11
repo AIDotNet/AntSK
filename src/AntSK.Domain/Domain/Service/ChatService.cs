@@ -1,23 +1,21 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Domain.Interface;
-using AntSK.Domain.Repositories;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
-using Microsoft.SemanticKernel;
-using System.Text;
-using AntSK.Domain.Utils;
-using AntSK.Domain.Domain.Model.Dto;
-using AntSK.Domain.Domain.Model.Constant;
-using DocumentFormat.OpenXml.Drawing;
-using System.Reflection.Metadata;
-using Microsoft.KernelMemory;
-using System.Collections.Generic;
-using Markdig;
-using ChatHistory = Microsoft.SemanticKernel.ChatCompletion.ChatHistory;
-using Microsoft.SemanticKernel.Plugins.Core;
-using Azure.Core;
 using AntSK.Domain.Domain.Model;
+using AntSK.Domain.Domain.Model.Constant;
+using AntSK.Domain.Domain.Model.Dto;
+using AntSK.Domain.Repositories;
+using AntSK.Domain.Utils;
 using AntSK.LLM.StableDiffusion;
+using Markdig;
+using Microsoft.KernelMemory;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
+using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
+using ChatHistory = Microsoft.SemanticKernel.ChatCompletion.ChatHistory;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -44,7 +42,7 @@ namespace AntSK.Domain.Domain.Service
                 //如果模板为空，给默认提示词
                 app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
             }
-            KernelArguments args =new KernelArguments();
+            KernelArguments args = new KernelArguments();
             if (history.Count > 10)
             {
                 app.Prompt = @"${{ConversationSummaryPlugin.SummarizeConversation $history}}" + app.Prompt;
@@ -53,14 +51,14 @@ namespace AntSK.Domain.Domain.Service
                 { "input", questions }
                 };
             }
-            else 
+            else
             {
-                args=new()
+                args = new()
                 {
                 { "input", $"{string.Join("\n", history.Select(x => x.Role + ": " + x.Content))}{Environment.NewLine} user:{questions}" }
                 };
             }
-    
+
             var _kernel = _kernelService.GetKernelByApp(app);
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
@@ -70,7 +68,7 @@ namespace AntSK.Domain.Domain.Service
                 settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
             }
             var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult = _kernel.InvokeStreamingAsync(function: func, 
+            var chatResult = _kernel.InvokeStreamingAsync(function: func,
                 arguments: args);
             await foreach (var content in chatResult)
             {
@@ -105,14 +103,14 @@ namespace AntSK.Domain.Domain.Service
             var dataMsg = new StringBuilder();
             if (relevantSourceList.Any())
             {
-                bool isSearch=false;
+                bool isSearch = false;
                 foreach (var item in relevantSourceList)
                 {
                     //匹配相似度
-                    if (item.Relevance >= app.Relevance/100)
+                    if (item.Relevance >= app.Relevance / 100)
                     {
                         dataMsg.AppendLine(item.ToString());
-                        isSearch=true;
+                        isSearch = true;
                     }
                 }
 
@@ -138,10 +136,10 @@ namespace AntSK.Domain.Domain.Service
                         yield return content;
                     }
                 }
-                else 
+                else
                 {
                     yield return new StreamingTextContent(KmsConstantcs.KmsSearchNull);
-                }             
+                }
             }
             else
             {
@@ -163,6 +161,77 @@ namespace AntSK.Domain.Domain.Service
             var chatResult = await _kernel.InvokeAsync(function: func, arguments: args);
             if (chatResult.IsNotNull())
             {
+                //Can Load stable-diffusion library in diffenert environment
+
+                //SDHelper.LoadLibrary()
+                string versionString = string.Empty;
+                string extensionString = string.Empty;
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    extensionString = ".dll";
+                    string cuda_path = Environment.GetEnvironmentVariable("CUDA_PATH");
+                    Regex regex = new Regex(@"v1(\d).[\d]");
+                    Match match = regex.Match(cuda_path);
+                    if (match.Success)
+                    {
+                        switch (match.Groups[1].Value.ToString())
+                        {
+                            case "1":
+                                versionString = "Cuda11";
+                                break;
+                            case "2":
+                                versionString = "Cuda12";
+                                break;
+                            default:
+                                versionString = "CPU";
+                                break;
+                        }
+                    }
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    //Have to math the cuda version in linux
+                    extensionString = ".so";
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        FileName = "/bin/bash",
+                        Arguments = "nvcc--version | grep 'release'",
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        CreateNoWindow = true
+                    };
+
+                    using (Process process = Process.Start(startInfo))
+                    {
+                        using (StreamReader reader = process.StandardOutput)
+                        {
+                            string result = reader.ReadToEnd();
+                            Regex regex = new Regex(@"release (\d).[\d]");
+                            Match match = regex.Match(result);
+                            if (match.Success)
+                            {
+                                switch (match.Groups[1].Value.ToString())
+                                {
+                                    case "1":
+                                        versionString = "Cuda11";
+                                        break;
+                                    case "2":
+                                        versionString = "Cuda12";
+                                        break;
+                                    default:
+                                        versionString = "CPU";
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException("OS Platform no support");
+                }
+                string libraryPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StableDiffusion", "Backend", versionString, "stable-diffusion" + extensionString);
+                NativeLibrary.TryLoad(libraryPath, out IntPtr s);
                 string prompt = chatResult.GetValue<string>();
                 if (!SDHelper.IsInitialized)
                 {
