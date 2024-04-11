@@ -3,7 +3,6 @@ using Sdcb.OpenVINO.PaddleOCR;
 using Sdcb.OpenVINO.PaddleOCR.Models.Online;
 using Sdcb.OpenVINO.PaddleOCR.Models;
 using OpenCvSharp;
-using static Microsoft.KernelMemory.DataFormats.WebPages.WebScraper;
 
 namespace AntSK.OCR
 {
