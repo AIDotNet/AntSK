@@ -27,6 +27,7 @@
     </Content>
     <ChildContent>
         <div class="filterCardList">
+            <Spin Tip="加载中..." Spinning="@(loaddding)">
             <AntList TItem="HfModels"
                      Grid="LayoutModel._listGridType"
                      DataSource="_modelList">
@@ -59,6 +60,7 @@
                     </Card>
                 </ListItem>
             </AntList>
+            </Spin>
         </div>
     </ChildContent>
 </PageContainer>

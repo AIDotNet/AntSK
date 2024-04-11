@@ -15,13 +15,11 @@
     <None Remove="llamafactory\**" />
   </ItemGroup>
   <ItemGroup>
-
-    
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.2" />
     <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
-	<PackageReference Include="Downloader" Version="3.0.6" />
+    <PackageReference Include="Downloader" Version="3.0.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,14 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="plugins\KMSPlugin\Ask1\skprompt.txt">
+    <None Update="plugins\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="plugins\KMSPlugin\Ask\skprompt.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="StableDiffusionModelList.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </None>  
   </ItemGroup>
 </Project>

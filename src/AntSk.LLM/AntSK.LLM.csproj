@@ -44,6 +44,9 @@
     <None Update="StableDiffusion\Backend\ROCm\stable-diffusion.so">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="StableDiffusionModelList.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
