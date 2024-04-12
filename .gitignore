@@ -324,10 +324,6 @@ ASALocalRun/
 # MSBuild Binary and Structured Log
 *.binlog
 
-# NVidia Nsight GPU debugger configuration file
-*.nvuser
-*.dll
-*.pdb
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 **/bin/
