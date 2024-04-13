@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{9F2E19
 		..\docker-compose.simple.yml = ..\docker-compose.simple.yml
 		..\docker-compose.yml = ..\docker-compose.yml
 		..\Dockerfile = ..\Dockerfile
+		..\Dockerfile-py = ..\Dockerfile-py
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MiddleWare", "MiddleWare", "{40DDB1DC-571B-4A95-9F34-47F52981C511}"
@@ -24,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntSK.Test", "AntSK.Test\An
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntSK.LLamaFactory", "AntSK.LLamaFactory\AntSK.LLamaFactory.csproj", "{664DFA1F-68B7-49C7-B889-FA14D1756D3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntSK.OCR", "AntSK.OCR\AntSK.OCR.csproj", "{6195F7AA-18C2-4372-85CA-11FC4B522686}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntSK.OCR", "AntSK.OCR\AntSK.OCR.csproj", "{6195F7AA-18C2-4372-85CA-11FC4B522686}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Settings", "Settings", "{EB227FAB-6060-4271-9A0A-6C99C7965126}"
 	ProjectSection(SolutionItems) = preProject
