@@ -22,15 +22,16 @@ namespace AntSK.LLM.StableDiffusion
         static readonly Native.SdLogCallback sd_Log_Cb;
         static readonly Native.SdProgressCallback sd_Progress_Cb;
 
-        static SDHelper()
-        {
-            sd_Log_Cb = new Native.SdLogCallback(OnNativeLog);
-            Native.sd_set_log_callback(sd_Log_Cb, IntPtr.Zero);
+        //Hide the code below so that the process can be seen in console.
+        //static SDHelper()
+        //{
+        //    sd_Log_Cb = new Native.SdLogCallback(OnNativeLog);
+        //    Native.sd_set_log_callback(sd_Log_Cb, IntPtr.Zero);
 
-            sd_Progress_Cb = new Native.SdProgressCallback(OnProgressRunning);
-            Native.sd_set_progress_callback(sd_Progress_Cb, IntPtr.Zero);
+        //    sd_Progress_Cb = new Native.SdProgressCallback(OnProgressRunning);
+        //    Native.sd_set_progress_callback(sd_Progress_Cb, IntPtr.Zero);
 
-        }
+        //}
 
         public static bool Initialize(ModelParams modelParams)
         {

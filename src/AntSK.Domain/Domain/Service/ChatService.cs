@@ -169,69 +169,51 @@ namespace AntSK.Domain.Domain.Service
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     extensionString = ".dll";
-                    string cuda_path = Environment.GetEnvironmentVariable("CUDA_PATH");
-                    Regex regex = new Regex(@"v1(\d).[\d]");
-                    Match match = regex.Match(cuda_path);
-                    if (match.Success)
-                    {
-                        switch (match.Groups[1].Value.ToString())
-                        {
-                            case "1":
-                                versionString = "Cuda11";
-                                break;
-                            case "2":
-                                versionString = "Cuda12";
-                                break;
-                            default:
-                                versionString = "CPU";
-                                break;
-                        }
-                    }
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    //Have to math the cuda version in linux
                     extensionString = ".so";
-                    ProcessStartInfo startInfo = new ProcessStartInfo
-                    {
-                        FileName = "/bin/bash",
-                        Arguments = "nvcc--version | grep 'release'",
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true,
-                        CreateNoWindow = true
-                    };
-
-                    using (Process process = Process.Start(startInfo))
-                    {
-                        using (StreamReader reader = process.StandardOutput)
-                        {
-                            string result = reader.ReadToEnd();
-                            Regex regex = new Regex(@"release (\d).[\d]");
-                            Match match = regex.Match(result);
-                            if (match.Success)
-                            {
-                                switch (match.Groups[1].Value.ToString())
-                                {
-                                    case "1":
-                                        versionString = "Cuda11";
-                                        break;
-                                    case "2":
-                                        versionString = "Cuda12";
-                                        break;
-                                    default:
-                                        versionString = "CPU";
-                                        break;
-                                }
-                            }
-                        }
-                    }
                 }
                 else
                 {
                     throw new InvalidOperationException("OS Platform no support");
                 }
+
+                ProcessStartInfo startInfo = new ProcessStartInfo("nvcc", "--version");
+                startInfo.RedirectStandardOutput = true;
+                startInfo.UseShellExecute = false;
+                startInfo.CreateNoWindow = true;
+                using (Process process = Process.Start(startInfo))
+                {
+                    if (process != null)
+                    {
+                        string result = process.StandardOutput.ReadToEnd();
+                        Regex regex = new Regex(@"release (\d+).[\d]");
+                        Match match = regex.Match(result);
+                        if (match.Success)
+                        {
+                            switch (match.Groups[1].Value.ToString())
+                            {
+                                case "11":
+                                    versionString = "Cuda11";
+                                    break;
+                                case "12":
+                                    versionString = "Cuda12";
+                                    break;
+                                default:
+                                    versionString = "CPU";
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("nvcc get an error");
+                    }
+                }
+
                 string libraryPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StableDiffusion", "Backend", versionString, "stable-diffusion" + extensionString);
-                NativeLibrary.TryLoad(libraryPath, out IntPtr s);
+                NativeLibrary.TryLoad(libraryPath, out _);
                 string prompt = chatResult.GetValue<string>();
                 if (!SDHelper.IsInitialized)
                 {
@@ -241,7 +223,8 @@ namespace AntSK.Domain.Domain.Service
                         RngType = Structs.RngType.CUDA_RNG,
                         //VaePath = vaePath,
                         //KeepVaeOnCpu = keepVaeOnCpu,
-                        //VaeTiling = vaeTiling,
+                        //set false can get a better image, otherwise can use lower vram
+                        VaeTiling = false,
                         //LoraModelDir = loraModelDir,
                     };
                     bool result = SDHelper.Initialize(modelParams);
@@ -250,10 +233,11 @@ namespace AntSK.Domain.Domain.Service
                 Structs.TextToImageParams textToImageParams = new Structs.TextToImageParams
                 {
                     Prompt = prompt,
-                    NegativePrompt = "2d, 3d, cartoon, paintings",
+                    NegativePrompt = "bad quality, wrong image, worst quality",
                     SampleMethod = (Structs.SampleMethod)Enum.Parse(typeof(Structs.SampleMethod), "EULER_A"),
-                    Width = 256,
-                    Height = 256,
+                    //the base image size in SD1.5 is 512x512
+                    Width = 512,
+                    Height = 512,
                     NormalizeInput = true,
                     ClipSkip = -1,
                     CfgScale = 7,
