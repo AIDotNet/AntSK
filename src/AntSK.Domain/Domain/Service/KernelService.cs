@@ -18,6 +18,8 @@ using AntSK.Domain.Domain.Model.Enum;
 using AntSK.LLM.LLamaFactory;
 using System.Reflection;
 using DocumentFormat.OpenXml.Drawing;
+using Microsoft.KernelMemory;
+using OpenCvSharp.ML;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -57,7 +59,7 @@ namespace AntSK.Domain.Domain.Service
                 var chatHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
 
                 var builder = Kernel.CreateBuilder();
-                WithTextGenerationByAIType(builder, app, chatModel, chatHttpClient);
+                WithTextGenerationByAIType(builder, chatModel, chatHttpClient);
 
                 _kernel = builder.Build();
                 RegisterPluginsWithKernel(_kernel);
@@ -69,7 +71,18 @@ namespace AntSK.Domain.Domain.Service
             //}
         }
 
-        private void WithTextGenerationByAIType(IKernelBuilder builder, Apps app, AIModels chatModel, HttpClient chatHttpClient)
+        public Kernel GetKernelByAIModelID(string modelid)
+        {
+            var chatModel = _aIModels_Repositories.GetById(modelid);
+            var chatHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
+            var builder = Kernel.CreateBuilder();
+            WithTextGenerationByAIType(builder, chatModel, chatHttpClient);
+            _kernel = builder.Build();
+            RegisterPluginsWithKernel(_kernel);
+            return _kernel;
+        }
+
+        private void WithTextGenerationByAIType(IKernelBuilder builder,AIModels chatModel, HttpClient chatHttpClient)
         {
             switch (chatModel.AIType)
             {
@@ -96,7 +109,7 @@ namespace AntSK.Domain.Domain.Service
 
                 case Model.Enum.AIType.SparkDesk:
                     var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelKey, ApiKey = chatModel.ModelName, ModelVersion = Sdcb.SparkDesk.ModelVersion.V3_5 };
-                    builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, app.Id));
+                    builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, chatModel.Id));
                     break;
 
                 case Model.Enum.AIType.DashScope:

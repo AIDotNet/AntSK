@@ -35,4 +35,10 @@ namespace AntSK.Domain.Domain.Model
         Text = 3,
         Excel=4
     }
+
+    public class QAModel
+    {
+        public string ChatModelId { get; set; }
+        public string Context { get; set; }
+    }
 }

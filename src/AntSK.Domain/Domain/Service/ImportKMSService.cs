@@ -24,7 +24,6 @@ namespace AntSK.Domain.Domain.Service
             try
             {
                 var km = _kmss_Repositories.GetFirst(p => p.Id == req.KmsId);
-
                 var _memory = _kMService.GetMemoryByKMS(km.Id);
                 string fileid = req.KmsDetail.Id;
                 switch (req.ImportType)
@@ -32,10 +31,30 @@ namespace AntSK.Domain.Domain.Service
                     case ImportType.File:
                         //导入文件
                         {
-                            var importResult = _memory.ImportDocumentAsync(new Document(fileid)
-                          .AddFile(req.FilePath)
-                          .AddTag(KmsConstantcs.KmsIdTag, req.KmsId)
-                          , index: KmsConstantcs.KmsIndex).Result;
+                            if (req.IsQA)
+                            {
+                                _memory.Orchestrator.AddHandler<TextExtractionHandler>("extract_text");
+                                _memory.Orchestrator.AddHandler<QAHandler>(km.ChatModelID);
+                                _memory.Orchestrator.AddHandler<GenerateEmbeddingsHandler>("generate_embeddings");
+                                _memory.Orchestrator.AddHandler<SaveRecordsHandler>("save_memory_records");
+                                var importResult = _memory.ImportDocumentAsync(new Document(fileid)
+                                .AddFile(req.FilePath)
+                                .AddTag(KmsConstantcs.KmsIdTag, req.KmsId)
+                                ,index: KmsConstantcs.KmsIndex ,steps: new[]
+                                      {
+                                            "extract_text",
+                                            km.ChatModelID,
+                                            "generate_embeddings",
+                                            "save_memory_records"
+                                      }).Result;
+                            }
+                            else 
+                            {
+                                var importResult = _memory.ImportDocumentAsync(new Document(fileid)
+                                 .AddFile(req.FilePath)
+                                 .AddTag(KmsConstantcs.KmsIdTag, req.KmsId)
+                             , index: KmsConstantcs.KmsIndex).Result;
+                            }
                             //查询文档数量
                             var docTextList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
                             string fileGuidName = Path.GetFileName(req.FilePath);
