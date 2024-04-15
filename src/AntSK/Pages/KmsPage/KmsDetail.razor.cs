@@ -239,7 +239,7 @@ namespace AntSK.Pages.KmsPage
                         KmsId = KmsId,
                         FilePath = item.Url,
                         FileName = item.FileName,
-                        IsQA = _isQa
+                        IsQA = false
                     });
                 }
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
