@@ -17,11 +17,14 @@ namespace AntSK.Domain.Domain.Model
         public string FilePath { get; set; } = "";
 
         public string FileName { get; set; } = "";
+
+        public bool IsQA { get; set; } = false;
     }
 
 
     public class ImportKMSTaskReq : ImportKMSTaskDTO
     {
+        public bool IsQA { get; set; }=false;
         public KmsDetails KmsDetail { get; set; } = new KmsDetails();
     }
 

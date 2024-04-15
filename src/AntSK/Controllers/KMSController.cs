@@ -47,6 +47,7 @@ namespace AntSK.Controllers
 
             await _kmsDetailsRepositories.InsertAsync(detail);
             req.KmsDetail = detail;
+            req.IsQA=model.IsQA;
             _taskBroker.QueueWorkItem(req);
             return Ok();
         }
