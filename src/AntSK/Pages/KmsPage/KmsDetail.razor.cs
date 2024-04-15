@@ -76,8 +76,8 @@ namespace AntSK.Pages.KmsPage
 
         private List<KmsDetails> _data = new List<KmsDetails>();
 
-       
 
+        private bool _isQa { get; set; } = false;
 
 
         protected override async Task OnInitializedAsync()
@@ -118,6 +118,7 @@ namespace AntSK.Pages.KmsPage
                     ImportType = ImportType.Url,
                     KmsId = KmsId,
                     Url = urlModel.Url,
+                    IsQA = _isQa
                 });
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
                 _urlVisible = false;
@@ -158,7 +159,8 @@ namespace AntSK.Pages.KmsPage
                 {
                     ImportType = ImportType.Text,
                     KmsId = KmsId,
-                    Text = textModel.Text
+                    Text = textModel.Text,
+                    IsQA = _isQa
                 });
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
                 _textVisible = false;
@@ -196,7 +198,8 @@ namespace AntSK.Pages.KmsPage
                         ImportType = ImportType.File,
                         KmsId = KmsId,
                         FilePath = item.Url,
-                        FileName = item.FileName
+                        FileName = item.FileName,
+                        IsQA=_isQa
                     });
                 }
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);
@@ -235,7 +238,8 @@ namespace AntSK.Pages.KmsPage
                         ImportType = ImportType.Excel,
                         KmsId = KmsId,
                         FilePath = item.Url,
-                        FileName = item.FileName
+                        FileName = item.FileName,
+                        IsQA = false
                     });
                 }
                 _data = await _kmsDetails_Repositories.GetListAsync(p => p.KmsId == KmsId);

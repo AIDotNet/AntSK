@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "description": "知识库问答",
+  "execution_settings": {
+    "default": {
+      "temperature": 0.0,
+      "top_p": 0.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    }
+  }
+}

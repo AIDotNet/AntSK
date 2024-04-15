@@ -17,11 +17,14 @@ namespace AntSK.Domain.Domain.Model
         public string FilePath { get; set; } = "";
 
         public string FileName { get; set; } = "";
+
+        public bool IsQA { get; set; } = false;
     }
 
 
     public class ImportKMSTaskReq : ImportKMSTaskDTO
     {
+        public bool IsQA { get; set; }=false;
         public KmsDetails KmsDetail { get; set; } = new KmsDetails();
     }
 
@@ -31,5 +34,11 @@ namespace AntSK.Domain.Domain.Model
         Url = 2,
         Text = 3,
         Excel=4
+    }
+
+    public class QAModel
+    {
+        public string ChatModelId { get; set; }
+        public string Context { get; set; }
     }
 }

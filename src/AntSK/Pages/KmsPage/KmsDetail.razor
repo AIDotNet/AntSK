@@ -15,8 +15,7 @@
                 <ChildContent>
                     <div class="standardList">
                         <Card Class="listCard"
-                              Title="知识库文档"
-                              >
+                              Title="知识库文档">
 
                             <Extra>
                                 <Button Type="@ButtonType.Primary" Style="position: absolute; right:360px; margin-bottom: 8px;" OnClick="Refresh">刷新 </Button>
@@ -106,7 +105,7 @@
             <TabPane Key="2">
                 <TabTemplate>搜索测试</TabTemplate>
                 <ChildContent>
-                   <KmsTest KmsId="@KmsId"></KmsTest>
+                    <KmsTest KmsId="@KmsId"></KmsTest>
                 </ChildContent>
             </TabPane>
         </Tabs>
@@ -125,6 +124,12 @@
         <FormItem Label="URL地址">
             <Input @bind-Value="@context.Url" />
         </FormItem>
+        <FormItem Label="切分方式">
+            <RadioGroup @bind-Value="@_isQa">
+                <Radio Value="false">直接切分</Radio>
+                <Radio Value="true">QA切分</Radio>
+            </RadioGroup>
+        </FormItem>
     </Form>
 </Modal>
 
@@ -136,9 +141,15 @@
     <Form Model="@textModel"
           LabelColSpan="8"
           WrapperColSpan="16"
-          @ref="@_textForm">
+          @ref="@_textForm">  
         <FormItem Label="文本内容">
             <TextArea @bind-Value="@context.Text" Rows="5" />
+        </FormItem>
+        <FormItem Label="切分方式">
+            <RadioGroup @bind-Value="@_isQa">
+                <Radio Value="false">直接切分</Radio>
+                <Radio Value="true">QA切分</Radio>
+            </RadioGroup>
         </FormItem>
     </Form>
 </Modal>
@@ -147,7 +158,7 @@
        Visible="@_fileVisible"
        OnOk="@FileHandleOk"
        OnCancel="@FileHandleCancel"
-       ConfirmLoading="@_fileConfirmLoading">
+       ConfirmLoading="@_fileConfirmLoading">   
     <Upload Action="@("api/File/UploadFile")"
             Name="file"
             Drag
@@ -165,7 +176,7 @@
                 支持 txt、word、pdf、md、excel、ppt、jpeg、png、tiff 等文件。
             </p>
         }
-        else    
+        else
         {
             <p class="ant-upload-hint">
                 支持 txt、word、pdf、md、excel、ppt 等文件。
@@ -173,6 +184,10 @@
         }
 
     </Upload>
+    <RadioGroup @bind-Value="@_isQa" Style="margin-top:5px;">
+        <Radio Value="false">直接切分</Radio>
+        <Radio Value="true">QA切分</Radio>
+    </RadioGroup>
 </Modal>
 
 <Modal Title="Excel导入"

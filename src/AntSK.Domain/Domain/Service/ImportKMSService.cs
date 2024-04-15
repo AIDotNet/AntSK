@@ -24,18 +24,40 @@ namespace AntSK.Domain.Domain.Service
             try
             {
                 var km = _kmss_Repositories.GetFirst(p => p.Id == req.KmsId);
-
                 var _memory = _kMService.GetMemoryByKMS(km.Id);
                 string fileid = req.KmsDetail.Id;
+                List<string> step = new List<string>();
+                if (req.IsQA)
+                {
+                    _memory.Orchestrator.AddHandler<TextExtractionHandler>("extract_text");
+                    _memory.Orchestrator.AddHandler<QAHandler>(km.ChatModelID);
+                    _memory.Orchestrator.AddHandler<GenerateEmbeddingsHandler>("generate_embeddings");
+                    _memory.Orchestrator.AddHandler<SaveRecordsHandler>("save_memory_records");
+                    step.Add("extract_text");
+                    step.Add(km.ChatModelID);
+                    step.Add("generate_embeddings");
+                    step.Add("save_memory_records");
+                }
+
                 switch (req.ImportType)
                 {
                     case ImportType.File:
-                        //导入文件
                         {
-                            var importResult = _memory.ImportDocumentAsync(new Document(fileid)
-                          .AddFile(req.FilePath)
-                          .AddTag(KmsConstantcs.KmsIdTag, req.KmsId)
-                          , index: KmsConstantcs.KmsIndex).Result;
+                            //导入文件
+                            if (req.IsQA)
+                            {
+                                var importResult = _memory.ImportDocumentAsync(new Document(fileid)
+                                .AddFile(req.FilePath)
+                                .AddTag(KmsConstantcs.KmsIdTag, req.KmsId)
+                                ,index: KmsConstantcs.KmsIndex ,steps: step.ToArray()).Result;
+                            }
+                            else 
+                            {
+                                var importResult = _memory.ImportDocumentAsync(new Document(fileid)
+                                 .AddFile(req.FilePath)
+                                 .AddTag(KmsConstantcs.KmsIdTag, req.KmsId)
+                             , index: KmsConstantcs.KmsIndex).Result;
+                            }
                             //查询文档数量
                             var docTextList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
                             string fileGuidName = Path.GetFileName(req.FilePath);
@@ -48,8 +70,16 @@ namespace AntSK.Domain.Domain.Service
                     case ImportType.Url:
                         {
                             //导入url                  
-                            var importResult = _memory.ImportWebPageAsync(req.Url, fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
-                                 , index: KmsConstantcs.KmsIndex).Result;
+                            if (req.IsQA)
+                            {
+                                var importResult = _memory.ImportWebPageAsync(req.Url, fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
+                                , index: KmsConstantcs.KmsIndex, steps: step.ToArray()).Result;
+                            }
+                            else 
+                            {
+                                var importResult = _memory.ImportWebPageAsync(req.Url, fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
+                                , index: KmsConstantcs.KmsIndex).Result;
+                            }  
                             //查询文档数量
                             var docTextList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
                             req.KmsDetail.Url = req.Url;
@@ -59,8 +89,16 @@ namespace AntSK.Domain.Domain.Service
                     case ImportType.Text:
                         //导入文本
                         {
-                            var importResult = _memory.ImportTextAsync(req.Text, fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
-                                , index: KmsConstantcs.KmsIndex).Result;
+                            if (req.IsQA)
+                            {
+                                var importResult = _memory.ImportTextAsync(req.Text, fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
+                                , index: KmsConstantcs.KmsIndex, steps: step.ToArray()).Result;
+                            }
+                            else 
+                            {
+                                var importResult = _memory.ImportTextAsync(req.Text, fileid, new TagCollection() { { KmsConstantcs.KmsIdTag, req.KmsId } }
+                                   , index: KmsConstantcs.KmsIndex).Result;
+                            }                  
                             //查询文档数量
                             var docTextList = _kMService.GetDocumentByFileID(km.Id, fileid).Result;
                             req.KmsDetail.Url = req.Url;
@@ -71,8 +109,7 @@ namespace AntSK.Domain.Domain.Service
                     case ImportType.Excel:
                         using (var fs = File.OpenRead(req.FilePath))
                         {
-                            var excelList= ExeclHelper.ExcelToList<KMSExcelModel>(fs);
-                            
+                            var excelList= ExeclHelper.ExcelToList<KMSExcelModel>(fs);           
                             _memory.Orchestrator.AddHandler<TextExtractionHandler>("extract_text");
                             _memory.Orchestrator.AddHandler<KMExcelHandler>("antsk_excel_split");
                             _memory.Orchestrator.AddHandler<GenerateEmbeddingsHandler>("generate_embeddings");
