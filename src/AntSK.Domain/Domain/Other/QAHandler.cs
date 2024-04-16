@@ -1,4 +1,6 @@
-﻿using AntSK.Domain.Domain.Model;
+﻿using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Model;
+using AntSK.Domain.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.KernelMemory.AI.OpenAI;
@@ -7,10 +9,12 @@ using Microsoft.KernelMemory.DataFormats.Text;
 using Microsoft.KernelMemory.Diagnostics;
 using Microsoft.KernelMemory.Extensions;
 using Microsoft.KernelMemory.Pipeline;
+using Microsoft.SemanticKernel;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Security.Policy;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AntSK.Domain.Domain.Other
 {
@@ -20,9 +24,11 @@ namespace AntSK.Domain.Domain.Other
         private readonly IPipelineOrchestrator _orchestrator;
         private readonly ILogger<QAHandler> _log;
         private readonly TextChunker.TokenCounter _tokenCounter;
+        private readonly IKernelService _kernelService;
         public QAHandler(
             string stepName,
             IPipelineOrchestrator orchestrator,
+            IKernelService kernelService,
             TextPartitioningOptions? options = null,
             ILogger<QAHandler>? log = null
             )
@@ -34,6 +40,7 @@ namespace AntSK.Domain.Domain.Other
 
             this._log = log ?? DefaultLogger<QAHandler>.Instance;
             this._tokenCounter = DefaultGPTTokenizer.StaticCountTokens;
+            this._kernelService = kernelService;
         }
 
         /// <inheritdoc />
@@ -88,15 +95,27 @@ namespace AntSK.Domain.Domain.Other
                                 this._log.LogDebug("Partitioning text file {0}", file.Name);
                                 string content = partitionContent.ToString();
 
-                                using (HttpClient httpclient = new HttpClient())
+                                var kernel = _kernelService.GetKernelByAIModelID(StepName);
+                                var lines = TextChunker.SplitPlainTextLines(content, 299);
+                                var paragraphs = TextChunker.SplitPlainTextParagraphs(lines, 3000);
+                                KernelFunction jsonFun = kernel.Plugins.GetFunction("KMSPlugin", "QA");
+
+                                List<string> qaList = new List<string>();
+                                foreach (var para in paragraphs)
                                 {
-                                    httpclient.Timeout = TimeSpan.FromMinutes(10);
-                                    StringContent scontent = new StringContent(JsonConvert.SerializeObject(new QAModel() { ChatModelId = StepName, Context = content }), Encoding.UTF8, "application/json");
-                                    HttpResponseMessage response = await httpclient.PostAsync("http://localhost:5000/api/KMS/QA", scontent);
-                                    List<string> qaList = JsonConvert.DeserializeObject<List<string>>( await response.Content.ReadAsStringAsync());
-                                    sentences = qaList;
-                                    partitions = qaList;
+                                    var qaresult = await kernel.InvokeAsync(function: jsonFun, new KernelArguments() { ["input"] = para });
+                                    var qaListStr = qaresult.GetValue<string>().ConvertToString();
+
+                                    string pattern = @"Q\d+:.*?A\d+:.*?(?=(Q\d+:|$))";
+                                    RegexOptions options = RegexOptions.Singleline;
+
+                                    foreach (Match match in Regex.Matches(qaListStr, pattern, options))
+                                    {
+                                        qaList.Add(match.Value.Trim()); // Trim用于删除可能的首尾空格
+                                    }
                                 }
+                                sentences = qaList;
+                                partitions = qaList;        
                                 break;
                             }
                         default:
