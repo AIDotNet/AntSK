@@ -83,9 +83,7 @@ namespace AntSK.Controllers
                 {
                     qaList.Add(match.Value.Trim()); // Trim用于删除可能的首尾空格
                 }
-
             }
-
             return Ok(qaList);
         }
     }

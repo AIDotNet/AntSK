@@ -29,7 +29,8 @@ namespace AntSK.Domain.Domain.Service
     public class KMService(
         IKmss_Repositories _kmss_Repositories,
         IAIModels_Repositories _aIModels_Repositories,
-        IMessageService? _message
+        IMessageService? _message,
+        IKernelService _kernelService
     ) : IKMService
     {
         private MemoryServerless _memory;
@@ -115,7 +116,7 @@ namespace AntSK.Domain.Domain.Service
                 //加载向量库
                 WithMemoryDbByVectorDB(memoryBuild);
               
-                _memory = memoryBuild.Build<MemoryServerless>();
+                _memory = memoryBuild.AddSingleton<IKernelService>(_kernelService).Build<MemoryServerless>();
                 return _memory;
             }
             //else {
