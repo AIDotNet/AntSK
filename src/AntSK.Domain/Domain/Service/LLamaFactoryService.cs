@@ -92,9 +92,9 @@ namespace AntSK.Domain.Domain.Service
                         WorkingDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "llamafactory"),
                     }
                 };
-                process.StartInfo.Environment["CUDA_VISIBLE_DEVICES"] = "0";
+                process.StartInfo.Environment["CUDA_VISIBLE_DEVICES"] = Environment.GetEnvironmentVariable("CUDA_VISIBLE_DEVICES") ?? "0";
                 process.StartInfo.Environment["API_PORT"] = "8000";
-                process.StartInfo.EnvironmentVariables["USE_MODELSCOPE_HUB"] = "1";
+                process.StartInfo.EnvironmentVariables["USE_MODELSCOPE_HUB"] = Environment.GetEnvironmentVariable("USE_MODELSCOPE_HUB") ?? "1";
                 process.OutputDataReceived += (sender, eventArgs) =>
                 {
                     Console.WriteLine($"{eventArgs.Data}");
