@@ -29,17 +29,17 @@
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.7.1" />
     <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.7.1" />
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.7.1-alpha" />
-    <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.36.240415.2" />
-    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.36.240415.2" />
-    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Qdrant" Version="0.36.240415.2" />
-    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Redis" Version="0.36.240415.2" />
-    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.AzureAISearch" Version="0.36.240415.2" />
+    <PackageReference Include="Microsoft.KernelMemory.Core" Version="$(KMVersion)" />
+    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="$(KMVersion)" />
+    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Qdrant" Version="$(KMVersion)" />
+    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Redis" Version="$(KMVersion)" />
+    <PackageReference Include="Microsoft.KernelMemory.MemoryDb.AzureAISearch" Version="$(KMVersion)" />
 
-    <PackageReference Include="LLamaSharp" Version="0.11.2" />
-    <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.11.2" />
-    <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.11.2" />
-    <PackageReference Include="LLamaSharp.kernel-memory" Version="0.11.2" />
-    <PackageReference Include="LLamaSharp.semantic-kernel" Version="0.11.2" />
+    <PackageReference Include="LLamaSharp" Version="$(LLamaSharpVersion)" />
+    <PackageReference Include="LLamaSharp.Backend.Cpu" Version="$(LLamaSharpVersion)" />
+    <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="$(LLamaSharpVersion)" />
+    <PackageReference Include="LLamaSharp.kernel-memory" Version="$(LLamaSharpVersion)" />
+    <PackageReference Include="LLamaSharp.semantic-kernel" Version="$(LLamaSharpVersion)" />
     
     
   </ItemGroup>

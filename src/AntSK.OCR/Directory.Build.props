@@ -1,0 +1,8 @@
+<Project>
+  <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+  <PropertyGroup>
+
+    <KMVersion>0.36.240416.1</KMVersion>
+    <LLamaSharpVersion>0.11.2</LLamaSharpVersion>
+  </PropertyGroup>
+</Project>
