@@ -91,7 +91,7 @@ version: '3.8'
 services:
   antsk:
     container_name: antsk
-    image: registry.cn-hangzhou.aliyuncs.com/AIDotNet/antsk:v0.2.9
+    image: registry.cn-hangzhou.aliyuncs.com/AIDotNet/antsk:v0.3.0
     ports:
       - 5000:5000
     networks:
