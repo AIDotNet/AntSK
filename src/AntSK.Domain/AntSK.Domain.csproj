@@ -21,7 +21,7 @@
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Markdig" Version="0.37.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SqlSugarCore" Version="5.1.4.151" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.152" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="NPOI" Version="2.7.0" />
