@@ -55,6 +55,11 @@
         "path": "/setting/modeldown",
         "name": "模型下载",
         "key": "setting.modeldown"
+      },
+      {
+        "path": "/setting/delkms",
+        "name": "删除向量表",
+        "key": "setting.delkms"
       }
     ]
   },
