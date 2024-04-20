@@ -1,9 +1,11 @@
-﻿using Python.Runtime;
+﻿using Newtonsoft.Json;
+using Python.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Python.Runtime.Py;
 
 namespace AntSK.Domain.Domain.Other.Bge
 {
@@ -24,12 +26,14 @@ namespace AntSK.Domain.Domain.Other.Bge
             {
                 if (model == null)
                 {
-                    Runtime.PythonDLL = pythondllPath;
+                    if (string.IsNullOrEmpty(Runtime.PythonDLL))
+                    {
+                        Runtime.PythonDLL = pythondllPath;
+                    }
                     PythonEngine.Initialize();
-                    PythonEngine.BeginAllowThreads();
                     try
                     {
-                        using (Py.GIL())// 初始化Python环境的Global Interpreter Lock)
+                        using (GIL())// 初始化Python环境的Global Interpreter Lock)
                         {
                             dynamic modelscope = Py.Import("modelscope");
                             dynamic flagEmbedding = Py.Import("FlagEmbedding");
@@ -48,6 +52,28 @@ namespace AntSK.Domain.Domain.Other.Bge
                 else
                 {
                     return model;
+                }
+            }
+        }
+
+
+        public static double Rerank(List<string> list)
+        {
+            using (GIL())
+            {
+                try
+                {
+                    PyList pyList = new PyList();
+                    foreach (string item in list)
+                    {
+                        pyList.Append(item.ToPython()); // 将C# string转换为Python对象并添加到PyList中
+                    }
+                    PyObject result = model.compute_score(pyList, normalize: true);
+                    return result.As<double>();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
                 }
             }
         }
