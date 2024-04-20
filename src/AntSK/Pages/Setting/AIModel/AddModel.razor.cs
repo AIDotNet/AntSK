@@ -3,7 +3,7 @@ using AntDesign.ProLayout;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Enum;
-using AntSK.Domain.Domain.Other;
+using AntSK.Domain.Domain.Other.Bge;
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;

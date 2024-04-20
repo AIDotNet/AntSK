@@ -100,9 +100,16 @@ namespace AntSK.Domain.Domain.Service
                 })));
             }
 
+
             var dataMsg = new StringBuilder();
             if (relevantSourceList.Any())
             {
+                if (!string.IsNullOrEmpty(app.RerankModelID))
+                { 
+                    //进行rerank
+                   
+                }
+                    
                 bool isSearch = false;
                 foreach (var item in relevantSourceList)
                 {

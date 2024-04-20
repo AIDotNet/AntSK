@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AntSK.Domain.Domain.Other;
+using AntSK.Domain.Domain.Other.Bge;
 
 namespace AntSK.Domain.Common.Embedding
 {

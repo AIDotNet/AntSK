@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AntSK.Domain.Domain.Other
+namespace AntSK.Domain.Domain.Other.Bge
 {
     public static class BegRerankConfig
     {
