@@ -9,7 +9,7 @@ using static Python.Runtime.Py;
 
 namespace AntSK.Domain.Domain.Other
 {
-    public static class EmbeddingConfig
+    public static class BgeEmbeddingConfig
     {
         public static dynamic model { get; set; }
 

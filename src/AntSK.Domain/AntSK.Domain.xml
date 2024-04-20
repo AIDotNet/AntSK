@@ -177,7 +177,12 @@
             总数
             </summary>
         </member>
-        <member name="M:AntSK.Domain.Domain.Other.EmbeddingConfig.LoadModel(System.String,System.String)">
+        <member name="M:AntSK.Domain.Domain.Other.BegRerankConfig.LoadModel(System.String,System.String)">
+            <summary>
+            模型写死
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.Domain.Other.BgeEmbeddingConfig.LoadModel(System.String,System.String)">
             <summary>
             模型写死
             </summary>
@@ -198,11 +203,6 @@
         </member>
         <member name="M:AntSK.Domain.Domain.Other.QAHandler.InvokeAsync(Microsoft.KernelMemory.Pipeline.DataPipeline,System.Threading.CancellationToken)">
             <inheritdoc />
-        </member>
-        <member name="M:AntSK.Domain.Domain.Other.RerankConfig.LoadModel(System.String,System.String)">
-            <summary>
-            模型写死
-            </summary>
         </member>
         <member name="M:AntSK.Domain.Domain.Service.ChatService.SendChatByAppAsync(AntSK.Domain.Repositories.Apps,System.String,Microsoft.SemanticKernel.ChatCompletion.ChatHistory)">
             <summary>

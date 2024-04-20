@@ -292,7 +292,7 @@ namespace AntSK.Pages.Setting.AIModel
             {
                 try
                 {
-                    EmbeddingConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
+                    BgeEmbeddingConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
                     BgeEmbeddingBtnText = "初始化完成";
                     BgeEmbeddingIsStart = false;
                 }
@@ -323,7 +323,7 @@ namespace AntSK.Pages.Setting.AIModel
             {
                 try
                 {
-                    RerankConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
+                    BegRerankConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
                     BgeRerankBtnText = "初始化完成";
                     BgeRerankIsStart = false;
                 }

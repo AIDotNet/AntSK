@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AntSK.Domain.Domain.Other
 {
-    public static class RerankConfig
+    public static class BegRerankConfig
     {
         public static dynamic model { get; set; }
 
