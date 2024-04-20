@@ -48,35 +48,39 @@
                                         <p>
                                             @if (context.AIType == AIType.OpenAI)
                                             {
-                                                <Tag Color="@PresetColor.Yellow.ToString()">OpenAI</Tag>
+                                                <Tag Color="@PresetColor.Pink.ToString()">OpenAI</Tag>
                                             }
                                             else if (context.AIType == AIType.AzureOpenAI)
                                             {
-                                                <Tag Color="@PresetColor.Green.ToString()">AzureOpenAI</Tag>
+                                                <Tag Color="@PresetColor.Red.ToString()">AzureOpenAI</Tag>
                                             }
                                             else if (context.AIType == AIType.LLamaSharp)
                                             {
-                                                <Tag Color="@PresetColor.Red.ToString()">LLamaSharp</Tag>
+                                                <Tag Color="@PresetColor.Yellow.ToString()">LLamaSharp</Tag>
                                             }
                                             else if (context.AIType == AIType.SparkDesk)
                                             {
-                                                <Tag Color="@PresetColor.Orange.ToString()">SparkDesk</Tag>
+                                                <Tag Color="@PresetColor.Cyan.ToString()">SparkDesk</Tag>
                                             }
                                             else if (context.AIType == AIType.Mock)
                                             {
-                                                <Tag Color="@PresetColor.Cyan.ToString()">Mock</Tag>
+                                                <Tag Color="@PresetColor.Green.ToString()">Mock</Tag>
                                             }
                                             else if (context.AIType == AIType.LLamaFactory)
                                             {
-                                                <Tag Color="@PresetColor.Cyan.ToString()">LLamaFactory</Tag>
+                                                <Tag Color="@PresetColor.Blue.ToString()">LLamaFactory</Tag>
                                             }
                                             else if (context.AIType == AIType.BgeEmbedding)
                                             {
-                                                <Tag Color="@PresetColor.Gold.ToString()">BgeEmbedding</Tag>
+                                                <Tag Color="@PresetColor.Purple.ToString()">BgeEmbedding</Tag>
+                                            }
+                                            else if (context.AIType == AIType.BgeRerank)
+                                            {
+                                                <Tag Color="@PresetColor.GeekBlue.ToString()">BgeRerank</Tag>
                                             }
                                             else if (context.AIType == AIType.StableDiffusion)
                                             {
-                                                <Tag Color="@PresetColor.Lime.ToString()">StableDiffusion</Tag>
+                                                <Tag Color="@PresetColor.Magenta.ToString()">StableDiffusion</Tag>
                                             }
                                         </p>
                                     </div>
@@ -96,6 +100,10 @@
                                             else if (context.AIModelType == AIModelType.Image)
                                             {
                                                 <Tag Color="@PresetColor.Lime.ToString()">图片模型</Tag>
+                                            }
+                                            else if (context.AIModelType == AIModelType.Rerank)
+                                            {
+                                                <Tag Color="@PresetColor.GeekBlue.ToString()">Rerank重排模型</Tag>
                                             }
                                         </p>
                                     </div>
