@@ -177,7 +177,12 @@
             总数
             </summary>
         </member>
-        <member name="M:AntSK.Domain.Domain.Other.EmbeddingConfig.LoadModel(System.String,System.String)">
+        <member name="M:AntSK.Domain.Domain.Other.Bge.BegRerankConfig.LoadModel(System.String,System.String)">
+            <summary>
+            模型写死
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.Domain.Other.Bge.BgeEmbeddingConfig.LoadModel(System.String,System.String)">
             <summary>
             模型写死
             </summary>

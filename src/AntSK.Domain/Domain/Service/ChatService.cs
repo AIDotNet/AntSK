@@ -3,6 +3,7 @@ using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Dto;
+using AntSK.Domain.Domain.Other.Bge;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using AntSK.LLM.StableDiffusion;
@@ -100,24 +101,66 @@ namespace AntSK.Domain.Domain.Service
                 })));
             }
 
+
             var dataMsg = new StringBuilder();
             if (relevantSourceList.Any())
             {
+                if (!string.IsNullOrEmpty(app.RerankModelID))
+                {
+                    var rerankModel=_aIModels_Repositories.GetById(app.RerankModelID);
+                    BegRerankConfig.LoadModel(rerankModel.EndPoint, rerankModel.ModelName);
+                    //进行rerank
+                    foreach (var item in relevantSourceList)
+                    {
+                        List<string> rerank = new List<string>();
+                        rerank.Add(questions);
+                        rerank.Add(item.Text);
+                        item.RerankScore = BegRerankConfig.Rerank(rerank);
+                      
+                    }
+                    relevantSourceList = relevantSourceList.OrderByDescending(p => p.RerankScore).Take(app.MaxMatchesCount).ToList();
+                }
+                    
                 bool isSearch = false;
                 foreach (var item in relevantSourceList)
                 {
-                    //匹配相似度
-                    if (item.Relevance >= app.Relevance / 100)
+                    if (!string.IsNullOrEmpty(app.RerankModelID))
                     {
-                        dataMsg.AppendLine(item.ToString());
-                        isSearch = true;
+                        //匹配重排后相似度
+                        if (item.RerankScore >= app.Relevance / 100)
+                        {
+                            dataMsg.AppendLine(item.ToString());
+                            isSearch = true;
+                        }
+                    }
+                    else 
+                    {
+                        //匹配相似度
+                        if (item.Relevance >= app.Relevance / 100)
+                        {
+                            dataMsg.AppendLine(item.ToString());
+                            isSearch = true;
+                        }
                     }
                 }
 
                 //处理markdown显示
                 relevantSources?.AddRange(relevantSourceList);
+                Dictionary<string, string> fileDic = new Dictionary<string, string>();
                 foreach (var item in relevantSourceList)
                 {
+                    if (fileDic.ContainsKey(item.SourceName))
+                    {
+                        item.SourceName = fileDic[item.SourceName];
+                    }
+                    else
+                    {
+                        string fileName = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == item.SourceName).FileName;
+                        fileDic.Add(item.SourceName, fileName);
+                        item.SourceName = fileName;
+
+
+                    }
                     item.Text = Markdown.ToHtml(item.Text);
                 }
 

@@ -45,14 +45,30 @@ namespace AntSK.Domain.Domain.Service
             var embedModel = _aIModels_Repositories.GetFirst(p => p.Id == app.EmbeddingModelID);
             var chatHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(chatModel.EndPoint);
             var embeddingHttpClient = OpenAIHttpClientHandlerUtil.GetHttpClient(embedModel.EndPoint);
-
-            var searchClientConfig = new SearchClientConfig
+            SearchClientConfig searchClientConfig;
+            if (string.IsNullOrEmpty(app.RerankModelID))
             {
-                MaxAskPromptSize = app.MaxAskPromptSize,
-                MaxMatchesCount = app.MaxMatchesCount,
-                AnswerTokens = app.AnswerTokens,
-                EmptyAnswer = KmsConstantcs.KmsSearchNull
-            };
+                //不重排直接取查询数
+                searchClientConfig = new SearchClientConfig
+                {
+                    MaxAskPromptSize = app.MaxAskPromptSize,
+                    MaxMatchesCount = app.MaxMatchesCount,
+                    AnswerTokens = app.AnswerTokens,
+                    EmptyAnswer = KmsConstantcs.KmsSearchNull
+                };
+            }
+            else 
+            {
+                //重排取rerank数
+                searchClientConfig = new SearchClientConfig
+                {
+                    MaxAskPromptSize = app.MaxAskPromptSize,
+                    MaxMatchesCount = app.RerankCount,
+                    AnswerTokens = app.AnswerTokens,
+                    EmptyAnswer = KmsConstantcs.KmsSearchNull
+                };
+            }
+           
 
             var memoryBuild = new KernelMemoryBuilder()
                   .WithSearchClientConfig(searchClientConfig)

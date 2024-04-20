@@ -18,3 +18,4 @@ fire
 modelscope
 langchain-community
 sentence_transformers
+FlagEmbedding

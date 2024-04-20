@@ -26,8 +26,10 @@ namespace AntSK.Domain.Domain.Model.Enum
         LLamaFactory = 6,
         [Display(Name = "Bge Embedding")]
         BgeEmbedding = 7,
+        [Display(Name = "Bge Rerank")]
+        BgeRerank = 8,
         [Display(Name = "StableDiffusion")]
-        StableDiffusion = 8,
+        StableDiffusion = 9,
         [Display(Name = "模拟输出")]
         Mock = 100,
 
@@ -41,5 +43,6 @@ namespace AntSK.Domain.Domain.Model.Enum
         Chat = 1,
         Embedding = 2,
         Image=3,
+        Rerank=4
     }
 }
