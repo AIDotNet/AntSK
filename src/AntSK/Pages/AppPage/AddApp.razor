@@ -61,6 +61,7 @@
                         <span>更发散</span>
                     </FormItem>
                 }
+
                 else              
                 {
                     <FormItem Label="图片模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
@@ -123,6 +124,17 @@
                             </SelectOptions>
                         </Select>
                         <Button Type="@ButtonType.Link" OnClick="NavigateKmsList">去创建</Button>
+                    </FormItem>
+                    <FormItem Label="Rerank重排模型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Select DataSource="@_rerankList"
+                                @bind-Value="@context.RerankModelID"
+                                ValueProperty="c=>c.Id"
+                                LabelProperty="c=>'【'+c.AIType.ToString()+'】'+c.ModelDescription">
+                        </Select>
+                        <Button Type="@ButtonType.Link" OnClick="NavigateModelList">去创建</Button>
+                    </FormItem>
+                    <FormItem Label="Rerank数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <AntDesign.InputNumber @bind-Value="context.RerankCount" PlaceHolder="Rerank数"></AntDesign.InputNumber>
                     </FormItem>
                     <FormItem Label="提问最大token数" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <AntDesign.InputNumber @bind-Value="context.MaxAskPromptSize" PlaceHolder="提问最大token数"></AntDesign.InputNumber>
