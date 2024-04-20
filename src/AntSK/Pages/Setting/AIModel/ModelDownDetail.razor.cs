@@ -50,7 +50,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private void Down(string path)
         {
-            NavigationManager.NavigateTo($"/setting/model/addbypath/{path.Replace("?download=true", "").Replace("/", "---")}");
+            NavigationManager.NavigateTo($"/modelmanager/model/addbypath/{path.Replace("?download=true", "").Replace("/", "---")}");
         }
     }
 }

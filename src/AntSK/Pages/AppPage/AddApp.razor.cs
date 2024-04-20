@@ -141,7 +141,7 @@ namespace AntSK.Pages.AppPage
 
         private void NavigateModelList()
         {
-            NavigationManager.NavigateTo("/setting/modellist");
+            NavigationManager.NavigateTo("/modelmanager/modellist");
         }
 
         private void NavigateKmsList()

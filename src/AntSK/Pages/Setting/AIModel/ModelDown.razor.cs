@@ -71,7 +71,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private void Down(string modelPath)
         {
-            NavigationManager.NavigateTo($"/setting/modeldown/detail/{modelPath}");
+            NavigationManager.NavigateTo($"/modelmanager/modeldown/detail/{modelPath}");
         }
 
         private void OnModelTypeChange(string value)

@@ -51,12 +51,12 @@ namespace AntSK.Pages.Setting.AIModel
 
         public async Task AddModel()
         {
-            NavigationManager.NavigateTo("/setting/model/add");
+            NavigationManager.NavigateTo("/modelmanager/model/add");
         }
 
         public void Edit(string modelid)
         {
-            NavigationManager.NavigateTo("/setting/model/add/" + modelid);
+            NavigationManager.NavigateTo("/modelmanager/model/add/" + modelid);
         }
 
         public async Task Delete(string modelid)
