@@ -150,7 +150,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private void Back()
         {
-            NavigationManager.NavigateTo("/setting/modellist");
+            NavigationManager.NavigateTo("/modelmanager/modellist");
         }
 
         private async Task StartDownload()

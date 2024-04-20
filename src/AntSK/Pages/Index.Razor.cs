@@ -70,7 +70,7 @@ namespace AntSK.Pages
 
         private void NavToAIModel()
         {
-            NavigationManager.NavigateTo("/setting/modellist");
+            NavigationManager.NavigateTo("/modelmanager/modellist");
         }
     }
 }
