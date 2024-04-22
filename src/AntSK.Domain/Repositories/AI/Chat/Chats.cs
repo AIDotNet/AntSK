@@ -21,6 +21,7 @@ namespace AntSK.Domain.Repositories
         /// <summary>
         /// 消息内容
         /// </summary>
+        [SugarColumn(ColumnDataType = "varchar(4000)")]
         public string Context { get; set; } = "";
 
         /// <summary>

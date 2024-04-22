@@ -177,9 +177,9 @@ namespace AntSK.Pages.ChatPage.Components
                     IsSend = true
                 };
                 MessageList.Add(chat);
-                if (string.IsNullOrEmpty(_userName))
+                if (!string.IsNullOrEmpty(_userName))
                 {
-                    _chats_Repositories.InsertAsync(chat);
+                    await _chats_Repositories.InsertAsync(chat);
                 }
 
                 Sendding = true;

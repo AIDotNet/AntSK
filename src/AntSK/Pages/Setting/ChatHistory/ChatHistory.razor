@@ -1,0 +1,78 @@
+﻿@namespace AntSK.Pages.Setting.AIModel
+@page "/setting/chathistory"
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
+@using Microsoft.AspNetCore.Authorization
+@using System.ComponentModel
+@using AntDesign.TableModels
+@using AntSK.Domain.Repositories
+@using AntSK.Domain.Common.Map
+@attribute [Authorize(Roles = "AntSKAdmin")]
+<div>
+    <PageContainer Title="聊天记录">
+        <ChildContent>
+            <Table @ref="table"
+                   TItem="ChatsDto"
+                   DataSource="@chatDtoList"
+                   Total="_total"
+                   @bind-PageIndex="_pageIndex"
+                   @bind-PageSize="_pageSize"
+                   OnChange="OnChange"
+                   Size="TableSize.Small"
+                   RowKey="x=>x.Id">
+                <PropertyColumn Property="c=>c.Id" Sortable />
+                <PropertyColumn Title="用户名" Property="c=>c.UserName" Sortable />
+                <PropertyColumn Title="应用名称" Property="c=>c.AppName" Sortable />
+                <PropertyColumn Title="发送/接收" Property="c=>c.SendReveice" Sortable />
+                <PropertyColumn Title="时间" Property="c=>c.CreateTime" Format="yyyy-MM-dd HH:mm:ss" Sortable />
+            </Table>
+        </ChildContent>
+    </PageContainer>
+</div>
+@using System.Text.Json;
+@code {
+    [Inject] IChats_Repositories _chats_Repositories { get; set; }
+
+    ChatsDto[] chatDtoList;
+
+    ITable table;
+
+    int _pageIndex = 1;
+    int _pageSize = 10;
+    int _total = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await InitData();
+    }
+
+    public async Task OnChange(QueryModel<ChatsDto> queryModel)
+    {
+        await InitData();
+    }
+
+    private async Task InitData()
+    {
+        _total = _chats_Repositories.Count(p => true);
+        var chatList = _chats_Repositories.GetDB().Queryable<Chats, Apps>((c, a) => new object[] {
+            SqlSugar.JoinType.Left,c.AppId==a.Id
+    }).Select((c, a) => new ChatsDto
+    {
+        Id = c.Id,
+        UserName = c.UserName,
+        AppId = c.AppId,
+        IsSend = c.IsSend,
+        SendReveice = c.IsSend ? "发送" : "接收",
+        CreateTime = c.CreateTime,
+        AppName = a.Name
+    }).ToPageList(_pageIndex, _pageSize);
+        chatDtoList = chatList.ToArray();
+    }
+
+    public class ChatsDto : Chats
+    {
+        public string AppName { get; set; }
+        public string SendReveice { get; set; }
+    }
+
+}
