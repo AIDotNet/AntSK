@@ -297,7 +297,7 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        public async Task<ChatHistory> GetChatHistory(List<MessageInfo> MessageList)
+        public async Task<ChatHistory> GetChatHistory(List<Chats> MessageList)
         {
             ChatHistory history = new ChatHistory();
             if (MessageList.Count > 1)
