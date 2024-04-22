@@ -65,6 +65,11 @@
         "key": "setting.user"
       },
       {
+        "path": "/setting/chathistory",
+        "name": "聊天记录",
+        "key": "setting.chathistory"
+      },
+      {
         "path": "/setting/delkms",
         "name": "删除向量表",
         "key": "setting.delkms"

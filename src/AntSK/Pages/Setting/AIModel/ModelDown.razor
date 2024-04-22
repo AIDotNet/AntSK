@@ -3,67 +3,67 @@
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
 @using Microsoft.AspNetCore.Authorization
-@using AntSK.Domain.Domain.Model.hfmirror;
-    using AntSK.Domain.Domain.Model.hfmirror
+@using AntSK.Domain.Domain.Model.hfmirror
 @attribute [Authorize(Roles = "AntSKAdmin")]
 
+<div>
+    <PageContainer Title="模型列表">
+        <Content>
+            <RadioGroup @bind-Value="@_modelType" OnChange="OnModelTypeChange" TValue="string">
+                <Radio Value="@("gguf")" DefaultChecked=true>LLama本地模型(gguf)</Radio>
+                <Radio Value="@("safetensors")">StableDiffusion(safetensors)</Radio>
+                <Radio Value="@("ckpt")">StableDiffusion2(ckpt)</Radio>
+            </RadioGroup>
+            <div style="text-align: center;">
 
-<PageContainer Title="模型列表">
-    <Content>
-        <RadioGroup @bind-Value="@_modelType" OnChange="OnModelTypeChange" TValue="string">
-            <Radio Value="@("gguf")" DefaultChecked=true>LLama本地模型(gguf)</Radio>
-            <Radio Value="@("safetensors")">StableDiffusion(safetensors)</Radio>
-            <Radio Value="@("ckpt")">StableDiffusion2(ckpt)</Radio>
-        </RadioGroup>
-        <div style="text-align: center;">
-            
-            <Search Placeholder="输入回车"
-                    EnterButton="@("搜索")"
-                    Size="large"
-                    Style="max-width: 522px; width: 100%;"
-                    OnSearch="Search" />
-          
-        </div>
-    </Content>
-    <ChildContent>
-        <div class="filterCardList">
-            <Spin Tip="加载中..." Spinning="@(loaddding)">
-            <AntList TItem="HfModels"
-                     Grid="LayoutModel._listGridType"
-                     DataSource="_modelList">
-                <ListItem NoFlex>
-                    <Card Hoverable
-                           BodyStyle="padding-bottom: 20px;"
-                           Actions="new[] {
-                            down(()=> Down(context.Id)) 
+                <Search Placeholder="输入回车"
+                        EnterButton="@("搜索")"
+                        Size="large"
+                        Style="max-width: 522px; width: 100%;"
+                        OnSearch="Search" />
+
+            </div>
+        </Content>
+        <ChildContent>
+            <div class="filterCardList">
+                <Spin Tip="加载中..." Spinning="@(loaddding)">
+                    <AntList TItem="HfModels"
+                             Grid="LayoutModel._listGridType"
+                             DataSource="_modelList">
+                        <ListItem NoFlex>
+                            <Card Hoverable
+                                  BodyStyle="padding-bottom: 20px;"
+                                  Actions="new[] {
+                            down(()=> Down(context.Id))
                              }">
-                         <CardMeta>
-                             <TitleTemplate>
-                                 @context.Id
-                            </TitleTemplate>
-                            <AvatarTemplate>
-                                <Avatar Size="small" Src="@context.AuthorData.AvatarUrl" />
-                            </AvatarTemplate>
-                        </CardMeta>
-                        <div class="cardItemContent">
-                            <div class="cardInfo">
-                                <div>
-                                    <p>Downloads</p>
-                                    <p>@context.Downloads.ToString("0,0")</p>
+                                <CardMeta>
+                                    <TitleTemplate>
+                                        @context.Id
+                                    </TitleTemplate>
+                                    <AvatarTemplate>
+                                        <Avatar Size="small" Src="@context.AuthorData.AvatarUrl" />
+                                    </AvatarTemplate>
+                                </CardMeta>
+                                <div class="cardItemContent">
+                                    <div class="cardInfo">
+                                        <div>
+                                            <p>Downloads</p>
+                                            <p>@context.Downloads.ToString("0,0")</p>
+                                        </div>
+                                        <div>
+                                            <p>Likes</p>
+                                            <p>@context.Likes.ToString("0,0")</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p>Likes</p>
-                                    <p>@context.Likes.ToString("0,0")</p>
-                                </div>
-                            </div>
-                        </div>
-                    </Card>
-                </ListItem>
-            </AntList>
-            </Spin>
-        </div>
-    </ChildContent>
-</PageContainer>
+                            </Card>
+                        </ListItem>
+                    </AntList>
+                </Spin>
+            </div>
+        </ChildContent>
+    </PageContainer>
+</div>
 @code
 {
     RenderFragment down(Action clickAction) =>@<a key="down" @onclick="@clickAction">下载</a>;

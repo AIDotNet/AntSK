@@ -31,4 +31,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>  
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Setting\ChatHistory\" />
+  </ItemGroup>
 </Project>
