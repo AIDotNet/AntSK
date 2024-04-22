@@ -157,11 +157,6 @@
             模型类型
             </summary>
         </member>
-        <member name="P:AntSK.Domain.Domain.Model.MessageInfo.IsSend">
-            <summary>
-            发送是true  接收是false
-            </summary>
-        </member>
         <member name="P:AntSK.Domain.Domain.Model.PageList`1.PageIndex">
             <summary>
             当前页，从1开始
@@ -405,6 +400,36 @@
         <member name="P:AntSK.Domain.Repositories.Apps.AnswerTokens">
             <summary>
             回答最大token数
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Chats.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Chats.AppId">
+            <summary>
+            应用ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Chats.Context">
+            <summary>
+            消息内容
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Chats.IsSend">
+            <summary>
+            发送是true  接收是false
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Chats.CreateTime">
+            <summary>
+            创建事件
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Chats.FileName">
+            <summary>
+            文件名
             </summary>
         </member>
         <member name="P:AntSK.Domain.Repositories.Funs.Path">

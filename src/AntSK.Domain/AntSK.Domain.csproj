@@ -26,9 +26,9 @@
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="NPOI" Version="2.7.0" />
     
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.7.1" />
-    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.7.1" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.7.1-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.8.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.8.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.8.0-alpha" />
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Qdrant" Version="$(KMVersion)" />

@@ -18,6 +18,6 @@ namespace AntSK.Domain.Domain.Interface
 
         IAsyncEnumerable<StreamingKernelContent> SendKmsByAppAsync(Apps app, string questions, ChatHistory history, string filePath, List<RelevantSource> relevantSources = null);
         Task<string> SendImgByAppAsync(Apps app, string questions);
-        Task<ChatHistory> GetChatHistory(List<MessageInfo> MessageList);
+        Task<ChatHistory> GetChatHistory(List<Chats> MessageList);
     }
 }
