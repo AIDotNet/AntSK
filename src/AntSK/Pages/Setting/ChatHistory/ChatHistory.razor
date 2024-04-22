@@ -24,7 +24,13 @@
                 <PropertyColumn Title="用户名" Property="c=>c.UserName"  />
                 <PropertyColumn Title="应用名称" Property="c=>c.AppName"  />
                 <PropertyColumn Title="发送/接收" Property="c=>c.SendReveice"  />
-                <PropertyColumn Title="消息内容" Property="c=>(MarkupString)(c.Context)"  Width="30%" />
+                <ActionColumn Title="消息内容" Width="30%">
+                    <Space>
+                        <SpaceItem>
+                           @((MarkupString)(context.Context))
+                        </SpaceItem>
+                    </Space>
+                </ActionColumn>
                 <PropertyColumn Title="时间" Property="c=>c.CreateTime" Format="yyyy-MM-dd HH:mm:ss"  />
             </Table>
         </ChildContent>
