@@ -78,7 +78,6 @@ builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGrou
         .WithLogCallback((level, message) => {
             Console.WriteLine($"[llama {level}]: {message.TrimEnd('\n')}");
          })
-        .WithAvx(NativeLibraryConfig.AvxLevel.Avx);
         .WithAvx(NativeLibraryConfig.AvxLevel.Avx)
         .WithLogCallback((level, message) => {
             Console.WriteLine($"[llama {level}]: {message.TrimEnd('\n')}");
