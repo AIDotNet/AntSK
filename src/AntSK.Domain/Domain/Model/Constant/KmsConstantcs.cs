@@ -10,7 +10,9 @@ namespace AntSK.Domain.Domain.Model.Constant
     {
         public const string KmsIdTag = "kmsid";
         public const string FileIdTag = "fileid";
+        public const string AppIdTag = "appid";
         public const string KmsIndex = "kms";
+        public const string FileIndex = "kms";
         public const string KmsSearchNull="知识库未搜索到相关内容";
 
         public const string KmsPrompt = @"使用<data></data>标记的内容作为你的知识：

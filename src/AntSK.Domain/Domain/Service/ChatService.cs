@@ -99,17 +99,17 @@ namespace AntSK.Domain.Domain.Service
                     if (!status)
                     {
                         var result = await memory.ImportDocumentAsync(new Document(fileId).AddFile(filePath)
-                                  .AddTag(KmsConstantcs.KmsIdTag, app.Id)
+                                  .AddTag(KmsConstantcs.AppIdTag, app.Id)
                                   .AddTag(KmsConstantcs.FileIdTag, fileId)
-                                  , index: KmsConstantcs.KmsIndex);
+                                  , index: KmsConstantcs.FileIndex);
                     }
 
                     var filters = new List<MemoryFilter>() {
-                        new MemoryFilter().ByTag(KmsConstantcs.KmsIdTag, app.Id),
+                        new MemoryFilter().ByTag(KmsConstantcs.AppIdTag, app.Id),
                         new MemoryFilter().ByTag(KmsConstantcs.FileIdTag, fileId)
                     };
 
-                    var searchResult = await memory.SearchAsync(questions, index: KmsConstantcs.KmsIndex, filters: filters);
+                    var searchResult = await memory.SearchAsync(questions, index: KmsConstantcs.FileIndex, filters: filters);
                     relevantSourceList.AddRange(searchResult.Results.SelectMany(item => item.Partitions.Select(part => new RelevantSource()
                     {
                         SourceName = item.SourceName,

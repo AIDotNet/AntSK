@@ -72,6 +72,7 @@
         }
 
         kmsDetails_Repositories.GetDB().Ado.ExecuteCommand("DROP TABLE IF EXISTS \"km-kms\"");    
+        kmsDetails_Repositories.GetDB().Ado.ExecuteCommand("DROP TABLE IF EXISTS \"km-file\"");    
         var kmsDetails = await kmsDetails_Repositories.GetListAsync();
         foreach (var detail in kmsDetails)
         {
