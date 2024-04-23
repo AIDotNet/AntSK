@@ -1,0 +1,121 @@
+﻿@namespace AntSK.Pages.Setting.AIModel
+@page "/setting/chathistory"
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
+@using Microsoft.AspNetCore.Authorization
+@using System.ComponentModel
+@using AntDesign.TableModels
+@using AntSK.Domain.Repositories
+@using AntSK.Domain.Common.Map
+@attribute [Authorize(Roles = "AntSKAdmin")]
+
+<Table @ref="table"
+       TItem="ChatsDto"
+       DataSource="@chatDtoList"
+       Total="_total"
+       @bind-PageIndex="_pageIndex"
+       @bind-PageSize="_pageSize"
+       OnChange="OnChange"
+       Size="TableSize.Small"
+       RowKey="x=>x.Id">
+    <TitleTemplate>
+        <GridRow>
+            <GridCol Span="4">
+                <Title Level="3">聊天记录</Title>
+            </GridCol>
+            <GridCol Span="8" Offset="12">
+                <Search Placeholder="搜索" @bind-Value="searchString" OnSearch="Search" />
+            </GridCol>
+        </GridRow>
+    </TitleTemplate>
+    <ColumnDefinitions>
+        <PropertyColumn Property="c=>c.Id" />
+        <PropertyColumn Title="用户名" Property="c=>c.UserName" />
+        <PropertyColumn Title="应用名称" Property="c=>c.AppName" />
+        <PropertyColumn Title="发送/接收" Property="c=>c.SendReveice" />
+        <ActionColumn Title="消息内容" Width="30%">
+            <Space>
+                <SpaceItem>
+                    @((MarkupString)(context.Context))
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+        <PropertyColumn Title="时间" Property="c=>c.CreateTime" Format="yyyy-MM-dd HH:mm:ss" />
+    </ColumnDefinitions>
+</Table>
+
+@using System.Text.Json;
+@code {
+    [Inject] IChats_Repositories _chats_Repositories { get; set; }
+
+    ChatsDto[] chatDtoList;
+
+    ITable table;
+
+    int _pageIndex = 1;
+    int _pageSize = 10;
+    int _total = 0;
+    string searchString;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await InitData();
+    }
+
+    public async Task OnChange(QueryModel<ChatsDto> queryModel)
+    {
+        await InitData();
+    }
+
+    private async Task InitData()
+    {
+        if (string.IsNullOrEmpty(searchString))
+        {
+            _total = _chats_Repositories.Count(p => true);
+            var chatList = _chats_Repositories.GetDB().Queryable<Chats, Apps>((c, a) => new object[] {
+            SqlSugar.JoinType.Left,c.AppId==a.Id
+    }).Select((c, a) => new ChatsDto
+        {
+            Id = c.Id,
+            UserName = c.UserName,
+            AppId = c.AppId,
+            IsSend = c.IsSend,
+            SendReveice = c.IsSend ? "发送" : "接收",
+            Context = c.Context,
+            CreateTime = c.CreateTime,
+            AppName = a.Name
+        }).ToPageList(_pageIndex, _pageSize);
+            chatDtoList = chatList.ToArray();
+        }
+        else
+        {
+            _total = _chats_Repositories.Count(p => p.UserName.Contains(searchString) || p.Context.Contains(searchString));
+            var chatList = _chats_Repositories.GetDB().Queryable<Chats, Apps>((c, a) => new object[] {
+            SqlSugar.JoinType.Left,c.AppId==a.Id
+        }).Select((c, a) => new ChatsDto
+            {
+                Id = c.Id,
+                UserName = c.UserName,
+                AppId = c.AppId,
+                IsSend = c.IsSend,
+                SendReveice = c.IsSend ? "发送" : "接收",
+                Context = c.Context,
+                CreateTime = c.CreateTime,
+                AppName = a.Name
+        }).Where(c => c.UserName.Contains(searchString) || c.Context.Contains(searchString)).ToPageList(_pageIndex, _pageSize);
+            chatDtoList = chatList.ToArray();
+        }
+    }
+
+    private async Task Search(string searchKey)
+    {
+        await InitData();
+    }
+
+    public class ChatsDto : Chats
+    {
+        public string AppName { get; set; }
+        public string SendReveice { get; set; }
+    }
+
+}

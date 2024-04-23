@@ -47,6 +47,7 @@ namespace AntSK.Pages.AppPage
 
         private List<AIModels> _chatList;
         private List<AIModels> _embedingList;
+        private List<AIModels> _rerankList;
         private List<AIModels> _imageList;
         protected override async Task OnInitializedAsync()
         {
@@ -56,6 +57,7 @@ namespace AntSK.Pages.AppPage
             var models=_aimodels_Repositories.GetList();
             _chatList = models.Where(p => p.AIModelType == AIModelType.Chat).ToList();
             _embedingList = models.Where(p => p.AIModelType == AIModelType.Embedding).ToList();
+            _rerankList = models.Where(p => p.AIModelType == AIModelType.Rerank).ToList();
             _imageList = models.Where(p => p.AIModelType == AIModelType.Image).ToList();
 
             _functionService.SearchMarkedMethods();
@@ -141,7 +143,7 @@ namespace AntSK.Pages.AppPage
 
         private void NavigateModelList()
         {
-            NavigationManager.NavigateTo("/setting/modellist");
+            NavigationManager.NavigateTo("/modelmanager/modellist");
         }
 
         private void NavigateKmsList()

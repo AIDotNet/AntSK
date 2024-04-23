@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AntSK.Domain.Domain.Other;
+using AntSK.Domain.Domain.Other.Bge;
 
 namespace AntSK.Domain.Common.Embedding
 {
@@ -22,12 +22,12 @@ namespace AntSK.Domain.Common.Embedding
 
         public HuggingfaceTextEmbeddingGenerator(string pyDllPath,string modelName)
         {
-            _embedder = EmbeddingConfig.LoadModel(pyDllPath, modelName);
+            _embedder = BgeEmbeddingConfig.LoadModel(pyDllPath, modelName);
         }
 
         public void Dispose()
         {
-            EmbeddingConfig.Dispose();
+            BgeEmbeddingConfig.Dispose();
         }
 
         //public async Task<IList<ReadOnlyMemory<float>>> GenerateEmbeddingAsync(IList<string> data, CancellationToken cancellationToken = default)
@@ -44,13 +44,13 @@ namespace AntSK.Domain.Common.Embedding
 
         public async Task<Microsoft.KernelMemory.Embedding> GenerateEmbeddingAsync(string text, CancellationToken cancellationToken = default)
         {
-            var embeddings = await EmbeddingConfig.GetEmbedding(text);
+            var embeddings = await BgeEmbeddingConfig.GetEmbedding(text);
             return new Microsoft.KernelMemory.Embedding(embeddings);
         }
 
         public int CountTokens(string text)
         {
-            return EmbeddingConfig.TokenCount(text);
+            return BgeEmbeddingConfig.TokenCount(text);
         }
     }
 }

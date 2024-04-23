@@ -1,0 +1,88 @@
+﻿@namespace AntSK.Pages.Setting.AIModel
+@page "/setting/delkms"
+@using AntSK.Services.Auth
+@using AntSK.Domain.Options
+@using AntSK.Domain.Repositories
+@inherits AuthComponentBase
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "AntSKAdmin")]
+
+<GridContent>
+    <Card>
+        <Result Status="error"
+                Title="删除向量表"
+                SubTitle="删除向量表将会删除您的所有知识库文件，以及知识库向量。请谨慎操作！"
+                Style="margin-top: 48px; margin-bottom: 16px;">
+            <Extra>
+                <Button Type="primary" OnClick="DelDimensions">删除向量表</Button>
+            </Extra>
+            <ChildContent>
+                <div class="title__b__0">
+                    当您切换不同维度的向量模型时，出现异常:
+                </div>
+                <div style="margin-bottom: 16px;">
+                <Icon Type="close-circle" Theme="outline" Class="error_icon" Style="margin-right: 8px;" />
+                Npgsql.PostgresException (0x80004005): 22000: expected 2048 dimensions, not 1024  
+                </div>
+                <div>
+                <Icon Type="close-circle" Theme="outline" Class="error_icon" Style="margin-right: 8px;" />
+                您需要删除向量表，然后重建向量维度。
+                </div>
+            </ChildContent>
+        </Result>
+    </Card>
+</GridContent>
+
+<Modal @ref="_modal" Visible="_showAdminPwdVisible" Footer="null" Closable Title="请输入管理员密码" OnCancel="OnCancel" DestroyOnClose>
+    <Flex Gap="10" Vertical>
+        <InputGroup>
+            <InputPassword @bind-Value="@adminPwd" Placeholder="管理员密码" Size="@InputSize.Large" />
+        </InputGroup>
+        <InputGroup>
+            <Button Type="primary" OnClick="DelSubmit">确认</Button>
+        </InputGroup>
+    </Flex>
+</Modal>
+@code {
+    [Inject] protected MessageService? Message { get; set; }
+    [Inject] protected IKmsDetails_Repositories kmsDetails_Repositories { get; set; }
+
+    [Inject] protected IConfirmService _confirmService { get; set; }
+
+    private Modal _modal;
+    private bool _showAdminPwdVisible = false;
+    private string adminPwd = "";
+
+    public async Task DelDimensions()
+    {
+        var content = "删除向量表将会删除您的所有知识库文件，以及知识库向量。请谨慎操作！";
+        var title = "删除向量表";
+        var result = await _confirmService.Show(content, title, ConfirmButtons.YesNo);
+        if (result == ConfirmResult.Yes)
+        {
+            _showAdminPwdVisible = true;
+        }
+    }
+
+    public async Task DelSubmit() {
+        if (adminPwd != LoginOption.Password)
+        {
+            _ = Message.Error("管理员密码错误！");
+            return;
+        }
+
+        kmsDetails_Repositories.GetDB().Ado.ExecuteCommand("DROP TABLE IF EXISTS \"km-kms\"");    
+        var kmsDetails = await kmsDetails_Repositories.GetListAsync();
+        foreach (var detail in kmsDetails)
+        {
+            kmsDetails_Repositories.Delete(detail);
+        }     
+        _showAdminPwdVisible = false;
+        _ = Message.Info("删除成功！");
+    }
+
+    private void OnCancel()
+    {
+        _showAdminPwdVisible = false;
+    }
+}

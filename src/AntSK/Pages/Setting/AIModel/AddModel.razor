@@ -5,9 +5,9 @@
 @using AntSK.LLamaFactory.Model
 @using AntSK.LLamaFactory
 @using BlazorComponents.Terminal
-@page "/setting/model/add"
-@page "/setting/model/add/{ModelId}"
-@page "/setting/model/addbypath/{ModelPath}"
+@page "/modelmanager/model/add"
+@page "/modelmanager/model/add/{ModelId}"
+@page "/modelmanager/model/addbypath/{ModelPath}"
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
 @using Microsoft.AspNetCore.Authorization
@@ -27,20 +27,24 @@
                     <EnumRadioGroup @bind-Value="context.AIType" ButtonStyle="RadioButtonStyle.Solid" OnChange="AITypeChange" TEnum="AIType"> </EnumRadioGroup>
                 </FormItem>
                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <RadioGroup @bind-Value="context.AIModelType">                  
+                    <RadioGroup @bind-Value="context.AIModelType">
                         @if (context.AIType == AIType.StableDiffusion)
                         {
                             <Radio RadioButton Value="@(AIModelType.Image)">图片模型</Radio>
                         }
-                        else  
+                        else
                         {
-                            @if (context.AIType != AIType.BgeEmbedding)
+                            @if (context.AIType != AIType.BgeEmbedding && context.AIType != AIType.BgeRerank)
                             {
                                 <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
                             }
-                            @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock && context.AIType != AIType.SparkDesk)
+                            @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock && context.AIType != AIType.SparkDesk && context.AIType != AIType.BgeRerank)
                             {
                                 <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
+                            }
+                            @if (context.AIType == AIType.BgeRerank)
+                            {
+                                <Radio RadioButton Value="@(AIModelType.Rerank)">Rerank重排模型</Radio>
                             }
                         }
                     </RadioGroup>
@@ -140,7 +144,7 @@
                                 <Button OnClick="StopLFService" Disabled="@(!llamaFactoryIsStart)">停止</Button>
                             }
                         </InputGroup>
-                    </FormItem>               
+                    </FormItem>
                 }
 
                 @if (context.AIType == AIType.BgeEmbedding)
@@ -152,19 +156,45 @@
                                 LabelProperty="c=>c">
                         </Select>
                     </FormItem>
-                    <FormItem Label="PythonDll路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" />
+
+                    <FormItem Label="Python路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Popover ContentTemplate="@_content" Title="提示" Style="width:100%">
+                            <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" />
+                        </Popover>
+                    </FormItem>
+
+                    <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Button Type="primary" OnClick="PipInstall">环境安装</Button>
+                    </FormItem>
+                    <FormItem Label="下载并初始化" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Spin Tip="请等待..." Spinning="@(BgeEmbeddingIsStart)">
+                            <Button Type="primary" Disabled="@(BgeEmbeddingIsStart)" OnClick="BgeEmbedding">@BgeEmbeddingBtnText</Button>
+                        </Spin>
+                    </FormItem>
+                }
+                @if (context.AIType == AIType.BgeRerank)
+                {
+                    <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Select DataSource="@bgeRerankList"
+                                @bind-Value="@context.ModelName"
+                                ValueProperty="c=>c"
+                                LabelProperty="c=>c">
+                        </Select>
+                    </FormItem>
+                    <FormItem Label="Python路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Popover ContentTemplate="@_content" Title="提示" Style="width:100%">
+                            <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" />
+                        </Popover>
                     </FormItem>
                     <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Button Type="primary" OnClick="PipInstall">环境安装</Button>
                     </FormItem>
                     <FormItem Label="下载并初始化" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Spin Tip="请等待..." Spinning="@(BgeIsStart)" >
-                            <Button Type="primary" Disabled="@(BgeIsStart)" OnClick="BgeDownload">@BgeBtnText</Button>
+                        <Spin Tip="请等待..." Spinning="@(BgeRerankIsStart)">
+                            <Button Type="primary" Disabled="@(BgeRerankIsStart)" OnClick="BgeRerank">@BgeRerankBtnText</Button>
                         </Spin>
                     </FormItem>
                 }
-
                 @if (context.AIType == AIType.Mock)
                 {
                 }
@@ -206,5 +236,8 @@
 
 @code
 {
-
+    RenderFragment _content =
+    @<div>
+        <p>在windows上使用 python311.dll文件，在linux上使用 libpython3.10.so</p>
+    </div>;
 }

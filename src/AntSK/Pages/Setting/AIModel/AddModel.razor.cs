@@ -3,7 +3,7 @@ using AntDesign.ProLayout;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Enum;
-using AntSK.Domain.Domain.Other;
+using AntSK.Domain.Domain.Other.Bge;
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
@@ -61,8 +61,13 @@ namespace AntSK.Pages.Setting.AIModel
         private bool _logModalVisible;
 
         private List<string> bgeEmbeddingList = new List<string>() { "AI-ModelScope/bge-small-zh-v1.5", "AI-ModelScope/bge-base-zh-v1.5", "AI-ModelScope/bge-large-zh-v1.5" };
-        private bool BgeIsStart = false;
-        private string BgeBtnText = "初始化";
+        private List<string> bgeRerankList = new List<string>() { "Xorbits/bge-reranker-base", "Xorbits/bge-reranker-large", "AI-ModelScope/bge-reranker-v2-m3", "AI-ModelScope/bge-reranker-v2-gemma"};
+        private bool BgeEmbeddingIsStart = false;
+        private string BgeEmbeddingBtnText = "初始化";
+
+        private bool BgeRerankIsStart = false;
+        private string BgeRerankBtnText = "初始化";
+
 
         protected override async Task OnInitializedAsync()
         {
@@ -150,7 +155,7 @@ namespace AntSK.Pages.Setting.AIModel
 
         private void Back()
         {
-            NavigationManager.NavigateTo("/setting/modellist");
+            NavigationManager.NavigateTo("/modelmanager/modellist");
         }
 
         private async Task StartDownload()
@@ -268,7 +273,7 @@ namespace AntSK.Pages.Setting.AIModel
             }
         }
 
-        private async Task BgeDownload()
+        private async Task BgeEmbedding()
         {
             if (string.IsNullOrEmpty(_aiModel.ModelName))
             {
@@ -277,27 +282,60 @@ namespace AntSK.Pages.Setting.AIModel
             }
             if (string.IsNullOrEmpty(_aiModel.EndPoint))
             {
-                _ = Message.Error("请输入正确的Python dll路径！", 2);
+                _ = Message.Error("请输入正确的Python dll或python so路径！", 2);
                 return;
             }
 
-            BgeIsStart = true;
-            BgeBtnText = "正在初始化...";
+            BgeEmbeddingIsStart = true;
+            BgeEmbeddingBtnText = "正在初始化...";
             await Task.Run(() =>
             {
                 try
                 {
-                    EmbeddingConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
-                    BgeBtnText = "初始化完成";
-                    BgeIsStart = false;
+                    BgeEmbeddingConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
+                    BgeEmbeddingBtnText = "初始化完成";
+                    BgeEmbeddingIsStart = false;
                 }
                 catch (System.Exception ex)
                 {
                     _ = Message.Error(ex.Message, 2);
-                    BgeIsStart = false;
+                    BgeEmbeddingIsStart = false;
                 }
             });   
         }
+
+        private async Task BgeRerank()
+        {
+            if (string.IsNullOrEmpty(_aiModel.ModelName))
+            {
+                _ = Message.Error("请输入模型名称！", 2);
+                return;
+            }
+            if (string.IsNullOrEmpty(_aiModel.EndPoint))
+            {
+                _ = Message.Error("请输入正确的Python dll或python so路径！", 2);
+                return;
+            }
+
+            BgeRerankIsStart = true;
+            BgeRerankBtnText = "正在初始化...";
+            await Task.Run(() =>
+            {
+                try
+                {
+                    BegRerankConfig.LoadModel(_aiModel.EndPoint, _aiModel.ModelName);
+                    BgeRerankBtnText = "初始化完成";
+                    BgeRerankIsStart = false;
+                }
+                catch (System.Exception ex)
+                {
+                    _ = Message.Error(ex.Message, 2);
+                    BgeRerankIsStart = false;
+                }
+            });
+        }
+
+
         private async Task CmdLogHandler(string message)
         {
             await InvokeAsync(() =>
@@ -330,6 +368,9 @@ namespace AntSK.Pages.Setting.AIModel
                     break ;
                 case AIType.BgeEmbedding:
                     _aiModel.AIModelType = AIModelType.Embedding;
+                    break;
+                case AIType.BgeRerank:
+                    _aiModel.AIModelType = AIModelType.Rerank;
                     break;
                 default:
                     _aiModel.AIModelType = AIModelType.Chat;

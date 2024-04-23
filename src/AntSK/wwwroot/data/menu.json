@@ -36,8 +36,26 @@
     ]
   },
   {
+    "path": "/modelmanager",
+    "name": "模型管理",
+    "key": "modelmanager",
+    "icon": "shop",
+    "children": [
+      {
+        "path": "/modelmanager/modellist",
+        "name": "模型管理",
+        "key": "modelmanager.modellist"
+      },
+      {
+        "path": "/modelmanager/modeldown",
+        "name": "模型下载",
+        "key": "modelmanager.modeldown"
+      }
+    ]
+  },
+  {
     "path": "/setting",
-    "name": "设置",
+    "name": "系统设置",
     "key": "setting",
     "icon": "setting",
     "children": [
@@ -47,14 +65,14 @@
         "key": "setting.user"
       },
       {
-        "path": "/setting/modellist",
-        "name": "模型管理",
-        "key": "setting.modellist"
+        "path": "/setting/chathistory",
+        "name": "聊天记录",
+        "key": "setting.chathistory"
       },
       {
-        "path": "/setting/modeldown",
-        "name": "模型下载",
-        "key": "setting.modeldown"
+        "path": "/setting/delkms",
+        "name": "删除向量表",
+        "key": "setting.delkms"
       }
     ]
   },

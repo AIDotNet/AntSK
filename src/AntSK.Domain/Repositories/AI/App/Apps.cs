@@ -44,6 +44,9 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         public string? EmbeddingModelID { get; set; }
 
+        public string? RerankModelID { get; set; }
+
+
         public string? ImageModelID { get; set; }
         /// <summary>
         /// 温度
@@ -96,6 +99,9 @@ namespace AntSK.Domain.Repositories
         [SugarColumn(DefaultValue = "3")]
         public int MaxMatchesCount { get; set; } = 3;
 
+
+        [SugarColumn(DefaultValue = "20")]
+        public int RerankCount { get; set; } = 20;
         /// <summary>
         /// 回答最大token数
         /// </summary>
