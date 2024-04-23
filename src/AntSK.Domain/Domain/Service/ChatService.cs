@@ -86,7 +86,7 @@ namespace AntSK.Domain.Domain.Service
             {
                 var memory = _kMService.GetMemoryByApp(app);
                 var fileId = Guid.NewGuid().ToString();
-                var result = await memory.ImportDocumentAsync(new Microsoft.KernelMemory.Document(fileId).AddFile(filePath)
+                var result = await memory.ImportDocumentAsync(new Document(fileId).AddFile(filePath)
                           .AddTag(KmsConstantcs.KmsIdTag, app.Id)
                           , index: KmsConstantcs.KmsIndex);
 
@@ -99,6 +99,7 @@ namespace AntSK.Domain.Domain.Service
                     Text = Markdown.ToHtml(part.Text),
                     Relevance = part.Relevance
                 })));
+                app.Prompt = KmsConstantcs.KmsPrompt;
             }
 
 
@@ -155,11 +156,13 @@ namespace AntSK.Domain.Domain.Service
                     }
                     else
                     {
-                        string fileName = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == item.SourceName).FileName;
-                        fileDic.Add(item.SourceName, fileName);
-                        item.SourceName = fileName;
-
-
+                        var fileDetail = _kmsDetails_Repositories.GetFirst(p => p.FileGuidName == item.SourceName);
+                        if (fileDetail.IsNotNull())
+                        {
+                            string fileName = fileDetail.FileName;
+                            fileDic.Add(item.SourceName, fileName);
+                            item.SourceName = fileName;
+                        }       
                     }
                     item.Text = Markdown.ToHtml(item.Text);
                 }
@@ -169,7 +172,7 @@ namespace AntSK.Domain.Domain.Service
                     //KernelFunction jsonFun = _kernel.Plugins.GetFunction("KMSPlugin", "Ask1");
                     var temperature = app.Temperature / 100;//存的是0~100需要缩小
                     OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
-                    var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
+                    var func = _kernel.CreateFunctionFromPrompt(app.Prompt , settings);
 
                     var chatResult = _kernel.InvokeStreamingAsync(function: func,
                         arguments: new KernelArguments() { ["doc"] = dataMsg.ToString(), ["history"] = string.Join("\n", history.Select(x => x.Role + ": " + x.Content)), ["input"] = questions });

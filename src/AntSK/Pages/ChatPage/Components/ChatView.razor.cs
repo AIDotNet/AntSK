@@ -8,6 +8,7 @@ using AntSK.Domain.Utils;
 using AntSK.LLM.StableDiffusion;
 using AntSK.Models;
 using Blazored.LocalStorage;
+using DocumentFormat.OpenXml.InkML;
 using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
@@ -85,7 +86,6 @@ namespace AntSK.Pages.ChatPage.Components
         /// <returns></returns>
         private async Task GetMsgList()
         {
-            MessageList.Clear();
             List<Chats> msgs = new List<Chats>();
             if (string.IsNullOrEmpty(_userName))
             {
@@ -122,7 +122,7 @@ namespace AntSK.Pages.ChatPage.Components
         /// 保存聊天记录
         /// </summary>
         /// <returns></returns>
-        private async Task SaveMsg()
+        private async Task SaveMsg(List<Chats> MessageList)
         {
             if (string.IsNullOrEmpty(_userName))
             {
@@ -130,7 +130,10 @@ namespace AntSK.Pages.ChatPage.Components
             }
             else 
             {
-                await _chats_Repositories.InsertAsync(MessageList.LastOrDefault());
+                if (MessageList.Count() > 0)
+                {
+                    await _chats_Repositories.InsertAsync(MessageList.LastOrDefault());
+                }
             }          
         }
 
@@ -246,7 +249,11 @@ namespace AntSK.Pages.ChatPage.Components
             //缓存消息记录
             if (app.Type != AppType.img.ToString())
             {
-                await SaveMsg();
+                await SaveMsg(MessageList);
+                if (OnRelevantSources.IsNotNull())
+                {
+                    await OnRelevantSources.InvokeAsync(_relevantSources);
+                }       
             }
 
 
@@ -287,29 +294,23 @@ namespace AntSK.Pages.ChatPage.Components
         /// <returns></returns>
         private async Task SendKms(string questions, ChatHistory history, Apps app, string? filePath)
         {
-            Chats info = null;
+            Chats info = new Chats()
+            {
+                Id = Guid.NewGuid().ToString(),
+                AppId = AppId,
+                UserName = _userName,
+                CreateTime = DateTime.Now,
+                Context=""
+            };
+            MessageList.Add(info);
             var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, filePath, _relevantSources);
             await foreach (var content in chatResult)
             {
-                if (info == null)
-                {
-                    info = new Chats();
-                    info.Id = Guid.NewGuid().ToString();
-                    info.UserName = _userName;
-                    info.AppId = AppId;
-                    info.Context = content.ConvertToString();
-                    info.CreateTime = DateTime.Now;
 
-                    MessageList.Add(info);
-                }
-                else
-                {
-                    info.Context += content.ConvertToString();
-                    await Task.Delay(50);
-                }
+                info.Context += content.ConvertToString();
+                await Task.Delay(50);
                 await InvokeAsync(StateHasChanged);
             }
-            await OnRelevantSources.InvokeAsync(_relevantSources);
             //全部处理完后再处理一次Markdown
             await MarkDown(info);
         }
