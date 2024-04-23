@@ -85,21 +85,39 @@ namespace AntSK.Domain.Domain.Service
             if (!string.IsNullOrWhiteSpace(filePath))
             {
                 var memory = _kMService.GetMemoryByApp(app);
-                var fileId = Guid.NewGuid().ToString();
-                var result = await memory.ImportDocumentAsync(new Document(fileId).AddFile(filePath)
-                          .AddTag(KmsConstantcs.KmsIdTag, app.Id)
-                          , index: KmsConstantcs.KmsIndex);
 
-                var filters = new MemoryFilter().ByTag(KmsConstantcs.KmsIdTag, app.Id);
+                // 匹配GUID的正则表达式
+                string pattern = @"\b[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\b";
 
-                var searchResult = await memory.SearchAsync(questions, index: KmsConstantcs.KmsIndex, filters: [filters]);
-                relevantSourceList.AddRange(searchResult.Results.SelectMany(item => item.Partitions.Select(part => new RelevantSource()
+                // 使用正则表达式找到匹配
+                Match match = Regex.Match(filePath, pattern);
+                if (match.Success)
                 {
-                    SourceName = item.SourceName,
-                    Text = Markdown.ToHtml(part.Text),
-                    Relevance = part.Relevance
-                })));
-                app.Prompt = KmsConstantcs.KmsPrompt;
+                    var fileId = match.Value;
+
+                    var status=await  memory.IsDocumentReadyAsync(fileId, index: KmsConstantcs.KmsIndex);
+                    if (!status)
+                    {
+                        var result = await memory.ImportDocumentAsync(new Document(fileId).AddFile(filePath)
+                                  .AddTag(KmsConstantcs.KmsIdTag, app.Id)
+                                  .AddTag(KmsConstantcs.FileIdTag, fileId)
+                                  , index: KmsConstantcs.KmsIndex);
+                    }
+
+                    var filters = new List<MemoryFilter>() {
+                        new MemoryFilter().ByTag(KmsConstantcs.KmsIdTag, app.Id),
+                        new MemoryFilter().ByTag(KmsConstantcs.FileIdTag, fileId)
+                    };
+
+                    var searchResult = await memory.SearchAsync(questions, index: KmsConstantcs.KmsIndex, filters: filters);
+                    relevantSourceList.AddRange(searchResult.Results.SelectMany(item => item.Partitions.Select(part => new RelevantSource()
+                    {
+                        SourceName = item.SourceName,
+                        Text = Markdown.ToHtml(part.Text),
+                        Relevance = part.Relevance
+                    })));
+                    app.Prompt = KmsConstantcs.KmsPrompt;
+                }
             }
 
 
