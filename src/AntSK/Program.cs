@@ -34,6 +34,7 @@ builder.Services.AddControllers().AddJsonOptions(config =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddAntDesign();
+builder.Services.AddMasaBlazor();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();

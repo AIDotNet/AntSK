@@ -1,27 +1,102 @@
 ﻿@namespace AntSK.Pages.User
-@layout UserLayout
-@using Microsoft.AspNetCore.Components.Authorization
-@inject AuthenticationStateProvider AuthenticationStateProvider
 @page "/user/login"
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using Microsoft.AspNetCore.Components.Authorization
 
-<div class="main__b__0">
-    <div class="login">
-        <Form Model="@_model" OnFinish="HandleSubmit">
-            <Tabs ActiveKey="@context.LoginType">
-                <TabPane Key="1" Tab="账号登录">
-                    <FormItem>
-                        <AntDesign.Input Placeholder="请输入账号" Size="large" @bind-Value="@context.UserName">
-                            <Prefix><Icon Type="user" /></Prefix>
-                        </AntDesign.Input>
-                    </FormItem>
-                    <FormItem>
-                        <AntDesign.Input Placeholder="请输入密码" Size="large" @bind-Value="@context.Password" Type="password">
-                            <Prefix><Icon Type="lock" /></Prefix>
-                        </AntDesign.Input>
-                    </FormItem>
-                </TabPane>
-            </Tabs>
-            <Button Type="primary" HtmlType="submit" Class="submit" Size="large" Block>登录</Button>
-        </Form>
+@* @layout UserLayout   *@
+@layout AccountLayout
+
+
+@if (false)
+{
+    <div class="main__b__0">
+        <div class="login">
+            <Form Model="@_model" OnFinish="HandleSubmit">
+                <Tabs ActiveKey="@context.LoginType">
+                    <TabPane Key="1" Tab="账号登录">
+                        <FormItem>
+                            <AntDesign.Input Placeholder="请输入账号" Size="large" @bind-Value="@context.UserName">
+                                <Prefix><Icon Type="user" /></Prefix>
+                            </AntDesign.Input>
+                        </FormItem>
+                        <FormItem>
+                            <AntDesign.Input Placeholder="请输入密码" Size="large" @bind-Value="@context.Password" Type="password">
+                                <Prefix><Icon Type="lock" /></Prefix>
+                            </AntDesign.Input>
+                        </FormItem>
+                    </TabPane>
+                </Tabs>
+                <Button Type="primary" HtmlType="submit" Class="submit" Size="large" Block>登录</Button>
+            </Form>
+        </div>
     </div>
-</div>
+}
+else
+{
+    @using BlazorComponent;
+    @using Masa.Blazor;
+    @using Masa.Blazor.Presets;
+
+    <MCol Class="mt-2 mx-2 text-center">
+        <span class="text-h4">欢迎登陆 AntSK</span>
+        <div style="height: 10px"></div>
+        <MLabel>Welcome to login AntSK</MLabel>
+        <div style="height: 20px"></div>
+
+        <MForm Class="px-2" Model="_model" OnValidSubmit="LoginClick" EnableValidation=true>
+            <MCol Cols="12">
+                <MTextField @bind-Value="_model.UserName"
+                            Counter="10" Outlined=true Dense=false
+                            Label="账户" />
+            </MCol>
+
+            <MCol Cols="12">
+                <MTextField @bind-Value="_model.Password"
+                            Counter="10" Outlined=true Dense=false
+                            Type="@(showPwd?"key":"password")"
+                            AppendIcon="@(showPwd ? "mdi-eye" : "mdi-eye-off")"
+                            OnAppendClick="_=>showPwd=!showPwd"
+                            Label="密码" />
+            </MCol>
+
+            <MCol Cols="12">
+                <MRow Class="mx-2" AlignContent="AlignContentTypes.Center">
+                    <MSpacer />
+                    <MCheckbox @bind-Value="_model.AutoLogin"
+                               Label="自动登录"
+                               HideDetails="true"
+                               Color="success" />
+                </MRow>
+            </MCol>
+
+            <MCol Cols="12" Style="height: 30px"></MCol>
+
+            <MCol Cols="12" Class="px-5">
+                <MButton Class="rounded-4" Disabled="@_model.UnValid" Dark=true Block=true Type="submit" Color="primary" Loading="_logining">
+                    <strong>登  录</strong>
+                </MButton>
+            </MCol>
+
+            <MRow Class="mx-2 mb-1" AlignContent="AlignContentTypes.Center">
+                <MSpacer />
+                <MButton Plain=true OnClick="@(_=>NavigationManager.NavigateTo("identity/account/Register"))">
+                    <MLabel>没有帐户? 点我注册</MLabel>
+                </MButton>
+            </MRow>
+        </MForm>
+    </MCol>
+}
+
+
+
+
+@code {
+    bool _logining;
+    bool showPwd;
+    async Task LoginClick()
+    {
+        _logining = true;
+        await HandleSubmit();
+        _logining = false;
+    }
+}

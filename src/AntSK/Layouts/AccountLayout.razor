@@ -1,0 +1,47 @@
+﻿@namespace AntSK
+
+@using BlazorComponent;
+@using Masa.Blazor;
+@using Masa.Blazor.Presets;
+
+@inherits LayoutComponentBase
+
+<MApp>
+    <div style="height:100%;margin:0;padding:0; background-image:url(https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg)">
+        <div class="d-flex align-center" style="height:calc(100% - 80px);">
+            <MCard Width=600 Class="mx-auto my-auto text-center" Rounded="@("xl")" Elevation="6">
+                <MCardTitle>
+                    <ChildContent>
+                        <MRow Class="mt-2" Justify="JustifyTypes.Center">
+                            <MAvatar Size=80>
+                                <MImage Src="assets/logo.svg"></MImage>
+                            </MAvatar>
+                        </MRow>
+                    </ChildContent>
+                </MCardTitle>
+                <MCardText>
+                    <ChildContent>
+                        @Body
+                    </ChildContent>
+                </MCardText>
+            </MCard>
+        </div>
+
+        <MFooter Height=80 Style="background-color:transparent;">
+            <MRow NoGutters=true>
+                <MCol Cols="12" Class="text-center">
+                    <a href="assets/gzh.jpg" target="_blank" style="text-decoration:none;font-size:14px;color:gray">
+                        许泽宇的技术分享
+                        <MIcon Class="ml-6">mdi-github</MIcon>
+                    </a>
+                </MCol>
+                <MCol Cols="12" Class="text-center">
+                    <a href="https://github.com/AIDotNet/AntSK" target="_blank" style="text-decoration:none;font-size:14px;color:gray">
+                        Copyright © 许泽宇的技术分享
+                    </a>
+                </MCol>
+            </MRow>
+
+        </MFooter>
+    </div>
+</MApp>

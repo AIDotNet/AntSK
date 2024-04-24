@@ -4,9 +4,15 @@ namespace AntSK.Models
 {
     public class LoginParamsType
     {
-        [Required] public string UserName { get; set; }
+        [Required(ErrorMessage ="请填写 *{0}*")]
+        [Display(Name = "账户")]
+        public string UserName { get; set; }
 
-        [Required] public string Password { get; set; }
+        [Required(ErrorMessage = "请填写 *{0}*")]
+        [Display(Name = "密码")]
+        public string Password { get; set; }
+
+        public bool UnValid => string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password);
 
         public string Mobile { get; set; }
 
