@@ -78,8 +78,14 @@
   },
   {
     "path": "http://antsk.cn/",
-    "name": "文档",
+    "name": "使用文档",
     "key": "antskdoc",
     "icon": "question-circle"
+  },
+  {
+    "path": "https://www.bilibili.com/video/BV1vK421b7NF",
+    "name": "教程视频",
+    "key": "antskvideo",
+    "icon": "video-camera"
   }
 ]
