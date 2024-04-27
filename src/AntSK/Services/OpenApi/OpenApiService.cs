@@ -41,13 +41,14 @@ namespace AntSK.Services.OpenApi
                 {
                     case "chat":
                         //普通会话
+                        history.AddUserMessage(questions);
                         if (model.stream)
                         {
                             OpenAIStreamResult result1 = new OpenAIStreamResult();
                             result1.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                             result1.choices = new List<StreamChoicesModel>()
                                 { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
-                            await SendChatStream(HttpContext, result1, app, questions,history);
+                            await SendChatStream(HttpContext, result1, app,history);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result1));
                             await HttpContext.Response.CompleteAsync();
@@ -59,14 +60,12 @@ namespace AntSK.Services.OpenApi
                             result2.created = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                             result2.choices = new List<ChoicesModel>()
                                 { new ChoicesModel() { message = new OpenAIMessage() { role = "assistant" } } };
-                            result2.choices[0].message.content = await SendChat(questions,history, app);
+                            result2.choices[0].message.content = await SendChat(history, app);
                             HttpContext.Response.ContentType = "application/json";
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result2));
                             await HttpContext.Response.CompleteAsync();
                         }
-
                         break;
-
                     case "kms":
                         //知识库问答
                         if (model.stream)
@@ -91,16 +90,15 @@ namespace AntSK.Services.OpenApi
                             await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result4));
                             await HttpContext.Response.CompleteAsync();
                         }
-
                         break;
                 }
             }
         }
 
-        private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app,string questions, ChatHistory history)
+        private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, ChatHistory history)
         {
             HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
-            var chatResult = _chatService.SendChatByAppAsync(app, questions, history);
+            var chatResult = _chatService.SendChatByAppAsync(app, history);
             await foreach (var content in chatResult)
             {
                 result.choices[0].delta.content = content.ConvertToString();
@@ -113,7 +111,6 @@ namespace AntSK.Services.OpenApi
 
             await HttpContext.Response.WriteAsync("data: [DONE]");
             await HttpContext.Response.Body.FlushAsync();
-
             await HttpContext.Response.CompleteAsync();
         }
 
@@ -124,49 +121,48 @@ namespace AntSK.Services.OpenApi
         /// <param name="history"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        private async Task<string> SendChat(string questions, ChatHistory history, Apps app)
+        private async Task<string> SendChat(ChatHistory history, Apps app)
         {
-            string result = "";
-
-            if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
-            {
-                //如果模板为空，给默认提示词
-                app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
-            }
-            KernelArguments args = new KernelArguments();
-            if (history.Count > 10)
-            {
-                app.Prompt = @"${{ConversationSummaryPlugin.SummarizeConversation $history}}" + app.Prompt;
-                args = new() {
-                { "history", string.Join("\n", history.Select(x => x.Role + ": " + x.Content)) },
-                { "input", questions }
-                };
-            }
-            else
-            {
-                args = new()
-                {
-                { "input", $"{string.Join("\n", history.Select(x => x.Role + ": " + x.Content))}{Environment.NewLine} user:{questions}" }
-                };
-            }
-
             var _kernel = _kernelService.GetKernelByApp(app);
-            var temperature = app.Temperature / 100; //存的是0~100需要缩小
+            var chat = _kernel.GetRequiredService<IChatCompletionService>();
+
+            var temperature = app.Temperature / 100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
+            List<string> completionList = new List<string>();
             if (!string.IsNullOrEmpty(app.ApiFunctionList) || !string.IsNullOrEmpty(app.NativeFunctionList))//这里还需要加上本地插件的
             {
                 _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
-            }
-            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult =await _kernel.InvokeAsync(function: func, arguments: args);
-            if (chatResult.IsNotNull())
-            {
-                string answers = chatResult.GetValue<string>();
-                result = answers;
-            }
+                settings.ToolCallBehavior = ToolCallBehavior.EnableKernelFunctions;
+                while (true)
+                {
+                    ChatMessageContent result = await chat.GetChatMessageContentAsync(history, settings, _kernel);
+                    if (result.Content is not null)
+                    {
+                        string chunkCompletion = result.Content.ConvertToString();
+                        completionList.Add(chunkCompletion);
+                        return chunkCompletion;
+                    }
+                    history.Add(result);
+                    IEnumerable<FunctionCallContent> functionCalls = FunctionCallContent.GetFunctionCalls(result);
+                    if (!functionCalls.Any())
+                    {
+                        break;
+                    }
 
-            return result;
+                    foreach (var functionCall in functionCalls)
+                    {
+                        FunctionResultContent resultContent = await functionCall.InvokeAsync(_kernel);
+
+                        history.Add(resultContent.ToChatMessage());
+                    }
+                }
+            }
+            else
+            {
+                ChatMessageContent result = await chat.GetChatMessageContentAsync(history, settings, _kernel);
+                return result.Content.ConvertToString();
+            }
+            return "";
         }
 
         private async Task SendKmsStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string questions,ChatHistory history)

@@ -10,6 +10,7 @@ using AntSK.LLM.StableDiffusion;
 using Markdig;
 using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using System.Diagnostics;
 using System.Drawing;
@@ -35,45 +36,54 @@ namespace AntSK.Domain.Domain.Service
         /// <param name="questions"></param>
         /// <param name="history"></param>
         /// <returns></returns>
-        public async IAsyncEnumerable<StreamingKernelContent> SendChatByAppAsync(Apps app, string questions, ChatHistory history)
+        public async IAsyncEnumerable<string> SendChatByAppAsync(Apps app, ChatHistory history)
         {
-
-            if (string.IsNullOrEmpty(app.Prompt) || !app.Prompt.Contains("{{$input}}"))
-            {
-                //如果模板为空，给默认提示词
-                app.Prompt = app.Prompt.ConvertToString() + "{{$input}}";
-            }
-            KernelArguments args = new KernelArguments();
-            if (history.Count > 10)
-            {
-                app.Prompt = @"${{ConversationSummaryPlugin.SummarizeConversation $history}}" + app.Prompt;
-                args = new() {
-                { "history", string.Join("\n", history.Select(x => x.Role + ": " + x.Content)) },
-                { "input", questions }
-                };
-            }
-            else
-            {
-                args = new()
-                {
-                { "input", $"{string.Join("\n", history.Select(x => x.Role + ": " + x.Content))}{Environment.NewLine} user:{questions}" }
-                };
-            }
-
             var _kernel = _kernelService.GetKernelByApp(app);
+            var chat = _kernel.GetRequiredService<IChatCompletionService>();
             var temperature = app.Temperature / 100;//存的是0~100需要缩小
             OpenAIPromptExecutionSettings settings = new() { Temperature = temperature };
+            List<string> completionList = new List<string>();
             if (!string.IsNullOrEmpty(app.ApiFunctionList) || !string.IsNullOrEmpty(app.NativeFunctionList))//这里还需要加上本地插件的
             {
                 _kernelService.ImportFunctionsByApp(app, _kernel);
-                settings.ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions;
+                settings.ToolCallBehavior = ToolCallBehavior.EnableKernelFunctions;
+                while (true)
+                {
+                    ChatMessageContent result = await chat.GetChatMessageContentAsync(history, settings, _kernel);
+                    if (result.Content is not null)
+                    {
+                        string chunkCompletion = result.Content.ConvertToString();
+                        completionList.Add(chunkCompletion);
+                        foreach (var content in completionList)
+                        {
+                            yield return content.ConvertToString();
+                        }
+                        break;
+                    }
+
+                    history.Add(result);
+
+                    IEnumerable<FunctionCallContent> functionCalls = FunctionCallContent.GetFunctionCalls(result);
+                    if (!functionCalls.Any())
+                    {
+                        break;
+                    }
+
+                    foreach (var functionCall in functionCalls)
+                    {
+                        FunctionResultContent resultContent = await functionCall.InvokeAsync(_kernel);
+
+                        history.Add(resultContent.ToChatMessage());
+                    }
+                }
             }
-            var func = _kernel.CreateFunctionFromPrompt(app.Prompt, settings);
-            var chatResult = _kernel.InvokeStreamingAsync(function: func,
-                arguments: args);
-            await foreach (var content in chatResult)
+            else
             {
-                yield return content;
+                var chatResult = chat.GetStreamingChatMessageContentsAsync(history, settings, _kernel);
+                await foreach (var content in chatResult)
+                {
+                    yield return content.ConvertToString();
+                }
             }
         }
 
@@ -318,9 +328,8 @@ namespace AntSK.Domain.Domain.Service
             }
         }
 
-        public async Task<ChatHistory> GetChatHistory(List<Chats> MessageList)
+        public async Task<ChatHistory> GetChatHistory(List<Chats> MessageList, ChatHistory history)
         {
-            ChatHistory history = new ChatHistory();
             if (MessageList.Count > 1)
             {
 

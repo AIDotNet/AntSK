@@ -20,6 +20,8 @@ using System.Reflection;
 using DocumentFormat.OpenXml.Drawing;
 using Microsoft.KernelMemory;
 using OpenCvSharp.ML;
+using LLamaSharp.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -105,6 +107,7 @@ namespace AntSK.Domain.Domain.Service
                     var (weights, parameters) = LLamaConfig.GetLLamaConfig(chatModel.ModelName);
                     var ex = new StatelessExecutor(weights, parameters);
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("local-llama", new LLamaSharpTextCompletion(ex));
+                    builder.Services.AddKeyedSingleton<IChatCompletionService>("local-llama-chat", new LLamaSharpChatCompletion(ex));
                     break;
 
                 case Model.Enum.AIType.SparkDesk:
