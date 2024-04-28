@@ -113,6 +113,7 @@ namespace AntSK.Domain.Domain.Service
                 case Model.Enum.AIType.SparkDesk:
                     var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelKey, ApiKey = chatModel.ModelName, ModelVersion = Sdcb.SparkDesk.ModelVersion.V3_5 };
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, chatModel.Id));
+                    builder.Services.AddKeyedSingleton<IChatCompletionService>("spark-desk-chat", new SparkDeskChatCompletion(options, chatModel.Id));
                     break;
 
                 case Model.Enum.AIType.DashScope:
@@ -121,6 +122,7 @@ namespace AntSK.Domain.Domain.Service
 
                 case Model.Enum.AIType.Mock:
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("mock", new MockTextCompletion());
+                    builder.Services.AddKeyedSingleton<IChatCompletionService>("mock-chat", new MockChatCompletion());
                     break;
                 case Model.Enum.AIType.LLamaFactory:
                     builder.AddOpenAIChatCompletion(
