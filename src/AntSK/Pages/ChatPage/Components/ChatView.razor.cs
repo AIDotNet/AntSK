@@ -224,26 +224,40 @@ namespace AntSK.Pages.ChatPage.Components
         /// <returns></returns>
         protected async Task<bool> SendAsync(string questions, string? filePath)
         {
-            ChatHistory history = new ChatHistory();
+
             //处理多轮会话
             Apps app = _apps_Repositories.GetFirst(p => p.Id == AppId);
-            if (MessageList.Count > 0)
-            {
-                history = await _chatService.GetChatHistory(MessageList);
-            }
+            ChatHistory history;
 
             if (app.Type == AppType.chat.ToString() && (filePath == null || app.EmbeddingModelID.IsNull()))
             {
-                await SendChat(questions, history, app);
+                if (string.IsNullOrEmpty(app.Prompt))
+                {
+                    app.Prompt = "你叫AntSK,是一个人工智能助手";
+                }
+                //聊天应用增加系统角色
+                history = new ChatHistory(app.Prompt.ConvertToString());
+
+                if (MessageList.Count > 0)
+                {
+                    history = await _chatService.GetChatHistory(MessageList, history);
+                }
+                await SendChat(history, app);
             }
             else if (app.Type == AppType.kms.ToString() || filePath != null || app.EmbeddingModelID.IsNotNull())
             {
+                history = new ChatHistory();
+
+                if (MessageList.Count > 0)
+                {
+                    history = await _chatService.GetChatHistory(MessageList, history);
+                }
                 await SendKms(questions, history, app, filePath);
-               
+
             }
             else if (app.Type == AppType.img.ToString())
             {
-                await SendImg(questions,app);
+                await SendImg(questions, app);
             }
 
             //缓存消息记录
@@ -253,7 +267,7 @@ namespace AntSK.Pages.ChatPage.Components
                 if (OnRelevantSources.IsNotNull())
                 {
                     await OnRelevantSources.InvokeAsync(_relevantSources);
-                }       
+                }
             }
 
 
@@ -318,14 +332,13 @@ namespace AntSK.Pages.ChatPage.Components
         /// <summary>
         /// 发送普通对话
         /// </summary>
-        /// <param name="questions"></param>
         /// <param name="history"></param>
         /// <param name="app"></param>
         /// <returns></returns>
-        private async Task SendChat(string questions, ChatHistory history, Apps app)
+        private async Task SendChat(ChatHistory history, Apps app)
         {
             Chats info = null;
-            var chatResult = _chatService.SendChatByAppAsync(app, questions, history);
+            var chatResult = _chatService.SendChatByAppAsync(app, history);
             await foreach (var content in chatResult)
             {
                 if (info == null)

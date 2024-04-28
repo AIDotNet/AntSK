@@ -20,6 +20,8 @@ using System.Reflection;
 using DocumentFormat.OpenXml.Drawing;
 using Microsoft.KernelMemory;
 using OpenCvSharp.ML;
+using LLamaSharp.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -105,11 +107,13 @@ namespace AntSK.Domain.Domain.Service
                     var (weights, parameters) = LLamaConfig.GetLLamaConfig(chatModel.ModelName);
                     var ex = new StatelessExecutor(weights, parameters);
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("local-llama", new LLamaSharpTextCompletion(ex));
+                    builder.Services.AddKeyedSingleton<IChatCompletionService>("local-llama-chat", new LLamaSharpChatCompletion(ex));
                     break;
 
                 case Model.Enum.AIType.SparkDesk:
                     var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelKey, ApiKey = chatModel.ModelName, ModelVersion = Sdcb.SparkDesk.ModelVersion.V3_5 };
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, chatModel.Id));
+                    builder.Services.AddKeyedSingleton<IChatCompletionService>("spark-desk-chat", new SparkDeskChatCompletion(options, chatModel.Id));
                     break;
 
                 case Model.Enum.AIType.DashScope:
@@ -118,6 +122,7 @@ namespace AntSK.Domain.Domain.Service
 
                 case Model.Enum.AIType.Mock:
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("mock", new MockTextCompletion());
+                    builder.Services.AddKeyedSingleton<IChatCompletionService>("mock-chat", new MockChatCompletion());
                     break;
                 case Model.Enum.AIType.LLamaFactory:
                     builder.AddOpenAIChatCompletion(

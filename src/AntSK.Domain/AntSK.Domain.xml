@@ -199,7 +199,7 @@
         <member name="M:AntSK.Domain.Domain.Other.QAHandler.InvokeAsync(Microsoft.KernelMemory.Pipeline.DataPipeline,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:AntSK.Domain.Domain.Service.ChatService.SendChatByAppAsync(AntSK.Domain.Repositories.Apps,System.String,Microsoft.SemanticKernel.ChatCompletion.ChatHistory)">
+        <member name="M:AntSK.Domain.Domain.Service.ChatService.SendChatByAppAsync(AntSK.Domain.Repositories.Apps,Microsoft.SemanticKernel.ChatCompletion.ChatHistory)">
             <summary>
             发送消息
             </summary>

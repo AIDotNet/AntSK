@@ -85,12 +85,13 @@
                     <FormItem Label="APPID" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="请输入APPID" @bind-Value="@context.EndPoint" />
                     </FormItem>
-                    <FormItem Label="APIKey" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入请输入APIKey" @bind-Value="@context.ModelName" />
-                    </FormItem>
                     <FormItem Label="APISecret" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputPassword @bind-Value="@context.ModelKey" Placeholder="APISecret" Size="@InputSize.Large" />
                     </FormItem>
+                    <FormItem Label="APIKey" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="请输入请输入APIKey" @bind-Value="@context.ModelName" />
+                    </FormItem>
+                   
                 }
                 @if (context.AIType == AIType.DashScope)
                 {
