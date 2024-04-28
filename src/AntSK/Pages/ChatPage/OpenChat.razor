@@ -6,14 +6,16 @@
 @page "/OpenChat/{AppId}"
 @layout OpenLayout
 
+
 <ChatView AppId="@AppId" ShowTitle=true>
 
 </ChatView>
 
+
 <style>
-    #chat{
-        height:100% ;
-        display:flex;
+    #chat {
+        height: 100%;
+        display: flex;
         flex-direction: column;
         overflow-x: hidden;
         font-family: Arial, sans-serif;
@@ -21,7 +23,7 @@
         padding: 10px;
     }
 </style>
-@code{
+@code {
     [Parameter]
     public string AppId { get; set; }
 }

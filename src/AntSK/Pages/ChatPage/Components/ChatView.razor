@@ -5,6 +5,7 @@
 @layout OpenLayout
 @inherits AntDomComponentBase
 
+
 <div id="chat">
     @if (ShowTitle)
     {
@@ -64,7 +65,7 @@
     <Flex Justify="end">
 
         <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding"></AntDesign.Input>
-        @if (app.EmbeddingModelID!=null)
+        @if (app.EmbeddingModelID != null)
         {
             <Upload Action="@("api/File/UploadFile")"
                     Name="file"
