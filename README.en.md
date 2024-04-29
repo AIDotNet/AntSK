@@ -39,9 +39,10 @@ AntSK is suitable for various business scenarios, such as:
 
 ## ✏️Function Examples
 ### Online Demo
-```
-https://antsk.ai-dotnet.com/
-```
+[document](http://antsk.cn/)
+
+[demo](https://antsk.ai-dotnet.com/)
+
 ```
 Default account: test
 
@@ -198,12 +199,12 @@ This project exists thanks to all the people who contribute.
   <img src="https://contrib.rocks/image?repo=AIDotNet/AntSK&max=1000&columns=15&anon=1" />
 </a>
 
-## 🚨 Code of Conduct
-
-This project has adopted the code of conduct defined by the Contributor Covenant to clarify expected behavior in our community.
-For more information see the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
-
-To learn more or get started with **AntSK**, follow my official WeChat account and join the discussion group.
+## 🚨  Use Protocol
+This warehouse follows the [Apache-2.0 License]（ https://github.com/AIDotNet/AntSK?tab=Apache -2.0-1-ov file) open source protocol.
+The Apache open source license allows the use of AntSK in commercial environments, provided that the license terms are followed. One of the main terms is to retain the copyright and license statements.
+If you plan to use AntSK in commercial projects, you need to ensure that you follow the following steps:
+1. Copyright statement containing Apache license. [Apache-2.0 License]（ https://github.com/AIDotNet/AntSK?tab=Apache -2.0-1-ov file).
+2. If you modify the software source code, you need to clearly indicate these modifications in the source code.
 
 ## ☎️Contact Me
 If you have any questions or suggestions, please contact me through my official WeChat account. We also have a discussion group where you can send a message to join, and then I will add you to the group.
