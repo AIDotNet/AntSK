@@ -207,15 +207,21 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 <img src="https://contrib.rocks/image?repo=AIDotNet/AntSK&max=1000&columns=15&anon=1" />
 </a>
 ﻿
-## 🚨 行为准则
+## 🚨 使用协议
 
-该项目采用了贡献者公约定义的行为准则，以阐明我们社区的预期行为。有关更多信息，请参见 .NET Foundation 行为准则。 [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
+本仓库遵循  [Apache-2.0 License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) 开源协议。
+Apache开源许可证允许在商业环境中使用AntSK，前提是需要遵守许可证的条款。主要条款之一是要保留版权声明和许可证声明。
 
-想了解更多信息或开始使用 **AntSK**，可以关注我的公众号以及加入交流群。
+如果您打算在商业项目中使用AntSK，您需要确保遵守以下步骤：
+
+1、包含Apache许可证的版权声明。 [Apache-2.0 License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) 。
+
+2、如果您修改了软件源代码，您需要在源代码中明确标明这些修改。
+
 
 ## ☎️联系我
 如有任何问题或建议，请通过以下方式关注我的公众号《许泽宇的技术分享》，发消息与我联系，我们也有AIDotnet交流群，可以发送进群等消息，然后我会拉你进交流群
-![公众号](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
+[公众号](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
 ## 🌟 Star History
 <a href="https://github.com/AIDotNet/AntSK/stargazers" target="_blank" style="display: block" align="center">
