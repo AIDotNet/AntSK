@@ -186,9 +186,11 @@ namespace AntSK.Pages.ChatPage.Components
                 }
 
                 Sendding = true;
-                await SendAsync(_messageInput, filePath);
-                _messageInput = "";
-                Sendding = false;
+                Task.Run(() =>
+                {
+                    SendAsync(_messageInput, filePath);
+                });
+
             }
             catch (System.Exception ex)
             {
@@ -270,7 +272,8 @@ namespace AntSK.Pages.ChatPage.Components
                 }
             }
 
-
+            _messageInput = "";
+            Sendding = false;
             return await Task.FromResult(true);
         }
 
