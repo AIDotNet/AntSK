@@ -296,7 +296,7 @@ namespace AntSK.Domain.Domain.Service
                     {
                         DocumentId = item.GetDocumentId(),
                         Text = item.GetPartitionText(),
-                        Url = item.GetWebPageUrl(),
+                        Url = item.GetWebPageUrl(KmsConstantcs.KmsIndex),
                         LastUpdate = item.GetLastUpdate().LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
                         File = item.GetFileName()
                     }));
