@@ -178,7 +178,6 @@ namespace AntSK.Domain.Domain.Service
 
                             var getParametes = new List<KernelParameterMetadata>() {
                                      new KernelParameterMetadata("jsonbody"){
-                                      Name="json参数字符串",
                                       ParameterType=typeof(string),
                                       Description=$"背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.Query}"
                                     }
@@ -217,7 +216,6 @@ namespace AntSK.Domain.Domain.Service
                             //处理json body
                             var postParametes = new List<KernelParameterMetadata>() {
                                     new KernelParameterMetadata("jsonbody"){
-                                      Name="json参数字符串",
                                       ParameterType=typeof(string),
                                       Description=$"背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.JsonBody}"
                                     }
