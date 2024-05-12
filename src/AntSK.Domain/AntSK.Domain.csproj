@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AntDesign.Charts" Version="0.5.1" />
-    <PackageReference Include="AntDesign.ProLayout" Version="0.18.2" />
+    <PackageReference Include="AntDesign.ProLayout" Version="0.19.0" />
     <PackageReference Include="BlazorComponents.Terminal" Version="0.6.0" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
   
@@ -26,9 +26,9 @@
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="NPOI" Version="2.7.0" />
     
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.10.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.10.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.10.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.11.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.11.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.11.1-alpha" />
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Qdrant" Version="$(KMVersion)" />
