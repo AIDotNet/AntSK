@@ -330,19 +330,15 @@ namespace AntSK.Domain.Domain.Service
 
         public async Task<ChatHistory> GetChatHistory(List<Chats> MessageList, ChatHistory history)
         {
-            if (MessageList.Count > 1)
+            foreach (var item in MessageList)
             {
-
-                foreach (var item in MessageList)
+                if (item.IsSend)
                 {
-                    if (item.IsSend)
-                    {
-                        history.AddUserMessage(item.Context);
-                    }
-                    else
-                    {
-                        history.AddAssistantMessage(item.Context);
-                    }
+                    history.AddUserMessage(item.Context);
+                }
+                else
+                {
+                    history.AddAssistantMessage(item.Context);
                 }
             }
             return history;
