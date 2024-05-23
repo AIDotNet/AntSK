@@ -78,7 +78,7 @@ AntSK 适用于多种业务场景，例如：
 
 从项目根目录下载[docker-compose.yml](https://github.com/AIDotNet/AntSK/blob/main/docker-compose.yml),然后把配置文件**appsettings.json**和它放在统一目录，
 
-这里已经把pg的镜像做好了。在docker-compose.yml中可以修改默认账号密码，然后你的 [appsettings.json](https://github.com/AIDotNet/AntSK/blob/main/src/AntSK/appsettings.json)的数据库连接需要保持一致。
+这里已经把pg的镜像做好了。在docker-compose.yml中可以修改默认账号密码，然后你的 [appsettings.json](https://github.com/AIDotNet/AntSK/blob/main/src/AntSK/appsettings.json) 的数据库连接需要保持一致。
 
 然后你可以进入到目录后执行
 ```
