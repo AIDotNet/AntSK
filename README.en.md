@@ -66,11 +66,10 @@ The following configuration file needs to be configured
 
 ## 1️⃣Using docker-compose
 
-Provided the pg version **appsettings.json** and simplified version (Sqlite+disk) **docker-compose.simple.yml**
+Provided the pg version [appsettings.json](https://github.com/AIDotNet/AntSK/blob/main/src/AntSK/appsettings.json) and simplified version (Sqlite+disk)  [docker-compose.simple.yml](https://github.com/AIDotNet/AntSK/blob/main/docker-compose.simple.yml)
+Download **docker-compose.yml** from the project root directory and place the configuration file [docker-compose.yml](https://github.com/AIDotNet/AntSK/blob/main/docker-compose.yml) in the same directory.
 
-Download **docker-compose.yml** from the project root directory and place the configuration file **appsettings.json** in the same directory.
-
-The pg image has already been prepared. You can modify the default username and password in docker-compose.yml, and then the database connection in your **appsettings.json** needs to be consistent.
+The pg image has already been prepared. You can modify the default username and password in docker-compose.yml, and then the database connection in your [appsettings.json](https://github.com/AIDotNet/AntSK/blob/main/src/AntSK/appsettings.json) needs to be consistent.
 
 Then you can execute the following command in the directory to start AntSK
 ```
