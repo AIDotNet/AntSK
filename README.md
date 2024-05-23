@@ -208,7 +208,8 @@ If you plan to use AntSK in commercial projects, you need to ensure that you fol
 
 ## ☎️Contact Me
 If you have any questions or suggestions, please contact me through my official WeChat account. We also have a discussion group where you can send a message to join, and then I will add you to the group.
-![Official WeChat Account](https://github.com/AIDotNet/Avalonia-Assistant/blob/main/img/gzh.jpg)
+
+![Official WeChat Account](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg))
 
 ---
 
