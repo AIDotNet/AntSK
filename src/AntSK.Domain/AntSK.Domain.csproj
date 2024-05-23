@@ -5,11 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DocumentationFile>AntSK.Domain.xml</DocumentationFile>
-    <NoWarn>CA1050,CA1707,CA2007,VSTHRD111,CS1591,RCS1110,CA5394,SKEXP0001,SKEXP0002,SKEXP0003,SKEXP0004,SKEXP0010,SKEXP0011,,SKEXP0012,SKEXP0020,SKEXP0021,SKEXP0022,SKEXP0023,SKEXP0024,SKEXP0025,SKEXP0026,SKEXP0027,SKEXP0028,SKEXP0029,SKEXP0030,SKEXP0031,SKEXP0032,SKEXP0040,SKEXP0041,SKEXP0042,SKEXP0050,SKEXP0051,SKEXP0052,SKEXP0053,SKEXP0054,SKEXP0055,SKEXP0060,SKEXP0061,SKEXP0101,SKEXP0102</NoWarn>
+    <NoWarn>CA1050,CA1707,CA2007,VSTHRD111,CS1591,RCS1110,CA5394,SKEXP0001,SKEXP0002,SKEXP0003,SKEXP0004,SKEXP0010,SKEXP0011,,SKEXP0012,SKEXP0020,SKEXP0021,SKEXP0022,SKEXP0023,SKEXP0024,SKEXP0025,SKEXP0026,SKEXP0027,SKEXP0028,SKEXP0029,SKEXP0030,SKEXP0031,SKEXP0032,SKEXP0040,SKEXP0041,SKEXP0042,SKEXP0050,SKEXP0051,SKEXP0052,SKEXP0053,SKEXP0054,SKEXP0055,SKEXP0060,SKEXP0061,SKEXP0101,SKEXP0102,KMEXP00</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AntDesign.Charts" Version="0.5.1" />
-    <PackageReference Include="AntDesign.ProLayout" Version="0.18.2" />
+    <PackageReference Include="AntDesign.ProLayout" Version="0.19.0" />
     <PackageReference Include="BlazorComponents.Terminal" Version="0.6.0" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
   
@@ -26,9 +26,9 @@
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="NPOI" Version="2.7.0" />
     
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.10.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.10.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.10.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.11.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.11.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.11.1-alpha" />
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Qdrant" Version="$(KMVersion)" />

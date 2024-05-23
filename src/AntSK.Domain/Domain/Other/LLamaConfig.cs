@@ -32,7 +32,7 @@ namespace AntSK.Domain.Domain.Other
                         ContextSize = lsConfig?.ContextSize ?? 2048,
                         Seed = lsConfig?.Seed ?? 0,
                         GpuLayerCount = lsConfig?.GpuLayerCount ?? 20,
-                        EmbeddingMode = true
+                        Embeddings = true
                     };
                     var weights = LLamaWeights.LoadFromFile(parameters);
                     dicLLamaWeights.Add(modelPath, (weights, parameters));

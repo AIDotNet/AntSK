@@ -1,4 +1,5 @@
 ﻿using AntSK.Domain.Domain.Model.Constant;
+using AntSK.Domain.Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.KernelMemory.AI.OpenAI;
 using Microsoft.KernelMemory.Configuration;
@@ -134,7 +135,7 @@ namespace AntSK.Domain.Domain.Other
                             PartitionNumber = partitionNumber,
                             SectionNumber = sectionNumber,
                             Tags = pipeline.Tags,
-                            ContentSHA256 = textData.CalculateSHA256(),
+                            ContentSHA256 = textData.AntSKCalculateSHA256(),
                         };
                         newFiles.Add(destFile, destFileDetails);
                         destFileDetails.MarkProcessedBy(this);

@@ -151,7 +151,7 @@ namespace AntSK.Domain.Domain.Other
                             PartitionNumber = partitionNumber,
                             SectionNumber = sectionNumber,
                             Tags = pipeline.Tags,
-                            ContentSHA256 = textData.CalculateSHA256(),
+                            ContentSHA256 = textData.AntSKCalculateSHA256(),
                         };
                         newFiles.Add(destFile, destFileDetails);
                         destFileDetails.MarkProcessedBy(this);

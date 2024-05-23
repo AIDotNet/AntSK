@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Security.Cryptography;
+using System.Web;
 
 namespace AntSK.Domain.Utils
 {
@@ -260,6 +261,12 @@ namespace AntSK.Domain.Utils
         public static bool ComparisonIgnoreCase(this string s, string value)
         {
             return s.Equals(value, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static string AntSKCalculateSHA256(this BinaryData binaryData)
+        {
+            byte[] byteArray = SHA256.HashData(binaryData.ToMemory().Span);
+            return Convert.ToHexString(byteArray).ToLowerInvariant();
         }
     }
 }

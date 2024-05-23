@@ -1,4 +1,5 @@
-﻿using Microsoft.KernelMemory.AI.OpenAI.GPT3;
+﻿using Microsoft.KernelMemory.AI.OpenAI;
+using Microsoft.KernelMemory.AI.OpenAI.GPT3;
 using Python.Runtime;
 using System;
 using System.Collections.Generic;
@@ -85,7 +86,7 @@ namespace AntSK.Domain.Domain.Other.Bge
             //    return len;
 
             //}
-            var tokenCount1 = GPT3Tokenizer.Encode(queryStr).Count;
+            var tokenCount1 = DefaultGPTTokenizer.StaticCountTokens(queryStr);
             return tokenCount1;
         }
 
