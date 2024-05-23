@@ -178,7 +178,6 @@ namespace AntSK.Domain.Domain.Service
 
                             var getParametes = new List<KernelParameterMetadata>() {
                                      new KernelParameterMetadata("jsonbody"){
-                                      Name="json参数字符串",
                                       ParameterType=typeof(string),
                                       Description=$"背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.Query}"
                                     }
@@ -217,7 +216,6 @@ namespace AntSK.Domain.Domain.Service
                             //处理json body
                             var postParametes = new List<KernelParameterMetadata>() {
                                     new KernelParameterMetadata("jsonbody"){
-                                      Name="json参数字符串",
                                       ParameterType=typeof(string),
                                       Description=$"背景文档:{Environment.NewLine}{api.InputPrompt} {Environment.NewLine}提取出对应的json格式字符串，参考如下格式:{Environment.NewLine}{api.JsonBody}"
                                     }
@@ -305,7 +303,7 @@ namespace AntSK.Domain.Domain.Service
             KernelFunction sunFun = _kernel.Plugins.GetFunction("ConversationSummaryPlugin", "SummarizeConversation");
             var summary = await _kernel.InvokeAsync(sunFun, new() { ["input"] = $"内容是：{history.ToString()} {Environment.NewLine} 请注意用中文总结" });
             string his = summary.GetValue<string>();
-            var msg = $"history：{Environment.NewLine}{history.ToString()}{Environment.NewLine} user：{questions}{Environment.NewLine}"; ;
+            var msg = $"history：{Environment.NewLine}{his}{Environment.NewLine} user：{questions}{Environment.NewLine}"; 
             return msg;
         }
     }
