@@ -65,7 +65,7 @@
                         <Input Placeholder="请输入部署名" @bind-Value="@context.ModelName" />
                     </FormItem>
                     <FormItem Label="模型秘钥" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥" Size="@InputSize.Large" />
+                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥"  />
                     </FormItem>
                 }
                 @if (context.AIType == AIType.OpenAI)
@@ -77,7 +77,7 @@
                         <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" />
                     </FormItem>
                     <FormItem Label="模型秘钥" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥" Size="@InputSize.Large" />
+                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥" />
                     </FormItem>
                 }
                 @if (context.AIType == AIType.SparkDesk)
@@ -86,7 +86,7 @@
                         <Input Placeholder="请输入APPID" @bind-Value="@context.EndPoint" />
                     </FormItem>
                     <FormItem Label="APISecret" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="APISecret" Size="@InputSize.Large" />
+                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="APISecret"  />
                     </FormItem>
                     <FormItem Label="APIKey" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="请输入请输入APIKey" @bind-Value="@context.ModelName" />
