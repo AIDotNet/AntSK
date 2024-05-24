@@ -232,7 +232,7 @@ namespace AntSK.Services.OpenApi
         {
             ChatHistory history = new ChatHistory();
             string questions = model.messages[model.messages.Count - 1].content;
-            for (int i = 0; i < model.messages.Count() - 1; i++)
+            for (int i = 0; i < model.messages.Count() ; i++)
             {
                 var item = model.messages[i];
                 if (item.role.ComparisonIgnoreCase("user"))
