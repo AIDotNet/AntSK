@@ -58,13 +58,7 @@ namespace AntSK.Pages.AppPage
 
         private void GetDesc()
         {
-            _desc = @$"为了方便其他应用对接，接口符合openai规范，省略了温度TopP等参数。
-BaseUrl:
-{_openApiUrl}
-headers:
-Authorization:Bearer {_appModel.SecretKey}
-Body: 
-{JsonConvert.SerializeObject(new OpenAIModel() { messages = new List<OpenAIMessage>() { new OpenAIMessage() { role = "user", content = "你好，你是谁" } } }, Formatting.Indented)}";
+            _desc = JsonConvert.SerializeObject(new OpenAIModel() { messages = new List<OpenAIMessage>() { new OpenAIMessage() { role = "user", content = "你好，你是谁" } } }, Formatting.Indented);
         }
 
         private void GetScript()

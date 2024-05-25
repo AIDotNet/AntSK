@@ -22,7 +22,13 @@
                                     </Button>
                                 </FormItem>
                                 <FormItem Label="使用方法" LabelCol="_formItemLayout.LabelCol" WrapperCol="_formItemLayout.WrapperCol">
-                                    <TextArea @bind-Value="@_desc" ReadOnly="true" Rows="15" />
+                                    <h3>为了方便其他应用对接，接口符合openai规范，省略了温度TopP等参数。</h3>
+                                    <h3>BaseUrl:</h3>
+                                    <p>@_openApiUrl</p>
+                                    <h3>Headers::</h3>
+                                    <p>Authorization : Bearer @_appModel.SecretKey</p>
+                                    <h3>Body: </h3>
+                                    <TextArea @bind-Value="@_desc" ReadOnly="true" Rows="10" />
                                 </FormItem>
                             </Form>
                         </Card>
