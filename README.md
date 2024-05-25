@@ -186,7 +186,7 @@ I'm using CodeFirst mode for the database, so as long as the database connection
 
 ## 🤝 Contributing
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/AIDotNet/AntSK/pulls)
+[PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
 
 If you would like to contribute, feel free to create a [Pull Request](https://github.com/AIDotNet/AntSK/pulls), or give us [Bug Report](https://github.com/AIDotNet/AntSK/issues/new).
 
@@ -200,16 +200,16 @@ This project exists thanks to all the people who contribute.
 </a>
 
 ## 🚨  Use Protocol
-This warehouse follows the [Apache-2.0 License]（ https://github.com/AIDotNet/AntSK?tab=Apache -2.0-1-ov file) open source protocol.
+This warehouse follows the [Apache-2.0 License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) open source protocol.
 The Apache open source license allows the use of AntSK in commercial environments, provided that the license terms are followed. One of the main terms is to retain the copyright and license statements.
 If you plan to use AntSK in commercial projects, you need to ensure that you follow the following steps:
-1. Copyright statement containing Apache license. [Apache-2.0 License]（ https://github.com/AIDotNet/AntSK?tab=Apache -2.0-1-ov file).
+1. Copyright statement containing Apache license. [Apache-2.0 License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file).
 2. If you modify the software source code, you need to clearly indicate these modifications in the source code.
 
 ## ☎️Contact Me
 If you have any questions or suggestions, please contact me through my official WeChat account. We also have a discussion group where you can send a message to join, and then I will add you to the group.
 
-![Official WeChat Account](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg))
+![Official WeChat Account](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
 ---
 
