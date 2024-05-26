@@ -235,17 +235,15 @@ namespace AntSK.Pages.ChatPage.Components
 
             //处理多轮会话
             Apps app = _apps_Repositories.GetFirst(p => p.Id == AppId);
-            ChatHistory history;
+            ChatHistory history = new ChatHistory();
 
             if (app.Type == AppType.chat.ToString() && (filePath == null || app.EmbeddingModelID.IsNull()))
             {
-                if (string.IsNullOrEmpty(app.Prompt))
+                if (!string.IsNullOrEmpty(app.Prompt))
                 {
-                    app.Prompt = "你叫AntSK,是一个人工智能助手";
+                    history = new ChatHistory(app.Prompt.ConvertToString());
                 }
                 //聊天应用增加系统角色
-                history = new ChatHistory(app.Prompt.ConvertToString());
-
                 if (MessageList.Count > 0)
                 {
                     history = await _chatService.GetChatHistory(MessageList, history);
@@ -254,8 +252,6 @@ namespace AntSK.Pages.ChatPage.Components
             }
             else if (app.Type == AppType.kms.ToString() || filePath != null || app.EmbeddingModelID.IsNotNull())
             {
-                history = new ChatHistory();
-
                 if (MessageList.Count > 0)
                 {
                     history = await _chatService.GetChatHistory(MessageList, history);
