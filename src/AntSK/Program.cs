@@ -82,6 +82,16 @@ builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGrou
     }
 }
 
+//增加API允许跨域调用
+builder.Services.AddCors(options => options.AddPolicy("Any",
+    builder =>
+    {
+        builder.AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowed(_ => true)
+            .AllowCredentials();
+    }));    
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -93,6 +103,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+
+app.UseCors("Any");
 
 app.UseStaticFiles();
 
