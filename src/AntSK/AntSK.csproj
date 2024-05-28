@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AntSK.Domain\AntSK.Domain.csproj" />
+    <ProjectReference Include="..\AntSK.ServiceDefaults\AntSK.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>
