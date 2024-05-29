@@ -33,6 +33,8 @@ builder.Services.AddControllers().AddJsonOptions(config =>
     config.JsonSerializerOptions.Converters.Add(new DateTimeNullableConvert());
 });
 
+builder.AddServiceDefaults();
+
 builder.Configuration.GetSection("DBConnection").Get<DBConnectionOption>();
 builder.Configuration.GetSection("Login").Get<LoginOption>();
 builder.Configuration.GetSection("LLamaSharp").Get<LLamaSharpOption>();
