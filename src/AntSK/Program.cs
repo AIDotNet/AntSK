@@ -40,11 +40,6 @@ builder.Configuration.GetSection("FileDir").Get<FileDirOption>();
 
 Log.Logger = new LoggerConfiguration()
 .ReadFrom.Configuration(builder.Configuration)
-.WriteTo.Console()
-.WriteTo.File(Path.Combine(FileDirOption.DirectoryPath, "logs", "log.txt"),
-   rollingInterval: RollingInterval.Day,
-   rollOnFileSizeLimit: true,
-   fileSizeLimitBytes: 10 * 1024 * 1024)
 .CreateLogger();
 
 var loggerFactory = LoggerFactory.Create(builder => {
