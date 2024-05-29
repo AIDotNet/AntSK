@@ -14,6 +14,8 @@
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
   
     <PackageReference Include="pythonnet" Version="3.0.3" />
+  
+    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="3.0.0-dev-00298" />
    
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     
