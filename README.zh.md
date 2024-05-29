@@ -127,9 +127,11 @@ model/xxx.gguf
     "ConnectionString": "Host=;Port=;Database=antsk;Username=;Password=",
     "TableNamePrefix": "km-"
   },
+  "FileDir": {
+    "DirectoryPath": "D:\\git\\AntBlazor\\model"
+  },
   "LLamaSharp": {
-    "RunType": "GPU", 
-    "FileDirectory": "D:\\Code\\AI\\AntBlazor\\model\\"
+    "RunType": "GPU"
   },
   "Login": {
     "User": "admin",
