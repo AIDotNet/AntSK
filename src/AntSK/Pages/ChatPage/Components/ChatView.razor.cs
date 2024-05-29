@@ -7,6 +7,7 @@ using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using AntSK.LLM.StableDiffusion;
 using AntSK.Models;
+using AntSK.Pages.KmsPage;
 using Blazored.LocalStorage;
 using DocumentFormat.OpenXml.InkML;
 using Markdig;
@@ -42,6 +43,8 @@ namespace AntSK.Pages.ChatPage.Components
         [Inject] ILocalStorageService _localStorage { get; set; }
         [Inject] IChats_Repositories _chats_Repositories { get; set; }
         [Inject] ProtectedSessionStorage _protectedSessionStore { get; set; }
+
+        [Inject] protected ILogger<ChatView> _logger { get; set; }
 
         protected List<Chats> MessageList = [];
         protected string? _messageInput;
@@ -201,7 +204,7 @@ namespace AntSK.Pages.ChatPage.Components
             catch (System.Exception ex)
             {
                 Sendding = false;
-                Console.WriteLine("异常:" + ex.Message);
+                _logger.LogError("异常:" + ex.Message);
                 _ = Message.Error("异常:" + ex.Message, 2);
             }
 

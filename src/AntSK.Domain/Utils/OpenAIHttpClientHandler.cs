@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿
+using Serilog;
+using System.Text.RegularExpressions;
 
 namespace AntSK.Domain.Utils
 {
@@ -19,7 +21,7 @@ namespace AntSK.Domain.Utils
             {
                 string requestBody = await request.Content.ReadAsStringAsync();
                 //便于调试查看请求prompt
-                Console.WriteLine(requestBody);
+                Log.Information(requestBody);
             }
             if (match.Success)
             {

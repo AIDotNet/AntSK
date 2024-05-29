@@ -1,9 +1,11 @@
-﻿using AntSK.Domain.Common.DependencyInjection;
+﻿using Amazon.Runtime.Internal.Util;
+using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Dto;
 using AntSK.Domain.Options;
 using AntSK.LLamaFactory.Model;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ using System.Threading.Tasks;
 namespace AntSK.Domain.Domain.Service
 {
     [ServiceDescription(typeof(ILLamaFactoryService), ServiceLifetime.Singleton)]
-    public class LLamaFactoryService : ILLamaFactoryService
+    public class LLamaFactoryService(ILogger<LLamaFactoryService> _logger) : ILLamaFactoryService
     {
         private Process process;
 
@@ -26,7 +28,7 @@ namespace AntSK.Domain.Domain.Service
         private readonly object _syncLock = new object();
         private List<LLamaModel> modelList = new List<LLamaModel>();
 
-        public LLamaFactoryService() { }
+
         public delegate Task LogMessageHandler(string message);
         public event LogMessageHandler LogMessageReceived;
         protected virtual async Task OnLogMessageReceived(string message)
@@ -56,12 +58,12 @@ namespace AntSK.Domain.Domain.Service
                 };  
                 process.OutputDataReceived += (sender, eventArgs) =>
                 {
-                    Console.WriteLine($"{eventArgs.Data}");
+                    _logger.LogInformation($"{eventArgs.Data}");
                     OnLogMessageReceived(eventArgs.Data);
                 };
                 process.ErrorDataReceived += (sender, eventArgs) =>
                 {
-                    Console.WriteLine($"{eventArgs.Data}");
+                    _logger.LogInformation($"{eventArgs.Data}");
                     OnLogMessageReceived(eventArgs.Data);
                 };
                 process.Start();
@@ -97,12 +99,12 @@ namespace AntSK.Domain.Domain.Service
                 process.StartInfo.EnvironmentVariables["USE_MODELSCOPE_HUB"] = Environment.GetEnvironmentVariable("USE_MODELSCOPE_HUB") ?? "1";
                 process.OutputDataReceived += (sender, eventArgs) =>
                 {
-                    Console.WriteLine($"{eventArgs.Data}");
+                    _logger.LogInformation($"{eventArgs.Data}");
                     OnLogMessageReceived(eventArgs.Data);
                 };
                 process.ErrorDataReceived += (sender, eventArgs) =>
                 {
-                    Console.WriteLine($"{eventArgs.Data}");
+                    _logger.LogInformation($"{eventArgs.Data}");
                     OnLogMessageReceived(eventArgs.Data);
                 };
                 process.Start();
@@ -137,7 +139,7 @@ namespace AntSK.Domain.Domain.Service
                     if (process1.ProcessName.ToLower() == "python")
                     {
                         process1.Kill();
-                        System.Console.WriteLine("kill python");
+                        _logger.LogInformation("kill python");
                     }
                 }
             }

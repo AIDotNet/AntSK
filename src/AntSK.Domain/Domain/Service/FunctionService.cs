@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Microsoft.SemanticKernel;
 using HtmlAgilityPack;
 using System.Collections.Generic;
+using Serilog;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -115,7 +116,7 @@ namespace AntSK.Domain.Domain.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+               Log.Error(ex.Message + " ---- " + ex.StackTrace);
             }
         }    
     }
