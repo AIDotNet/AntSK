@@ -5,6 +5,7 @@ using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Domain.Model.Excel;
 using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using Microsoft.KernelMemory;
 using Microsoft.KernelMemory.Handlers;
 using System.Text;
@@ -15,7 +16,8 @@ namespace AntSK.Domain.Domain.Service
     public class ImportKMSService(
         IKMService _kMService,
         IKmsDetails_Repositories _kmsDetails_Repositories,
-        IKmss_Repositories _kmss_Repositories
+        IKmss_Repositories _kmss_Repositories,
+        ILogger<ImportKMSService> _logger
         ) : IImportKMSService
     {
 
@@ -140,13 +142,13 @@ namespace AntSK.Domain.Domain.Service
                 req.KmsDetail.Status = Model.Enum.ImportKmsStatus.Success;
                 _kmsDetails_Repositories.Update(req.KmsDetail);
                 //_kmsDetails_Repositories.GetList(p => p.KmsId == req.KmsId);
-                Console.WriteLine("后台导入任务成功:" + req.KmsDetail.DataCount);
+                _logger.LogInformation("后台导入任务成功:" + req.KmsDetail.DataCount);
             }
             catch (Exception ex)
             {
                 req.KmsDetail.Status = Model.Enum.ImportKmsStatus.Fail;
                 _kmsDetails_Repositories.Update(req.KmsDetail);
-                Console.WriteLine("后台导入任务异常:" + ex.Message);
+                _logger.LogError("后台导入任务异常:" + ex.Message);
             }
         }
     }

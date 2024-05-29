@@ -22,6 +22,8 @@ using Microsoft.KernelMemory;
 using OpenCvSharp.ML;
 using LLamaSharp.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.ChatCompletion;
+using Amazon.Runtime.Internal.Util;
+using Microsoft.Extensions.Logging;
 
 namespace AntSK.Domain.Domain.Service
 {
@@ -33,17 +35,20 @@ namespace AntSK.Domain.Domain.Service
         private readonly FunctionService _functionService;
         private readonly IServiceProvider _serviceProvider;
         private Kernel _kernel;
+        private readonly ILogger<KernelService> _logger;
 
         public KernelService(
               IApis_Repositories apis_Repositories,
               IAIModels_Repositories aIModels_Repositories,
               FunctionService functionService,
-              IServiceProvider serviceProvider)
+              IServiceProvider serviceProvider,
+               ILogger<KernelService> logger)
         {
             _apis_Repositories = apis_Repositories;
             _aIModels_Repositories = aIModels_Repositories;
             _functionService = functionService;
             _serviceProvider = serviceProvider;
+            _logger = logger;
         }
 
         /// <summary>
@@ -224,7 +229,7 @@ namespace AntSK.Domain.Domain.Service
                             {
                                 try
                                 {
-                                    Console.WriteLine(jsonBody);
+                                    _logger.LogInformation(jsonBody);
                                     RestClient client = new RestClient();
                                     RestRequest request = new RestRequest(api.Url, Method.Post);
                                     foreach (var header in api.Header.ConvertToString().Split("\n"))

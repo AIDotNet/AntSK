@@ -41,6 +41,8 @@ namespace AntSK.Pages.KmsPage
 
         [Inject]
         protected IHttpService _httpService { get; set; }
+        [Inject]
+        protected ILogger<KmsDetail> _logger { get; set; }
 
         private Kmss km;
 
@@ -127,7 +129,7 @@ namespace AntSK.Pages.KmsPage
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+                _logger.LogError(ex.Message + " ---- " + ex.StackTrace);
             }
         }
 
@@ -169,7 +171,7 @@ namespace AntSK.Pages.KmsPage
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+                _logger.LogError(ex.Message + " ---- " + ex.StackTrace);
             }
         }
 
@@ -210,7 +212,7 @@ namespace AntSK.Pages.KmsPage
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+                _logger.LogError(ex.Message + " ---- " + ex.StackTrace);
             }
         }
 
@@ -250,7 +252,7 @@ namespace AntSK.Pages.KmsPage
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+                _logger.LogError(ex.Message + " ---- " + ex.StackTrace);
             }
         }
 
@@ -289,7 +291,7 @@ namespace AntSK.Pages.KmsPage
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+                _logger.LogError(ex.Message + " ---- " + ex.StackTrace);
             }
             finally
             {

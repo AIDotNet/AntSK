@@ -88,7 +88,7 @@ namespace AntSK.Pages.Setting.AIModel
 
                
                 //目前只支持gguf的 所以筛选一下
-                _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory)).Where(p=> p.Contains(".gguf")||p.Contains(".ckpt")|| p.Contains(".safetensors")).ToArray();
+                _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), FileDirOption.DirectoryPath)).Where(p=> p.Contains(".gguf")||p.Contains(".ckpt")|| p.Contains(".safetensors")).ToArray();
                 if (!string.IsNullOrEmpty(ModelPath))
                 {
                     string extension = Path.GetExtension(ModelPath);
@@ -167,7 +167,7 @@ namespace AntSK.Pages.Setting.AIModel
 
             _download = DownloadBuilder.New()
             .WithUrl(_downloadUrl)
-            .WithDirectory(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory))
+            .WithDirectory(Path.Combine(Directory.GetCurrentDirectory(), FileDirOption.DirectoryPath))
             .WithConfiguration(new DownloadConfiguration()
             {
                 ParallelCount = 5,
@@ -195,7 +195,7 @@ namespace AntSK.Pages.Setting.AIModel
             _aiModel.ModelName = _download.Package.FileName;
             _downloadModalVisible = false;
             _downloadStarted = false;
-            _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory));
+            _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), FileDirOption.DirectoryPath));
             InvokeAsync(StateHasChanged);
         }
 

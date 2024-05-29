@@ -14,7 +14,7 @@
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
   
     <PackageReference Include="pythonnet" Version="3.0.3" />
-    
+   
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     
     <PackageReference Include="AutoMapper" Version="8.1.0" />
@@ -40,8 +40,14 @@
     <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="$(LLamaSharpVersion)" />
     <PackageReference Include="LLamaSharp.kernel-memory" Version="$(LLamaSharpVersion)" />
     <PackageReference Include="LLamaSharp.semantic-kernel" Version="$(LLamaSharpVersion)" />
-    
-    
+
+    <PackageReference Include="Serilog" Version="4.0.0-dev-02195" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.1.0-dev-00943" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.1-dev-10391" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.1-dev-00583" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0-dev-00302" />
+    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="3.0.0-dev-00298" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AntSK.LLamaFactory\AntSK.LLamaFactory.csproj" />

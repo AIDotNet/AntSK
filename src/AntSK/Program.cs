@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Exporter;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using System.Text.Encodings.Web;
@@ -30,6 +32,26 @@ builder.Services.AddControllers().AddJsonOptions(config =>
     config.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
     config.JsonSerializerOptions.Converters.Add(new DateTimeNullableConvert());
 });
+
+builder.Configuration.GetSection("DBConnection").Get<DBConnectionOption>();
+builder.Configuration.GetSection("Login").Get<LoginOption>();
+builder.Configuration.GetSection("LLamaSharp").Get<LLamaSharpOption>();
+builder.Configuration.GetSection("KernelMemory").Get<KernelMemoryOption>();
+builder.Configuration.GetSection("FileDir").Get<FileDirOption>();
+
+builder.Services.Configure<OtlpExporterOptions>(
+    o => o.Headers = $"x-otlp-api-key=antsk");
+
+Log.Logger = new LoggerConfiguration()
+.ReadFrom.Configuration(builder.Configuration)
+.CreateLogger();
+
+var loggerFactory = LoggerFactory.Create(builder => {
+    builder.ClearProviders();
+    builder.AddSerilog();
+});
+ILogger<Program> logger = loggerFactory.CreateLogger<Program>();
+InitExtensions.InitLog(logger);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -56,18 +78,14 @@ builder.Services.AddMapper();
 //后台队列任务
 builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGroundTaskHandler>("ImportKMSTask");
 // 读取连接字符串配置
-{
-    builder.Configuration.GetSection("DBConnection").Get<DBConnectionOption>();
-    builder.Configuration.GetSection("Login").Get<LoginOption>();
-    builder.Configuration.GetSection("LLamaSharp").Get<LLamaSharpOption>();
-    builder.Configuration.GetSection("KernelMemory").Get<KernelMemoryOption>();
+
     if (LLamaSharpOption.RunType.ToUpper() == "CPU")
     {
         NativeLibraryConfig
            .Instance
            .WithCuda(false)
            .WithLogCallback((level, message) => {
-               Console.WriteLine($"[llama {level}]: {message.TrimEnd('\n')}");
+               logger.LogInformation($"[llama {level}]: {message.TrimEnd('\n')}");
             });
     }
     else if (LLamaSharpOption.RunType.ToUpper() == "GPU")
@@ -76,11 +94,11 @@ builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGrou
         .Instance
         .WithCuda(true)
         .WithLogCallback((level, message) => {
-            Console.WriteLine($"[llama {level}]: {message.TrimEnd('\n')}");
+            logger.LogInformation($"[llama {level}]: {message.TrimEnd('\n')}");
          })
         .WithAvx(NativeLibraryConfig.AvxLevel.Avx);
     }
-}
+
 
 //增加API允许跨域调用
 builder.Services.AddCors(options => options.AddPolicy("Any",

@@ -52,9 +52,6 @@ namespace AntSK.Services.OpenApi
                             result1.choices = new List<StreamChoicesModel>()
                                 { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
                             await SendChatStream(HttpContext, result1, app,history);
-                            HttpContext.Response.ContentType = "application/json";
-                            await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result1));
-                            await HttpContext.Response.CompleteAsync();
                             return;
                         }
                         else
@@ -79,9 +76,6 @@ namespace AntSK.Services.OpenApi
                             result3.choices = new List<StreamChoicesModel>()
                                 { new StreamChoicesModel() { delta = new OpenAIMessage() { role = "assistant" } } };
                             await SendKmsStream(HttpContext, result3, app, questions,history);
-                            HttpContext.Response.ContentType = "application/json";
-                            await HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(result3));
-                            await HttpContext.Response.CompleteAsync();
                         }
                         else
                         {

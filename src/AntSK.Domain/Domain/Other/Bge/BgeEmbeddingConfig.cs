@@ -1,6 +1,7 @@
 ﻿using Microsoft.KernelMemory.AI.OpenAI;
 using Microsoft.KernelMemory.AI.OpenAI.GPT3;
 using Python.Runtime;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,7 +93,7 @@ namespace AntSK.Domain.Domain.Other.Bge
 
         public static void Dispose()
         {
-            Console.WriteLine("python dispose");
+            Log.Information("python dispose");
         }
     }
 }

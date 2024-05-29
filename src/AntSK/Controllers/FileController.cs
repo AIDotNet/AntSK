@@ -23,7 +23,7 @@ namespace AntSK.Controllers
             }
 
             // 创建文件存储的路径
-            var uploadsFolderPath = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), LLamaSharpOption.FileDirectory), "files");// 给定的文件夹名称
+            var uploadsFolderPath = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), FileDirOption.DirectoryPath), "files");// 给定的文件夹名称
 
             // 如果路径不存在，则创建一个新的目录
             if (!Directory.Exists(uploadsFolderPath))

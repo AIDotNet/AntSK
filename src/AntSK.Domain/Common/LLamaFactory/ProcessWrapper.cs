@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Amazon.Runtime.Internal.Util;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AntSK.Domain.Common.LLamaFactory
 {
-    public class ProcessWrapper
+    public class ProcessWrapper(ILogger<ProcessWrapper> _logger)
     {
         private Process process;
 
@@ -41,7 +43,7 @@ namespace AntSK.Domain.Common.LLamaFactory
                             isProcessComplete = true;
                         }
                     }
-                    Console.WriteLine(result);
+                    _logger.LogInformation(result);
                 }
                 start.WaitForExit();
             }

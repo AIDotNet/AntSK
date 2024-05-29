@@ -5,6 +5,7 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using SqlSugar;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -19,6 +20,12 @@ namespace AntSK.Domain.Common.DependencyInjection
 {
     public static class InitExtensions
     {
+        private static ILogger _logger;
+
+        public static void InitLog(ILogger logger)
+        {
+            _logger = logger;
+        }
         /// <summary>
         /// 使用codefirst创建数据库表
         /// </summary>
@@ -52,6 +59,8 @@ namespace AntSK.Domain.Common.DependencyInjection
                 }
                 //安装向量插件
                 _repository.GetDB().Ado.ExecuteCommandAsync($"CREATE EXTENSION IF NOT EXISTS vector;");
+
+                _logger.LogInformation("初始化表结构完成");
             }
             return app;
         }
@@ -72,7 +81,7 @@ namespace AntSK.Domain.Common.DependencyInjection
                     llamafactoryStart.Value = "false";
                     _dic_Repository.Insert(llamafactoryStart);
                 }
-
+                _logger.LogInformation("初始化数据库初始数据完成");
             }
             return app;
         }
@@ -99,7 +108,7 @@ namespace AntSK.Domain.Common.DependencyInjection
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+                _logger.LogError(ex.Message + " ---- " + ex.StackTrace);
             }
             return app;
         }

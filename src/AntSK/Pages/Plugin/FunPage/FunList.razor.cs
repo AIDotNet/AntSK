@@ -4,6 +4,7 @@ using AntSK.Domain.Domain.Model.Fun;
 using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Repositories;
 using AntSK.Models;
+using AntSK.Pages.KmsPage;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Components;
@@ -27,7 +28,7 @@ namespace AntSK.Pages.FunPage
 
         [Inject]
         protected MessageService? _message { get; set; }
-
+        [Inject] protected ILogger<FunDto> _logger { get; set; }
 
         bool _fileVisible = false;
         bool _fileConfirmLoading = false;
@@ -102,7 +103,7 @@ namespace AntSK.Pages.FunPage
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine(ex.Message + " ---- " + ex.StackTrace);
+                _logger.LogError(ex.Message + " ---- " + ex.StackTrace);
             }
         }
         private void FileHandleCancel(MouseEventArgs e)

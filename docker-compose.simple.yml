@@ -3,9 +3,9 @@ version: '3.8'
 services:
   antsk:
     container_name: antsk
-    image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.3.1
+    image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:v0.3.6
     # 如果需要pytorch环境需要使用下面这个镜像，镜像比较大
-    # image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:p0.3.1
+    # image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk:p0.3.6
     ports:
       - 5000:5000
     networks:
@@ -15,5 +15,7 @@ services:
       - ASPNETCORE_URLS=http://*:5000
     volumes:
       - ./appsettings.json:/app/appsettings.json # 本地配置文件 需要放在同级目录
+      - /AntSK/model:/app/model
+      - /AntSK/model:/root/.cache/modelscope/hub/AI-ModelScope # LLamaFactory模型文件
 networks:
   antsk:
