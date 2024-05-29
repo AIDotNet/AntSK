@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Exporter;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
@@ -37,6 +38,9 @@ builder.Configuration.GetSection("Login").Get<LoginOption>();
 builder.Configuration.GetSection("LLamaSharp").Get<LLamaSharpOption>();
 builder.Configuration.GetSection("KernelMemory").Get<KernelMemoryOption>();
 builder.Configuration.GetSection("FileDir").Get<FileDirOption>();
+
+builder.Services.Configure<OtlpExporterOptions>(
+    o => o.Headers = $"x-otlp-api-key=antsk");
 
 Log.Logger = new LoggerConfiguration()
 .ReadFrom.Configuration(builder.Configuration)
