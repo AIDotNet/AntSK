@@ -1,6 +1,20 @@
 # 非 host 版本, 不使用本机代理
 version: '3.8'
 services:
+  aspire-dashboard:
+    container_name: aspire-dashboard
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:8.0
+    networks:
+      - antsk
+    environment:
+      - DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS=true
+      - ASPIRE_ALLOW_UNSECURED_TRANSPORT=true
+      - DASHBOARD_OTLP_AUTHMODE=ApiKey
+      - DASHBOARD_OTLP_PRIMARYAPIKEY=antsk
+    ports:
+      - 18888:18888
+      - 18889:18889
+    restart: unless-stopped
   antskpg:
     image: registry.cn-hangzhou.aliyuncs.com/xuzeyu91/pg:v0.5.0 
     container_name: antskpg
@@ -30,6 +44,12 @@ services:
     restart: always
     environment:
       - ASPNETCORE_URLS=http://*:5000
+      - ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
+      - OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES=true
+      - OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES= true
+      - OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY=in_memory
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://aspire-dashboard:18889
+      - OTEL_SERVICE_NAME=antsk
     volumes:
       - ./appsettings.json:/app/appsettings.json # 本地配置文件 需要放在同级目录
       - /AntSK/model:/app/model
