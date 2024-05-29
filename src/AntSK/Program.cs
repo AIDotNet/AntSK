@@ -39,6 +39,7 @@ builder.Configuration.GetSection("KernelMemory").Get<KernelMemoryOption>();
 builder.Configuration.GetSection("FileDir").Get<FileDirOption>();
 
 Log.Logger = new LoggerConfiguration()
+.ReadFrom.Configuration(builder.Configuration)
 .WriteTo.Console()
 .WriteTo.File(Path.Combine(FileDirOption.DirectoryPath, "logs", "log.txt"),
    rollingInterval: RollingInterval.Day,
