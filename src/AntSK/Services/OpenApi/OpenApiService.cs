@@ -35,7 +35,7 @@ namespace AntSK.Services.OpenApi
             string token = match.Groups[1].Value;
             string questions;
             ChatHistory history;
-          Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == token);
+            Apps app = _apps_Repositories.GetFirst(p => p.SecretKey == token);
             if (app.IsNotNull())
             {
 
@@ -234,7 +234,7 @@ namespace AntSK.Services.OpenApi
                 history = new ChatHistory(systemPrompt);
             }
             string questions = model.messages[model.messages.Count - 1].content;
-            for (int i = 0; i < model.messages.Count() ; i++)
+            for (int i = 0; i < model.messages.Count()-1 ; i++)
             {
                 var item = model.messages[i];
                 if (item.role.ComparisonIgnoreCase("user"))
