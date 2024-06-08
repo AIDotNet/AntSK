@@ -30,6 +30,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{8578F0F2-5DE5-45EF-AE54-C37A07B62248}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AntSKWeb", "AntSKWeb", "{F341BA6B-E329-42F7-8005-1E366C8A7B1F}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntSK.AppHost", "AntSK.AppHost\AntSK.AppHost.csproj", "{3EEC5A22-2C4D-4D6F-9039-C4AF3FEA3418}"
 EndProject
