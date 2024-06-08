@@ -1,4 +1,5 @@
-﻿using LLama;
+﻿using AntSK.Domain.Options;
+using LLama;
 using LLama.Common;
 using LLamaSharp.KernelMemory;
 
@@ -29,9 +30,9 @@ namespace AntSK.Domain.Domain.Other
                     }
                     var parameters = new ModelParams(lsConfig.ModelPath)
                     {
-                        ContextSize = lsConfig?.ContextSize ?? 2048,
+                        ContextSize = LLamaSharpOption.ContextSize ?? 2048,
                         Seed = lsConfig?.Seed ?? 0,
-                        GpuLayerCount = lsConfig?.GpuLayerCount ?? 20,
+                        GpuLayerCount = LLamaSharpOption.GpuLayerCount ?? 20,
                         Embeddings = true
                     };
                     var weights = LLamaWeights.LoadFromFile(parameters);

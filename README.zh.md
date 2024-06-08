@@ -131,7 +131,9 @@ model/xxx.gguf
     "DirectoryPath": "D:\\git\\AntBlazor\\model"
   },
   "LLamaSharp": {
-    "RunType": "GPU"
+    "RunType": "GPU",
+	"ContextSize": 2048,
+    "GpuLayerCount": 20
   },
   "Login": {
     "User": "admin",
