@@ -21,14 +21,14 @@
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Markdig" Version="0.37.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SqlSugarCore" Version="5.1.4.154" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.158" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
-    <PackageReference Include="RestSharp" Version="110.2.0" />
+    <PackageReference Include="RestSharp" Version="111.2.0" />
     <PackageReference Include="NPOI" Version="2.7.0" />
     
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.13.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.13.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.13.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.14.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.14.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.14.1-alpha" />
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Qdrant" Version="$(KMVersion)" />
@@ -41,13 +41,13 @@
     <PackageReference Include="LLamaSharp.kernel-memory" Version="$(LLamaSharpVersion)" />
     <PackageReference Include="LLamaSharp.semantic-kernel" Version="$(LLamaSharpVersion)" />
 
-    <PackageReference Include="Serilog" Version="4.0.0-dev-02195" />
+    <PackageReference Include="Serilog" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="5.1.0-dev-00943" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.1-dev-10391" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.1-dev-00583" />
-    <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0-dev-00302" />
-    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="3.0.0-dev-00298" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.1" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AntSK.LLamaFactory\AntSK.LLamaFactory.csproj" />
