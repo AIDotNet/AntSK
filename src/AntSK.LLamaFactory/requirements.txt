@@ -1,10 +1,9 @@
 torch>=1.13.1  --index-url https://download.pytorch.org/whl/cu121
-transformers>=4.37.2
-datasets>=2.14.3
-accelerate>=0.27.2
-peft>=0.9.0
-trl>=0.7.11
-gradio>=3.38.0,<4.0.0
+transformers>=4.41.2
+datasets>=2.16.0
+accelerate>=0.30.1
+peft>=0.11.1
+gradio>=4.0.0
 scipy
 einops
 sentencepiece
@@ -13,9 +12,12 @@ uvicorn
 pydantic
 fastapi
 sse-starlette
-matplotlib
+matplotlib>=3.7.0
 fire
 modelscope
 langchain-community
 sentence_transformers
 FlagEmbedding
+packaging
+pyyaml
+trl>=0.8.6

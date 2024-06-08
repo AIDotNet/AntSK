@@ -87,7 +87,7 @@ namespace AntSK.Domain.Domain.Service
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "python",
-                        Arguments = "api_demo.py --model_name_or_path " + modelName + " --template " + templateName + " ",
+                        Arguments = "api_antsk.py --model_name_or_path " + modelName + " --template " + templateName + " ",
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
                         RedirectStandardError=true,

@@ -1,21 +1,16 @@
 ﻿[
 	{
 		"models": {
-			"Baichuan-7B-Base": {
-				"DEFAULT": "baichuan-inc/Baichuan-7B",
-				"MODELSCOPE": "baichuan-inc/baichuan-7B"
+			"Aya-23-8B-Chat": {
+				"DEFAULT": "CohereForAI/aya-23-8B",
+				"MODELSCOPE": "CohereForAI/aya-23-8B"
 			},
-			"Baichuan-13B-Base": {
-				"DEFAULT": "baichuan-inc/Baichuan-13B-Base",
-				"MODELSCOPE": "baichuan-inc/Baichuan-13B-Base"
-			},
-			"Baichuan-13B-Chat": {
-				"DEFAULT": "baichuan-inc/Baichuan-13B-Chat",
-				"MODELSCOPE": "baichuan-inc/Baichuan-13B-Chat"
+			"Aya-23-35B-Chat": {
+				"DEFAULT": "CohereForAI/aya-23-35B",
+				"MODELSCOPE": "CohereForAI/aya-23-35B"
 			}
 		},
-		"module": "W_pack",
-		"template": "baichuan"
+		"template": "aya"
 	},
 	{
 		"models": {
@@ -36,7 +31,6 @@
 				"MODELSCOPE": "baichuan-inc/Baichuan2-13B-Chat"
 			}
 		},
-		"module": "W_pack",
 		"template": "baichuan2"
 	},
 	{
@@ -53,8 +47,7 @@
 				"DEFAULT": "bigscience/bloom-7b1",
 				"MODELSCOPE": "AI-ModelScope/bloom-7b1"
 			}
-		},
-		"module": "query_key_value"
+		}
 	},
 	{
 		"models": {
@@ -70,8 +63,7 @@
 				"DEFAULT": "bigscience/bloomz-7b1-mt",
 				"MODELSCOPE": "AI-ModelScope/bloomz-7b1-mt"
 			}
-		},
-		"module": "query_key_value"
+		}
 	},
 	{
 		"models": {
@@ -88,12 +80,22 @@
 	},
 	{
 		"models": {
+			"Breeze-7B": {
+				"DEFAULT": "MediaTek-Research/Breeze-7B-Base-v1_0"
+			},
+			"Breeze-7B-Chat": {
+				"DEFAULT": "MediaTek-Research/Breeze-7B-Instruct-v1_0"
+			}
+		},
+		"template": "breeze"
+	},
+	{
+		"models": {
 			"ChatGLM2-6B-Chat": {
 				"DEFAULT": "THUDM/chatglm2-6b",
 				"MODELSCOPE": "ZhipuAI/chatglm2-6b"
 			}
 		},
-		"module": "query_key_value",
 		"template": "chatglm2"
 	},
 	{
@@ -107,7 +109,6 @@
 				"MODELSCOPE": "ZhipuAI/chatglm3-6b"
 			}
 		},
-		"module": "query_key_value",
 		"template": "chatglm3"
 	},
 	{
@@ -141,6 +142,69 @@
 	},
 	{
 		"models": {
+			"CodeGemma-7B": {
+				"DEFAULT": "google/codegemma-7b",
+				"MODELSCOPE": "google/codegemma-7b"
+			},
+			"CodeGemma-7B-Chat": {
+				"DEFAULT": "google/codegemma-7b-it",
+				"MODELSCOPE": "AI-ModelScope/codegemma-7b-it"
+			},
+			"CodeGemma-1.1-2B": {
+				"DEFAULT": "google/codegemma-1.1-2b",
+				"MODELSCOPE": "google/codegemma-1.1-2b"
+
+			},
+			"CodeGemma-1.1-7B-Chat": {
+				"DEFAULT": "google/codegemma-1.1-7b-it",
+				"MODELSCOPE": "google/codegemma-1.1-7b-it"
+			}
+		},
+		"template": "gemma"
+	},
+	{
+		"models": {
+			"Codestral-22B-v0.1-Chat": {
+				"DEFAULT": "mistralai/Codestral-22B-v0.1"
+			}
+		},
+		"template": "mistral"
+	},
+	{
+		"models": {
+			"CommandR-35B-Chat": {
+				"DEFAULT": "CohereForAI/c4ai-command-r-v01",
+				"MODELSCOPE": "AI-ModelScope/c4ai-command-r-v01"
+			},
+			"CommandR-Plus-104B-Chat": {
+				"DEFAULT": "CohereForAI/c4ai-command-r-plus",
+				"MODELSCOPE": "AI-ModelScope/c4ai-command-r-plus"
+			},
+			"CommandR-35B-4bit-Chat": {
+				"DEFAULT": "CohereForAI/c4ai-command-r-v01-4bit",
+				"MODELSCOPE": "mirror013/c4ai-command-r-v01-4bit"
+			},
+			"CommandR-Plus-104B-4bit-Chat": {
+				"DEFAULT": "CohereForAI/c4ai-command-r-plus-4bit"
+			}
+		},
+		"template": "cohere"
+	},
+	{
+		"models": {
+			"DBRX-132B-Base": {
+				"DEFAULT": "databricks/dbrx-base",
+				"MODELSCOPE": "AI-ModelScope/dbrx-base"
+			},
+			"DBRX-132B-Chat": {
+				"DEFAULT": "databricks/dbrx-instruct",
+				"MODELSCOPE": "AI-ModelScope/dbrx-instruct"
+			}
+		},
+		"template": "dbrx"
+	},
+	{
+		"models": {
 			"DeepSeek-LLM-7B-Base": {
 				"DEFAULT": "deepseek-ai/deepseek-llm-7b-base",
 				"MODELSCOPE": "deepseek-ai/deepseek-llm-7b-base"
@@ -157,15 +221,37 @@
 				"DEFAULT": "deepseek-ai/deepseek-llm-67b-chat",
 				"MODELSCOPE": "deepseek-ai/deepseek-llm-67b-chat"
 			},
-			"DeepSeek-Math-7B-Base": { "DEFAULT": "deepseek-ai/deepseek-math-7b-base" },
-			"DeepSeek-Math-7B-Chat": { "DEFAULT": "deepseek-ai/deepseek-math-7b-instruct" },
+			"DeepSeek-Math-7B-Base": {
+				"DEFAULT": "deepseek-ai/deepseek-math-7b-base",
+				"MODELSCOPE": "deepseek-ai/deepseek-math-7b-base"
+			},
+			"DeepSeek-Math-7B-Chat": {
+				"DEFAULT": "deepseek-ai/deepseek-math-7b-instruct",
+				"MODELSCOPE": "deepseek-ai/deepseek-math-7b-instruct"
+			},
 			"DeepSeek-MoE-16B-Base": {
 				"DEFAULT": "deepseek-ai/deepseek-moe-16b-base",
 				"MODELSCOPE": "deepseek-ai/deepseek-moe-16b-base"
 			},
+			"DeepSeek-MoE-16B-v2-Base": {
+				"DEFAULT": "deepseek-ai/DeepSeek-V2-Lite",
+				"MODELSCOPE": "deepseek-ai/DeepSeek-V2-Lite"
+			},
+			"DeepSeek-MoE-236B-Base": {
+				"DEFAULT": "deepseek-ai/DeepSeek-V2",
+				"MODELSCOPE": "deepseek-ai/DeepSeek-V2"
+			},
 			"DeepSeek-MoE-16B-Chat": {
 				"DEFAULT": "deepseek-ai/deepseek-moe-16b-chat",
 				"MODELSCOPE": "deepseek-ai/deepseek-moe-16b-chat"
+			},
+			"DeepSeek-MoE-16B-v2-Chat": {
+				"DEFAULT": "deepseek-ai/DeepSeek-V2-Lite-Chat",
+				"MODELSCOPE": "deepseek-ai/DeepSeek-V2-Lite-Chat"
+			},
+			"DeepSeek-MoE-236B-Chat": {
+				"DEFAULT": "deepseek-ai/DeepSeek-V2-Chat",
+				"MODELSCOPE": "deepseek-ai/DeepSeek-V2-Chat"
 			}
 		},
 		"template": "deepseek"
@@ -176,7 +262,9 @@
 				"DEFAULT": "deepseek-ai/deepseek-coder-6.7b-base",
 				"MODELSCOPE": "deepseek-ai/deepseek-coder-6.7b-base"
 			},
-			"DeepSeekCoder-7B-Base": { "DEFAULT": "deepseek-ai/deepseek-coder-7b-base-v1.5" },
+			"DeepSeekCoder-7B-Base": {
+				"DEFAULT": "deepseek-ai/deepseek-coder-7b-base-v1.5"
+			},
 			"DeepSeekCoder-33B-Base": {
 				"DEFAULT": "deepseek-ai/deepseek-coder-33b-base",
 				"MODELSCOPE": "deepseek-ai/deepseek-coder-33b-base"
@@ -185,7 +273,9 @@
 				"DEFAULT": "deepseek-ai/deepseek-coder-6.7b-instruct",
 				"MODELSCOPE": "deepseek-ai/deepseek-coder-6.7b-instruct"
 			},
-			"DeepSeekCoder-7B-Chat": { "DEFAULT": "deepseek-ai/deepseek-coder-7b-instruct-v1.5" },
+			"DeepSeekCoder-7B-Chat": {
+				"DEFAULT": "deepseek-ai/deepseek-coder-7b-instruct-v1.5"
+			},
 			"DeepSeekCoder-33B-Chat": {
 				"DEFAULT": "deepseek-ai/deepseek-coder-33b-instruct",
 				"MODELSCOPE": "deepseek-ai/deepseek-coder-33b-instruct"
@@ -198,6 +288,9 @@
 			"Falcon-7B": {
 				"DEFAULT": "tiiuae/falcon-7b",
 				"MODELSCOPE": "AI-ModelScope/falcon-7b"
+			},
+			"Falcon-11B": {
+				"DEFAULT": "tiiuae/falcon-11B"
 			},
 			"Falcon-40B": {
 				"DEFAULT": "tiiuae/falcon-40b",
@@ -220,7 +313,6 @@
 				"MODELSCOPE": "modelscope/falcon-180B-chat"
 			}
 		},
-		"module": "query_key_value",
 		"template": "falcon"
 	},
 	{
@@ -240,30 +332,32 @@
 			"Gemma-7B-Chat": {
 				"DEFAULT": "google/gemma-7b-it",
 				"MODELSCOPE": "AI-ModelScope/gemma-7b-it"
+			},
+			"Gemma-1.1-2B-Chat": {
+				"DEFAULT": "google/gemma-1.1-2b-it"
+			},
+			"Gemma-1.1-7B-Chat": {
+				"DEFAULT": "google/gemma-1.1-7b-it"
 			}
 		},
 		"template": "gemma"
 	},
 	{
 		"models": {
-			"InternLM-7B": {
-				"DEFAULT": "internlm/internlm-7b",
-				"MODELSCOPE": "Shanghai_AI_Laboratory/internlm-7b"
+			"GLM-4-9B": {
+				"DEFAULT": "THUDM/glm-4-9b",
+				"MODELSCOPE": "ZhipuAI/glm-4-9b"
 			},
-			"InternLM-20B": {
-				"DEFAULT": "internlm/internlm-20b",
-				"MODELSCOPE": "Shanghai_AI_Laboratory/internlm-20b"
+			"GLM-4-9B-Chat": {
+				"DEFAULT": "THUDM/glm-4-9b-chat",
+				"MODELSCOPE": "ZhipuAI/glm-4-9b-chat"
 			},
-			"InternLM-7B-Chat": {
-				"DEFAULT": "internlm/internlm-chat-7b",
-				"MODELSCOPE": "Shanghai_AI_Laboratory/internlm-chat-7b"
-			},
-			"InternLM-20B-Chat": {
-				"DEFAULT": "internlm/internlm-chat-20b",
-				"MODELSCOPE": "Shanghai_AI_Laboratory/internlm-chat-20b"
+			"GLM-4-9B-1M-Chat": {
+				"DEFAULT": "THUDM/glm-4-9b-chat-1m",
+				"MODELSCOPE": "ZhipuAI/glm-4-9b-chat-1m"
 			}
 		},
-		"template": "intern"
+		"template": "glm4"
 	},
 	{
 		"models": {
@@ -284,8 +378,16 @@
 				"MODELSCOPE": "Shanghai_AI_Laboratory/internlm2-chat-20b"
 			}
 		},
-		"module": "wqkv",
 		"template": "intern2"
+	},
+	{
+		"models": {
+			"Jambda-v0.1": {
+				"DEFAULT": "ai21labs/Jamba-v0.1",
+				"MODELSCOPE": "AI-ModelScope/Jamba-v0.1"
+			}
+		},
+		"template": "Jamba"
 	},
 	{
 		"models": {
@@ -294,7 +396,7 @@
 				"MODELSCOPE": "DeepLang/LingoWhale-8B"
 			}
 		},
-		"module": "qkv_proj"
+		"template": "LingoWhale"
 	},
 	{
 		"models": {
@@ -314,7 +416,8 @@
 				"DEFAULT": "huggyllama/llama-65b",
 				"MODELSCOPE": "skyline2006/llama-65b"
 			}
-		}
+		},
+		"template": "llama"
 	},
 	{
 		"models": {
@@ -347,54 +450,112 @@
 	},
 	{
 		"models": {
-			"Mistral-7B": {
+			"LLaMA3-8B": {
+				"DEFAULT": "meta-llama/Meta-Llama-3-8B",
+				"MODELSCOPE": "LLM-Research/Meta-Llama-3-8B"
+			},
+			"LLaMA3-70B": {
+				"DEFAULT": "meta-llama/Meta-Llama-3-70B",
+				"MODELSCOPE": "LLM-Research/Meta-Llama-3-70B"
+			},
+			"LLaMA3-8B-Chat": {
+				"DEFAULT": "meta-llama/Meta-Llama-3-8B-Instruct",
+				"MODELSCOPE": "LLM-Research/Meta-Llama-3-8B-Instruct"
+			},
+			"LLaMA3-70B-Chat": {
+				"DEFAULT": "meta-llama/Meta-Llama-3-70B-Instruct",
+				"MODELSCOPE": "LLM-Research/Meta-Llama-3-70B-Instruct"
+			},
+			"LLaMA3-8B-Chinese-Chat": {
+				"DEFAULT": "shenzhi-wang/Llama3-8B-Chinese-Chat",
+				"MODELSCOPE": "LLM-Research/Llama3-8B-Chinese-Chat"
+			},
+			"LLaMA3-70B-Chinese-Chat": {
+				"DEFAULT": "shenzhi-wang/Llama3-70B-Chinese-Chat"
+			}
+		},
+		"template": "llama3"
+	},
+	{
+		"models": {
+			"Mistral-7B-v0.1": {
 				"DEFAULT": "mistralai/Mistral-7B-v0.1",
 				"MODELSCOPE": "AI-ModelScope/Mistral-7B-v0.1"
 			},
-			"Mistral-7B-Chat": {
+			"Mistral-7B-v0.1-Chat": {
 				"DEFAULT": "mistralai/Mistral-7B-Instruct-v0.1",
 				"MODELSCOPE": "AI-ModelScope/Mistral-7B-Instruct-v0.1"
+			},
+			"Mistral-7B-v0.2": {
+				"DEFAULT": "alpindale/Mistral-7B-v0.2-hf",
+				"MODELSCOPE": "AI-ModelScope/Mistral-7B-v0.2-hf"
 			},
 			"Mistral-7B-v0.2-Chat": {
 				"DEFAULT": "mistralai/Mistral-7B-Instruct-v0.2",
 				"MODELSCOPE": "AI-ModelScope/Mistral-7B-Instruct-v0.2"
+			},
+			"Mistral-7B-v0.3": {
+				"DEFAULT": "mistralai/Mistral-7B-v0.3"
+			},
+			"Mistral-7B-v0.3-Chat": {
+				"DEFAULT": "mistralai/Mistral-7B-Instruct-v0.3"
 			}
 		},
 		"template": "mistral"
 	},
 	{
 		"models": {
-			"Mixtral-8x7B": {
+			"Mixtral-8x7B-v0.1": {
 				"DEFAULT": "mistralai/Mixtral-8x7B-v0.1",
 				"MODELSCOPE": "AI-ModelScope/Mixtral-8x7B-v0.1"
 			},
-			"Mixtral-8x7B-Chat": {
+			"Mixtral-8x7B-v0.1-Chat": {
 				"DEFAULT": "mistralai/Mixtral-8x7B-Instruct-v0.1",
 				"MODELSCOPE": "AI-ModelScope/Mixtral-8x7B-Instruct-v0.1"
+			},
+			"Mixtral-8x22B-v0.1": {
+				"DEFAULT": "mistralai/Mixtral-8x22B-v0.1",
+				"MODELSCOPE": "AI-ModelScope/Mixtral-8x22B-v0.1"
+			},
+			"Mixtral-8x22B-v0.1-Chat": {
+				"DEFAULT": "mistralai/Mixtral-8x22B-Instruct-v0.1",
+				"MODELSCOPE": "AI-ModelScope/Mixtral-8x22B-Instruct-v0.1"
 			}
 		},
 		"template": "mistral"
 	},
 	{
 		"models": {
-			"OLMo-1B": { "DEFAULT": "allenai/OLMo-1B" },
-			"OLMo-7B": {
-				"DEFAULT": "allenai/OLMo-7B",
-				"MODELSCOPE": "AI-ModelScope/OLMo-7B"
+			"OLMo-1B": {
+				"DEFAULT": "allenai/OLMo-1B-hf"
 			},
-			"OLMo-7B-Chat": { "DEFAULT": "allenai/OLMo-7B-Instruct" }
-		},
-		"module": "att_proj",
-		"template": "olmo"
+			"OLMo-7B": {
+				"DEFAULT": "allenai/OLMo-7B-hf"
+			},
+			"OLMo-7B-Chat": {
+				"DEFAULT": "ssec-uw/OLMo-7B-Instruct-hf"
+			},
+			"OLMo-1.7-7B": {
+				"DEFAULT": "allenai/OLMo-1.7-7B-hf"
+			}
+		}
 	},
 	{
 		"models": {
 			"OpenChat3.5-7B-Chat": {
 				"DEFAULT": "openchat/openchat-3.5-0106",
-				"MODELSCOPE": "myxiongmodel/openchat_3.5"
+				"MODELSCOPE": "xcwzxcwz/openchat-3.5-0106"
 			}
 		},
 		"template": "openchat"
+	},
+	{
+		"models": {
+			"OpenChat3.6-8B-Chat": {
+				"DEFAULT": "openchat/openchat-3.6-8b-20240522"
+			}
+		},
+		"template": "openchat-3.6"
 	},
 	{
 		"models": {
@@ -432,6 +593,35 @@
 				"MODELSCOPE": "AI-ModelScope/phi-2"
 			}
 		}
+	},
+	{
+		"models": {
+			"Phi3-4B-4k-Chat": {
+				"DEFAULT": "microsoft/Phi-3-mini-4k-instruct",
+				"MODELSCOPE": "LLM-Research/Phi-3-mini-4k-instruct"
+			},
+			"Phi3-4B-128k-Chat": {
+				"DEFAULT": "microsoft/Phi-3-mini-128k-instruct",
+				"MODELSCOPE": "LLM-Research/Phi-3-mini-128k-instruct"
+			},
+			"Phi3-7B-8k-Chat": {
+				"DEFAULT": "microsoft/Phi-3-small-8k-instruct",
+				"MODELSCOPE": "LLM-Research/Phi-3-small-8k-instruct"
+			},
+			"Phi3-7B-128k-Chat": {
+				"DEFAULT": "microsoft/Phi-3-small-128k-instruct",
+				"MODELSCOPE": "LLM-Research/Phi-3-small-128k-instruct"
+			},
+			"Phi3-14B-8k-Chat": {
+				"DEFAULT": "microsoft/Phi-3-medium-4k-instruct",
+				"MODELSCOPE": "LLM-Research/Phi-3-medium-4k-instruct"
+			},
+			"Phi3-14B-128k-Chat": {
+				"DEFAULT": "microsoft/Phi-3-medium-128k-instruct",
+				"MODELSCOPE": "LLM-Research/Phi-3-medium-128k-instruct"
+			}
+		},
+		"template": "phi"
 	},
 	{
 		"models": {
@@ -500,7 +690,6 @@
 				"MODELSCOPE": "qwen/Qwen-72B-Chat-Int4"
 			}
 		},
-		"module": "c_attn",
 		"template": "qwen"
 	},
 	{
@@ -525,9 +714,25 @@
 				"DEFAULT": "Qwen/Qwen1.5-14B",
 				"MODELSCOPE": "qwen/Qwen1.5-14B"
 			},
+			"Qwen1.5-32B": {
+				"DEFAULT": "Qwen/Qwen1.5-32B",
+				"MODELSCOPE": "qwen/Qwen1.5-32B"
+			},
 			"Qwen1.5-72B": {
 				"DEFAULT": "Qwen/Qwen1.5-72B",
 				"MODELSCOPE": "qwen/Qwen1.5-72B"
+			},
+			"Qwen1.5-110B": {
+				"DEFAULT": "Qwen/Qwen1.5-110B",
+				"MODELSCOPE": "qwen/Qwen1.5-110B"
+			},
+			"Qwen1.5-MoE-A2.7B": {
+				"DEFAULT": "Qwen/Qwen1.5-MoE-A2.7B",
+				"MODELSCOPE": "qwen/Qwen1.5-MoE-A2.7B"
+			},
+			"Qwen1.5-Code-7B": {
+				"DEFAULT": "Qwen/CodeQwen1.5-7B",
+				"MODELSCOPE": "qwen/CodeQwen1.5-7B"
 			},
 			"Qwen1.5-0.5B-Chat": {
 				"DEFAULT": "Qwen/Qwen1.5-0.5B-Chat",
@@ -549,9 +754,25 @@
 				"DEFAULT": "Qwen/Qwen1.5-14B-Chat",
 				"MODELSCOPE": "qwen/Qwen1.5-14B-Chat"
 			},
+			"Qwen1.5-32B-Chat": {
+				"DEFAULT": "Qwen/Qwen1.5-32B-Chat",
+				"MODELSCOPE": "qwen/Qwen1.5-32B-Chat"
+			},
 			"Qwen1.5-72B-Chat": {
 				"DEFAULT": "Qwen/Qwen1.5-72B-Chat",
 				"MODELSCOPE": "qwen/Qwen1.5-72B-Chat"
+			},
+			"Qwen1.5-110B-Chat": {
+				"DEFAULT": "Qwen/Qwen1.5-110B-Chat",
+				"MODELSCOPE": "qwen/Qwen1.5-110B-Chat"
+			},
+			"Qwen1.5-MoE-A2.7B-Chat": {
+				"DEFAULT": "Qwen/Qwen1.5-MoE-A2.7B-Chat",
+				"MODELSCOPE": "qwen/Qwen1.5-MoE-A2.7B-Chat"
+			},
+			"Qwen1.5-Code-7B-Chat": {
+				"DEFAULT": "Qwen/CodeQwen1.5-7B-Chat",
+				"MODELSCOPE": "qwen/CodeQwen1.5-7B-Chat"
 			},
 			"Qwen1.5-0.5B-int8-Chat": {
 				"DEFAULT": "Qwen/Qwen1.5-0.5B-Chat-GPTQ-Int8",
@@ -593,6 +814,10 @@
 				"DEFAULT": "Qwen/Qwen1.5-14B-Chat-AWQ",
 				"MODELSCOPE": "qwen/Qwen1.5-14B-Chat-AWQ"
 			},
+			"Qwen1.5-32B-int4-Chat": {
+				"DEFAULT": "Qwen/Qwen1.5-32B-Chat-AWQ",
+				"MODELSCOPE": "qwen/Qwen1.5-32B-Chat-AWQ"
+			},
 			"Qwen1.5-72B-int8-Chat": {
 				"DEFAULT": "Qwen/Qwen1.5-72B-Chat-GPTQ-Int8",
 				"MODELSCOPE": "qwen/Qwen1.5-72B-Chat-GPTQ-Int8"
@@ -600,13 +825,108 @@
 			"Qwen1.5-72B-int4-Chat": {
 				"DEFAULT": "Qwen/Qwen1.5-72B-Chat-AWQ",
 				"MODELSCOPE": "qwen/Qwen1.5-72B-Chat-AWQ"
+			},
+			"Qwen1.5-110B-int4-Chat": {
+				"DEFAULT": "Qwen/Qwen1.5-110B-Chat-AWQ",
+				"MODELSCOPE": "qwen/Qwen1.5-110B-Chat-AWQ"
+			},
+			"Qwen1.5-MoE-A2.7B-int4-Chat": {
+				"DEFAULT": "Qwen/Qwen1.5-MoE-A2.7B-Chat-GPTQ-Int4",
+				"MODELSCOPE": "qwen/Qwen1.5-MoE-A2.7B-Chat-GPTQ-Int4"
+			},
+			"Qwen1.5-Code-7B-int4-Chat": {
+				"DEFAULT": "Qwen/CodeQwen1.5-7B-Chat-AWQ",
+				"MODELSCOPE": "qwen/CodeQwen1.5-7B-Chat-AWQ"
 			}
 		},
 		"template": "qwen"
 	},
 	{
 		"models": {
-			"SOLAR-10.7B": { "DEFAULT": "upstage/SOLAR-10.7B-v1.0" },
+			"Qwen2-0.5B": {
+				"DEFAULT": "Qwen/Qwen2-0.5B",
+				"MODELSCOPE": "qwen/Qwen2-0.5B"
+			},
+			"Qwen2-1.5B": {
+				"DEFAULT": "Qwen/Qwen2-1.5B",
+				"MODELSCOPE": "qwen/Qwen2-1.5B"
+			},
+			"Qwen2-7B": {
+				"DEFAULT": "Qwen/Qwen2-7B",
+				"MODELSCOPE": "qwen/Qwen2-7B"
+			},
+			"Qwen2-72B": {
+				"DEFAULT": "Qwen/Qwen2-72B",
+				"MODELSCOPE": "qwen/Qwen2-72B"
+			},
+			"Qwen2-MoE-57B": {
+				"DEFAULT": "Qwen/Qwen2-57B-A14B",
+				"MODELSCOPE": "qwen/Qwen2-57B-A14B"
+			},
+			"Qwen2-0.5B-Chat": {
+				"DEFAULT": "Qwen/Qwen2-0.5B-Instruct",
+				"MODELSCOPE": "qwen/Qwen2-0.5B-Instruct"
+			},
+			"Qwen2-1.5B-Chat": {
+				"DEFAULT": "Qwen/Qwen2-1.5B-Instruct",
+				"MODELSCOPE": "qwen/Qwen2-1.5B-Instruct"
+			},
+			"Qwen2-7B-Chat": {
+				"DEFAULT": "Qwen/Qwen2-7B-Instruct",
+				"MODELSCOPE": "qwen/Qwen2-7B-Instruct"
+			},
+			"Qwen2-72B-Chat": {
+				"DEFAULT": "Qwen/Qwen2-72B-Instruct",
+				"MODELSCOPE": "qwen/Qwen2-72B-Instruct"
+			},
+			"Qwen2-MoE-57B-Chat": {
+				"DEFAULT": "Qwen/Qwen2-57B-A14B-Instruct",
+				"MODELSCOPE": "qwen/Qwen2-57B-A14B-Instruct"
+			},
+			"Qwen2-0.5B-int8-Chat": {
+				"DEFAULT": "Qwen/Qwen2-0.5B-Instruct-GPTQ-Int8",
+				"MODELSCOPE": "qwen/Qwen2-0.5B-Instruct-GPTQ-Int8"
+			},
+			"Qwen2-0.5B-int4-Chat": {
+				"DEFAULT": "Qwen/Qwen2-0.5B-Instruct-AWQ",
+				"MODELSCOPE": "qwen/Qwen2-0.5B-Instruct-AWQ"
+			},
+			"Qwen2-1.5B-int8-Chat": {
+				"DEFAULT": "Qwen/Qwen2-1.5B-Instruct-GPTQ-Int8",
+				"MODELSCOPE": "qwen/Qwen2-1.5B-Instruct-GPTQ-Int8"
+			},
+			"Qwen2-1.5B-int4-Chat": {
+				"DEFAULT": "Qwen/Qwen2-1.5B-Instruct-AWQ",
+				"MODELSCOPE": "qwen/Qwen2-1.5B-Instruct-AWQ"
+			},
+			"Qwen2-7B-int8-Chat": {
+				"DEFAULT": "Qwen/Qwen2-7B-Instruct-GPTQ-Int8",
+				"MODELSCOPE": "qwen/Qwen2-7B-Instruct-GPTQ-Int8"
+			},
+			"Qwen2-7B-int4-Chat": {
+				"DEFAULT": "Qwen/Qwen2-7B-Instruct-AWQ",
+				"MODELSCOPE": "qwen/Qwen2-7B-Instruct-AWQ"
+			},
+			"Qwen2-72B-int8-Chat": {
+				"DEFAULT": "Qwen/Qwen2-72B-Instruct-GPTQ-Int8",
+				"MODELSCOPE": "qwen/Qwen2-72B-Instruct-GPTQ-Int8"
+			},
+			"Qwen2-72B-int4-Chat": {
+				"DEFAULT": "Qwen/Qwen2-72B-Instruct-AWQ",
+				"MODELSCOPE": "qwen/Qwen2-72B-Instruct-AWQ"
+			},
+			"Qwen2-MoE-57B-int4-Chat": {
+				"DEFAULT": "Qwen/Qwen2-57B-A14B-Instruct-GPTQ-Int4",
+				"MODELSCOPE": "qwen/Qwen2-57B-A14B-Instruct-GPTQ-Int4"
+			}
+		},
+		"template": "qwen"
+	},
+	{
+		"models": {
+			"SOLAR-10.7B": {
+				"DEFAULT": "upstage/SOLAR-10.7B-v1.0"
+			},
 			"SOLAR-10.7B-Chat": {
 				"DEFAULT": "upstage/SOLAR-10.7B-Instruct-v1.0",
 				"MODELSCOPE": "AI-ModelScope/SOLAR-10.7B-Instruct-v1.0"
@@ -624,10 +944,36 @@
 	},
 	{
 		"models": {
-			"StarCoder2-3B": { "DEFAULT": "bigcode/starcoder2-3b" },
-			"StarCoder2-7B": { "DEFAULT": "bigcode/starcoder2-7b" },
-			"StarCoder2-15B": { "DEFAULT": "bigcode/starcoder2-15b" }
+			"StarCoder2-3B": {
+				"DEFAULT": "bigcode/starcoder2-3b",
+				"MODELSCOPE": "AI-ModelScope/starcoder2-3b"
+			},
+			"StarCoder2-7B": {
+				"DEFAULT": "bigcode/starcoder2-7b",
+				"MODELSCOPE": "AI-ModelScope/starcoder2-7b"
+			},
+			"StarCoder2-15B": {
+				"DEFAULT": "bigcode/starcoder2-15b",
+				"MODELSCOPE": "AI-ModelScope/starcoder2-15b"
+			}
 		}
+	},
+	{
+		"models": {
+			"TeleChat-7B-Chat": {
+				"DEFAULT": "Tele-AI/telechat-7B",
+				"MODELSCOPE": "TeleAI/telechat-7B"
+			},
+			"TeleChat-12B-Chat": {
+				"DEFAULT": "Tele-AI/TeleChat-12B",
+				"MODELSCOPE": "TeleAI/TeleChat-12B"
+			},
+			"TeleChat-12B-v2-Chat": {
+				"DEFAULT": "Tele-AI/TeleChat-12B-v2",
+				"MODELSCOPE": "TeleAI/TeleChat-12B-v2"
+			}
+		},
+		"template": "telechat"
 	},
 	{
 		"models": {
@@ -644,10 +990,54 @@
 	},
 	{
 		"models": {
-			"XuanYuan-70B": { "DEFAULT": "Duxiaoman-DI/XuanYuan-70B" },
-			"XuanYuan-70B-Chat": { "DEFAULT": "Duxiaoman-DI/XuanYuan-70B-Chat" },
-			"XuanYuan-70B-int8-Chat": { "DEFAULT": "Duxiaoman-DI/XuanYuan-70B-Chat-8bit" },
-			"XuanYuan-70B-int4-Chat": { "DEFAULT": "Duxiaoman-DI/XuanYuan-70B-Chat-4bit" }
+			"XuanYuan-6B": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan-6B",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan-6B"
+			},
+			"XuanYuan-70B": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan-70B",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan-70B"
+			},
+			"XuanYuan-2-70B": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan2-70B",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan2-70B"
+			},
+			"XuanYuan-6B-Chat": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan-6B-Chat",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan-6B-Chat"
+			},
+			"XuanYuan-70B-Chat": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan-70B-Chat",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan-70B-Chat"
+			},
+			"XuanYuan-2-70B-Chat": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan2-70B-Chat",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan2-70B-Chat"
+			},
+			"XuanYuan-6B-int8-Chat": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan-6B-Chat-8bit",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan-6B-Chat-8bit"
+			},
+			"XuanYuan-6B-int4-Chat": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan-6B-Chat-4bit",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan-6B-Chat-4bit"
+			},
+			"XuanYuan-70B-int8-Chat": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan-70B-Chat-8bit",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan-70B-Chat-8bit"
+			},
+			"XuanYuan-70B-int4-Chat": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan-70B-Chat-4bit",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan-70B-Chat-4bit"
+			},
+			"XuanYuan-2-70B-int8-Chat": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan2-70B-Chat-8bit",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan2-70B-Chat-8bit"
+			},
+			"XuanYuan-2-70B-int4-Chat": {
+				"DEFAULT": "Duxiaoman-DI/XuanYuan2-70B-Chat-4bit",
+				"MODELSCOPE": "Duxiaoman-DI/XuanYuan2-70B-Chat-4bit"
+			}
 		},
 		"template": "xuanyuan"
 	},
@@ -680,6 +1070,30 @@
 			"XVERSE-65B-Chat": {
 				"DEFAULT": "xverse/XVERSE-65B-Chat",
 				"MODELSCOPE": "xverse/XVERSE-65B-Chat"
+			},
+			"XVERSE-MoE-A4.2B": {
+				"DEFAULT": "xverse/XVERSE-MoE-A4.2B",
+				"MODELSCOPE": "xverse/XVERSE-MoE-A4.2B"
+			},
+			"XVERSE-7B-int8-Chat": {
+				"DEFAULT": "xverse/XVERSE-7B-Chat-GPTQ-Int8",
+				"MODELSCOPE": "xverse/XVERSE-7B-Chat-GPTQ-Int8"
+			},
+			"XVERSE-7B-int4-Chat": {
+				"DEFAULT": "xverse/XVERSE-7B-Chat-GPTQ-Int4",
+				"MODELSCOPE": "xverse/XVERSE-7B-Chat-GPTQ-Int4"
+			},
+			"XVERSE-13B-int8-Chat": {
+				"DEFAULT": "xverse/XVERSE-13B-Chat-GPTQ-Int8",
+				"MODELSCOPE": "xverse/XVERSE-13B-Chat-GPTQ-Int8"
+			},
+			"XVERSE-13B-int4-Chat": {
+				"DEFAULT": "xverse/XVERSE-13B-Chat-GPTQ-Int4",
+				"MODELSCOPE": "xverse/XVERSE-13B-Chat-GPTQ-Int4"
+			},
+			"XVERSE-65B-int4-Chat": {
+				"DEFAULT": "xverse/XVERSE-65B-Chat-GPTQ-Int4",
+				"MODELSCOPE": "xverse/XVERSE-65B-Chat-GPTQ-Int4"
 			}
 		},
 		"template": "xverse"
@@ -734,6 +1148,30 @@
 			"Yi-34B-int4-Chat": {
 				"DEFAULT": "01-ai/Yi-34B-Chat-4bits",
 				"MODELSCOPE": "01ai/Yi-34B-Chat-4bits"
+			},
+			"Yi-1.5-6B": {
+				"DEFAULT": "01-ai/Yi-1.5-6B",
+				"MODELSCOPE": "01ai/Yi-1.5-6B"
+			},
+			"Yi-1.5-9B": {
+				"DEFAULT": "01-ai/Yi-1.5-9B",
+				"MODELSCOPE": "01ai/Yi-1.5-9B"
+			},
+			"Yi-1.5-34B": {
+				"DEFAULT": "01-ai/Yi-1.5-34B",
+				"MODELSCOPE": "01ai/Yi-1.5-34B"
+			},
+			"Yi-1.5-6B-Chat": {
+				"DEFAULT": "01-ai/Yi-1.5-6B-Chat",
+				"MODELSCOPE": "01ai/Yi-1.5-6B-Chat"
+			},
+			"Yi-1.5-9B-Chat": {
+				"DEFAULT": "01-ai/Yi-1.5-9B-Chat",
+				"MODELSCOPE": "01ai/Yi-1.5-9B-Chat"
+			},
+			"Yi-1.5-34B-Chat": {
+				"DEFAULT": "01-ai/Yi-1.5-34B-Chat",
+				"MODELSCOPE": "01ai/Yi-1.5-34B-Chat"
 			}
 		},
 		"template": "yi"
@@ -764,21 +1202,11 @@
 			"Zephyr-7B-Beta-Chat": {
 				"DEFAULT": "HuggingFaceH4/zephyr-7b-beta",
 				"MODELSCOPE": "modelscope/zephyr-7b-beta"
+			},
+			"Zephyr-141B-ORPO-Chat": {
+				"DEFAULT": "HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1"
 			}
 		},
 		"template": "zephyr"
-	},
-	{
-		"models": {
-			"Atom-7B": {
-				"DEFAULT": "FlagAlpha/Atom-7B",
-				"MODELSCOPE": "FlagAlpha/Atom-7B"
-			},
-			"Atom-7B-Chat": {
-				"DEFAULT": "FlagAlpha/Atom-7B-Chat",
-				"MODELSCOPE": "FlagAlpha/Atom-7B-Chat"
-			}
-		},
-		"template": "atom"
 	}
 ]
