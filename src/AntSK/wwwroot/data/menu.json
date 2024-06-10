@@ -77,10 +77,16 @@
     ]
   },
   {
-    "path": "http://antsk.cn/",
+    "path": "https://antsk.cn/",
     "name": "使用文档",
     "key": "antskdoc",
     "icon": "question-circle"
+  },
+  {
+    "path": "https://api.antsk.cn/",
+    "name": "GPT代理接口",
+    "key": "antskapi",
+    "icon": "bulb"
   },
   {
     "path": "https://www.bilibili.com/video/BV1vK421b7NF",

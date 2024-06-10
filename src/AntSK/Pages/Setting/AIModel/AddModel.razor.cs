@@ -357,7 +357,10 @@ namespace AntSK.Pages.Setting.AIModel
         private void AITypeChange(AIType aiType) 
         {
             switch (aiType)
-            { 
+            {
+                case AIType.OpenAI:
+                    _aiModel.EndPoint = "https://api.antsk.cn/";
+                    break;
                 case AIType.LLamaFactory:
                     _aiModel.EndPoint = "http://localhost:8000/";
                     _aiModel.AIModelType=AIModelType.Chat;
