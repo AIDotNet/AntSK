@@ -121,7 +121,7 @@ model/xxx.gguf
   },
   "LLamaSharp": {
     "RunType": "GPU",
-	"ContextSize": 2048,
+    "ContextSize": 2048,
     "GpuLayerCount": 20
   },
   "Login": {
