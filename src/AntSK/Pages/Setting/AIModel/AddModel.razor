@@ -85,14 +85,18 @@
                 }
                 @if (context.AIType == AIType.SparkDesk)
                 {
-                    <FormItem Label="APPID" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入APPID" @bind-Value="@context.EndPoint" />
+                    <FormItem Label="模型版本" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <SimpleSelect DefaultValue="V3_5" @bind-Value="@context.ModelName">
+                            <SelectOptions>
+                                <SimpleSelectOption Value="V3_5" Label="V3_5"></SimpleSelectOption>
+                                <SimpleSelectOption Value="V3" Label="V3"></SimpleSelectOption>
+                                <SimpleSelectOption Value="V2" Label="V2" Disabled></SimpleSelectOption>
+                                <SimpleSelectOption Value="V1_5" Label="V1_5"></SimpleSelectOption>
+                            </SelectOptions>
+                        </SimpleSelect>
                     </FormItem>
-                    <FormItem Label="APISecret" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="APISecret"  />
-                    </FormItem>
-                    <FormItem Label="APIKey" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入请输入APIKey" @bind-Value="@context.ModelName" />
+                    <FormItem Label="请输入模型APPID|APISecret|APIKey" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <InputPassword Placeholder="APPID|APISecret|APIKey" @bind-Value="@context.ModelKey" />
                     </FormItem>
                    
                 }

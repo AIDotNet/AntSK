@@ -116,7 +116,29 @@ namespace AntSK.Domain.Domain.Service
                     break;
 
                 case Model.Enum.AIType.SparkDesk:
-                    var options = new SparkDeskOptions { AppId = chatModel.EndPoint, ApiSecret = chatModel.ModelKey, ApiKey = chatModel.ModelName, ModelVersion = Sdcb.SparkDesk.ModelVersion.V3_5 };
+
+                    var settings = chatModel.ModelKey.Split("|");
+
+                    Sdcb.SparkDesk.ModelVersion modelVersion = Sdcb.SparkDesk.ModelVersion.V3_5;
+
+                    switch (chatModel.ModelName)
+                    {
+                        case "V3_5":
+                            modelVersion = Sdcb.SparkDesk.ModelVersion.V3_5;
+                            break;
+                        case "V3":
+                            modelVersion = Sdcb.SparkDesk.ModelVersion.V3;
+                            break;
+                        case "V2":
+                            modelVersion = Sdcb.SparkDesk.ModelVersion.V2;
+                            break;
+                        case "V1_5":
+                            modelVersion = Sdcb.SparkDesk.ModelVersion.V1_5;
+                            break;
+                    }
+
+                    SparkDeskOptions options = new SparkDeskOptions { AppId = settings[0], ApiSecret = settings[1], ApiKey = settings[2], ModelVersion = modelVersion };
+                
                     builder.Services.AddKeyedSingleton<ITextGenerationService>("spark-desk", new SparkDeskTextCompletion(options, chatModel.Id));
                     builder.Services.AddKeyedSingleton<IChatCompletionService>("spark-desk-chat", new SparkDeskChatCompletion(options, chatModel.Id));
                     break;
