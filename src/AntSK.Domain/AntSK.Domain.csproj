@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AntDesign.Charts" Version="0.5.2" />
-    <PackageReference Include="AntDesign.ProLayout" Version="0.19.3" />
+    <PackageReference Include="AntDesign.ProLayout" Version="0.19.2" />
     <PackageReference Include="BlazorComponents.Terminal" Version="0.6.0" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
   
