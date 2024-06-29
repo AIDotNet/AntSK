@@ -3,5 +3,8 @@
   <PropertyGroup>
     <KMVersion>0.62.240605.1</KMVersion>
     <LLamaSharpVersion>0.13.0</LLamaSharpVersion>
+    <NewtonsoftVersion>13.0.3</NewtonsoftVersion>
+    <RestSharpVersion>111.2.0</RestSharpVersion>
+    <SKVersion>1.14.1</SKVersion>
   </PropertyGroup>
 </Project>
