@@ -31,6 +31,7 @@ namespace AntSK.Domain.Domain.Other.Bge
                         Runtime.PythonDLL = pythondllPath;
                     }
                     PythonEngine.Initialize();
+                    PythonEngine.BeginAllowThreads();
                     try
                     {
                         using (GIL())// 初始化Python环境的Global Interpreter Lock)
