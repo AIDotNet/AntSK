@@ -331,8 +331,8 @@ namespace AntSK.Pages.ChatPage.Components
                 //await Task.Delay(50);
                 await InvokeAsync(StateHasChanged);
             }
-            //全部处理完后再处理一次Markdown
-            //await MarkDown(info);
+            //全部处理完后再处理一次Markdown 处理代码高亮
+            await MarkDown(info);
         }
 
         /// <summary>
@@ -368,8 +368,8 @@ namespace AntSK.Pages.ChatPage.Components
                 //await Task.Delay(50);
                 await InvokeAsync(StateHasChanged);
             }
-            //全部处理完后再处理一次Markdown
-            //await MarkDown(info);
+            //全部处理完后再处理一次Markdown 处理代码高亮
+            await MarkDown(info);
         }
 
         /// <summary>
