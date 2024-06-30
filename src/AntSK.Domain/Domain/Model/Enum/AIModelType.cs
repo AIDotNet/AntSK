@@ -30,6 +30,9 @@ namespace AntSK.Domain.Domain.Model.Enum
         BgeRerank = 8,
         [Display(Name = "StableDiffusion")]
         StableDiffusion = 9,
+
+        [Display(Name = "Ollama")]
+        Ollama = 10,
         [Display(Name = "模拟输出")]
         Mock = 100,
 
