@@ -332,7 +332,7 @@ namespace AntSK.Pages.ChatPage.Components
                 await InvokeAsync(StateHasChanged);
             }
             //全部处理完后再处理一次Markdown 处理代码高亮
-            await MarkDown(info);
+            await MarkDown();
         }
 
         /// <summary>
@@ -369,7 +369,7 @@ namespace AntSK.Pages.ChatPage.Components
                 await InvokeAsync(StateHasChanged);
             }
             //全部处理完后再处理一次Markdown 处理代码高亮
-            await MarkDown(info);
+            await MarkDown();
         }
 
         /// <summary>
@@ -377,14 +377,8 @@ namespace AntSK.Pages.ChatPage.Components
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private async Task MarkDown(Chats info)
+        private async Task MarkDown()
         {
-            if (info.IsNotNull())
-            {
-                // info!.HtmlAnswers = markdown.Transform(info.HtmlAnswers);
-                info!.Context = Markdown.ToHtml(info.Context);
-
-            }
             await InvokeAsync(StateHasChanged);
             await _JSRuntime.InvokeVoidAsync("Prism.highlightAll");
             await _JSRuntime.ScrollToBottomAsync("scrollDiv");
