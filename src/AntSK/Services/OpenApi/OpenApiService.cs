@@ -95,7 +95,7 @@ namespace AntSK.Services.OpenApi
 
         private async Task SendChatStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, ChatHistory history)
         {
-            HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
+            HttpContext.Response.Headers.Add("Content-Type", "text/event-stream;charset=utf-8");
             var chatResult = _chatService.SendChatByAppAsync(app, history);
             await foreach (var content in chatResult)
             {
@@ -165,7 +165,7 @@ namespace AntSK.Services.OpenApi
 
         private async Task SendKmsStream(HttpContext HttpContext, OpenAIStreamResult result, Apps app, string questions,ChatHistory history)
         {
-            HttpContext.Response.Headers.Add("Content-Type", "text/event-stream");
+            HttpContext.Response.Headers.Add("Content-Type", "text/event-stream;charset=utf-8");
             var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, "");
             int i = 0;
             await foreach (var content in chatResult)
