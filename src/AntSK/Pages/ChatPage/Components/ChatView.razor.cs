@@ -82,6 +82,7 @@ namespace AntSK.Pages.ChatPage.Components
             var userSession = userSessionStorageResult.Success ? userSessionStorageResult.Value : null;
             _userName = userSession?.UserName;
             await GetMsgList();
+            await MarkDown();
         }
         /// <summary>
         /// 获取聊天记录列表
