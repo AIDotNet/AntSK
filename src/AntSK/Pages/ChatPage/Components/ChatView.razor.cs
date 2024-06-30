@@ -323,15 +323,16 @@ namespace AntSK.Pages.ChatPage.Components
             };
             MessageList.Add(info);
             var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, filePath, _relevantSources);
+            var rawContent = string.Empty;
             await foreach (var content in chatResult)
             {
-
-                info.Context += content.ConvertToString();
-                await Task.Delay(50);
+                rawContent+=content.ConvertToString();
+                info.Context=Markdown.ToHtml(rawContent);
+                //await Task.Delay(50);
                 await InvokeAsync(StateHasChanged);
             }
             //全部处理完后再处理一次Markdown
-            await MarkDown(info);
+            //await MarkDown(info);
         }
 
         /// <summary>
@@ -344,10 +345,12 @@ namespace AntSK.Pages.ChatPage.Components
         {
             Chats info = null;
             var chatResult = _chatService.SendChatByAppAsync(app, history);
+            var rawContent=string.Empty;
             await foreach (var content in chatResult)
             {
                 if (info == null)
                 {
+                    rawContent=content.ConvertToString();
                     info = new Chats();
                     info.Id = Guid.NewGuid().ToString();
                     info.UserName = _userName;
@@ -359,13 +362,14 @@ namespace AntSK.Pages.ChatPage.Components
                 }
                 else
                 {
-                    info.Context += content.ConvertToString();
-                    await Task.Delay(50);
+                    rawContent+=content.ConvertToString();                        
                 }
+                info.Context = Markdown.ToHtml(rawContent);
+                //await Task.Delay(50);
                 await InvokeAsync(StateHasChanged);
             }
             //全部处理完后再处理一次Markdown
-            await MarkDown(info);
+            //await MarkDown(info);
         }
 
         /// <summary>
