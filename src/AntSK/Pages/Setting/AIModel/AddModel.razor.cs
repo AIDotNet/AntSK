@@ -243,7 +243,7 @@ namespace AntSK.Pages.Setting.AIModel
         {
             if (string.IsNullOrEmpty(value))
             {
-                ollamaModelList = File.ReadAllLines(Path.Combine(AppContext.BaseDirectory, "OllamaModelList.txt")).ToList(); ;
+                ollamaModelList = File.ReadAllLines(Path.Combine(AppContext.BaseDirectory, "OllamaModelList.txt")).ToList(); 
             }
             else
             {
