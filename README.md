@@ -20,7 +20,7 @@
 
 - **Online Search**: AntSK, real-time access to the latest information, ensuring users receive the most timely and relevant data.
 
-- **Model Management**: Adapts and manages integration of different models from different manufacturers, including gguf types supported by **llama.cpp** and models offline running supported by **llamafactory**.
+- **Model Management**: Adapts and manages integration of different models from different manufacturers, including gguf types supported by **llama.cpp** and models offline running supported by **llamafactory** and **ollama**.
 
 - **Domestic Innovation**: AntSK supports domestic models and databases and can run under domestic innovation conditions.
 
