@@ -154,7 +154,14 @@ namespace AntSK.Domain.Domain.Service
                 case Model.Enum.AIType.LLamaFactory:
                     builder.AddOpenAIChatCompletion(
                      modelId: chatModel.ModelName,
-                     apiKey: "123",
+                     apiKey: "NotNull",
+                     httpClient: chatHttpClient
+                       );
+                    break;
+                case AIType.Ollama:
+                    builder.AddOpenAIChatCompletion(
+                     modelId: chatModel.ModelName,
+                     apiKey: "NotNull",
                      httpClient: chatHttpClient
                        );
                     break;
