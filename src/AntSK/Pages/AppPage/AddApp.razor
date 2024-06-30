@@ -24,7 +24,7 @@
                     <IconPicker @bind-Value="@context.Icon"></IconPicker>
                 </FormItem>
                 <FormItem Label="类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <RadioGroup @bind-Value="context.Type" OnChange="OnAppTypeChange" TValue="string">
+                    <RadioGroup @bind-Value="context.Type" OnChange="OnAppTypeChange" TValue="string" ButtonStyle="RadioButtonStyle.Solid">
                         <Radio RadioButton Value="@AppType.chat.ToString()">会话应用</Radio>
                         <Radio RadioButton Value="@AppType.kms.ToString()">知识库</Radio>
                         <Radio RadioButton Value="@AppType.img.ToString()">做图应用</Radio>

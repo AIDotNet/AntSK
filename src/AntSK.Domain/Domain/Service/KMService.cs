@@ -226,6 +226,13 @@ namespace AntSK.Domain.Domain.Service
                         TextModel = chatModel.ModelName
                     }, null, chatHttpClient);
                     break;
+                case Model.Enum.AIType.Ollama:
+                    memory.WithOpenAITextGeneration(new OpenAIConfig()
+                    {
+                        APIKey = "NotNull",
+                        TextModel = chatModel.ModelName
+                    }, null, chatHttpClient);
+                    break;
                 case Model.Enum.AIType.DashScope:
                     memory.WithDashScopeTextGeneration(new Cnblogs.KernelMemory.AI.DashScope.DashScopeConfig
                     {

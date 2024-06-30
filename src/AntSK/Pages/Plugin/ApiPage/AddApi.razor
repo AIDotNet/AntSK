@@ -29,7 +29,7 @@
                     <TextArea Placeholder="一个一行，以冒号分割。例如:Content-Type:application/json" @bind-Value="@context.Header" MinRows="3" />
                 </FormItem>
                 <FormItem Label="Method类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <EnumRadioGroup ButtonStyle="@RadioButtonStyle.Outline" @bind-Value="context.Method"></EnumRadioGroup>
+                    <EnumRadioGroup ButtonStyle="@RadioButtonStyle.Solid" @bind-Value="context.Method"></EnumRadioGroup>
                  </FormItem>
 
                  @if (context.Method == HttpMethodType.Get)

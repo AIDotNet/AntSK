@@ -27,7 +27,7 @@
                     <EnumRadioGroup @bind-Value="context.AIType" ButtonStyle="RadioButtonStyle.Solid" OnChange="AITypeChange" TEnum="AIType"> </EnumRadioGroup>
                 </FormItem>
                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <RadioGroup @bind-Value="context.AIModelType">
+                    <RadioGroup @bind-Value="context.AIModelType" ButtonStyle="RadioButtonStyle.Solid">
                         @if (context.AIType == AIType.StableDiffusion)
                         {
                             <Radio RadioButton Value="@(AIModelType.Image)">图片模型</Radio>
@@ -38,7 +38,7 @@
                             {
                                 <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
                             }
-                            @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock && context.AIType != AIType.SparkDesk && context.AIType != AIType.BgeRerank)
+                            @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock && context.AIType != AIType.SparkDesk && context.AIType != AIType.BgeRerank && context.AIType != AIType.Ollama)
                             {
                                 <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
                             }
@@ -65,12 +65,12 @@
                         <Input Placeholder="请输入部署名" @bind-Value="@context.ModelName" />
                     </FormItem>
                     <FormItem Label="模型秘钥" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥"  />
+                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥" />
                     </FormItem>
                 }
                 @if (context.AIType == AIType.OpenAI)
                 {
-                     <FormItem Label="代理API" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <FormItem Label="代理API" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <a href="https://api.antsk.cn/" target="_blank">去创建</a>
                     </FormItem>
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
@@ -98,7 +98,7 @@
                     <FormItem Label="请输入模型APPID|APISecret|APIKey" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputPassword Placeholder="APPID|APISecret|APIKey" @bind-Value="@context.ModelKey" />
                     </FormItem>
-                   
+
                 }
                 @if (context.AIType == AIType.DashScope)
                 {
@@ -154,7 +154,39 @@
                         </InputGroup>
                     </FormItem>
                 }
+                @if (context.AIType == AIType.Ollama)
+                {
+                    <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <InputGroup>
+                            <Select TItem="string"
+                                    TItemValue="string"
+                                    DataSource="@ollamaModelList"
+                                    @bind-Value="@context.ModelName"
+                                    ValueProperty="c=>c"
+                                    LabelProperty="c=>c"
+                                    Placeholder="选择模型"
+                                    DefaultActiveFirstOption="false"
+                                    EnableSearch
+                                    OnSearch="OnOllamaSearch">
+                            </Select>
+                        </InputGroup>
+                        <a href="https://ollama.com/library" target="_blank">获取更多模型</a>
+                    </FormItem>
+                    <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="http://localhost:11434/" @bind-Value="@context.EndPoint" />
+                    </FormItem>
+                    <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <a href="https://ollama.com/download" target="_blank">下载Ollama</a>
+                    </FormItem>
+                    <FormItem Label="Ollama服务" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <InputGroup>
 
+                            <Button Type="primary" OnClick="StartOllamaService" >启动</Button>
+
+                        </InputGroup>
+                    </FormItem>
+
+                }
                 @if (context.AIType == AIType.BgeEmbedding)
                 {
                     <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
