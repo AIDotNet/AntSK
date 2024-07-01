@@ -330,7 +330,7 @@ namespace AntSK.Pages.ChatPage.Components
             {
                 rawContent.Append(content.ConvertToString());
                 info.Context = Markdown.ToHtml(rawContent.ToString());
-                //await Task.Delay(50);
+                await Task.Delay(30);
                 await InvokeAsync(StateHasChanged);
             }
             //全部处理完后再处理一次Markdown 处理代码高亮
@@ -367,7 +367,7 @@ namespace AntSK.Pages.ChatPage.Components
                     rawContent.Append(content.ConvertToString());
                 }
                 info.Context = Markdown.ToHtml(rawContent.ToString());
-                //await Task.Delay(50);
+                await Task.Delay(30);
                 await InvokeAsync(StateHasChanged);
             }
             //全部处理完后再处理一次Markdown 处理代码高亮
