@@ -19,6 +19,7 @@ using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Text;
 
 namespace AntSK.Pages.ChatPage.Components
 {
@@ -324,11 +325,11 @@ namespace AntSK.Pages.ChatPage.Components
             };
             MessageList.Add(info);
             var chatResult = _chatService.SendKmsByAppAsync(app, questions, history, filePath, _relevantSources);
-            var rawContent = string.Empty;
+            StringBuilder rawContent = new StringBuilder();
             await foreach (var content in chatResult)
             {
-                rawContent+=content.ConvertToString();
-                info.Context=Markdown.ToHtml(rawContent);
+                rawContent.Append(content.ConvertToString());
+                info.Context = Markdown.ToHtml(rawContent.ToString());
                 //await Task.Delay(50);
                 await InvokeAsync(StateHasChanged);
             }
@@ -346,12 +347,12 @@ namespace AntSK.Pages.ChatPage.Components
         {
             Chats info = null;
             var chatResult = _chatService.SendChatByAppAsync(app, history);
-            var rawContent=string.Empty;
+            StringBuilder rawContent = new StringBuilder();
             await foreach (var content in chatResult)
             {
                 if (info == null)
                 {
-                    rawContent=content.ConvertToString();
+                    rawContent.Append(content.ConvertToString());
                     info = new Chats();
                     info.Id = Guid.NewGuid().ToString();
                     info.UserName = _userName;
@@ -363,9 +364,9 @@ namespace AntSK.Pages.ChatPage.Components
                 }
                 else
                 {
-                    rawContent+=content.ConvertToString();                        
+                    rawContent.Append(content.ConvertToString());
                 }
-                info.Context = Markdown.ToHtml(rawContent);
+                info.Context = Markdown.ToHtml(rawContent.ToString());
                 //await Task.Delay(50);
                 await InvokeAsync(StateHasChanged);
             }
