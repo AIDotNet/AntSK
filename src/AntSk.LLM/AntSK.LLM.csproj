@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <None Update="OllamaModelList.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="StableDiffusion\Backend\CPU\stable-diffusion.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -45,7 +45,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="StableDiffusionModelList.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
