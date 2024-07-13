@@ -41,7 +41,7 @@ AntSK is suitable for various business scenarios, such as:
 ### Online Demo
 [document](http://antsk.cn/)
 
-[demo](https://antsk.ai-dotnet.com/)
+[demo](https://demo.antsk.cn/)
 
 ```
 Default account: test
