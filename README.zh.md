@@ -45,7 +45,7 @@ AntSK 适用于多种业务场景，例如：
 
 [文档地址](http://antsk.cn/)
 
-[体验地址](https://antsk.ai-dotnet.com/)
+[体验地址](https://demo.antsk.cn/)
 
 ```
 默认账号：test
