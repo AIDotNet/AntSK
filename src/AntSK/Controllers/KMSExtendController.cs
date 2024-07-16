@@ -1,4 +1,5 @@
 ﻿using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Repositories;
 using AntSK.Filters;
 using AntSK.Models;
@@ -16,6 +17,7 @@ namespace AntSK.Controllers
     [ApiController]
     [TokenCheck]
     public class KMSExtendController(
+        IAIModels_Repositories aIModels_Repositories,
         IKmss_Repositories kmss_Repositories,
         IKmsDetails_Repositories kmsDetails_Repositories,
         IKMService kMService,
@@ -32,6 +34,18 @@ namespace AntSK.Controllers
             return await (string.IsNullOrWhiteSpace(model.Id) ? AddAsync(model) : UpdateAsync(model));
         }
 
+        /// <summary>
+        /// 知识库列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ExecuteResult<List<KmsReturnDto>>> GetListAsync()
+        {
+            return ExecuteResult<List<KmsReturnDto>>
+                .Success((await kmss_Repositories.GetListAsync())
+                .Select(x => new KmsReturnDto { Id = x.Id, Name = x.Name })
+                .ToList());
+        }
 
         /// <summary>
         /// 删除知识库
@@ -68,10 +82,25 @@ namespace AntSK.Controllers
             {
                 return ExecuteResult<KmsReturnDto>.Error("名称已存在！");
             }
+            var chatDefault = aIModels_Repositories.GetFirst(x => x.Defalut == true && x.AIModelType == AIModelType.Chat);
+            if (chatDefault == null)
+            {
+                return ExecuteResult<KmsReturnDto>.Error("默认会话模型未配置，无法创建知识库");
+            }
+            var embeddingDefault = aIModels_Repositories.GetFirst(x => x.Defalut == true && x.AIModelType == AIModelType.Embedding);
+            if (embeddingDefault == null)
+            {
+                return ExecuteResult<KmsReturnDto>.Error("默认向量模型未配置，无法创建知识库");
+            }
             var _kmsModel = new Kmss();
+            _kmsModel.Icon = "chrome";
+            _kmsModel.Name = model.Name;
+            _kmsModel.Describe = model.Name;
             _kmsModel.Id = Guid.NewGuid().ToString();
-            _kmsModel.ChatModelID = configuration.GetSection("DefaultModel:Chat").Value;
-            _kmsModel.EmbeddingModelID = configuration.GetSection("DefaultModel:Embedding").Value;
+            //_kmsModel.ChatModelID = configuration.GetSection("DefaultModel:Chat").Value;
+            //_kmsModel.EmbeddingModelID = configuration.GetSection("DefaultModel:Embedding").Value;
+            _kmsModel.ChatModelID = chatDefault.Id;
+            _kmsModel.EmbeddingModelID = embeddingDefault.Id;
             var result = await kmss_Repositories.InsertAsync(_kmsModel);
             return result ?
                 ExecuteResult<KmsReturnDto>.Success(new KmsReturnDto { Id = _kmsModel.Id, Name = _kmsModel.Name }) :
@@ -91,6 +120,10 @@ namespace AntSK.Controllers
             if (_kmsModel == null)
             {
                 return ExecuteResult<KmsReturnDto>.Error("知识库不存在");
+            }
+            if (_kmsModel.Name == model.Name)
+            {
+                return ExecuteResult<KmsReturnDto>.Success(new KmsReturnDto { Id = _kmsModel.Id, Name = _kmsModel.Name });
             }
             _kmsModel.Name = model.Name;
             var result = await kmss_Repositories.UpdateAsync(_kmsModel);

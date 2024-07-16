@@ -235,6 +235,9 @@
                         </Spin>
                     </FormItem>
                 }
+                <FormItem Label="默认" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Switch @bind-Value="@context.Defalut" />
+                </FormItem>
                 @if (context.AIType == AIType.Mock)
                 {
                 }

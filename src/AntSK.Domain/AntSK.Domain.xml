@@ -794,6 +794,11 @@
             部署名，azure需要使用
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.AIModels.Defalut">
+            <summary>
+            默认
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Users.No">
             <summary>
             工号，用于登陆

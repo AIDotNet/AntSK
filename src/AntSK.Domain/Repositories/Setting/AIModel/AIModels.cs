@@ -42,5 +42,10 @@ namespace AntSK.Domain.Repositories
 
         [Required]
         public string ModelDescription { get; set; }
+
+        /// <summary>
+        /// 默认
+        /// </summary>
+        public bool Defalut { get; set; }
     }
 }
