@@ -1,12 +1,9 @@
 ﻿using AntSK.Domain.Domain.Model.Enum;
-using SqlSugar;
 
-namespace AntSK.Domain.Repositories
+namespace AntSK.Models.Dto
 {
-    [SugarTable("KmsDetails")]
-    public partial class KmsDetails
+    public class KmsDetailsDto
     {
-        [SugarColumn(IsPrimaryKey = true)]
         public string Id { get; set; }
         public string KmsId { get; set; }
         /// <summary>
@@ -33,10 +30,11 @@ namespace AntSK.Domain.Repositories
         /// 创建时间
         /// </summary>
         public DateTime CreateTime { get; set; }
+
         /// <summary>
         /// 状态
         /// </summary>
-        public ImportKmsStatus? Status { get; set; } = ImportKmsStatus.Loadding;
+        public ImportKmsStatus? Status { get; set; }
 
         /// <summary>
         /// 失败原因

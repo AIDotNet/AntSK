@@ -1,10 +1,13 @@
 ﻿using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using AntSK.Filters;
 using AntSK.Models;
 using AntSK.Models.Dto;
-using Microsoft.AspNetCore.Mvc;
+using AntSK.BackgroundTask;
+using AntSK.Domain.Common.Map;
 
 namespace AntSK.Controllers
 {
@@ -21,6 +24,7 @@ namespace AntSK.Controllers
         IKmss_Repositories kmss_Repositories,
         IKmsDetails_Repositories kmsDetails_Repositories,
         IKMService kMService,
+        BackgroundTaskBroker<ImportKMSTaskReq> taskBroker,
         IConfiguration configuration) : ControllerBase
     {
         /// <summary>
@@ -52,24 +56,78 @@ namespace AntSK.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ExecuteResult> DeleteAsync([FromBody] string id)
+        public async Task<ExecuteResult> DeleteAsync([FromQuery] string id)
         {
             var _memory = kMService.GetMemoryByKMS(id);
             var detailList = kmsDetails_Repositories.GetList(p => p.KmsId == id);
-            foreach (var detail in detailList)
+            if (detailList != null)
             {
-                var flag = await kmsDetails_Repositories.DeleteAsync(detail.Id);
-                if (flag)
+                foreach (var detail in detailList)
                 {
-                    if (_memory != null)
+                    var flag = await kmsDetails_Repositories.DeleteAsync(detail.Id);
+                    if (flag)
                     {
-                        await _memory.DeleteDocumentAsync(index: "kms", documentId: detail.Id);
-                    }
+                        if (_memory != null)
+                        {
+                            await _memory.DeleteDocumentAsync(index: "kms", documentId: detail.Id);
+                        }
 
+                    }
                 }
             }
-            await kmss_Repositories.DeleteAsync(id);
-            return new ExecuteResult();
+            var result = await kmss_Repositories.DeleteAsync(id);
+            return result ? ExecuteResult.Success("删除成功") : ExecuteResult.Error("删除失败");
+        }
+
+        /// <summary>
+        /// 导入任务
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ExecuteResult<KmsDetailsDto>> ImportKMSTask([FromBody] ImportKMSTaskDTO model)
+        {
+            ImportKMSTaskReq req = model.ToDTO<ImportKMSTaskReq>();
+            KmsDetails detail = new KmsDetails()
+            {
+                Id = Guid.NewGuid().ToString(),
+                KmsId = req.KmsId,
+                CreateTime = DateTime.Now,
+                Status = ImportKmsStatus.Loadding,
+                Type = model.ImportType.ToString().ToLower()
+            };
+
+            var result = await kmsDetails_Repositories.InsertAsync(detail);
+            if (!result)
+            {
+                return ExecuteResult<KmsDetailsDto>.Error("导入失败");
+            }
+            req.KmsDetail = detail;
+            req.IsQA = model.IsQA;
+            taskBroker.QueueWorkItem(req);
+            return ExecuteResult<KmsDetailsDto>.Success(detail.ToDTO<KmsDetailsDto>());
+        }
+
+        [HttpPost]
+        public async Task<ExecuteResult<KmsDetailsDto>> GetDetail([FromQuery] string detailId)
+        {
+            var model = await kmsDetails_Repositories.GetByIdAsync(detailId);
+            if (model == null)
+                return ExecuteResult<KmsDetailsDto>.Error("未找到详情");
+            return ExecuteResult<KmsDetailsDto>.Success(model.ToDTO<KmsDetailsDto>());
+        }
+        [HttpPost]
+        public async Task<ExecuteResult> DeleteDetail([FromQuery] string detailId)
+        {
+            var model = await kmsDetails_Repositories.GetByIdAsync(detailId);
+            if (model == null)
+                return ExecuteResult.Success("删除成功");
+            if (model.Status == ImportKmsStatus.Loadding)
+            {
+                return ExecuteResult.Error("导入中不能删除");
+            }
+            var result = await kmsDetails_Repositories.DeleteAsync(detailId);
+            return result ? ExecuteResult.Success("删除成功") : ExecuteResult.Error("删除失败");
         }
 
         async Task<ExecuteResult<KmsReturnDto>> AddAsync([FromBody] KmsEditDto model)

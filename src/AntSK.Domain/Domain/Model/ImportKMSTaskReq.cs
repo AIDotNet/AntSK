@@ -4,20 +4,39 @@ namespace AntSK.Domain.Domain.Model
 {
     public class ImportKMSTaskDTO
     {
-
+        /// <summary>
+        /// 导入类型
+        /// </summary>
         public ImportType ImportType { get; set; }
 
+        /// <summary>
+        /// 知识库Id
+        /// </summary>
         public string KmsId { get; set; }
 
+        /// <summary>
+        /// 导入链接
+        /// </summary>
         public string Url { get; set; } = "";
 
-
+        /// <summary>
+        /// 导入文本
+        /// </summary>
         public string Text { get; set; } = "";
 
+        /// <summary>
+        /// 文件路径
+        /// </summary>
         public string FilePath { get; set; } = "";
 
+        /// <summary>
+        /// 文件名
+        /// </summary>
         public string FileName { get; set; } = "";
 
+        /// <summary>
+        /// 是否QA切分
+        /// </summary>
         public bool IsQA { get; set; } = false;
     }
 
