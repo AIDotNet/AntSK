@@ -7,6 +7,7 @@ using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
+using AntSK.Midware;
 using AntSK.plugins.Functions;
 using AntSK.Services.Auth;
 using Blazored.LocalStorage;
@@ -24,7 +25,11 @@ using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
-builder.Services.AddControllers().AddJsonOptions(config =>
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new PermissionFilter(builder.Configuration));
+})
+    .AddJsonOptions(config =>
 {
     //此设定解决JsonResult中文被编码的问题
     config.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
@@ -133,6 +138,8 @@ app.LoadFun();
 app.InitDbData();
 
 app.UseRouting();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
