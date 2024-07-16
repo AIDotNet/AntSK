@@ -1,8 +1,8 @@
-﻿using AntSK.Domain.Repositories;
+﻿using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Repositories;
 using AntSK.Filters;
 using AntSK.Models;
 using AntSK.Models.Dto;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AntSK.Controllers
@@ -15,7 +15,11 @@ namespace AntSK.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [TokenCheck]
-    public class KMSExtendController(IKmss_Repositories kmss_Repositories, IConfiguration configuration) : ControllerBase
+    public class KMSExtendController(
+        IKmss_Repositories kmss_Repositories,
+        IKmsDetails_Repositories kmsDetails_Repositories,
+        IKMService kMService,
+        IConfiguration configuration) : ControllerBase
     {
         /// <summary>
         /// 保存知识库
@@ -28,6 +32,31 @@ namespace AntSK.Controllers
             return await (string.IsNullOrWhiteSpace(model.Id) ? AddAsync(model) : UpdateAsync(model));
         }
 
+
+        /// <summary>
+        /// 删除知识库
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ExecuteResult> DeleteAsync([FromBody] string id)
+        {
+            var _memory = kMService.GetMemoryByKMS(id);
+            var detailList = kmsDetails_Repositories.GetList(p => p.KmsId == id);
+            foreach (var detail in detailList)
+            {
+                var flag = await kmsDetails_Repositories.DeleteAsync(detail.Id);
+                if (flag)
+                {
+                    if (_memory != null)
+                    {
+                        await _memory.DeleteDocumentAsync(index: "kms", documentId: detail.Id);
+                    }
+
+                }
+            }
+            await kmss_Repositories.DeleteAsync(id);
+            return new ExecuteResult();
+        }
 
         async Task<ExecuteResult<KmsReturnDto>> AddAsync([FromBody] KmsEditDto model)
         {
