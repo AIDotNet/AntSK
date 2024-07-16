@@ -157,6 +157,41 @@
             模型类型
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Domain.Model.ImportKMSTaskDTO.ImportType">
+            <summary>
+            导入类型
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.ImportKMSTaskDTO.KmsId">
+            <summary>
+            知识库Id
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.ImportKMSTaskDTO.Url">
+            <summary>
+            导入链接
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.ImportKMSTaskDTO.Text">
+            <summary>
+            导入文本
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.ImportKMSTaskDTO.FilePath">
+            <summary>
+            文件路径
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.ImportKMSTaskDTO.FileName">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.ImportKMSTaskDTO.IsQA">
+            <summary>
+            是否QA切分
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Domain.Model.PageList`1.PageIndex">
             <summary>
             当前页，从1开始
@@ -465,6 +500,11 @@
         <member name="P:AntSK.Domain.Repositories.KmsDetails.Status">
             <summary>
             状态
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Fail">
+            <summary>
+            失败原因
             </summary>
         </member>
         <member name="P:AntSK.Domain.Repositories.Kmss.Icon">

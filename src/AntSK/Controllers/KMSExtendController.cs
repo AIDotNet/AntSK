@@ -107,7 +107,11 @@ namespace AntSK.Controllers
             taskBroker.QueueWorkItem(req);
             return ExecuteResult<KmsDetailsDto>.Success(detail.ToDTO<KmsDetailsDto>());
         }
-
+        /// <summary>
+        /// 获取知识详情
+        /// </summary>
+        /// <param name="detailId"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ExecuteResult<KmsDetailsDto>> GetDetail([FromQuery] string detailId)
         {
@@ -116,6 +120,11 @@ namespace AntSK.Controllers
                 return ExecuteResult<KmsDetailsDto>.Error("未找到详情");
             return ExecuteResult<KmsDetailsDto>.Success(model.ToDTO<KmsDetailsDto>());
         }
+        /// <summary>
+        /// 删除知识
+        /// </summary>
+        /// <param name="detailId"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ExecuteResult> DeleteDetail([FromQuery] string detailId)
         {
