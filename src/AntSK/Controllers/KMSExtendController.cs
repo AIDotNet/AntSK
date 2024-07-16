@@ -107,35 +107,90 @@ namespace AntSK.Controllers
             taskBroker.QueueWorkItem(req);
             return ExecuteResult<KmsDetailsDto>.Success(detail.ToDTO<KmsDetailsDto>());
         }
+
+        /// <summary>
+        /// 批量导入任务
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ExecuteResult<List<KmsDetailsDto>>> BatchImportKMSTask([FromBody] List<ImportKMSTaskDTO> model)
+        {
+            var list = new List<KmsDetails>();
+            foreach (var item in model)
+            {
+                KmsDetails detail = new KmsDetails()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    KmsId = item.KmsId,
+                    CreateTime = DateTime.Now,
+                    Status = ImportKmsStatus.Loadding,
+                    Type = item.ImportType.ToString().ToLower()
+                };
+                list.Add(detail);
+            }
+            var result = await kmsDetails_Repositories.InsertRangeAsync(list);
+            if (!result)
+            {
+                return ExecuteResult<List<KmsDetailsDto>>.Error("批量导入失败");
+            }
+            for (var i = 0; i < model.Count; i++)
+            {
+                var req = model[i].ToDTO<ImportKMSTaskReq>();
+                req.KmsDetail = list[i];
+                req.IsQA = model[i].IsQA;
+                taskBroker.QueueWorkItem(req);
+            }
+            return ExecuteResult<List<KmsDetailsDto>>.Success(list.Select(x => x.ToDTO<KmsDetailsDto>()).ToList());
+        }
+
+
         /// <summary>
         /// 获取知识详情
         /// </summary>
-        /// <param name="detailId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ExecuteResult<KmsDetailsDto>> GetDetail([FromQuery] string detailId)
+        public async Task<ExecuteResult<KmsDetailsDto>> GetDetail([FromBody] string id)
         {
-            var model = await kmsDetails_Repositories.GetByIdAsync(detailId);
+            if (string.IsNullOrWhiteSpace(id)) return ExecuteResult<KmsDetailsDto>.Error("未找到详情");
+            var model = await kmsDetails_Repositories.GetByIdAsync(id);
             if (model == null)
                 return ExecuteResult<KmsDetailsDto>.Error("未找到详情");
             return ExecuteResult<KmsDetailsDto>.Success(model.ToDTO<KmsDetailsDto>());
         }
         /// <summary>
-        /// 删除知识
+        /// 获取知识详情
         /// </summary>
-        /// <param name="detailId"></param>
+        /// <param name="ids"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ExecuteResult> DeleteDetail([FromQuery] string detailId)
+        public async Task<ExecuteResult<List<KmsDetailsDto>>> GetDetails([FromBody] string[] ids)
         {
-            var model = await kmsDetails_Repositories.GetByIdAsync(detailId);
+            if (ids == null || !ids.Any()) return ExecuteResult<List<KmsDetailsDto>>.Error("未找到详情");
+            var list = await kmsDetails_Repositories.GetListAsync(x => ids.Contains(x.Id));
+            if (list == null)
+                return ExecuteResult<List<KmsDetailsDto>>.Error("未找到详情");
+            return ExecuteResult<List<KmsDetailsDto>>.Success(list.Select(x => x.ToDTO<KmsDetailsDto>()).ToList());
+        }
+
+
+        /// <summary>
+        /// 删除知识详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ExecuteResult> DeleteDetail([FromBody] string id)
+        {
+            var model = await kmsDetails_Repositories.GetByIdAsync(id);
             if (model == null)
                 return ExecuteResult.Success("删除成功");
             if (model.Status == ImportKmsStatus.Loadding)
             {
                 return ExecuteResult.Error("导入中不能删除");
             }
-            var result = await kmsDetails_Repositories.DeleteAsync(detailId);
+            var result = await kmsDetails_Repositories.DeleteAsync(id);
             return result ? ExecuteResult.Success("删除成功") : ExecuteResult.Error("删除失败");
         }
 
