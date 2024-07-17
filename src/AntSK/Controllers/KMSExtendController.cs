@@ -3,11 +3,11 @@ using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using AntSK.Filters;
 using AntSK.Models;
 using AntSK.Models.Dto;
 using AntSK.BackgroundTask;
 using AntSK.Domain.Common.Map;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AntSK.Controllers
 {
@@ -18,7 +18,7 @@ namespace AntSK.Controllers
     /// <param name="configuration"></param>
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [TokenCheck]
+    [Authorize(Policy = "openapi")]
     public class KMSExtendController(
         IAIModels_Repositories aIModels_Repositories,
         IKmss_Repositories kmss_Repositories,

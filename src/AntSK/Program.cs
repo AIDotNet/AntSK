@@ -1,3 +1,4 @@
+using Amazon.Auth.AccessControlPolicy;
 using AntDesign.ProLayout;
 using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Common.Map;
@@ -7,11 +8,13 @@ using AntSK.Domain.Domain.Service;
 using AntSK.Domain.Options;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using AntSK.Midware;
+using AntSK.Filters;
+using AntSK.Middleware;
 using AntSK.plugins.Functions;
 using AntSK.Services.Auth;
 using Blazored.LocalStorage;
 using LLama.Native;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,11 +28,8 @@ using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(new PermissionFilter(builder.Configuration));
-})
-    .AddJsonOptions(config =>
+builder.Services.AddControllers()
+.AddJsonOptions(config =>
 {
     //此设定解决JsonResult中文被编码的问题
     config.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
@@ -53,7 +53,8 @@ Log.Logger = new LoggerConfiguration()
 .ReadFrom.Configuration(builder.Configuration)
 .CreateLogger();
 
-var loggerFactory = LoggerFactory.Create(builder => {
+var loggerFactory = LoggerFactory.Create(builder =>
+{
     builder.ClearProviders();
     builder.AddSerilog();
 });
@@ -64,6 +65,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddAntDesign();
 
+builder.Services.AddScoped<IAuthorizationHandler, OpenApiAuthorizationHandler>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("openapi", policy => policy.Requirements.Add(new OpenApiRequirement()));
+});
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<AuthenticationStateProvider, AntSKAuthProvider>();
@@ -86,24 +92,26 @@ builder.Services.AddMapper();
 builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGroundTaskHandler>("ImportKMSTask");
 // 读取连接字符串配置
 
-    if (LLamaSharpOption.RunType.ToUpper() == "CPU")
+if (LLamaSharpOption.RunType.ToUpper() == "CPU")
+{
+    NativeLibraryConfig
+       .All
+       .WithCuda(false)
+       .WithLogCallback((level, message) =>
+       {
+           logger.LogInformation($"[llama {level}]: {message.TrimEnd('\n')}");
+       });
+}
+else if (LLamaSharpOption.RunType.ToUpper() == "GPU")
+{
+    NativeLibraryConfig
+    .All
+    .WithCuda(true)
+    .WithLogCallback((level, message) =>
     {
-        NativeLibraryConfig
-           .All
-           .WithCuda(false)
-           .WithLogCallback((level, message) => {
-               logger.LogInformation($"[llama {level}]: {message.TrimEnd('\n')}");
-            });
-    }
-    else if (LLamaSharpOption.RunType.ToUpper() == "GPU")
-    {
-        NativeLibraryConfig
-        .All
-        .WithCuda(true)
-        .WithLogCallback((level, message) => {
-            logger.LogInformation($"[llama {level}]: {message.TrimEnd('\n')}");
-         });
-    }
+        logger.LogInformation($"[llama {level}]: {message.TrimEnd('\n')}");
+    });
+}
 
 
 //增加API允许跨域调用
@@ -114,10 +122,10 @@ builder.Services.AddCors(options => options.AddPolicy("Any",
             .AllowAnyHeader()
             .SetIsOriginAllowed(_ => true)
             .AllowCredentials();
-    }));    
+    }));
 
 var app = builder.Build();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -138,8 +146,8 @@ app.LoadFun();
 app.InitDbData();
 
 app.UseRouting();
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

@@ -2,6 +2,7 @@
 using AntSK.Filters;
 using AntSK.Models;
 using AntSK.Models.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AntSK.Controllers
@@ -11,7 +12,7 @@ namespace AntSK.Controllers
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [TokenCheck]
+    [Authorize(Policy = "openapi")]
     public class AiModelController(IAIModels_Repositories aIModels_Repositories) : ControllerBase
     {
         [HttpPost]
