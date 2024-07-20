@@ -26,12 +26,7 @@ namespace AntSK.Domain.Domain.Other.Bge
             {
                 if (model == null)
                 {
-                    if (string.IsNullOrEmpty(Runtime.PythonDLL))
-                    {
-                        Runtime.PythonDLL = pythondllPath;
-                    }
-                    PythonEngine.Initialize();
-                    PythonEngine.BeginAllowThreads();
+                    PyRunTime.InitRunTime(pythondllPath);
                     try
                     {
                         using (GIL())// 初始化Python环境的Global Interpreter Lock)
