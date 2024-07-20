@@ -40,7 +40,7 @@ namespace AntSK.Domain.Domain.Other.Bge
                             dynamic flagEmbedding = Py.Import("FlagEmbedding");
 
                             dynamic model_dir = modelscope.snapshot_download(modelName, revision: "master");
-                            dynamic flagReranker = flagEmbedding.FlagReranker(model_dir, use_fp16: true);
+                            dynamic flagReranker = flagEmbedding.FlagReranker(model_dir, use_fp16: false);
                             model = flagReranker;
                             return model;
                         }
