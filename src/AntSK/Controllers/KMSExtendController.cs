@@ -8,6 +8,7 @@ using AntSK.Models.Dto;
 using AntSK.BackgroundTask;
 using AntSK.Domain.Common.Map;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace AntSK.Controllers
 {
@@ -25,7 +26,7 @@ namespace AntSK.Controllers
         IKmsDetails_Repositories kmsDetails_Repositories,
         IKMService kMService,
         BackgroundTaskBroker<ImportKMSTaskReq> taskBroker,
-        IConfiguration configuration) : ControllerBase
+        IConfiguration configuration, ILogger<KMSExtendController> logger) : ControllerBase
     {
         /// <summary>
         /// 保存知识库
@@ -193,6 +194,64 @@ namespace AntSK.Controllers
             var result = await kmsDetails_Repositories.DeleteAsync(id);
             return result ? ExecuteResult.Success("删除成功") : ExecuteResult.Error("删除失败");
         }
+        /// <summary>
+        /// 移动到知识库
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ExecuteResult> MoveTo([FromBody] KmsMoveDto model)
+        {
+            if (string.IsNullOrWhiteSpace(model.FromId) || string.IsNullOrWhiteSpace(model.ToId))
+                return ExecuteResult.Error("fromId或toId不能为空");
+            var list = await kmsDetails_Repositories.GetListAsync(x => x.KmsId == model.FromId);
+            int success = 0;
+            int fail = 0;
+            if (list != null && list.Any())
+            {
+                foreach (var item in list)
+                {
+                    item.KmsId = model.ToId;
+                    var r = await kmsDetails_Repositories.UpdateAsync(item);
+                    if (r)
+                    {
+                        logger.LogDebug("转移成功 {id}", item.Id);
+                        success++;
+                    }
+                    else
+                    {
+                        logger.LogDebug("转移失败 {id}", item.Id);
+                        fail++;
+                    }
+                }
+            }
+            return ExecuteResult.Success($"转移结果,成功数:{success} 失败数:{fail}");
+        }
+        /// <summary>
+        /// 详情移动到知识库
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ExecuteResult> DetailMoveTo([FromBody] DetailMoveToDto model)
+        {
+            if (string.IsNullOrWhiteSpace(model.Id) || string.IsNullOrWhiteSpace(model.KmsId))
+                return ExecuteResult.Error("Id或KmsId不能为空");
+            var detail = await kmsDetails_Repositories.GetFirstAsync(x => x.Id == model.Id);
+            if (detail == null)
+            {
+                return ExecuteResult.Error("知识文件不存在");
+            }
+            if (detail.KmsId == model.KmsId)
+            {
+                return ExecuteResult.Success("转移成功");
+            }
+            detail.KmsId = model.KmsId;
+            var result = await kmsDetails_Repositories.UpdateAsync(detail);
+            return result ? ExecuteResult.Success("转移成功") : ExecuteResult.Error("转移失败");
+        }
+
+
 
         async Task<ExecuteResult<KmsReturnDto>> AddAsync([FromBody] KmsEditDto model)
         {
