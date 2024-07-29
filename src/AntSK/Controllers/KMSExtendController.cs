@@ -192,6 +192,15 @@ namespace AntSK.Controllers
                 return ExecuteResult.Error("导入中不能删除");
             }
             var result = await kmsDetails_Repositories.DeleteAsync(id);
+            if (result)
+            {
+                var _memory = kMService.GetMemoryByKMS(model.KmsId);
+                if (_memory != null)
+                {
+                    await _memory.DeleteDocumentAsync(index: "kms", documentId: id);
+                }
+
+            }
             return result ? ExecuteResult.Success("删除成功") : ExecuteResult.Error("删除失败");
         }
         /// <summary>
