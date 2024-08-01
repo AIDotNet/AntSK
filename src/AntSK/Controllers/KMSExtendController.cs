@@ -126,6 +126,8 @@ namespace AntSK.Controllers
                     KmsId = item.KmsId,
                     CreateTime = DateTime.Now,
                     Status = ImportKmsStatus.Loadding,
+                    FileName = item.FileName,
+                    Url = item.Url,
                     Type = item.ImportType.ToString().ToLower()
                 };
                 list.Add(detail);
