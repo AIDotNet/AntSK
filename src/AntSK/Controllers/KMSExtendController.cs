@@ -154,7 +154,7 @@ namespace AntSK.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ExecuteResult<KmsDetailsDto>> GetDetail([FromBody] string id)
+        public async Task<ExecuteResult<KmsDetailsDto>> GetDetail([FromQuery] string id)
         {
             if (string.IsNullOrWhiteSpace(id)) return ExecuteResult<KmsDetailsDto>.Error("未找到详情");
             var model = await kmsDetails_Repositories.GetByIdAsync(id);
@@ -184,7 +184,7 @@ namespace AntSK.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ExecuteResult> DeleteDetail([FromBody] string id)
+        public async Task<ExecuteResult> DeleteDetail([FromQuery] string id)
         {
             var model = await kmsDetails_Repositories.GetByIdAsync(id);
             if (model == null)
