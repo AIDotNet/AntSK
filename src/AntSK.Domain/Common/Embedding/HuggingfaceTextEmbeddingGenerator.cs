@@ -52,5 +52,10 @@ namespace AntSK.Domain.Common.Embedding
         {
             return BgeEmbeddingConfig.TokenCount(text);
         }
+
+        public IReadOnlyList<string> GetTokens(string text)
+        {
+            return new List<string>();
+        }
     }
 }
