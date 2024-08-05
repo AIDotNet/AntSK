@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.SemanticKernel" Version="$(SKVersion)" />
     <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftVersion)" />
     <PackageReference Include="RestSharp" Version="$(RestSharpVersion)" />
-    <PackageReference Include="Cnblogs.KernelMemory.AI.DashScope" Version="0.1.0" />
+    <PackageReference Include="Cnblogs.KernelMemory.AI.DashScope" Version="0.3.0" />
     <PackageReference Include="Cnblogs.SemanticKernel.Connectors.DashScope" Version="0.3.2" />
     <PackageReference Include="Sdcb.SparkDesk" Version="3.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
