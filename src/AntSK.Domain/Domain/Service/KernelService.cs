@@ -176,7 +176,7 @@ namespace AntSK.Domain.Domain.Service
         public void ImportFunctionsByApp(Apps app, Kernel _kernel)
         {
             //插件不能重复注册，否则会异常
-            if (_kernel.Plugins.Any(p => p.Name == "AntSkFunctions"))
+            if (_kernel.Plugins.Any(p => p.Name == "AntSKFunctions"))
             {
                 return;
             }
@@ -187,7 +187,7 @@ namespace AntSK.Domain.Domain.Service
             //本地函数插件
             ImportNativeFunction(app, functions);
 
-            _kernel.ImportPluginFromFunctions("AntSkFunctions", functions);
+            _kernel.ImportPluginFromFunctions("AntSKFunctions", functions);
         }
 
         /// <summary>

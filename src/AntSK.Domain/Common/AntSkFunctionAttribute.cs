@@ -1,7 +1,7 @@
 ﻿namespace AntSK.Domain.Common
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class AntSkFunctionAttribute : Attribute
+    public class AntSKFunctionAttribute : Attribute
     {
         // 自定义的ActionAttribute
     }

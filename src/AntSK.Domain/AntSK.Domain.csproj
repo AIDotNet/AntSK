@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AntSK.LLamaFactory\AntSK.LLamaFactory.csproj" />
-    <ProjectReference Include="..\AntSk.LLM\AntSK.LLM.csproj" />
+    <ProjectReference Include="..\AntSK.LLM\AntSK.LLM.csproj" />
     <ProjectReference Include="..\AntSK.OCR\AntSK.OCR.csproj" />
     <ProjectReference Include="..\MiddleWare\AntSK.BackgroundTask\AntSK.BackgroundTask.csproj" />
   </ItemGroup>

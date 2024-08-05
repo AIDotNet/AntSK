@@ -67,7 +67,7 @@ namespace AntSK.LLM.SparkDesk
             parameters.Temperature = (float)chatExecutionSettings.Temperature;
             parameters.MaxTokens = chatExecutionSettings.MaxTokens ?? parameters.MaxTokens;
 
-            IList<KernelFunctionMetadata> functions = kernel?.Plugins.GetFunctionsMetadata().Where(x => x.PluginName == "AntSkFunctions").ToList() ?? [];
+            IList<KernelFunctionMetadata> functions = kernel?.Plugins.GetFunctionsMetadata().Where(x => x.PluginName == "AntSKFunctions").ToList() ?? [];
             var functionDefs = functions.Select(func => new FunctionDef(func.Name, func.Description, func.Parameters.Select(p => new FunctionParametersDef(p.Name, p.ParameterType?.IsClass == true ? "object" : "string", p.Description, p.IsRequired)).ToList())).ToList();
 
             //var messages = GetHistories(prompt);
