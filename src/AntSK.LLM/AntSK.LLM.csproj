@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SemanticKernel" Version="$(SKVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftVersion)" />
+    <PackageReference Include="RestSharp" Version="$(RestSharpVersion)" />
+    <PackageReference Include="Cnblogs.KernelMemory.AI.DashScope" Version="0.3.0" />
+    <PackageReference Include="Cnblogs.SemanticKernel.Connectors.DashScope" Version="0.3.2" />
+    <PackageReference Include="Sdcb.SparkDesk" Version="3.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="OllamaModelList.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="StableDiffusion\Backend\CPU\stable-diffusion.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="StableDiffusion\Backend\CPU\stable-diffusion.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="StableDiffusion\Backend\Cuda11\stable-diffusion.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="StableDiffusion\Backend\Cuda11\stable-diffusion.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="StableDiffusion\Backend\Cuda12\stable-diffusion.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="StableDiffusion\Backend\Cuda12\stable-diffusion.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="StableDiffusion\Backend\ROCm\stable-diffusion.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="StableDiffusion\Backend\ROCm\stable-diffusion.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="StableDiffusionModelList.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
