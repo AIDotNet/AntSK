@@ -1,5 +1,4 @@
 ﻿using Microsoft.KernelMemory.AI.OpenAI;
-using Microsoft.KernelMemory.AI.OpenAI.GPT3;
 using Python.Runtime;
 using Serilog;
 using System;
