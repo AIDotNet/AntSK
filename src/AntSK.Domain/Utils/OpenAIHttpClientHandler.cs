@@ -1,5 +1,5 @@
-﻿
-using Serilog;
+﻿using Serilog;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace AntSK.Domain.Utils
@@ -17,12 +17,19 @@ namespace AntSK.Domain.Utils
             UriBuilder uriBuilder;
             Regex regex = new Regex(@"(https?)://([^/:]+)(:\d+)?/(.*)");
             Match match = regex.Match(_endPoint);
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" && request.Content != null)
+            string guid = Guid.NewGuid().ToString();
+            var mediaType = request.Content.Headers.ContentType.MediaType;
+            string requestBody = (await request.Content.ReadAsStringAsync()).Unescape();
+            var uncaseBody = new StringContent(requestBody, Encoding.UTF8, mediaType);
+            request.Content = uncaseBody;
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ConvertToString() != "Production")
             {
-                string requestBody = await request.Content.ReadAsStringAsync();
+                //生产环境根据环境变量可去关闭日志
                 //便于调试查看请求prompt
-                Log.Information(requestBody);
+                Log.Information("{Message}", $"【模型服务接口调用-{guid},host:{_endPoint}】:{Environment.NewLine}{requestBody}");
             }
+
             if (match.Success)
             {
                 string xieyi = match.Groups[1].Value;
@@ -72,7 +79,11 @@ namespace AntSK.Domain.Utils
 
             // 接着，调用基类的 SendAsync 方法将你的修改后的请求发出去
             HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ConvertToString() != "Production")
+            {
+                string responseContent = requestBody.IsStream() ? response.Content.ReadAsStringAsync().Result : response.Content.ReadAsStringAsync().Result.Unescape();
+                Log.Information("{Message}", $"【模型服务接口返回-{guid},host:{_endPoint}】:{Environment.NewLine}{responseContent}");
+            }
             return response;
         }
     }
@@ -84,7 +95,7 @@ namespace AntSK.Domain.Utils
         {
             var handler = new OpenAIHttpClientHandler(endPoint.ConvertToString());
             var httpClient = new HttpClient(handler);
-            httpClient.Timeout = TimeSpan.FromMinutes(5);
+            httpClient.Timeout = TimeSpan.FromMinutes(10);
             return httpClient;
         }
     }
