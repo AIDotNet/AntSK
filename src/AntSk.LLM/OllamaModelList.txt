@@ -44,6 +44,9 @@ llama2:13b
 llama2:70b
 llama2-chinese:7b
 llama2-chinese:13b
+llama3.1:8b
+llama3.1:70b
+llama3.1:405b
 codellama:7b
 codellama:13b
 codellama:34b
