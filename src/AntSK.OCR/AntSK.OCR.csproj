@@ -9,11 +9,11 @@
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="$(KMVersion)" />
     <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.9.0.20240103" />
     <PackageReference Include="Sdcb.OpenCvSharp4.mini.runtime.debian.12-x64" Version="4.8.0.20231125" />
-    <PackageReference Include="Sdcb.OpenVINO" Version="0.6.5" />
+    <PackageReference Include="Sdcb.OpenVINO" Version="0.6.6" />
     <PackageReference Include="Sdcb.OpenVINO.PaddleOCR.Models.Online" Version="0.6.2" />
     <PackageReference Include="Sdcb.OpenVINO.PaddleOCR" Version="0.6.3" />
-    <PackageReference Include="Sdcb.OpenVINO.runtime.ubuntu.22.04-x64" Version="2024.0.0" />
-    <PackageReference Include="Sdcb.OpenVINO.runtime.win-x64" Version="2024.1.0" />
+    <PackageReference Include="Sdcb.OpenVINO.runtime.ubuntu.22.04-x64" Version="2024.2.0" />
+    <PackageReference Include="Sdcb.OpenVINO.runtime.win-x64" Version="2024.2.0" />
     
   </ItemGroup>
 </Project>

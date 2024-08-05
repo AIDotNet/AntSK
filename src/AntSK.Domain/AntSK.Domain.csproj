@@ -24,7 +24,7 @@
     <PackageReference Include="SqlSugarCore" Version="5.1.4.166" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
     <PackageReference Include="RestSharp" Version="$(RestSharpVersion)" />
-    <PackageReference Include="NPOI" Version="2.7.0" />
+    <PackageReference Include="NPOI" Version="2.7.1" />
 
     <PackageReference Include="Microsoft.SemanticKernel" Version="$(SKVersion)" />
     <PackageReference Include="Microsoft.SemanticKernel.Core" Version="$(SKVersion)" />
