@@ -43,8 +43,6 @@ AntSK 适用于多种业务场景，例如：
 ## ✏️功能示例
 ### 在线演示
 
-[文档地址](http://antsk.cn/)
-
 [体验地址1](https://demo.antsk.cn/)
 
 和
