@@ -189,17 +189,20 @@ namespace AntSK.Controllers
             var model = await kmsDetails_Repositories.GetByIdAsync(id);
             if (model == null)
                 return ExecuteResult.Success("删除成功");
-            if (model.Status == ImportKmsStatus.Loadding)
-            {
-                return ExecuteResult.Error("导入中不能删除");
-            }
             var result = await kmsDetails_Repositories.DeleteAsync(id);
             if (result)
             {
                 var _memory = kMService.GetMemoryByKMS(model.KmsId);
                 if (_memory != null)
                 {
-                    await _memory.DeleteDocumentAsync(index: "kms", documentId: id);
+                    try
+                    {
+                        await _memory.DeleteDocumentAsync(index: "kms", documentId: id);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "删除KMS文档异常 {index}", id);
+                    }
                 }
 
             }

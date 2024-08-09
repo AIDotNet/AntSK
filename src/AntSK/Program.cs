@@ -17,6 +17,7 @@ using LLama.Native;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Exporter;
@@ -123,7 +124,11 @@ builder.Services.AddCors(options => options.AddPolicy("Any",
             .SetIsOriginAllowed(_ => true)
             .AllowCredentials();
     }));
-
+// 显式禁用数据保护服务
+builder.Services.Configure<DataProtectionOptions>(options =>
+{
+    options.ApplicationDiscriminator = null;
+});
 var app = builder.Build();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 // Configure the HTTP request pipeline.
