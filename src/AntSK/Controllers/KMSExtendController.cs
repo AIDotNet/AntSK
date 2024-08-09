@@ -202,6 +202,7 @@ namespace AntSK.Controllers
                     catch (Exception ex)
                     {
                         logger.LogError(ex, "删除KMS文档异常 {index}", id);
+                        return ExecuteResult.Error("删除KMS文档异常");
                     }
                 }
 
