@@ -213,6 +213,9 @@ If you plan to use AntSK in commercial projects, you need to ensure that you fol
 1. Copyright statement containing Apache license. [Apache-2.0 License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file).
 2. If you modify the software source code, you need to clearly indicate these modifications in the source code.
 
+## 💕 Special thanks
+Help enterprise AI application development, and recommend [AntBlazor]（ https://antblazor.com ）
+
 ## ☎️Contact Me
 If you have any questions or suggestions, please contact me through my official WeChat account. We also have a discussion group where you can send a message to join, and then I will add you to the group.
 
