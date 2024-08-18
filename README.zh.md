@@ -191,13 +191,6 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 7、点击保存，然后就可以开始聊天了
 8、很多人会问 LLamaSharp与llamafactory有什么区别？其实这两者LLamaSharp是llama.cpp的 dotnet实现，但是只支持本地gguf模型，  而llamafactory 支持的模型种类更多，但使用的是python的实现，其主要差异在这里，另外llamafactory具有模型微调的能力，这也是我们下一步需要重点集成的部分。
 ```
-
-## 🤝 贡献
-
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/AIDotNet/AntSK/pulls)
-﻿
-如果你想贡献，可以创建一个[拉取请求](https://github.com/AIDotNet/AntSK/pulls), 或给我们[错误报告](https://github.com/AIDotNet/AntSK/issues/new).
-﻿
 ﻿
 ## 💕 贡献者
 
@@ -209,14 +202,25 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 ﻿
 ## 🚨 使用协议
 
-本仓库遵循  [Apache-2.0 License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) 开源协议。
-Apache开源许可证允许在商业环境中使用AntSK，前提是需要遵守许可证的条款。主要条款之一是要保留版权声明和许可证声明。
+本仓库遵循  [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) 开源协议。
+
+除以下附加条款外，该项目遵循Apache 2.0协议
+
+1. 本项目可以用于商业目的，但如果违反以下规定，它有权禁止您使用
+   
+2. 未经授权，您不允许修改AntSK的徽标和标题信息
+   
+3. 未经授权，您不能修改页面底部的版权信息
+   
+4. 如果您需要授权，可以联系微信：xuzeyu91
 
 如果您打算在商业项目中使用AntSK，您需要确保遵守以下步骤：
 
-1、包含Apache许可证的版权声明。 [Apache-2.0 License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) 。
+1. 包含AntSK许可证的版权声明。 [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) 。
 
-2、如果您修改了软件源代码，您需要在源代码中明确标明这些修改。
+2. 如果您修改了软件源代码，您需要在源代码中明确标明这些修改。
+
+3. 满足以上四个要求
 
 ## 💕 特别感谢
 助力企业级AI应用开发，推荐使用 [AntBlazor](https://antblazor.com)
