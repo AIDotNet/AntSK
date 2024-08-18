@@ -200,13 +200,13 @@ This warehouse follows the [AntSK License](https://github.com/AIDotNet/AntSK?tab
 
 This project follows the Apache 2.0 agreement, in addition to the following additional terms
 
-1.This project can be used for commercial purposes, but it has the right to prohibit you from using it if it violates the following provisions
+1. This project can be used for commercial purposes, but it has the right to prohibit you from using it if it violates the following provisions
 
 2. Without authorization, you are not allowed to modify AntSK's logo and title information
    
 4. Without authorization, you are not allowed to modify the copyright information at the bottom of the page
    
-6. If you need authorization, you can contact WeChat: xuzeyu91
+6. If you need authorization, you can contact WeChat: **xuzeyu91**
 
 If you plan to use AntSK in commercial projects, you need to ensure that you follow the following steps:
 
