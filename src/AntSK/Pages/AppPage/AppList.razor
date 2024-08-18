@@ -33,6 +33,7 @@
                     {
                         <Card Hoverable Bordered Class="card" Actions="@(new[] {
                             info(()=> Info(context.Id)) ,
+                            use(()=> Use(context.Id)),
                             open(()=> Open(context.Id)),
                             delete(async ()=>await Delete(context.Id)) ,
                        
@@ -75,6 +76,7 @@
 @code
 {
     RenderFragment info(Action clickAction) =>@<a key="info" @onclick="@clickAction">查看</a>;
+    RenderFragment use(Action clickAction) =>@<a key="use" @onclick="@clickAction">使用</a>;
     RenderFragment open(Action clickAction) =>@<a key="info" @onclick="@clickAction">外部使用</a>;
     RenderFragment delete(Action clickAction) => @<a key="delete" @onclick="@clickAction">删除</a> ;
 }
