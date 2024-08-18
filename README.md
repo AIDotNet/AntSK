@@ -210,7 +210,7 @@ This project follows the Apache 2.0 agreement, in addition to the following addi
 
 If you plan to use AntSK in commercial projects, you need to ensure that you follow the following steps:
 
-1. Copyright statement containing Apache license. [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file).
+1. Copyright statement containing AntSK license. [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file).
    
 2. If you modify the software source code, you need to clearly indicate these modifications in the source code.
    
