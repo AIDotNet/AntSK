@@ -186,13 +186,6 @@ I'm using CodeFirst mode for the database, so as long as the database connection
 8. Many people ask about the difference between LLamaSharp and llamafactory. In fact, LLamaSharp is a .NET implementation of llama.cpp, but only supports local gguf models, while llamafactory supports a wider variety of models and uses Python implementation. The main difference lies here. Additionally, llamafactory has the ability to fine-tune models, which is an area we will focus on integrating in the future.
 ```
 
-## 🤝 Contributing
-
-[PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
-
-If you would like to contribute, feel free to create a [Pull Request](https://github.com/AIDotNet/AntSK/pulls), or give us [Bug Report](https://github.com/AIDotNet/AntSK/issues/new).
-
-
 ## 💕 Contributors
 
 This project exists thanks to all the people who contribute.
@@ -202,17 +195,26 @@ This project exists thanks to all the people who contribute.
 </a>
 
 ## 🚨  Use Protocol
+
 This warehouse follows the [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) open source protocol.
+
 This project follows the Apache 2.0 agreement, in addition to the following additional terms
+
 1.This project can be used for commercial purposes, but it has the right to prohibit you from using it if it violates the following provisions
+
 2. Without authorization, you are not allowed to modify AntSK's logo and title information
-3. Without authorization, you are not allowed to modify the copyright information at the bottom of the page
-4. If you need authorization, you can contact WeChat: xuzeyu91
+   
+4. Without authorization, you are not allowed to modify the copyright information at the bottom of the page
+   
+6. If you need authorization, you can contact WeChat: xuzeyu91
 
 If you plan to use AntSK in commercial projects, you need to ensure that you follow the following steps:
+
 1. Copyright statement containing Apache license. [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file).
+   
 2. If you modify the software source code, you need to clearly indicate these modifications in the source code.
-3. Meet the above four requirements
+   
+3. Meet the above four requirements  
 
 ## 💕 Special thanks
 Helping enterprise AI application development, we recommend [AntBlazor](https://antblazor.com)
