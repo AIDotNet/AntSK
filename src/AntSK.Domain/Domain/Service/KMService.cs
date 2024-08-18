@@ -178,6 +178,13 @@ namespace AntSK.Domain.Domain.Service
                 case Model.Enum.AIType.DashScope:
                     memory.WithDashScopeDefaults(embedModel.ModelKey);
                     break;
+                case Model.Enum.AIType.OllamaEmbedding:
+                    memory.WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
+                    {
+                        APIKey = "NotNull",
+                        EmbeddingModel = embedModel.ModelName
+                    }, null, false, embeddingHttpClient);
+                    break;
             }
         }
 
