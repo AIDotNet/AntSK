@@ -188,11 +188,6 @@
         <member name="M:AntSK.Domain.Domain.Other.KMExcelHandler.InvokeAsync(Microsoft.KernelMemory.Pipeline.DataPipeline,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="F:AntSK.Domain.Domain.Other.LLamaConfig.dicLLamaWeights">
-            <summary>
-            避免模型重复加载，本地缓存
-            </summary>
-        </member>
         <member name="P:AntSK.Domain.Domain.Other.QAHandler.StepName">
             <inheritdoc />
         </member>
@@ -921,6 +916,20 @@
             忽略大小写匹配
             </summary>
             <param name="s"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.Unescape(System.String)">
+            <summary>
+            \uxxxx转中文,保留换行符号
+            </summary>
+            <param name="unicodeString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.Utils.ConvertUtils.IsStream(System.String)">
+            <summary>
+            是否为流式请求
+            </summary>
             <param name="value"></param>
             <returns></returns>
         </member>

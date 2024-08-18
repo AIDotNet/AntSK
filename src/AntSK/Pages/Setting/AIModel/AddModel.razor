@@ -18,103 +18,113 @@
         <Card>
             <Form Model="@_aiModel"
                   Style="margin-top: 8px;"
-                  OnFinish="HandleSubmit">
+                  OnFinish="HandleSubmit"
+                  Autocomplete="off">
                 <FormItem Label="模型描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入模型描述" @bind-Value="@context.ModelDescription" />
                 </FormItem>
 
-                <FormItem Label="AI类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <EnumRadioGroup @bind-Value="context.AIType" ButtonStyle="RadioButtonStyle.Solid" OnChange="AITypeChange" TEnum="AIType"> </EnumRadioGroup>
-                </FormItem>
                 <FormItem Label="模型类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    <RadioGroup @bind-Value="context.AIModelType" ButtonStyle="RadioButtonStyle.Solid">
-                        @if (context.AIType == AIType.StableDiffusion)
+                    <RadioGroup @bind-Value="context.AIModelType" ButtonStyle="RadioButtonStyle.Solid" OnChange="AIModelTypeChange" TValue="AIModelType">
+                        <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
+                        <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
+                        <Radio RadioButton Value="@(AIModelType.Rerank)">Rerank重排模型</Radio>
+                        <Radio RadioButton Value="@(AIModelType.Image)">图片模型</Radio>
+                    </RadioGroup>
+                </FormItem>
+
+                <FormItem Label="AI类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <RadioGroup @bind-Value="context.AIType" ButtonStyle="RadioButtonStyle.Solid" OnChange="AITypeChange" TValue="AIType">
+                        @if (context.AIModelType == AIModelType.Chat)
                         {
-                            <Radio RadioButton Value="@(AIModelType.Image)">图片模型</Radio>
+                            <Radio RadioButton Value="@(AIType.OpenAI)">OpenAI</Radio>
+                            <Radio RadioButton Value="@(AIType.AzureOpenAI)">AzureOpenAI</Radio>
+                            <Radio RadioButton Value="@(AIType.SparkDesk)">星火大模型</Radio>
+                            <Radio RadioButton Value="@(AIType.DashScope)">灵积大模型</Radio>
+                            <Radio RadioButton Value="@(AIType.Ollama)">Ollama本地模型</Radio>
+                            <Radio RadioButton Value="@(AIType.LLamaFactory)">LLamaFactory本地模型</Radio>
+                            <Radio RadioButton Value="@(AIType.Mock)">模拟输出</Radio>
                         }
-                        else
+                        else if (context.AIModelType == AIModelType.Embedding)
                         {
-                            @if (context.AIType != AIType.BgeEmbedding && context.AIType != AIType.BgeRerank)
-                            {
-                                <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
-                            }
-                            @if (context.AIType != AIType.LLamaFactory && context.AIType != AIType.Mock && context.AIType != AIType.SparkDesk && context.AIType != AIType.BgeRerank && context.AIType != AIType.Ollama)
-                            {
-                                <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
-                            }
-                            @if (context.AIType == AIType.BgeRerank)
-                            {
-                                <Radio RadioButton Value="@(AIModelType.Rerank)">Rerank重排模型</Radio>
-                            }
+                            <Radio RadioButton Value="@(AIType.BgeEmbedding)">BgeEmbedding</Radio>
+                            <Radio RadioButton Value="@(AIType.OpenAI)">OpenAI</Radio>
+                            <Radio RadioButton Value="@(AIType.AzureOpenAI)">AzureOpenAI</Radio>
+                            <Radio RadioButton Value="@(AIType.OllamaEmbedding)">Ollama本地模型</Radio>
+                        }
+                        else if (context.AIModelType == AIModelType.Rerank)
+                        {
+                            <Radio RadioButton Value="@(AIType.BgeRerank)">BgeRerank</Radio>
+                        }
+                        else if (context.AIModelType == AIModelType.Image)
+                        {
+                            <Radio RadioButton Value="@(AIType.StableDiffusion)">StableDiffusion</Radio>
                         }
                     </RadioGroup>
                 </FormItem>
+
                 @if (context.AIModelType == AIModelType.Embedding)
                 {
                     <FormItem Label="注意事项" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <span style="color:red"><b>请不要使用不同维度的向量模型，否则会导致无法向量存储</b></span>
                     </FormItem>
                 }
-
                 @if (context.AIType == AIType.AzureOpenAI)
                 {
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入请求地址" @bind-Value="@context.EndPoint" />
+                        <Input Placeholder="请输入请求地址" @bind-Value="@context.EndPoint" AutoComplete="false" />
                     </FormItem>
                     <FormItem Label="部署名(模型名)" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入部署名" @bind-Value="@context.ModelName" />
+                        <Input Placeholder="请输入部署名" @bind-Value="@context.ModelName" AutoComplete="false" />
                     </FormItem>
                     <FormItem Label="模型秘钥" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥" />
+                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥" AutoComplete="false" />
                     </FormItem>
                 }
                 @if (context.AIType == AIType.OpenAI)
                 {
-                    <FormItem Label="代理API" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <a href="https://api.antsk.cn/" target="_blank">去创建</a>
-                    </FormItem>
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入请求地址 示例格式 http://ip:port/" @bind-Value="@context.EndPoint" />
+                        <Input Placeholder="请输入请求地址 示例格式 http://ip:port/" @bind-Value="@context.EndPoint" AutoComplete="false" />
                     </FormItem>
                     <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" />
+                        <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" AutoComplete="false" />
                     </FormItem>
                     <FormItem Label="模型秘钥" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥" />
+                        <InputPassword @bind-Value="@context.ModelKey" Placeholder="请输入模型秘钥" AutoComplete="false" />
                     </FormItem>
                 }
                 @if (context.AIType == AIType.SparkDesk)
                 {
                     <FormItem Label="模型版本" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <SimpleSelect DefaultValue="V3_5" @bind-Value="@context.ModelName">
+                        <SimpleSelect DefaultValue="Lite" @bind-Value="@context.ModelName">
                             <SelectOptions>
-                                <SimpleSelectOption Value="V3_5" Label="V3_5"></SimpleSelectOption>
-                                <SimpleSelectOption Value="V3" Label="V3"></SimpleSelectOption>
-                                <SimpleSelectOption Value="V2" Label="V2" Disabled></SimpleSelectOption>
-                                <SimpleSelectOption Value="V1_5" Label="V1_5"></SimpleSelectOption>
+                                <SimpleSelectOption Value="Max" Label="Max"></SimpleSelectOption>
+                                <SimpleSelectOption Value="Pro" Label="Pro"></SimpleSelectOption>
+                                <SimpleSelectOption Value="V2" Label="V2"></SimpleSelectOption>
+                                <SimpleSelectOption Value="Lite" Label="Lite"></SimpleSelectOption>
                             </SelectOptions>
                         </SimpleSelect>
                     </FormItem>
                     <FormItem Label="请输入模型APPID|APISecret|APIKey" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <InputPassword Placeholder="APPID|APISecret|APIKey" @bind-Value="@context.ModelKey" />
+                        <InputPassword Placeholder="APPID|APISecret|APIKey" @bind-Value="@context.ModelKey" AutoComplete="false" />
                     </FormItem>
 
                 }
                 @if (context.AIType == AIType.DashScope)
                 {
                     <FormItem Label="API KEY" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入API KEY" @bind-Value="@context.ModelKey" />
+                        <Input Placeholder="请输入API KEY" @bind-Value="@context.ModelKey" AutoComplete="false" />
                     </FormItem>
                     <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" />
+                        <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" AutoComplete="false" />
                     </FormItem>
                 }
-                @if (context.AIType == AIType.LLamaSharp || context.AIType == AIType.StableDiffusion)
+                @if (context.AIType == AIType.StableDiffusion)
                 {
                     <FormItem Label="模型路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputGroup>
                             <AutoComplete Options="_modelFiles" Placeholder="请输入模型路径" @bind-Value="@context.ModelName" />
-                            <Button OnClick="()=>_downloadModalVisible=true">从Haggingface下载</Button>
+                            <Button OnClick="()=>_downloadModalVisible=true" Style="margin-top:5px">从Haggingface下载</Button>
                         </InputGroup>
                     </FormItem>
                 }
@@ -136,10 +146,14 @@
                         </InputGroup>
                     </FormItem>
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="http://localhost:8080/" @bind-Value="@context.EndPoint" />
+                        <Input Placeholder="http://localhost:8080/" @bind-Value="@context.EndPoint" AutoComplete="false" />
                     </FormItem>
-                    <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Button Type="primary" OnClick="PipInstall">环境安装</Button>
+                    <FormItem Label="基础环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Button Type="primary" OnClick="PipInstall">开始安装</Button>
+                    </FormItem>
+
+                    <FormItem Label="缺失依赖包安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Button Type="primary" OnClick="PipInstallShow">pip install</Button>
                     </FormItem>
                     <FormItem Label="llama factory服务" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputGroup>
@@ -173,19 +187,46 @@
                         <a href="https://ollama.com/library" target="_blank">获取更多模型</a>
                     </FormItem>
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <Input Placeholder="http://localhost:11434/" @bind-Value="@context.EndPoint" />
+                        <Input Placeholder="http://localhost:11434/" @bind-Value="@context.EndPoint" AutoComplete="false" />
                     </FormItem>
                     <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <a href="https://ollama.com/download" target="_blank">下载Ollama</a>
                     </FormItem>
                     <FormItem Label="Ollama服务" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <InputGroup>
-
-                            <Button Type="primary" OnClick="StartOllamaService" >启动</Button>
-
+                            <Button Type="primary" OnClick="StartOllamaService">启动</Button>
                         </InputGroup>
                     </FormItem>
-
+                }
+                @if (context.AIType == AIType.OllamaEmbedding)
+                {
+                    <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <InputGroup>
+                            <Select TItem="string"
+                                    TItemValue="string"
+                                    DataSource="@ollamaEmbeddingModelList"
+                                    @bind-Value="@context.ModelName"
+                                    ValueProperty="c=>c"
+                                    LabelProperty="c=>c"
+                                    Placeholder="选择模型"
+                                    DefaultActiveFirstOption="false"
+                                    EnableSearch
+                                    OnSearch="OnOllamaEmbeddingSearch">
+                            </Select>
+                        </InputGroup>
+                        <a href="https://ollama.com/library" target="_blank">获取更多模型</a>
+                    </FormItem>
+                    <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <Input Placeholder="http://localhost:11434/" @bind-Value="@context.EndPoint" AutoComplete="false" />
+                    </FormItem>
+                    <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <a href="https://ollama.com/download" target="_blank">下载Ollama</a>
+                    </FormItem>
+                    <FormItem Label="Ollama服务" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                        <InputGroup>
+                            <Button Type="primary" OnClick="StartOllamaService">启动</Button>
+                        </InputGroup>
+                    </FormItem>
                 }
                 @if (context.AIType == AIType.BgeEmbedding)
                 {
@@ -199,7 +240,7 @@
 
                     <FormItem Label="Python路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Popover ContentTemplate="@_content" Title="提示" Style="width:100%">
-                            <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" />
+                            <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" AutoComplete="false" />
                         </Popover>
                     </FormItem>
 
@@ -223,7 +264,7 @@
                     </FormItem>
                     <FormItem Label="Python路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Popover ContentTemplate="@_content" Title="提示" Style="width:100%">
-                            <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" />
+                            <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" AutoComplete="false" />
                         </Popover>
                     </FormItem>
                     <FormItem Label="环境安装" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
@@ -257,7 +298,7 @@
             <Input Disabled="_downloadStarted" Placeholder="请输入下载地址" @bind-Value="_downloadUrl" Style="width:80%"></Input>
             @if (!_downloadStarted)
             {
-                <Button OnClick="StartDownload">开始</Button>
+                <Button OnClick="StartDownload" Style="margin-left:10px;" Type="@ButtonType.Primary">开始</Button>
             }
             else
             {
@@ -269,8 +310,19 @@
     </Flex>
 </Modal>
 
+<Modal @ref="_modal" Visible="_pipModalVisible" Footer="null" Closable Title="pip install" OnCancel="OnCancelPipInstall" DestroyOnClose>
+    <Flex Gap="10" Vertical>
+        <InputGroup>
+            <Input Placeholder="请输入包名（例如 pip install torch 则只需要输入 torch）" @bind-Value="_pipName" Style="border-radius: 8px"></Input>
+        </InputGroup>
+        <InputGroup>
+            <Button OnClick="PipInstallName" Type="@ButtonType.Primary">pip install</Button>
+        </InputGroup>
+    </Flex>
+</Modal>
+
 <Modal Visible="_logModalVisible" Footer="null" Closable Title="日志输出" OnCancel="OnCancelLog" DestroyOnClose Width="1000">
-    <BlazorTerminal @ref="blazorTerminal" Style="height:600px;"></BlazorTerminal>
+    <BlazorTerminal @ref="blazorTerminal" Style="height:600px;overflow-y: auto;"></BlazorTerminal>
 </Modal>
 
 

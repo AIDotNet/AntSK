@@ -1,0 +1,12 @@
+﻿nomic-embed-text:v1.5
+mxbai-embed-large:335m
+all-minilm:22m
+all-minilm:33m
+snowflake-arctic-embed:22m
+snowflake-arctic-embed:33m
+snowflake-arctic-embed:110m
+snowflake-arctic-embed:137m
+snowflake-arctic-embed:335m
+bge-m3:567m
+bge-large:335m
+paraphrase-multilingual:278m

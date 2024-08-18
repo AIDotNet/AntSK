@@ -1,5 +1,4 @@
-﻿using LLamaSharp.KernelMemory;
-using Microsoft.KernelMemory.AI;
+﻿using Microsoft.KernelMemory.AI;
 using Microsoft.KernelMemory;
 using System;
 using System.Collections.Generic;

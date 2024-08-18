@@ -37,7 +37,6 @@ builder.AddServiceDefaults();
 
 builder.Configuration.GetSection("DBConnection").Get<DBConnectionOption>();
 builder.Configuration.GetSection("Login").Get<LoginOption>();
-builder.Configuration.GetSection("LLamaSharp").Get<LLamaSharpOption>();
 builder.Configuration.GetSection("KernelMemory").Get<KernelMemoryOption>();
 builder.Configuration.GetSection("FileDir").Get<FileDirOption>();
 
@@ -79,27 +78,6 @@ builder.Services.AddBlazoredLocalStorage(config =>
 builder.Services.AddMapper();
 //后台队列任务
 builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGroundTaskHandler>("ImportKMSTask");
-// 读取连接字符串配置
-
-    if (LLamaSharpOption.RunType.ToUpper() == "CPU")
-    {
-        NativeLibraryConfig
-           .All
-           .WithCuda(false)
-           .WithLogCallback((level, message) => {
-               logger.LogInformation($"[llama {level}]: {message.TrimEnd('\n')}");
-            });
-    }
-    else if (LLamaSharpOption.RunType.ToUpper() == "GPU")
-    {
-        NativeLibraryConfig
-        .All
-        .WithCuda(true)
-        .WithLogCallback((level, message) => {
-            logger.LogInformation($"[llama {level}]: {message.TrimEnd('\n')}");
-         });
-    }
-
 
 //增加API允许跨域调用
 builder.Services.AddCors(options => options.AddPolicy("Any",

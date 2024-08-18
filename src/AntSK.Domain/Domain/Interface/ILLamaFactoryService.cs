@@ -12,7 +12,9 @@ namespace AntSK.Domain.Domain.Interface
     {
         public event LogMessageHandler LogMessageReceived;
         Task PipInstall();
-        Task StartLLamaFactory(string modelName, string templateName);
+
+        Task PipInstallName(string name);
+        Task StartLLamaFactory(string modelName);
 
         void KillProcess();
 
