@@ -12,7 +12,7 @@ namespace AntSK.Domain.Repositories
         /// 图标
         /// </summary>
         [Required]
-        public string Icon { get; set; }
+        public string Icon { get; set; } = "question-circle";
         /// <summary>
         /// 名称
         /// </summary>
