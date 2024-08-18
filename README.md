@@ -202,11 +202,17 @@ This project exists thanks to all the people who contribute.
 </a>
 
 ## 🚨  Use Protocol
-This warehouse follows the [Apache-2.0 License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) open source protocol.
-The Apache open source license allows the use of AntSK in commercial environments, provided that the license terms are followed. One of the main terms is to retain the copyright and license statements.
+This warehouse follows the [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) open source protocol.
+This project follows the Apache 2.0 agreement, in addition to the following additional terms
+1.This project can be used for commercial purposes, but it has the right to prohibit you from using it if it violates the following provisions
+2. Without authorization, you are not allowed to modify AntSK's logo and title information
+3. Without authorization, you are not allowed to modify the copyright information at the bottom of the page
+4. If you need authorization, you can contact WeChat: xuzeyu91
+
 If you plan to use AntSK in commercial projects, you need to ensure that you follow the following steps:
-1. Copyright statement containing Apache license. [Apache-2.0 License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file).
+1. Copyright statement containing Apache license. [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file).
 2. If you modify the software source code, you need to clearly indicate these modifications in the source code.
+3. Meet the above four requirements
 
 ## 💕 Special thanks
 Helping enterprise AI application development, we recommend [AntBlazor](https://antblazor.com)
