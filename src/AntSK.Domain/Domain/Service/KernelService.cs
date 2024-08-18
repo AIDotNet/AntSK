@@ -4,25 +4,15 @@ using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Other;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
-using LLama;
-using LLamaSharp.SemanticKernel.TextCompletion;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Plugins.Core;
 using Microsoft.SemanticKernel.TextGeneration;
 using RestSharp;
-using System;
 using ServiceLifetime = AntSK.Domain.Common.DependencyInjection.ServiceLifetime;
 using AntSK.LLM.Mock;
 using AntSK.Domain.Domain.Model.Enum;
-using AntSK.LLM.LLamaFactory;
-using System.Reflection;
-using DocumentFormat.OpenXml.Drawing;
-using Microsoft.KernelMemory;
-using OpenCvSharp.ML;
-using LLamaSharp.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.ChatCompletion;
-using Amazon.Runtime.Internal.Util;
 using Microsoft.Extensions.Logging;
 
 namespace AntSK.Domain.Domain.Service
@@ -106,13 +96,6 @@ namespace AntSK.Domain.Domain.Service
                         apiKey: chatModel.ModelKey,
                         endpoint: chatModel.EndPoint
                         );
-                    break;
-
-                case Model.Enum.AIType.LLamaSharp:
-                    var (weights, parameters) = LLamaConfig.GetLLamaConfig(chatModel.ModelName);
-                    var ex = new StatelessExecutor(weights, parameters);
-                    builder.Services.AddKeyedSingleton<ITextGenerationService>("local-llama", new LLamaSharpTextCompletion(ex));
-                    builder.Services.AddKeyedSingleton<IChatCompletionService>("local-llama-chat", new LLamaSharpChatCompletion(ex));
                     break;
 
                 case Model.Enum.AIType.SparkDesk:

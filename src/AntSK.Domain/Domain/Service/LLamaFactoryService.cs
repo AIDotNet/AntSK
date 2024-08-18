@@ -7,6 +7,7 @@ using AntSK.LLamaFactory.Model;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -74,8 +75,45 @@ namespace AntSK.Domain.Domain.Service
             }, TaskCreationOptions.LongRunning);
             await cmdTask;
         }
+        public async Task PipInstallName(string name)
+        {
 
-        public async Task StartLLamaFactory(string modelName, string templateName)
+            var cmdTask = Task.Factory.StartNew(() =>
+            {
+
+                var isProcessComplete = false;
+
+                process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "pip",
+                        Arguments = $"install {name} -i https://pypi.tuna.tsinghua.edu.cn/simple",
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                    }
+                };
+                process.OutputDataReceived += (sender, eventArgs) =>
+                {
+                    Log.Information($"{eventArgs.Data}");
+                    OnLogMessageReceived(eventArgs.Data);
+                };
+                process.ErrorDataReceived += (sender, eventArgs) =>
+                {
+                    Log.Information($"{eventArgs.Data}");
+                    OnLogMessageReceived(eventArgs.Data);
+                };
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                process.WaitForExit();
+                OnLogMessageReceived("--------------------完成--------------------");
+            }, TaskCreationOptions.LongRunning);
+            await cmdTask;
+        }
+        public async Task StartLLamaFactory(string modelName)
         {
             var cmdTask = Task.Factory.StartNew(() =>
             {
@@ -87,7 +125,7 @@ namespace AntSK.Domain.Domain.Service
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "python",
-                        Arguments = "api_antsk.py --model_name_or_path " + modelName + " --template " + templateName + " ",
+                        Arguments = "api_antsk.py --model_name_or_path " + modelName + " --template default ",
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
                         RedirectStandardError=true,

@@ -57,6 +57,10 @@ namespace AntSK.Pages.AppPage
             NavigationManager.NavigateTo($"/app/open/{id}");
         }
 
+        private void Use(string id)
+        {
+            NavigationManager.NavigateTo($"/chat/{id}");
+        }
 
         private async Task Delete(string id)
         {

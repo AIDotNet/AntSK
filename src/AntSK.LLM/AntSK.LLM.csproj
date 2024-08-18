@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="OllamaEmbeddingModelList.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="OllamaModelList.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

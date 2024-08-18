@@ -35,12 +35,6 @@
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Redis" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.AzureAISearch" Version="$(KMVersion)" />
 
-    <PackageReference Include="LLamaSharp" Version="$(LLamaSharpVersion)" />
-    <PackageReference Include="LLamaSharp.Backend.Cpu" Version="$(LLamaSharpVersion)" />
-    <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="$(LLamaSharpVersion)" />
-    <PackageReference Include="LLamaSharp.kernel-memory" Version="$(LLamaSharpVersion)" />
-    <PackageReference Include="LLamaSharp.semantic-kernel" Version="$(LLamaSharpVersion)" />
-
     <PackageReference Include="Serilog" Version="4.0.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />

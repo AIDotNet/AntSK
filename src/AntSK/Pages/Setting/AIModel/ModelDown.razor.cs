@@ -38,7 +38,7 @@ namespace AntSK.Pages.Setting.AIModel
                     }
                     RestClient client = new RestClient();
                     RestRequest request = new RestRequest(urlBase, Method.Get);
-                    var response =await client.ExecuteAsync(request);
+                    var response = await client.ExecuteAsync(request);
                     var model = JsonConvert.DeserializeObject<HfModel>(response.Content);
                     _modelList.AddRange(model.models);
                 }

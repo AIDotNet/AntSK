@@ -11,7 +11,6 @@ using AntSK.Domain.Utils;
 using AntSK.OCR;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
 using LLama;
-using LLamaSharp.KernelMemory;
 using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
@@ -171,12 +170,6 @@ namespace AntSK.Domain.Domain.Service
                         APIType = AzureOpenAIConfig.APITypes.EmbeddingGeneration,
                     });
                     break;
-
-                case Model.Enum.AIType.LLamaSharp:
-                    var (weights, parameters) = LLamaConfig.GetLLamaConfig(embedModel.ModelName);
-                    var embedder = new LLamaEmbedder(weights, parameters);
-                    memory.WithLLamaSharpTextEmbeddingGeneration(new LLamaSharpTextEmbeddingGenerator(embedder));
-                    break;
                 case Model.Enum.AIType.BgeEmbedding:
                     string pyDll = embedModel.EndPoint;
                     string bgeEmbeddingModelName = embedModel.ModelName;
@@ -184,6 +177,13 @@ namespace AntSK.Domain.Domain.Service
                     break;
                 case Model.Enum.AIType.DashScope:
                     memory.WithDashScopeDefaults(embedModel.ModelKey);
+                    break;
+                case Model.Enum.AIType.OllamaEmbedding:
+                    memory.WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
+                    {
+                        APIKey = "NotNull",
+                        EmbeddingModel = embedModel.ModelName
+                    }, null, false, embeddingHttpClient);
                     break;
             }
         }
@@ -210,13 +210,6 @@ namespace AntSK.Domain.Domain.Service
                         Auth = AzureOpenAIConfig.AuthTypes.APIKey,
                         APIType = AzureOpenAIConfig.APITypes.TextCompletion,
                     });
-                    break;
-
-                case Model.Enum.AIType.LLamaSharp:
-                    var (weights, parameters) = LLamaConfig.GetLLamaConfig(chatModel.ModelName);
-                    var context = weights.CreateContext(parameters);
-                    var executor = new StatelessExecutor(weights, parameters);
-                    memory.WithLLamaSharpTextGeneration(new LlamaSharpTextGenerator(weights, context, executor));
                     break;
                 case Model.Enum.AIType.LLamaFactory:
 

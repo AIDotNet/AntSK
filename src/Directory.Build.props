@@ -2,9 +2,8 @@
   <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
   <PropertyGroup>
     <KMVersion>0.70.240803.1</KMVersion>
-    <LLamaSharpVersion>0.15.0</LLamaSharpVersion>
     <NewtonsoftVersion>13.0.3</NewtonsoftVersion>
     <RestSharpVersion>111.4.1</RestSharpVersion>
-    <SKVersion>1.16.2</SKVersion>
+    <SKVersion>1.17.1</SKVersion>
   </PropertyGroup>
 </Project>

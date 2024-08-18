@@ -25,7 +25,7 @@ namespace AntSK.Domain.Repositories
         /// 图标
         /// </summary>
         [Required]
-        public string Icon { get; set; }
+        public string Icon { get; set; } = "windows";
 
         /// <summary>
         /// 类型

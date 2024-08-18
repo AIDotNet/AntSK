@@ -9,10 +9,9 @@
 <div>
     <PageContainer Title="模型列表">
         <Content>
-            <RadioGroup @bind-Value="@_modelType" OnChange="OnModelTypeChange" TValue="string">
-                <Radio Value="@("gguf")" DefaultChecked=true>LLama本地模型(gguf)</Radio>
-                <Radio Value="@("safetensors")">StableDiffusion(safetensors)</Radio>
-                <Radio Value="@("ckpt")">StableDiffusion2(ckpt)</Radio>
+            <RadioGroup @bind-Value="@_modelType" OnChange="OnModelTypeChange" TValue="string" ButtonStyle="@RadioButtonStyle.Solid">
+                <Radio RadioButton Value="@("ckpt")">StableDiffusion2(ckpt)</Radio>
+                <Radio RadioButton Value="@("safetensors")">StableDiffusion(safetensors)</Radio>
             </RadioGroup>
             <div style="text-align: center;">
 
