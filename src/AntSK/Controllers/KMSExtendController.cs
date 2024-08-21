@@ -199,9 +199,14 @@ namespace AntSK.Controllers
                     {
                         await _memory.DeleteDocumentAsync(index: "kms", documentId: id);
                     }
+                    catch (FileNotFoundException ex)
+                    {
+                        logger.LogError(ex, "删除KMS文档异常,未找到文件 {id}", id);
+                        return ExecuteResult.Success("删除成功");
+                    }
                     catch (Exception ex)
                     {
-                        logger.LogError(ex, "删除KMS文档异常 {index}", id);
+                        logger.LogError(ex, "删除KMS文档异常 {id}", id);
                         return ExecuteResult.Error("删除KMS文档异常");
                     }
                 }
