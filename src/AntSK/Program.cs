@@ -91,6 +91,7 @@ builder.Services.AddBlazoredLocalStorage(config =>
 builder.Services.AddMapper();
 //后台队列任务
 builder.Services.AddBackgroundTaskBroker().AddHandler<ImportKMSTaskReq, BackGroundTaskHandler>("ImportKMSTask");
+builder.Services.AddBackgroundTaskBroker().AddHandler<DeleteKmsDetailReq, DeleteKmsDetailBackGroundTaskHandler>("DeleteKmsDetail");
 // 读取连接字符串配置
 
 if (LLamaSharpOption.RunType.ToUpper() == "CPU")

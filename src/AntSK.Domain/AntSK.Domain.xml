@@ -147,6 +147,16 @@
             <param name="firstcol"></param>
             <param name="lastcol"></param>
         </member>
+        <member name="P:AntSK.Domain.Domain.Model.DeleteKmsDetailReq.KmsId">
+            <summary>
+            知识库Id
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Domain.Model.DeleteKmsDetailReq.DocumentId">
+            <summary>
+            文档Id
+            </summary>
+        </member>
         <member name="T:AntSK.Domain.Domain.Model.Enum.AIType">
             <summary>
             AI类型

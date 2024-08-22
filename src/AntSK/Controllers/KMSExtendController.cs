@@ -26,6 +26,7 @@ namespace AntSK.Controllers
         IKmsDetails_Repositories kmsDetails_Repositories,
         IKMService kMService,
         BackgroundTaskBroker<ImportKMSTaskReq> taskBroker,
+        BackgroundTaskBroker<DeleteKmsDetailReq> deleteKmsDetailtaskBroker,
         IConfiguration configuration, ILogger<KMSExtendController> logger) : ControllerBase
     {
         /// <summary>
@@ -192,24 +193,11 @@ namespace AntSK.Controllers
             var result = await kmsDetails_Repositories.DeleteAsync(id);
             if (result)
             {
-                var _memory = kMService.GetMemoryByKMS(model.KmsId);
-                if (_memory != null)
+                deleteKmsDetailtaskBroker.QueueWorkItem(new DeleteKmsDetailReq
                 {
-                    try
-                    {
-                        await _memory.DeleteDocumentAsync(index: "kms", documentId: id);
-                    }
-                    catch (FileNotFoundException ex)
-                    {
-                        logger.LogError(ex, "删除KMS文档异常,未找到文件 {id}", id);
-                        return ExecuteResult.Success("删除成功");
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex, "删除KMS文档异常 {id}", id);
-                        return ExecuteResult.Error("删除KMS文档异常");
-                    }
-                }
+                    KmsId = model.KmsId,
+                    DocumentId = id
+                });
 
             }
             return result ? ExecuteResult.Success("删除成功") : ExecuteResult.Error("删除失败");
