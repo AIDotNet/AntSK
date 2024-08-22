@@ -1,4 +1,4 @@
-﻿using AntSK.Domain.Domain.Interface;
+using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model;
 using AntSK.Domain.Domain.Model.Enum;
 using AntSK.Domain.Repositories;
