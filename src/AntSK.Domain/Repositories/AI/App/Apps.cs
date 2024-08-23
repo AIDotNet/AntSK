@@ -75,6 +75,7 @@ namespace AntSK.Domain.Repositories
         /// <summary>
         /// 知识库ID列表
         /// </summary>
+        [SugarColumn(ColumnDataType = "varchar(1000)")]
         public string? KmsIdList { get; set; }
 
         /// <summary>
