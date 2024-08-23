@@ -39,6 +39,6 @@ namespace AntSK.Models.Dto
         /// <summary>
         /// 失败原因
         /// </summary>
-        public string Fail { get; set; } = "";
+        public string? Fail { get; set; }
     }
 }

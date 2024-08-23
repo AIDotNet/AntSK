@@ -72,9 +72,11 @@ namespace AntSK.Domain.Repositories
         [SugarColumn(ColumnDataType = "varchar(1000)")]
         public string? NativeFunctionList { get; set; }
 
+
         /// <summary>
         /// 知识库ID列表
         /// </summary>
+        [SugarColumn(ColumnDataType = "varchar(2000)")]
         public string? KmsIdList { get; set; }
 
         /// <summary>
