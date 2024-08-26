@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Python.Runtime.Py;
+using AntSK.Domain.Utils;
 
 namespace AntSK.Domain.Domain.Other.Bge
 {
@@ -65,7 +66,7 @@ namespace AntSK.Domain.Domain.Other.Bge
                         pyList.Append(item.ToPython()); // 将C# string转换为Python对象并添加到PyList中
                     }
                     PyObject result = model.compute_score(pyList, normalize: true);
-                    return result.As<double>();
+                    return result.ConvertToString().Trim('[').Trim(']').ConvertToDouble();
                 }
                 catch (Exception ex)
                 {
