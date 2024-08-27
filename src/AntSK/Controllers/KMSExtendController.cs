@@ -9,6 +9,7 @@ using AntSK.BackgroundTask;
 using AntSK.Domain.Common.Map;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 
 namespace AntSK.Controllers
 {
@@ -220,11 +221,18 @@ namespace AntSK.Controllers
                 foreach (var item in list)
                 {
                     item.KmsId = model.ToId;
+                    item.Status = ImportKmsStatus.Loadding;
                     var r = await kmsDetails_Repositories.UpdateAsync(item);
                     if (r)
                     {
                         logger.LogDebug("转移成功 {id}", item.Id);
                         success++;
+                        deleteKmsDetailtaskBroker.QueueWorkItem(new DeleteKmsDetailReq
+                        {
+                            KmsId = item.KmsId,
+                            DocumentId = item.Id,
+                            ReCut = true
+                        });
                     }
                     else
                     {
@@ -255,11 +263,68 @@ namespace AntSK.Controllers
                 return ExecuteResult.Success("转移成功");
             }
             detail.KmsId = model.KmsId;
+            detail.Status = ImportKmsStatus.Loadding;
             var result = await kmsDetails_Repositories.UpdateAsync(detail);
+            if (result)
+            {
+                deleteKmsDetailtaskBroker.QueueWorkItem(new DeleteKmsDetailReq
+                {
+                    KmsId = detail.KmsId,
+                    DocumentId = detail.Id,
+                    ReCut = true
+                });
+            }
             return result ? ExecuteResult.Success("转移成功") : ExecuteResult.Error("转移失败");
         }
 
-
+        /// <summary>
+        /// 重新切片
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ExecuteResult> ReCut([FromQuery] string? kmsId, [FromQuery] string? documentId)
+        {
+            var list = new List<KmsDetails>();
+            if (!string.IsNullOrWhiteSpace(documentId))
+            {
+                var detail = await kmsDetails_Repositories.GetFirstAsync(x => x.Id == documentId);
+                if (detail != null && detail.Type != "text")
+                {
+                    list.Add(detail);
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(kmsId))
+            {
+                list = await kmsDetails_Repositories.GetListAsync(p => p.KmsId == kmsId && p.Type != "text");
+            }
+            else
+            {
+                list = await kmsDetails_Repositories.GetListAsync(x => x.Status == ImportKmsStatus.Success && x.Type != "text");
+            }
+            if (list != null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    item.Status = ImportKmsStatus.Loadding;
+                }
+                var result = await kmsDetails_Repositories.UpdateRangeAsync(list);
+                if (result)
+                {
+                    logger.LogDebug("文档更新为切片中");
+                    foreach (var detail in list)
+                    {
+                        logger.LogDebug("文档加入切片队列 {Id},{Url}", detail.Id, detail.Url);
+                        deleteKmsDetailtaskBroker.QueueWorkItem(new DeleteKmsDetailReq
+                        {
+                            KmsId = detail.KmsId,
+                            DocumentId = detail.Id,
+                            ReCut = true
+                        });
+                    }
+                }
+            }
+            return ExecuteResult.Success("重新切片中");
+        }
 
         async Task<ExecuteResult<KmsReturnDto>> AddAsync([FromBody] KmsEditDto model)
         {

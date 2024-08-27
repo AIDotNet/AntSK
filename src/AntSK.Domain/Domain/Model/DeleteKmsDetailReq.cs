@@ -11,5 +11,10 @@
         /// 文档Id
         /// </summary>
         public string DocumentId { get; set; } = null!;
+
+        /// <summary>
+        /// 重新切片
+        /// </summary>
+        public bool ReCut { get; set; } = false;
     }
 }

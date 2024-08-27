@@ -139,6 +139,7 @@ namespace AntSK.Domain.Domain.Service
                         }
                         break;
                 }
+                req.KmsDetail.Fail = "";
                 req.KmsDetail.Status = Model.Enum.ImportKmsStatus.Success;
                 _kmsDetails_Repositories.Update(req.KmsDetail);
                 //_kmsDetails_Repositories.GetList(p => p.KmsId == req.KmsId);

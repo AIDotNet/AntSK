@@ -157,6 +157,11 @@
             文档Id
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Domain.Model.DeleteKmsDetailReq.ReCut">
+            <summary>
+            重新切片
+            </summary>
+        </member>
         <member name="T:AntSK.Domain.Domain.Model.Enum.AIType">
             <summary>
             AI类型
