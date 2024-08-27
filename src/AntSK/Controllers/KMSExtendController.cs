@@ -222,6 +222,7 @@ namespace AntSK.Controllers
                 {
                     item.KmsId = model.ToId;
                     item.Status = ImportKmsStatus.Loadding;
+                    item.DataCount = 0;
                     var r = await kmsDetails_Repositories.UpdateAsync(item);
                     if (r)
                     {
@@ -264,6 +265,7 @@ namespace AntSK.Controllers
             }
             detail.KmsId = model.KmsId;
             detail.Status = ImportKmsStatus.Loadding;
+            detail.DataCount = 0;
             var result = await kmsDetails_Repositories.UpdateAsync(detail);
             if (result)
             {
@@ -305,7 +307,9 @@ namespace AntSK.Controllers
             {
                 foreach (var item in list)
                 {
+                    item.DataCount = 0;
                     item.Status = ImportKmsStatus.Loadding;
+                    item.Fail = "";
                 }
                 var result = await kmsDetails_Repositories.UpdateRangeAsync(list);
                 if (result)
