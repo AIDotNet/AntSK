@@ -153,11 +153,8 @@ DBConnection.ConnectionStrings
 //Qdrant 和AzureAISearch 的 ConnectionString 使用 Endpoint|APIKey  
 KernelMemory.VectorDb
 
-//本地模型使用的运行方式  GUP  CPU ,如果用在线API 这个随意使用一个即可
-LLamaSharp.RunType
-
 //本地模型路径，用于在选择llama时可以快速选择目录下的模型，以及保存下载的模型
-LLamaSharp.FileDirectory
+FileDir.DirectoryPath
 
 //默认管理员账号密码
 Login
