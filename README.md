@@ -219,6 +219,8 @@ Helping enterprise AI application development, we recommend [AntBlazor](https://
 ## ☎️Contact Me
 If you have any questions or suggestions, please contact me through my official WeChat account. We also have a discussion group where you can send a message to join, and then I will add you to the group.
 
+Additionally, you can also contact me via email: antskpro@qq.com
+
 ![Official WeChat Account](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
 ---
