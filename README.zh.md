@@ -153,11 +153,8 @@ DBConnection.ConnectionStrings
 //Qdrant 和AzureAISearch 的 ConnectionString 使用 Endpoint|APIKey  
 KernelMemory.VectorDb
 
-//本地模型使用的运行方式  GUP  CPU ,如果用在线API 这个随意使用一个即可
-LLamaSharp.RunType
-
 //本地模型路径，用于在选择llama时可以快速选择目录下的模型，以及保存下载的模型
-LLamaSharp.FileDirectory
+FileDir.DirectoryPath
 
 //默认管理员账号密码
 Login
@@ -228,6 +225,9 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 
 ## ☎️联系我
 如有任何问题或建议，请通过以下方式关注我的公众号《许泽宇的技术分享》，发消息与我联系，我们也有AIDotnet交流群，可以发送进群等消息，然后我会拉你进交流群
+
+另外您也可以通过邮箱与我联系：antskpro@qq.com
+
 ![公众号](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
 ## 🌟 Star History

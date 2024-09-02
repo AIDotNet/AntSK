@@ -145,11 +145,8 @@ DBConnection.ConnectionStrings
 //The ConnectionString of Qdrant and AzureAISearch uses Endpoint | APIKey
 KernelMemory.VectorDb
 
-//Local model execution options: GPU and CPU. When using the online API, any option can be used.
-LLamaSharp.RunType
-
 //Local model path, used for quick selection of models under llama, as well as saving downloaded models.
-LLamaSharp.FileDirectory
+FileDir.DirectoryPath
 
 //Default admin account password
 Login
@@ -221,6 +218,8 @@ Helping enterprise AI application development, we recommend [AntBlazor](https://
 
 ## ☎️Contact Me
 If you have any questions or suggestions, please contact me through my official WeChat account. We also have a discussion group where you can send a message to join, and then I will add you to the group.
+
+Additionally, you can also contact me via email: antskpro@qq.com
 
 ![Official WeChat Account](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
