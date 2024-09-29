@@ -1,0 +1,70 @@
+﻿
+/*@font-face {
+    font-family: 'IBM Plex Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/ibmplexmono/v19/-F6qfjptAgt5VM-kVkqdyU8n3twJwl1FgtIU.woff2) format('woff2');
+    unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}*/
+
+/*@font-face {
+    font-family: ibmplexmono;
+    src: url(fonts/ibmplexmono.woff2);
+    display: swap;
+}*/
+
+@font-face {
+    font-family: CascadiaCode;
+    src: url(fonts/CascadiaCode.ttf);
+    display: swap;
+}
+
+
+.bc-terminal-theme {
+    font-family: CascadiaCode, monospace;
+    font-style: normal;
+    font-weight: 500;
+    background-color: rgb(29, 42, 53);
+    color: rgb(203, 213, 225);
+}
+
+    .bc-terminal-theme > .bc-paragraph {
+    }
+
+    .bc-terminal-theme .bc-terminal-input {
+        color: rgb(203, 213, 225);
+        caret-color: rgb(5, 206, 145);
+        font-family: inherit;
+        font-size: 100%;
+        /*line-height: 1.15;*/
+        padding: 0;
+    }
+
+
+    .bc-terminal-theme > .bc-paragraph-command > .bc-prompt > .bc-prompt-name {
+        color: rgb(255, 157, 0);
+    }
+
+    .bc-terminal-theme > .bc-paragraph-command > .bc-prompt > .bc-prompt-spr1 {
+    }
+
+    .bc-terminal-theme > .bc-paragraph-command > .bc-prompt > .bc-prompt-host {
+        color: rgb(5, 206, 145);
+    }
+
+    .bc-terminal-theme > .bc-paragraph-command > .bc-prompt > .bc-prompt-spr2 {
+    }
+
+    .bc-terminal-theme > .bc-paragraph-command > .bc-prompt > .bc-prompt-path {
+    }
+
+    .bc-terminal-theme > .bc-paragraph-command > .bc-prompt > .bc-prompt-pmt {
+    }
+
+
+
+
+
+    .bc-terminal-theme > .bc-paragraph-response > .bc-command-content {
+    }

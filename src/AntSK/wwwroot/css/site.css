@@ -53,3 +53,29 @@ ol {
     min-height: 100vh;
   }
 }
+
+
+
+::-webkit-scrollbar {
+    width: 1px; /* 设置滚动条的宽度 */
+    height: 8px; /* 设置水平滚动条的高度 */
+}
+
+::-webkit-scrollbar-track {
+    background: #f5f5f5; /* 设置滚动条轨道的背景色 */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1; /* 设置滚动条拇指的背景色（可拖动的部分） */
+    border-radius: 8px; /* 设置滚动条拇指的圆角 */
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; /* 鼠标悬停时滚动条拇指的背景色 */
+    }
+
+/* 适用于Firefox */
+* {
+    scrollbar-width: thin; /* 设置滚动条为细的 */
+    scrollbar-color: #ccc #f1f1f1; /* 设置滚动条拇指和轨道的颜色 */
+}
