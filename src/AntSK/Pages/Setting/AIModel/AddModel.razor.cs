@@ -119,7 +119,7 @@ namespace AntSK.Pages.Setting.AIModel
             catch (System.Exception ex)
             {
                 Log.Error(ex.Message + ex.StackTrace);
-                _ = Message.Error("FileDirOption.FileDirectory目录配置不正确！", 2);
+                _ = Message.Error($"{ex.Message + ex.StackTrace}", 2);
             }
         }
 
