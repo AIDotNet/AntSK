@@ -211,7 +211,7 @@ If you plan to use AntSK in commercial projects, you need to ensure that you fol
    
 2. If you modify the software source code, you need to clearly indicate these modifications in the source code.
    
-3. Meet the above four requirements  
+3. Meet the above requirements  
 
 ## 💕 Special thanks
 Helping enterprise AI application development, we recommend [AntBlazor](https://antblazor.com)
