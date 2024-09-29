@@ -48,7 +48,6 @@ namespace AntSK.Pages.AppPage
         private List<AIModels> _chatList;
         private List<AIModels> _embedingList;
         private List<AIModels> _rerankList;
-        private List<AIModels> _imageList;
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -58,7 +57,7 @@ namespace AntSK.Pages.AppPage
             _chatList = models.Where(p => p.AIModelType == AIModelType.Chat).ToList();
             _embedingList = models.Where(p => p.AIModelType == AIModelType.Embedding).ToList();
             _rerankList = models.Where(p => p.AIModelType == AIModelType.Rerank).ToList();
-            _imageList = models.Where(p => p.AIModelType == AIModelType.Image).ToList();
+
 
             _functionService.SearchMarkedMethods();
             foreach (var func in _functionService.Functions)

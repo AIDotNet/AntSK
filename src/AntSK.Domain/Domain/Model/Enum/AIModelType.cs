@@ -25,8 +25,6 @@ namespace AntSK.Domain.Domain.Model.Enum
         BgeEmbedding = 7,
         [Display(Name = "Bge Rerank")]
         BgeRerank = 8,
-        [Display(Name = "StableDiffusion")]
-        StableDiffusion = 9,
 
         [Display(Name = "Ollama")]
         Ollama = 10,
@@ -44,7 +42,6 @@ namespace AntSK.Domain.Domain.Model.Enum
     {
         Chat = 1,
         Embedding = 2,
-        Image=3,
         Rerank=4
     }
 }

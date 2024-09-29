@@ -29,7 +29,6 @@
                         <Radio RadioButton Value="@(AIModelType.Chat)">会话模型</Radio>
                         <Radio RadioButton Value="@(AIModelType.Embedding)">向量模型</Radio>
                         <Radio RadioButton Value="@(AIModelType.Rerank)">Rerank重排模型</Radio>
-                        <Radio RadioButton Value="@(AIModelType.Image)">图片模型</Radio>
                     </RadioGroup>
                 </FormItem>
 
@@ -55,10 +54,6 @@
                         else if (context.AIModelType == AIModelType.Rerank)
                         {
                             <Radio RadioButton Value="@(AIType.BgeRerank)">BgeRerank</Radio>
-                        }
-                        else if (context.AIModelType == AIModelType.Image)
-                        {
-                            <Radio RadioButton Value="@(AIType.StableDiffusion)">StableDiffusion</Radio>
                         }
                     </RadioGroup>
                 </FormItem>
@@ -117,15 +112,6 @@
                     </FormItem>
                     <FormItem Label="模型名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="请输入模型名称" @bind-Value="@context.ModelName" AutoComplete="false" />
-                    </FormItem>
-                }
-                @if (context.AIType == AIType.StableDiffusion)
-                {
-                    <FormItem Label="模型路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                        <InputGroup>
-                            <AutoComplete Options="_modelFiles" Placeholder="请输入模型路径" @bind-Value="@context.ModelName" />
-                            <Button OnClick="()=>_downloadModalVisible=true" Style="margin-top:5px">从Haggingface下载</Button>
-                        </InputGroup>
                     </FormItem>
                 }
                 @if (context.AIType == AIType.LLamaFactory)
