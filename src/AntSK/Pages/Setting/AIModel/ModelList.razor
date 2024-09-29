@@ -74,10 +74,6 @@
                                             {
                                                 <Tag Color="@PresetColor.GeekBlue.ToString()">BgeRerank</Tag>
                                             }
-                                            else if (context.AIType == AIType.StableDiffusion)
-                                            {
-                                                <Tag Color="@PresetColor.Magenta.ToString()">StableDiffusion</Tag>
-                                            }
                                             else if (context.AIType == AIType.Ollama || context.AIType == AIType.OllamaEmbedding)
                                                             {
                                                 <Tag Color="@PresetColor.Pink.ToString()">Ollama</Tag>
@@ -96,10 +92,6 @@
                                             else if (context.AIModelType == AIModelType.Embedding)
                                             {
                                                 <Tag Color="@PresetColor.Green.ToString()">向量模型</Tag>
-                                            }
-                                            else if (context.AIModelType == AIModelType.Image)
-                                            {
-                                                <Tag Color="@PresetColor.Lime.ToString()">图片模型</Tag>
                                             }
                                             else if (context.AIModelType == AIModelType.Rerank)
                                             {

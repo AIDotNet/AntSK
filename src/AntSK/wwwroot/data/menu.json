@@ -45,11 +45,6 @@
         "path": "/modelmanager/modellist",
         "name": "模型管理",
         "key": "modelmanager.modellist"
-      },
-      {
-        "path": "/modelmanager/modeldown",
-        "name": "作图模型下载",
-        "key": "modelmanager.modeldown"
       }
     ]
   },

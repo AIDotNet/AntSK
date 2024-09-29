@@ -21,8 +21,6 @@ namespace AntSK.Pages.Setting.AIModel
     {
         [Parameter]
         public string ModelId { get; set; }
-        [Parameter]
-        public string ModelPath { get; set; }
         [Inject] protected IAIModels_Repositories _aimodels_Repositories { get; set; }
         [Inject] protected MessageService? Message { get; set; }
         [Inject] public HttpClient HttpClient { get; set; }
@@ -94,32 +92,11 @@ namespace AntSK.Pages.Setting.AIModel
                 {
                     llamaFactoryIsStart = llamaFactoryDic.Value == "false" ? false : true;
                 }
-
-
-                //目前只支持gguf的 所以筛选一下
-                _modelFiles = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), FileDirOption.DirectoryPath)).Where(p => p.Contains(".gguf") || p.Contains(".ckpt") || p.Contains(".safetensors")).ToArray();
-                if (!string.IsNullOrEmpty(ModelPath))
-                {
-                    string extension = Path.GetExtension(ModelPath);
-                    switch (extension)
-                    {
-                        case ".safetensors":
-                        case ".ckpt":
-                            _aiModel.AIType = AIType.StableDiffusion;
-                            break;
-
-                    }
-                    //下载页跳入
-
-                    _downloadModalVisible = true;
-
-                    _downloadUrl = $"https://hf-mirror.com{ModelPath.Replace("---", "/")}";
-                }
             }
             catch (System.Exception ex)
             {
                 Log.Error(ex.Message + ex.StackTrace);
-                _ = Message.Error("FileDirOption.FileDirectory目录配置不正确！", 2);
+                _ = Message.Error($"{ex.Message + ex.StackTrace}", 2);
             }
         }
 
@@ -461,9 +438,6 @@ namespace AntSK.Pages.Setting.AIModel
                     _aiModel.EndPoint = "http://localhost:11434/";
                     _aiModel.AIModelType = AIModelType.Embedding;
                     break;
-                case AIType.StableDiffusion:
-                    _aiModel.AIModelType = AIModelType.Image;
-                    break;
                 case AIType.Mock:
                     _aiModel.AIModelType = AIModelType.Chat;
                     break;
@@ -493,9 +467,6 @@ namespace AntSK.Pages.Setting.AIModel
                     break;
                 case AIModelType.Rerank:
                     _aiModel.AIType = AIType.BgeRerank;
-                    break;
-                case AIModelType.Image:
-                    _aiModel.AIType = AIType.StableDiffusion;
                     break;
             }
         }
