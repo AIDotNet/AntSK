@@ -71,10 +71,10 @@
   color: rgba(0, 0, 0, 0.85);
 }
 .salesExtra a:hover {
-  color: #9F9FFF;
+  color: #1890ff;
 }
 .salesExtra a.currentDate {
-  color: #9F9FFF;
+  color: #1890ff;
 }
 .salesCard .salesBar {
   padding: 0 0 32px 32px;
@@ -129,7 +129,7 @@
   right: 6px;
 }
 .offlineCard :global .ant-tabs-tab-active h4 {
-  color: #9F9FFF;
+  color: #1890ff;
 }
 .trendText {
   margin-left: 8px;

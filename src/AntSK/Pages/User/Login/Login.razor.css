@@ -22,7 +22,7 @@
   width: 100%;
 }
 .main__b__0 ::deep .login .icon {
-  color: #9F9FFF;
+  color: #1890ff;
 }
 .main__b__0 ::deep .login .other {
   margin-top: 24px;
@@ -38,7 +38,7 @@
   transition: color 0.3s;
 }
 .main__b__0 ::deep .login .other .icon:hover {
-  color: #9F9FFF;
+  color: #1890ff;
 }
 .main__b__0 ::deep .login .other .register {
   float: right;
