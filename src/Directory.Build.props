@@ -3,7 +3,7 @@
   <PropertyGroup>
     <KMVersion>0.71.240820.1</KMVersion>
     <NewtonsoftVersion>13.0.3</NewtonsoftVersion>
-    <RestSharpVersion>111.4.1</RestSharpVersion>
+    <RestSharpVersion>112.1.0</RestSharpVersion>
     <SKVersion>1.17.2</SKVersion>
   </PropertyGroup>
 </Project>
