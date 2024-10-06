@@ -112,9 +112,15 @@ networks:
   antsk:
 ```
 以这个为示例，意思是把windows本地D://model的文件夹挂载进 容器内/app/model 如果是这样你的appsettings.json中的模型地址应该配置为  
-```
-model/xxx.gguf
-```
+
+[LiteDockerCompose](https://github.com/AIDotNet/AntSK/blob/main/docker-compose.simple.yml)
+
+精简版使用sqlite+disk向量模式，简化部署配置
+
+[FullDockerCompose](https://github.com/AIDotNet/AntSK/blob/main/docker-compose.yml)
+
+完整版使用pg+aspire 功能更完整，配置文件需要参考如下配置含义进行配置
+
 
 ## 3️⃣配置文件的一些含义
 ```
