@@ -103,9 +103,6 @@ networks:
   antsk:
 ```
 Taking this as an example, it means mounting the local D://model folder of Windows into the container /app/model. If so, the model address in your appsettings.json should be configured as
-```
-model/xxx.gguf
-```
 
 ## 3️⃣Some meanings of configuration file
 ```
