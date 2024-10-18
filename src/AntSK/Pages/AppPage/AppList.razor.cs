@@ -29,7 +29,7 @@ namespace AntSK.Pages.AppPage
             }
             else
             {
-                data = await _apps_Repositories.GetListAsync(p => p.Name.Contains(searchKey));
+                data = await _apps_Repositories.GetListAsync(p => p.Name.Contains(searchKey)|| p.SecretKey==searchKey);
             }
 
             list.AddRange(data);
