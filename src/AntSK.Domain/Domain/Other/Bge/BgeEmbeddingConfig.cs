@@ -1,4 +1,4 @@
-﻿using Microsoft.KernelMemory.AI.OpenAI;
+﻿using Microsoft.KernelMemory.AI;
 using Python.Runtime;
 using Serilog;
 using System;

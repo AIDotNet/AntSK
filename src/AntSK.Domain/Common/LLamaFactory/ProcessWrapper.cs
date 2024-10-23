@@ -1,4 +1,4 @@
-﻿using Amazon.Runtime.Internal.Util;
+﻿
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

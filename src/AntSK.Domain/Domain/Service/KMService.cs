@@ -10,7 +10,6 @@ using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using AntSK.OCR;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
-using LLama;
 using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;

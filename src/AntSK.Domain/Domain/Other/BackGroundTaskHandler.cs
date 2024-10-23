@@ -1,5 +1,4 @@
-﻿using Amazon.Runtime.Internal.Util;
-using AntSK.BackgroundTask;
+﻿using AntSK.BackgroundTask;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model;
 using Microsoft.Extensions.DependencyInjection;
