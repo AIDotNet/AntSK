@@ -8,21 +8,21 @@
     <NoWarn>CA1050,CA1707,CA2007,VSTHRD111,CS1591,RCS1110,CA5394,SKEXP0001,SKEXP0002,SKEXP0003,SKEXP0004,SKEXP0010,SKEXP0011,,SKEXP0012,SKEXP0020,SKEXP0021,SKEXP0022,SKEXP0023,SKEXP0024,SKEXP0025,SKEXP0026,SKEXP0027,SKEXP0028,SKEXP0029,SKEXP0030,SKEXP0031,SKEXP0032,SKEXP0040,SKEXP0041,SKEXP0042,SKEXP0050,SKEXP0051,SKEXP0052,SKEXP0053,SKEXP0054,SKEXP0055,SKEXP0060,SKEXP0061,SKEXP0101,SKEXP0102,KMEXP00</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AntDesign.Charts" Version="0.5.5" />
+    <PackageReference Include="AntDesign.Charts" Version="0.5.6" />
     <PackageReference Include="AntDesign.ProLayout" Version="0.20.3" />
     <PackageReference Include="BlazorComponents.Terminal" Version="0.6.0" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
   
-    <PackageReference Include="pythonnet" Version="3.0.3" />
+    <PackageReference Include="pythonnet" Version="3.0.4" />
    
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
     
     <PackageReference Include="AutoMapper" Version="8.1.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Markdig" Version="0.37.0" />
     <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftVersion)" />
-    <PackageReference Include="SqlSugarCore" Version="5.1.4.166" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.169" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
     <PackageReference Include="RestSharp" Version="$(RestSharpVersion)" />
     <PackageReference Include="NPOI" Version="2.7.1" />
 
@@ -35,13 +35,13 @@
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Redis" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.AzureAISearch" Version="$(KMVersion)" />
 
-    <PackageReference Include="Serilog" Version="4.0.1" />
+    <PackageReference Include="Serilog" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.1-dev-10391" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.2" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.4" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
-    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AntSK.LLamaFactory\AntSK.LLamaFactory.csproj" />
