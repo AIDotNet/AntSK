@@ -18,11 +18,11 @@
                 <FormItem Label="应用名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <Input Placeholder="请输入应用名称" @bind-Value="@context.Name" />
                 </FormItem>
-                <FormItem Label="图标" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
-                    @* <Input Placeholder="请输入图标" @bind-Value="@context.Icon" />
-                    <a href="https://antblazor.com/zh-CN/components/icon" target="_blank">图标库</a> *@
+       @*          <FormItem Label="图标" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                   <Input Placeholder="请输入图标" @bind-Value="@context.Icon" />
+                    <a href="https://antblazor.com/zh-CN/components/icon" target="_blank">图标库</a> 
                     <IconPicker @bind-Value="@context.Icon"></IconPicker>
-                </FormItem>
+                </FormItem> *@
                 <FormItem Label="类型" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                     <RadioGroup @bind-Value="context.Type" OnChange="OnAppTypeChange" TValue="string" ButtonStyle="RadioButtonStyle.Solid">
                         <Radio RadioButton Value="@AppType.chat.ToString()">会话应用</Radio>
