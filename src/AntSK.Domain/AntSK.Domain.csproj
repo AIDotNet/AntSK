@@ -29,8 +29,6 @@
     <PackageReference Include="Microsoft.SemanticKernel" Version="$(SKVersion)" />
     <PackageReference Include="Microsoft.SemanticKernel.Core" Version="$(SKVersion)" />
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="$(SKVersion)-alpha" />
-    <PackageReference Include="Microsoft.KernelMemory.AI.OpenAI" Version="$(KMVersion)" />
-    <PackageReference Include="Microsoft.KernelMemory.AI.AzureOpenAI" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="$(KMVersion)" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Qdrant" Version="$(KMVersion)" />

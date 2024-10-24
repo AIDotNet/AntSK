@@ -1,7 +1,7 @@
 ﻿using AntSK.Domain.Domain.Model.Constant;
 using AntSK.Domain.Utils;
 using Microsoft.Extensions.Logging;
-using Microsoft.KernelMemory.AI;
+using Microsoft.KernelMemory.AI.OpenAI;
 using Microsoft.KernelMemory.Configuration;
 using Microsoft.KernelMemory.DataFormats.Text;
 using Microsoft.KernelMemory.Diagnostics;
