@@ -252,6 +252,53 @@
             <param name="history"></param>
             <returns></returns>
         </member>
+        <member name="P:AntSK.Domain.Result.Code">
+            <summary>
+            错误码，0是正常返回，异常返回错误码
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Result.Data">
+            <summary>
+            返回数据
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Result.Message">
+            <summary>
+            返回信息详情
+            </summary>
+        </member>
+        <member name="M:AntSK.Domain.ResponseResult.Success">
+            <summary>
+            执行成功
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.ResponseResult.Success(System.Object,System.String,System.String)">
+            <summary>
+            执行成功
+            </summary>
+            <param name="data"></param>
+            <param name="code"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.ResponseResult.Error(System.Object,System.String,System.String)">
+            <summary>
+            执行失败
+            </summary>
+            <param name="data"></param>
+            <param name="code"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AntSK.Domain.ResponseResult.Error(System.String,System.String)">
+            <summary>
+            执行失败
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
         <member name="P:AntSK.Domain.Options.DBConnectionOption.DbType">
             <summary>
             sqlite连接字符串

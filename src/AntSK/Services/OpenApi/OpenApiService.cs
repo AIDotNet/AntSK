@@ -1,6 +1,7 @@
 ﻿using AntSK.Domain.Common.DependencyInjection;
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Dto.OpenAPI;
+using AntSK.Domain.Domain.Other.Bge;
 using AntSK.Domain.Repositories;
 using AntSK.Domain.Utils;
 using Microsoft.KernelMemory;
@@ -17,6 +18,8 @@ namespace AntSK.Services.OpenApi
     public interface IOpenApiService
     {
         Task Chat(OpenAIModel model, string sk, HttpContext HttpContext);
+
+        Task<double> Rerank(RerankModel model, string sk, HttpContext HttpContext);
     }
 
     [ServiceDescription(typeof(IOpenApiService), ServiceLifetime.Scoped)]
@@ -24,7 +27,8 @@ namespace AntSK.Services.OpenApi
         IApps_Repositories _apps_Repositories,
         IKernelService _kernelService,
         IKMService _kMService,
-        IChatService _chatService
+        IChatService _chatService,
+        IAIModels_Repositories _aIModels_Repositories
     ) : IOpenApiService
     {
         public async Task Chat(OpenAIModel model, string sk, HttpContext HttpContext)
@@ -251,6 +255,17 @@ namespace AntSK.Services.OpenApi
                 }
             }
             return (questions,history);
+        }
+
+        public async Task<double> Rerank(RerankModel model, string sk, HttpContext HttpContext)
+        {
+            var rerankModel = _aIModels_Repositories.GetById(model.modelId);
+            BegRerankConfig.LoadModel(rerankModel.EndPoint, rerankModel.ModelName);
+            List<string> rerank = new List<string>();
+            rerank.Add(model.query);
+            rerank.Add(model.document);
+            var result= BegRerankConfig.Rerank(rerank);
+            return result;
         }
     }
 }

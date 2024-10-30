@@ -66,7 +66,7 @@ namespace AntSK.Domain.Domain.Other.Bge
                         pyList.Append(item.ToPython()); // 将C# string转换为Python对象并添加到PyList中
                     }
                     PyObject result = model.compute_score(pyList, normalize: true);
-                    return result.ConvertToString().Trim('[').Trim(']').ConvertToDouble();
+                    return result.ConvertToDouble();
                 }
                 catch (Exception ex)
                 {

@@ -18,4 +18,11 @@
         public List<string> input { get; set; }
     }
 
+    public class RerankModel
+    {
+        public string modelId { get; set; }
+        public string query { get; set; }
+
+        public string document { get; set; }
+    }
 }
