@@ -29,7 +29,7 @@ namespace AntSK.Domain.Repositories
         /// </summary>
         public bool IsSend { get; set; } = false;
         /// <summary>
-        /// 创建事件
+        /// 创建时间
         /// </summary>
         public DateTime CreateTime { get; set; }
 
