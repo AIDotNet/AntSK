@@ -77,9 +77,10 @@ namespace AntSK.Domain.Domain.Other.Bge
 
                     //BAAI/bge-reranker-v2-minicpm-layerwise
                     // https://www.modelscope.cn/models/AI-ModelScope/bge-reranker-v2-m3
-                    PyList cutoffLayers = new PyList();
-                    cutoffLayers.Append(new PyInt(8));
-                    dynamic scores = model.compute_score(pyList, cutoff_layers: cutoffLayers);
+
+                    //PyList cutoffLayers = new PyList();
+                    //cutoffLayers.Append(new PyInt(8));
+                    //dynamic scores = model.compute_score(pyList, cutoff_layers: cutoffLayers);
 
                     return result.ConvertToDouble();
                 }
