@@ -65,7 +65,7 @@ namespace AntSK.Pages.Setting.AIModel
         private bool _logModalVisible;
 
         private List<string> bgeEmbeddingList = new List<string>() { "AI-ModelScope/bge-small-zh-v1.5", "AI-ModelScope/bge-base-zh-v1.5", "AI-ModelScope/bge-large-zh-v1.5" };
-        private List<string> bgeRerankList = new List<string>() { "Xorbits/bge-reranker-base", "Xorbits/bge-reranker-large", "AI-ModelScope/bge-reranker-v2-m3", "AI-ModelScope/bge-reranker-v2-gemma" };
+        private List<string> bgeRerankList = new List<string>() { "Xorbits/bge-reranker-base", "Xorbits/bge-reranker-large", "AI-ModelScope/bge-reranker-v2-m3", "AI-ModelScope/bge-reranker-v2-gemma", "BAAI/bge-reranker-v2-minicpm-layerwise" };
         private bool BgeEmbeddingIsStart = false;
         private string BgeEmbeddingBtnText = "初始化";
 

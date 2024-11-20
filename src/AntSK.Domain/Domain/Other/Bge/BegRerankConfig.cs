@@ -36,8 +36,16 @@ namespace AntSK.Domain.Domain.Other.Bge
                             dynamic flagEmbedding = Py.Import("FlagEmbedding");
 
                             dynamic model_dir = modelscope.snapshot_download(modelName, revision: "master");
-                            dynamic flagReranker = flagEmbedding.FlagReranker(model_dir, use_fp16: false);
-                            model = flagReranker;
+                            if (modelName == "BAAI/bge-reranker-v2-minicpm-layerwise")
+                            {
+                                dynamic flagReranker = flagEmbedding.LayerWiseFlagLLMReranker(model_dir, use_fp16: true);
+                                model = flagReranker;
+                            }
+                            else
+                            {
+                                dynamic flagReranker = flagEmbedding.FlagReranker(model_dir, use_fp16: true);
+                                model = flagReranker;
+                            }
                             return model;
                         }
                     }
@@ -66,6 +74,14 @@ namespace AntSK.Domain.Domain.Other.Bge
                         pyList.Append(item.ToPython()); // 将C# string转换为Python对象并添加到PyList中
                     }
                     PyObject result = model.compute_score(pyList, normalize: true);
+
+                    //BAAI/bge-reranker-v2-minicpm-layerwise
+                    // https://www.modelscope.cn/models/AI-ModelScope/bge-reranker-v2-m3
+
+                    //PyList cutoffLayers = new PyList();
+                    //cutoffLayers.Append(new PyInt(8));
+                    //dynamic scores = model.compute_score(pyList, cutoff_layers: cutoffLayers);
+
                     return result.ConvertToDouble();
                 }
                 catch (Exception ex)
