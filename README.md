@@ -101,6 +101,7 @@ services:
       - D://model:/app/model
 networks:
   antsk:
+    external: true
 ```
 Taking this as an example, it means mounting the local D://model folder of Windows into the container /app/model. If so, the model address in your appsettings.json should be configured as
 
