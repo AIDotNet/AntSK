@@ -466,7 +466,7 @@
         </member>
         <member name="P:AntSK.Domain.Repositories.Chats.CreateTime">
             <summary>
-            创建事件
+            创建时间
             </summary>
         </member>
         <member name="P:AntSK.Domain.Repositories.Chats.FileName">
