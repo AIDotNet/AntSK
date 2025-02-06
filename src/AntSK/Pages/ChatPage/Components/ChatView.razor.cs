@@ -329,7 +329,7 @@ namespace AntSK.Pages.ChatPage.Components
             await foreach (var content in chatResult)
             {
                 rawContent.Append(content.ConvertToString());
-                info.Context = Markdown.ToHtml(rawContent.ToString());
+                info.Context = Markdown.ToHtml(rawContent.ToString().Replace("<think>", "<div class=\"think\">").Replace("</think>", "</div>"));
                 await Task.Delay(30);
                 await InvokeAsync(StateHasChanged);
             }
@@ -366,7 +366,7 @@ namespace AntSK.Pages.ChatPage.Components
                 {
                     rawContent.Append(content.ConvertToString());
                 }
-                info.Context = Markdown.ToHtml(rawContent.ToString());
+                info.Context = Markdown.ToHtml(rawContent.ToString().Replace("<think>", "<div class=\"think\">").Replace("</think>", "</div>"));
                 await Task.Delay(30);
                 await InvokeAsync(StateHasChanged);
             }
