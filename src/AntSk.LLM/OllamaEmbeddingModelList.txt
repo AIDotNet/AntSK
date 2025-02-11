@@ -7,6 +7,6 @@ snowflake-arctic-embed:33m
 snowflake-arctic-embed:110m
 snowflake-arctic-embed:137m
 snowflake-arctic-embed:335m
-bge-m3:567m
+bge-m3
 bge-large:335m
 paraphrase-multilingual:278m
