@@ -95,6 +95,7 @@ namespace AntSK.Domain.Domain.Service
             var _kernel = _kernelService.GetKernelByApp(app);
             if (!string.IsNullOrWhiteSpace(filePath))
             {
+                //上传文件问答
                 var memory = _kMService.GetMemoryByApp(app);
 
                 // 匹配GUID的正则表达式
@@ -132,6 +133,7 @@ namespace AntSK.Domain.Domain.Service
             }
             else 
             {
+                //从知识库问答
                 relevantSourceList = await _kMService.GetRelevantSourceList(app, questions);
             }
 
