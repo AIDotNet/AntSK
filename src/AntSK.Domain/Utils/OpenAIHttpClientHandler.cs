@@ -23,7 +23,7 @@ namespace AntSK.Domain.Utils
             var uncaseBody = new StringContent(requestBody, Encoding.UTF8, mediaType);
             request.Content = uncaseBody;
 
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ConvertToString() != "Production")
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ConvertToString() == "Development")
             {
                 //生产环境根据环境变量可去关闭日志
                 //便于调试查看请求prompt
@@ -79,7 +79,7 @@ namespace AntSK.Domain.Utils
 
             // 接着，调用基类的 SendAsync 方法将你的修改后的请求发出去
             HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ConvertToString() != "Production")
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ConvertToString() == "Development")
             {
                 string responseContent = requestBody.IsStream() ? response.Content.ReadAsStringAsync().Result : response.Content.ReadAsStringAsync().Result.Unescape();
                 Log.Information("{Message}", $"【模型服务接口返回-{guid},host:{_endPoint}】:{Environment.NewLine}{responseContent}");
