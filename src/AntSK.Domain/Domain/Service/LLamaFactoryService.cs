@@ -2,6 +2,7 @@
 using AntSK.Domain.Domain.Interface;
 using AntSK.Domain.Domain.Model.Dto;
 using AntSK.Domain.Options;
+using AntSK.Domain.Utils;
 using AntSK.LLamaFactory.Model;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
@@ -23,8 +24,6 @@ namespace AntSK.Domain.Domain.Service
     {
         private Process process;
 
-        public static bool isProcessComplete = false;
-
         private readonly object _syncLock = new object();
         private List<LLamaModel> modelList = new List<LLamaModel>();
 
@@ -42,7 +41,6 @@ namespace AntSK.Domain.Domain.Service
             var cmdTask = Task.Factory.StartNew(() =>
             {
 
-                var isProcessComplete = false;
 
                 process = new Process
                 {
@@ -80,8 +78,6 @@ namespace AntSK.Domain.Domain.Service
             var cmdTask = Task.Factory.StartNew(() =>
             {
 
-                var isProcessComplete = false;
-
                 process = new Process
                 {
                     StartInfo = new ProcessStartInfo
@@ -116,15 +112,20 @@ namespace AntSK.Domain.Domain.Service
         {
             var cmdTask = Task.Factory.StartNew(() =>
             {
-
-                var isProcessComplete = false;
+                string templateName = "default";
+                var modelList = GetLLamaFactoryModels();
+                var model = modelList.Where(p => p.ModelScope == modelName).FirstOrDefault();
+                if (model.IsNotNull() && !string.IsNullOrEmpty(model.Template))
+                {
+                    templateName = model.Template;
+                }
 
                 process = new Process
                 {
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "python",
-                        Arguments = "api_antsk.py --model_name_or_path " + modelName + " --template default ",
+                        Arguments = "api_antsk.py --model_name_or_path " + modelName + " --template " + templateName + " ",
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
                         RedirectStandardError=true,
@@ -199,7 +200,7 @@ namespace AntSK.Domain.Domain.Service
                 {
                     foreach (var m in model.Models)
                     {
-                        modelList.Add(new LLamaModel() { Name=m.Key, ModelScope=m.Value.MODELSCOPE });
+                        modelList.Add(new LLamaModel() { Name = m.Key, ModelScope = m.Value.MODELSCOPE, Template = model.Template });
                     }
                 }
             }         

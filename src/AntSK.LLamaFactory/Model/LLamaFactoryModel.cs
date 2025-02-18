@@ -23,5 +23,7 @@ namespace AntSK.LLamaFactory.Model
     { 
         public string Name { get; set; }
         public string ModelScope { get; set; }
+
+        public string Template { get; set; }
     }
 }
