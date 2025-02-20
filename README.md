@@ -86,7 +86,7 @@ version: '3.8'
 services:
   antsk:
     container_name: antsk
-    image: registry.cn-hangzhou.aliyuncs.com/AIDotNet/antsk:v0.5.0
+    image: registry.cn-hangzhou.aliyuncs.com/AIDotNet/antsk:v0.6.0
     ports:
       - 5000:5000
     networks:
@@ -204,13 +204,14 @@ This warehouse follows the [AntSK License](https://github.com/AIDotNet/AntSK?tab
 
 This project follows the Apache 2.0 agreement, in addition to the following additional terms
 
-1. This project can be used for commercial purposes, but it has the right to prohibit you from using it if it violates the following provisions
-
-2. Without authorization, you are not allowed to modify AntSK's logo and title information
+1. **Free Commercial Use**: Users can use the software for commercial purposes without modifying the code.
+2. **Commercial License Required**: A commercial license is required if any of the following conditions are met:
+   1. You modify, develop, or alter the software, including but not limited to changes to the application name, logo, code, or functionality.
+   2. You provide multi-tenant services to enterprise customers with 10 or more users.
+   3. You pre-install or integrate the software into hardware devices or products and bundle it for sale.
+   4. You are engaging in large-scale procurement for government or educational institutions, especially involving security, data privacy, or other sensitive requirements.
    
-4. Without authorization, you are not allowed to modify the copyright information at the bottom of the page
-   
-6. If you need authorization, you can contact WeChat: **xuzeyu91**
+3. If you need authorization, you can contact WeChat: **xuzeyu91**
 
 If you plan to use AntSK in commercial projects, you need to ensure that you follow the following steps:
 
