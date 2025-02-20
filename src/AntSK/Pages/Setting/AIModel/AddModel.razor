@@ -170,6 +170,8 @@
                             </Select>
                         </InputGroup>
                         <a href="https://ollama.com/library" target="_blank">获取更多模型</a>
+                        <br/>
+                        <span>可以在OllamaModelList.txt中进行修改</span>
                     </FormItem>
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="http://localhost:11434/" @bind-Value="@context.EndPoint" AutoComplete="false" />
@@ -200,6 +202,8 @@
                             </Select>
                         </InputGroup>
                         <a href="https://ollama.com/library" target="_blank">获取更多模型</a>
+                        <br />
+                        <span>可以在OllamaEmbeddingModelList.txt中进行修改</span>
                     </FormItem>
                     <FormItem Label="请求地址" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Input Placeholder="http://localhost:11434/" @bind-Value="@context.EndPoint" AutoComplete="false" />
@@ -220,9 +224,8 @@
                                 @bind-Value="@context.ModelName"
                                 ValueProperty="c=>c"
                                 LabelProperty="c=>c">
-                        </Select>
+                        </Select>  
                     </FormItem>
-
                     <FormItem Label="Python路径" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
                         <Popover ContentTemplate="@_content" Title="提示" Style="width:100%">
                             <Input Placeholder="D:\Programs\Python\Python311\python311.dll" @bind-Value="@context.EndPoint" AutoComplete="false" />
