@@ -317,7 +317,7 @@ namespace AntSK.Pages.Setting.AIModel
 
             _ollamaService.LogMessageReceived -= CmdLogHandler;
             _ollamaService.LogMessageReceived += CmdLogHandler;
-            _ollamaService.StartOllama(_aiModel.ModelName);
+            _ollamaService.OllamaPull(_aiModel.ModelName);
         }
 
         private void OnCancelPipInstall()

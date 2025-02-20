@@ -22,7 +22,7 @@ namespace AntSK.Domain.Domain.Service
             LogMessageReceived?.Invoke(message);
         }
 
-        public async Task StartOllama(string modelName)
+        public async Task OllamaPull(string modelName)
         {
             Console.OutputEncoding = Encoding.UTF8;
             var cmdTask = Task.Factory.StartNew(() =>
@@ -35,7 +35,7 @@ namespace AntSK.Domain.Domain.Service
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "ollama",
-                        Arguments = "run " + modelName,
+                        Arguments = "pull " + modelName,
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,

@@ -10,6 +10,6 @@ namespace AntSK.Domain.Domain.Interface
     public interface IOllamaService
     {
         public event LogMessageHandler LogMessageReceived;
-        Task StartOllama(string modelName);
+        Task OllamaPull(string modelName);
     }
 }
