@@ -17,7 +17,7 @@ fire
 modelscope
 langchain-community
 sentence_transformers
-FlagEmbedding
+flagembedding
 packaging
 pyyaml
 trl>=0.8.6
