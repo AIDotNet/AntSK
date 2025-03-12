@@ -72,8 +72,8 @@
     ]
   },
   {
-    "path": "https://antsk.cn",
-    "name": "官方文档",
+    "path": "https://gw.antsk.cn",
+    "name": "官网",
     "key": "antskdoc",
     "icon": "question-circle"
   },
