@@ -2,42 +2,165 @@
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
+
+/* 全局样式优化 */
+:root {
+  --primary-color: #1890ff;
+  --primary-hover: #40a9ff;
+  --primary-active: #096dd9;
+  --primary-light: rgba(24, 144, 255, 0.1);
+  --text-color: rgba(0, 0, 0, 0.85);
+  --text-color-secondary: rgba(0, 0, 0, 0.45);
+  --border-radius: 4px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --transition-duration: 0.3s;
+}
+
+/* 图标组样式优化 */
 .iconGroup span.anticon {
   margin-left: 16px;
-  color: rgba(0, 0, 0, 0.45);
+  color: var(--text-color-secondary);
   cursor: pointer;
-  transition: color 0.32s;
+  transition: all var(--transition-duration) ease;
 }
+
 .iconGroup span.anticon:hover {
-  color: rgba(0, 0, 0, 0.85);
+  color: var(--text-color);
+  transform: scale(1.1);
 }
+
+/* 统计卡片样式增强 */
+.ant-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all var(--transition-duration) ease;
+}
+
+.ant-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+}
+
+/* ChartCard 组件样式优化 */
+.chartCard {
+  position: relative;
+  padding: 16px;
+  transition: all var(--transition-duration) ease;
+}
+
+.chartCard .chartTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.chartCard .metaWrap {
+  flex: 1;
+}
+
+.chartCard .meta {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-color-secondary);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.chartCard .action {
+  color: var(--primary-color);
+  transition: all var(--transition-duration) ease;
+}
+
+.chartCard .total {
+  margin-top: 4px;
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.chartCard .content {
+  position: relative;
+  margin-bottom: 12px;
+  height: auto;
+  width: 100%;
+}
+
+.chartCard .contentFixed {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.chartCard .footer {
+  margin-top: 8px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* 功能特性卡片样式优化 */
+.ant-space-item .ant-card {
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.ant-space-item .ant-card:hover {
+  border-color: var(--primary-color);
+}
+
+.ant-space-item .ant-card .ant-card-head {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(90deg, var(--primary-light) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.ant-space-item .ant-card .ant-card-head-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+/* 排名列表样式优化 */
 .rankingList {
   margin: 25px 0 0;
   padding: 0;
   list-style: none;
 }
+
 .rankingList li {
   display: flex;
   align-items: center;
   margin-top: 16px;
-  zoom: 1;
+  padding: 8px;
+  border-radius: var(--border-radius);
+  transition: background-color var(--transition-duration) ease;
 }
+
+.rankingList li:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
 .rankingList li::before,
 .rankingList li::after {
   display: table;
   content: ' ';
 }
+
 .rankingList li::after {
   clear: both;
   height: 0;
   font-size: 0;
   visibility: hidden;
 }
+
 .rankingList li span {
-  color: rgba(0, 0, 0, 0.85);
+  color: var(--text-color);
   font-size: 14px;
   line-height: 22px;
 }
+
 .rankingList li .rankingItemNumber {
   display: inline-block;
   width: 20px;
@@ -49,12 +172,15 @@
   line-height: 20px;
   text-align: center;
   background-color: #fafafa;
-  border-radius: 20px;
+  border-radius: 50%;
+  transition: all var(--transition-duration) ease;
 }
+
 .rankingList li .rankingItemNumber.active {
   color: #fff;
-  background-color: #314659;
+  background-color: var(--primary-color);
 }
+
 .rankingList li .rankingItemTitle {
   flex: 1;
   margin-right: 8px;
@@ -62,79 +188,41 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.salesExtra {
-  display: inline-block;
-  margin-right: 24px;
-}
-.salesExtra a {
-  margin-left: 24px;
-  color: rgba(0, 0, 0, 0.85);
-}
-.salesExtra a:hover {
-  color: #1890ff;
-}
-.salesExtra a.currentDate {
-  color: #1890ff;
-}
-.salesCard .salesBar {
-  padding: 0 0 32px 32px;
-}
-.salesCard .salesRank {
-  padding: 0 32px 32px 72px;
-}
-.salesCard :global .ant-tabs-bar,
-.salesCard :global .ant-tabs-nav-wrap {
-  padding-left: 16px;
-}
-.salesCard :global .ant-tabs-bar .ant-tabs-nav .ant-tabs-tab,
-.salesCard :global .ant-tabs-nav-wrap .ant-tabs-nav .ant-tabs-tab {
-  padding-top: 16px;
-  padding-bottom: 14px;
-  line-height: 24px;
-}
-.salesCard :global .ant-tabs-extra-content {
-  padding-right: 24px;
-  line-height: 55px;
-}
-.salesCard :global .ant-card-head {
+
+/* 标题样式优化 */
+.ant-divider .ant-typography {
   position: relative;
+  color: var(--text-color);
+  font-weight: 600;
+  text-align: center;
 }
-.salesCard :global .ant-card-head-title {
-  align-items: normal;
-}
-.salesCardExtra {
-  height: inherit;
-}
-.salesTypeRadio {
+
+.ant-divider .ant-typography::after {
+  content: '';
   position: absolute;
-  right: 54px;
-  bottom: 12px;
+  bottom: -8px;
+  left: 50%;
+  width: 40px;
+  height: 3px;
+  background: var(--primary-color);
+  transform: translateX(-50%);
+  border-radius: 3px;
 }
-.offlineCard :global .ant-tabs-ink-bar {
-  bottom: auto;
+
+/* 标签样式优化 */
+.ant-tag {
+  margin: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  transition: all var(--transition-duration) ease;
 }
-.offlineCard :global .ant-tabs-bar {
-  border-bottom: none;
+
+.ant-tag:hover {
+  transform: scale(1.05);
 }
-.offlineCard :global .ant-tabs-nav-container-scrolling {
-  padding-right: 40px;
-  padding-left: 40px;
-}
-.offlineCard :global .ant-tabs-tab-prev-icon::before {
-  position: relative;
-  left: 6px;
-}
-.offlineCard :global .ant-tabs-tab-next-icon::before {
-  position: relative;
-  right: 6px;
-}
-.offlineCard :global .ant-tabs-tab-active h4 {
-  color: #1890ff;
-}
-.trendText {
-  margin-left: 8px;
-  color: rgba(0, 0, 0, 0.85);
-}
+
+/* 响应式调整 */
 @media screen and (max-width: 992px) {
   .salesExtra {
     display: none;
@@ -142,7 +230,11 @@
   .rankingList li span:first-child {
     margin-right: 8px;
   }
+  .ant-card:hover {
+    transform: translateY(-2px);
+  }
 }
+
 @media screen and (max-width: 768px) {
   .rankingTitle {
     margin-top: 16px;
@@ -150,12 +242,19 @@
   .salesCard .salesBar {
     padding: 16px;
   }
+  .ant-space {
+    justify-content: center;
+  }
 }
+
 @media screen and (max-width: 576px) {
   .salesExtraWrap {
     display: none;
   }
   .salesCard :global .ant-tabs-content {
     padding-top: 30px;
+  }
+  .chartCard .total {
+    font-size: 20px;
   }
 }
