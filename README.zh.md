@@ -248,12 +248,3 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 
 ![公众号](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
-## 🌟 Star History
-<a href="https://github.com/AIDotNet/AntSK/stargazers" target="_blank" style="display: block" align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=AIDotNet/AntSK&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=AIDotNet/AntSK&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=AIDotNet/AntSK&type=Date" />
-  </picture>
-</a>
-
