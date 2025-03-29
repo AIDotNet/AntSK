@@ -26,6 +26,10 @@ namespace AntSK.Pages.ChatPage
         {
             await base.OnInitializedAsync();
             _list = _apps_Repositories.GetList();
+            if (string.IsNullOrEmpty(AppId)&&_list.Count>0)
+            {
+                AppId = _list.FirstOrDefault().Id;
+            }
         }
 
         private void OnRelevantSources(List<RelevantSource> relevantSources)
