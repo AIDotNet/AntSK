@@ -264,46 +264,15 @@ namespace AntSK.Pages.ChatPage.Components
                 await SendKms(questions, history, app, filePath);
 
             }
-            else if (app.Type == AppType.img.ToString())
+
+
+            await SaveMsg(MessageList);
+            if (OnRelevantSources.IsNotNull())
             {
-                await SendImg(questions, app);
+                await OnRelevantSources.InvokeAsync(_relevantSources);
             }
 
-            //缓存消息记录
-            if (app.Type != AppType.img.ToString())
-            {
-                await SaveMsg(MessageList);
-                if (OnRelevantSources.IsNotNull())
-                {
-                    await OnRelevantSources.InvokeAsync(_relevantSources);
-                }
-            }
             return true;
-        }
-
-        /// <summary>
-        /// 发送图片对话
-        /// </summary>
-        /// <param name="questions"></param>
-        /// <param name="app"></param>
-        /// <returns></returns>
-        private async Task SendImg(string questions,Apps app)
-        {
-            Chats info = new Chats();
-            info.Id = Guid.NewGuid().ToString();
-            info.UserName=_userName;
-            info.AppId=AppId;
-            info.CreateTime = DateTime.Now;
-            var base64= await _chatService.SendImgByAppAsync(app, questions);
-            if (string.IsNullOrEmpty(base64))
-            {
-                info.Context = "生成失败";
-            }
-            else 
-            {
-                info.Context = $"<img src=\"data:image/jpeg;base64,{base64}\" alt=\"Base64 Image\" />";
-            }
-            MessageList.Add(info);
         }
 
         /// <summary>

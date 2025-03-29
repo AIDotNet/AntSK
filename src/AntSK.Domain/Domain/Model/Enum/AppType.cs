@@ -10,6 +10,5 @@ namespace AntSK.Domain.Domain.Model.Enum
     {
         chat = 1,
         kms = 2,
-        img=3
     }
 }
