@@ -84,6 +84,10 @@ AntSK 适用于多种业务场景，例如：
 密码: xuzeyu
 ```
 
+
+[源码深度解读](https://deepwiki.com/AIDotNet/AntSK)
+
+
 ## 1️⃣使用docker-compose 
 
 提供了pg版本 **appsettings.json** 和 简化版本（**Sqlite+disk**） **docker-compose.simple.yml**
