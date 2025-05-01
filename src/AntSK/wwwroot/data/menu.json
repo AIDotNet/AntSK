@@ -72,16 +72,16 @@
     ]
   },
   {
-    "path": "https://gw.antsk.cn",
-    "name": "官网",
-    "key": "antskdoc",
-    "icon": "question-circle"
-  },
-  {
     "path": "https://api.antsk.cn/",
     "name": "GPT代理接口",
     "key": "antskapi",
     "icon": "bulb"
+  },
+  {
+    "path": "https://gw.antsk.cn",
+    "name": "官网",
+    "key": "antskdoc",
+    "icon": "question-circle"
   },
   {
     "path": "https://www.bilibili.com/video/BV1vK421b7NF",
