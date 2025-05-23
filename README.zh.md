@@ -81,7 +81,7 @@ AntSK 适用于多种业务场景，例如：
 下载文件后启动 AntSK.exe  然后会自动打开浏览器
 ```
 账号: admin
-密码: xuzeyu
+密码: admin
 ```
 
 
