@@ -131,7 +131,7 @@ The full version uses pg+aspire
   },
   "Login": {
     "User": "admin",
-    "Password": "xuzeyu"
+    "Password": "admin"
   },
   "BackgroundTaskBroker": {
     "ImportKMSTask": {
