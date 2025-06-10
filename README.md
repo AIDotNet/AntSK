@@ -1,92 +1,115 @@
-[简体中文](./README.zh.md) | English
+中文|[English](./README.en.md) 
 # AntSK
-## AI Knowledge Base/Intelligent Agent built on .Net8+AntBlazor+SemanticKernel
+## 使用.Net8+Blazor+SemanticKernel 打造的AI知识库/智能体
 
-## ⭐Core Features
+## ⭐核心功能
 
-- **Semantic Kernel**: Utilizes advanced natural language processing technology to accurately understand, process, and respond to complex semantic queries, providing users with precise information retrieval and recommendation services.
+- **语义内核 (Semantic Kernel)**：采用领先的自然语言处理技术，准确理解、处理和响应复杂的语义查询，为用户提供精确的信息检索和推荐服务。
 
-- **Kernel Memory**: Capable of continuous learning and storing knowledge points, AntSK has long-term memory function, accumulates experience, and provides a more personalized interaction experience.
+- **内存内核 (Kernel Memory)**：具备持续学习和存储知识点的能力，AntSK 拥有长期记忆功能，累积经验，提供更个性化的交互体验。
 
-- **Knowledge Base**: Import knowledge base through documents (Word, PDF, Excel, Txt, Markdown, Json, PPT) and perform knowledge base Q&A.
+- **知识库**：通过文档（Word、PDF、Excel、Txt、Markdown、Json、PPT）等形式导入知识库，可以进行知识库问答，支持本地bge-embedding 向量模型 ，以及bge-rerank 重排模型。
 
-- **GPT Generation**: This platform supports creating personalized GPT models, enabling users to build their own GPT models.
+- **文生图**：集成**StableDiffusion** 本地模型，可以进行文生图。
 
-- **API Interface Publishing**: Exposes internal functions in the form of APIs, enabling developers to integrate AntSK into other applications and enhance application intelligence.
+- **GPTs 生成**：此平台支持创建个性化的GPT模型，尝试构建您自己的GPT模型。
 
-- **API Plugin System**: Open API plugin system that allows third-party developers or service providers to easily integrate their services into AntSK, continuously enhancing application functionality.
+- **API接口发布**：将内部功能以API的形式对外提供，便于开发者将AntSK 集成进其他应用，增强应用智慧。
 
-- **.Net Plugin System**: Open dll plugin system that allows third-party developers or service providers to easily integrate their business functions by generating dll in standard format code, continuously enhancing application functionality.
+- **API插件系统**：开放式API插件系统，允许第三方开发者或服务商轻松将其服务集成到AntSK，不断增强应用功能。
 
-- **Online Search**: AntSK, real-time access to the latest information, ensuring users receive the most timely and relevant data.
+- **.Net插件系统**：开放式dll插件系统，允许第三方开发者或服务商轻松将其业务功能通过标准格式的代码生成dll后集成到AntSK，不断增强应用功能。
 
-- **Model Management**: Adapts and manages integration of different models from different manufacturers, models offline running supported by **llamafactory** and **ollama**.
+- **联网搜索**：AntSK，实时获取最新信息，确保用户接受到的资料总是最及时、最相关的。
 
-- **Domestic Innovation**: AntSK supports domestic models and databases and can run under domestic innovation conditions.
+- **模型管理**：适配和管理集成不同厂商的不同模型。并且支持**llama.cpp**所支持的gguf类型，以及**llamafactory** 和 **ollama** 所支持的模型离线运行
 
-- **Model Fine-Tuning**: Planned based on llamafactory for model fine-tuning.
+- **国产信创**：AntSK支持国产模型，和国产数据库，可以在信创条件下运行
 
-## ⛪Application Scenarios
+- **模型微调**：规划中，基于llamafactory进行模型微调
+  
 
-AntSK is suitable for various business scenarios, such as:
-- Enterprise knowledge management system
-- Automatic customer service and chatbots
-- Enterprise search engine
-- Personalized recommendation system
-- Intelligent writing assistance
-- Education and online learning platforms
-- Other interesting AI Apps
+## ⛪应用场景
 
-## ✏️Function Examples
-### Online Demo
-[document](http://antsk.cn/)
+AntSK 适用于多种业务场景，例如：
+- 企业级知识管理系统
+- 自动客服与聊天机器人
+- 企业级搜索引擎
+- 个性化推荐系统
+- 智能辅助写作
+- 教育与在线学习平台
+- 其他有意思的AI App
 
-[demo](https://demo.antsk.cn/)
-and
-[demo1](https://antsk.ai-dotnet.com/)
+## ✏️功能示例
+### 在线演示
 
+[体验地址1](https://demo.antsk.cn/)
+
+和
+
+[体验地址2](https://antsk.ai-dotnet.com/)
 ```
-Default account: test
+默认账号：test
 
-Default password: test
+默认密码：test
 
-Due to the low configuration of the cloud server, the local model cannot be run, so the system settings permissions have been closed. You can simply view the interface. If you want to use the local model, please download and use it on your own.
+由于云服务器配置较低，无法运行本地模型，所以把系统设置权限关闭了，大家看看界面即可，要使用本地模型，请下载自行使用
+
+请勿在演示站点上传敏感信息
 ```
 
-### Other Function Examples
-[Video Demonstration](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
+### 其他功能示例
+[视频示例](https://www.bilibili.com/video/BV1zH4y1h7Y9/)
 
-## ❓How to get started?
+[在线文档：http://antsk.cn](http://antsk.cn)
 
-Here I am using Postgres as the data and vector storage because Semantic Kernel and Kernel Memory support it, but you can also use other options.
+## ❓如何开始？
 
-The model by default supports the local model of openai, azure openai, and llama. If you need to use other models, you can integrate them using one-api.
+在这里我使用的是Postgres 作为数据存储和向量存储，因为Semantic Kernel和Kernel Memory都支持他，当然你也可以换成其他的。
 
-The Login configuration in the configuration file is the default login account and password.
+模型默认支持openai、azure openai、讯飞星火、阿里云积、 和llama支持的gguf本地模型 以及llamafactory的本地模型,如果需要使用其他模型，可以使用one-api进行集成。
 
-The following configuration file needs to be configured
+配置文件中的Login配置是默认的登录账号和密码
 
-## 1️⃣Using docker-compose
+需要配置如下的配置文件
 
-Provided the pg version **appsettings.json** and simplified version (Sqlite+disk) **docker-compose.simple.yml**
+## 为了方便体验，我已经把打包好的程序放进了网盘，你只需要安装.net8环境即可运行。
+[.net8环境 ](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0)
 
-Download **docker-compose.yml** from the project root directory and place the configuration file **appsettings.json** in the same directory.
+[我用夸克网盘分享了「AntSK」](https://pan.quark.cn/s/63ea02e1683e)
 
-The pg image has already been prepared. You can modify the default username and password in docker-compose.yml, and then the database connection in your **appsettings.json** needs to be consistent.
+下载文件后启动 AntSK.exe  然后会自动打开浏览器
+```
+账号: admin
+密码: admin
+```
 
-Then you can execute the following command in the directory to start AntSK
+
+[源码深度解读](https://deepwiki.com/AIDotNet/AntSK)
+
+
+## 1️⃣使用docker-compose 
+
+提供了pg版本 **appsettings.json** 和 简化版本（**Sqlite+disk**） **docker-compose.simple.yml**
+
+从项目根目录下载**docker-compose.yml**,然后把配置文件**appsettings.json**和它放在统一目录，
+
+这里已经把pg的镜像做好了。在docker-compose.yml中可以修改默认账号密码，然后你的**appsettings.json**的数据库连接需要保持一致。
+
+然后你可以进入到目录后执行
 ```
 docker-compose up -d
 ```
+来启动AntSK
 
-## 2️⃣How to mount local models and model download directory in docker
+## 2️⃣如何在docker中挂载本地模型，和模型下载的目录
 ```
-# Non-host version, do not use local proxy
+# 非 host 版本, 不使用本机代理
 version: '3.8'
 services:
   antsk:
     container_name: antsk
-    image: registry.cn-hangzhou.aliyuncs.com/AIDotNet/antsk:v0.6.3
+    image: registry.cn-hangzhou.aliyuncs.com/AIDotNet/antsk:v0.6.0
     ports:
       - 5000:5000
     networks:
@@ -97,32 +120,32 @@ services:
     environment:
       - ASPNETCORE_URLS=http://*:5000
     volumes:
-      - ./appsettings.json:/app/appsettings.json # Local configuration file needs to be placed in the same directory
+      - ./appsettings.json:/app/appsettings.json # 本地配置文件 需要放在同级目录
       - D://model:/app/model
+      - D://model:/root/.cache/modelscope/hub/AI-ModelScope #使用Llamafactory时需要挂载 否则初始化的环境重启后会丢失
 networks:
   antsk:
-    external: true
 ```
-Taking this as an example, it means mounting the local D://model folder of Windows into the container /app/model. If so, the model address in your appsettings.json should be configured as
+以这个为示例，意思是把windows本地D://model的文件夹挂载进 容器内/app/model 如果是这样你的appsettings.json中的模型地址应该配置为  
 
 [LiteDockerCompose](https://github.com/AIDotNet/AntSK/blob/main/docker-compose.simple.yml)
 
-The compact version is deployed with sqlite-disk by one click
+精简版使用sqlite+disk向量模式，简化部署配置
 
 [FullDockerCompose](https://github.com/AIDotNet/AntSK/blob/main/docker-compose.yml)
 
-The full version uses pg+aspire
+完整版使用pg+aspire 功能更完整，配置文件需要参考如下配置含义进行配置
 
 
-## 3️⃣Some meanings of configuration file
+## 3️⃣配置文件的一些含义
 ```
 {
   "DBConnection": {
-    "DbType": "Sqlite",
+    "DbType": "Sqlite", 
     "ConnectionStrings": "Data Source=AntSK.db;"
   },
   "KernelMemory": {
-    "VectorDb": "Disk",
+    "VectorDb": "Disk", 
     "ConnectionString": "Host=;Port=;Database=antsk;Username=;Password=",
     "TableNamePrefix": "km-"
   },
@@ -131,7 +154,7 @@ The full version uses pg+aspire
   },
   "Login": {
     "User": "admin",
-    "Password": "admin"
+    "Password": "xuzeyu"
   },
   "BackgroundTaskBroker": {
     "ImportKMSTask": {
@@ -141,96 +164,90 @@ The full version uses pg+aspire
 }
 ```
 ```
-// Supports various databases, you can check SqlSugar, MySql, SqlServer, Sqlite, Oracle, PostgreSQL, Dm, Kdbndp, Oscar, MySqlConnector, Access, OpenGauss, QuestDB, HG, ClickHouse, GBase, Odbc, OceanBaseForOracle, TDengine, GaussDB, OceanBase, Tidb, Vastbase, PolarDB, Custom
+//支持多种数据库，具体可以查看SqlSugar，MySql，SqlServer，Sqlite，Oracle，PostgreSQL，Dm，Kdbndp，Oscar，MySqlConnector，Access，OpenGauss，QuestDB，HG，ClickHouse，GBase，Odbc，OceanBaseForOracle，TDengine，GaussDB，OceanBase，Tidb，Vastbase，PolarDB，Custom
 DBConnection.DbType
-
-// Connection string, need to use the corresponding string according to the different DB types
+//连接字符串，需要根据不同DB类型，用对应的字符串
 DBConnection.ConnectionStrings
 
-//The type of vector storage, supporting Postgres, Disk, Memory, Qdrant, Redis, AzureAISearch
-//Postgres and Redis require ConnectionString configuration
-//The ConnectionString of Qdrant and AzureAISearch uses Endpoint | APIKey
+//向量存储的类型，支持  Postgres、Disk、Memory、Qdrant、Redis、AzureAISearch
+//Postgres、Redis需要配置 ConnectionString
+//Qdrant 和AzureAISearch 的 ConnectionString 使用 Endpoint|APIKey  
 KernelMemory.VectorDb
 
-//Local model path, used for quick selection of models under llama, as well as saving downloaded models.
+//本地模型路径，用于在选择llama时可以快速选择目录下的模型，以及保存下载的模型
 FileDir.DirectoryPath
 
-//Default admin account password
+//默认管理员账号密码
 Login
-
-//Import asynchronous processing thread count. A higher count can be used for online API, but for local models, 1 is recommended to avoid memory overflow issues.
+//导入异步处理的线程数，使用在线API可以高一点，本地模型建议1 否则容易内存溢出崩掉
 BackgroundTaskBroker.ImportKMSTask.WorkerCount
-
 ```
 
-## ⚠️Fixing Style Issues:
-Run the following in AntSK/src/AntSK:
+## ⚠️找不到样式问题解决：
+AntSK/src/AntSK下执行:
 ```
 dotnet clean
 dotnet build
 dotnet publish "AntSK.csproj"
 ```
-Then navigate to AntSK/src/AntSK/bin/Release/net8.0/publish and run:
+再去AntSK/src/AntSK/bin/Release/net8.0/publish下
 ```
 dotnet AntSK.dll
 ```
-The styles should now be applied after starting.
+然后启动就有样式了
 
-I'm using CodeFirst mode for the database, so as long as the database connection is properly configured, the table structure will be created automatically.
+DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是自动创建的
 
-## ✔️Using llamafactory
+## ✔️使用llamafactory
 ```
-1. First, ensure that Python and pip are installed in your environment. This step is not necessary if using an image, such as version v0.2.3.2, which already includes the complete Python environment.
-2. Go to the model add page and select llamafactory.
-3. Click "Initialize" to check whether the 'pip install' environment setup is complete.
-4. Choose a model that you like.
-5. Click "Start" to begin downloading the model from the tower. This may involve a somewhat lengthy wait.
-6. After the model has finished downloading, enter http://localhost:8000/ in the request address. The default port is 8000.
-7. Click "Save" and start chatting.
-8. Many people ask about the difference between LLamaSharp and llamafactory. In fact, LLamaSharp is a .NET implementation of llama.cpp, but only supports local gguf models, while llamafactory supports a wider variety of models and uses Python implementation. The main difference lies here. Additionally, llamafactory has the ability to fine-tune models, which is an area we will focus on integrating in the future.
+1、首先需要确保你的环境已经安装了python和pip，如果使用镜像，例如p0.2.4版本已经包含了 python全套环境则无需此步骤
+2、进入模型添加页面选择llamafactory
+3、点击初始化，可以检查pip install 环境是否完成
+4、选择一个喜欢的模型
+5、点击启动,这会开始从魔塔下载模型，你可能需要有一个较为漫长的等待
+6、等待模型下载完毕后，在请求地址输入 http://localhost:8000/   这里默认是使用8000端口
+7、点击保存，然后就可以开始聊天了
+8、很多人会问 LLamaSharp与llamafactory有什么区别？其实这两者LLamaSharp是llama.cpp的 dotnet实现，但是只支持本地gguf模型，  而llamafactory 支持的模型种类更多，但使用的是python的实现，其主要差异在这里，另外llamafactory具有模型微调的能力，这也是我们下一步需要重点集成的部分。
 ```
+﻿
+## 💕 贡献者
 
-## 💕 Contributors
-
-This project exists thanks to all the people who contribute.
-
+这个项目的存在要感谢所有的贡献者。
+﻿
 <a href="https://github.com/AIDotNet/AntSK/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=AIDotNet/AntSK&max=1000&columns=15&anon=1" />
+<img src="https://contrib.rocks/image?repo=AIDotNet/AntSK&max=1000&columns=15&anon=1" />
 </a>
+﻿
+## 🚨 使用协议
 
-## 🚨  Use Protocol
+本仓库遵循  [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) 开源协议。
 
-This warehouse follows the [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) open source protocol.
+除以下附加条款外，该项目遵循Apache 2.0协议
 
-This project follows the Apache 2.0 agreement, in addition to the following additional terms
-
-1. **Free Commercial Use**: Users can use the software for commercial purposes without modifying the code.
-2. **Commercial License Required**: A commercial license is required if any of the following conditions are met:
-   1. You modify, develop, or alter the software, including but not limited to changes to the application name, logo, code, or functionality.
-   2. You provide multi-tenant services to enterprise customers with 10 or more users.
-   3. You pre-install or integrate the software into hardware devices or products and bundle it for sale.
-   4. You are engaging in large-scale procurement for government or educational institutions, especially involving security, data privacy, or other sensitive requirements.
+1. **免费商用**：用户在不修改代码的情况下，可以免费用于商业目的。
+2. **商业授权**：如果您满足以下任意条件之一，需取得商业授权：
+   1. 对本软件进行二次修改、开发（包括但不限于修改应用名称、logo、代码以及功能）。
+   2. 为企业客户提供多租户服务，且该服务支持 10 人或以上的使用。
+   3. 预装或集成到硬件设备或产品中进行捆绑销售。
+   4. 政府或教育机构的大规模采购项目，特别是涉及安全、数据隐私等敏感需求时。
    
-3. If you need authorization, you can contact WeChat: **xuzeyu91**
+3. 如果您需要授权，可以联系微信：xuzeyu91
 
-If you plan to use AntSK in commercial projects, you need to ensure that you follow the following steps:
+如果您打算在商业项目中使用AntSK，您需要确保遵守以下步骤：
 
-1. Copyright statement containing AntSK license. [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file).
-   
-2. If you modify the software source code, you need to clearly indicate these modifications in the source code.
-   
-3. Meet the above requirements  
+1. 包含AntSK许可证的版权声明。 [AntSK License](https://github.com/AIDotNet/AntSK?tab=Apache-2.0-1-ov-file) 。
 
-## 💕 Special thanks
-Helping enterprise AI application development, we recommend [AntBlazor](https://antblazor.com)
+2. 如果您修改了软件源代码，您需要在源代码中明确标明这些修改。
 
-## ☎️Contact Me
-If you have any questions or suggestions, please contact me through my official WeChat account. We also have a discussion group where you can send a message to join, and then I will add you to the group.
+3. 满足以上要求
 
-Additionally, you can also contact me via email: antskpro@qq.com
+## 💕 特别感谢
+助力企业级AI应用开发，推荐使用 [AntBlazor](https://antblazor.com)
 
-![Official WeChat Account](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
 
----
+## ☎️联系我
+如有任何问题或建议，请通过以下方式关注我的公众号《许泽宇的技术分享》，发消息与我联系，我们也有AIDotnet交流群，可以发送进群等消息，然后我会拉你进交流群
 
-We appreciate your interest in **AntSK** and look forward to collaborating with you to create an intelligent future!
+另外您也可以通过邮箱与我联系：antskpro@qq.com
+
+![公众号](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
