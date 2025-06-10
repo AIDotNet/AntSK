@@ -73,8 +73,8 @@ AntSK 适用于多种业务场景，例如：
 
 需要配置如下的配置文件
 
-## 为了方便体验，我已经把打包好的程序放进了网盘，你只需要安装.net8环境即可运行。
-[.net8环境 ](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0)
+## 为了方便体验，我已经把打包好的程序放进了网盘，你只需要安装.net9环境即可运行。
+[.net9环境 ](https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0)
 
 [我用夸克网盘分享了「AntSK」](https://pan.quark.cn/s/63ea02e1683e)
 

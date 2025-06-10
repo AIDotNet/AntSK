@@ -3,7 +3,7 @@ sidebar_position: 1
 ---
 
 # AntSK功能介绍
-## 基于.Net8+AntBlazor+SemanticKernel 打造的AI知识库/智能体
+## 基于.Net9+AntBlazor+SemanticKernel 打造的AI知识库/智能体
 
 ## 核心功能
 
