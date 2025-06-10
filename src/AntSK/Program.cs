@@ -123,13 +123,15 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
-Task.Run(async () =>
-{
-    await Task.Delay(3000);
-    System.Diagnostics.Process.Start("explorer.exe", "http://localhost:5000");
-});
-app.Run();
+
 
 //延迟3秒后打开浏览器 localhost:5000
+//Task.Run(async () =>
+//{
+//    await Task.Delay(3000);
+//    System.Diagnostics.Process.Start("explorer.exe", "http://localhost:5000");
+//});
+app.Run();
+
 
 
