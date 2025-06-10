@@ -211,7 +211,7 @@ This project follows the Apache 2.0 agreement, in addition to the following addi
    3. You pre-install or integrate the software into hardware devices or products and bundle it for sale.
    4. You are engaging in large-scale procurement for government or educational institutions, especially involving security, data privacy, or other sensitive requirements.
    
-3. If you need authorization, you can contact WeChat: **xuzeyu91**
+3. If you need authorization, you can contact WeChat: **13469996907**
 
 If you plan to use AntSK in commercial projects, you need to ensure that you follow the following steps:
 
