@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["src/AntSK/AntSK.csproj", "AntSK/"]
 RUN dotnet restore "AntSK/AntSK.csproj"
@@ -7,7 +7,7 @@ WORKDIR "/src/AntSK"
 RUN dotnet build "AntSK.csproj" -c Release -o /app/build
 RUN dotnet publish "AntSK.csproj" -c Release -o /app/publish
 
-FROM registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk-base:v1.0.0 AS final
+FROM registry.cn-hangzhou.aliyuncs.com/xuzeyu91/antsk-base:9.0.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 

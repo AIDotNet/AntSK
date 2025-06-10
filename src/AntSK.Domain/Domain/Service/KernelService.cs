@@ -102,21 +102,21 @@ namespace AntSK.Domain.Domain.Service
 
                     var settings = chatModel.ModelKey.Split("|");
 
-                    Sdcb.SparkDesk.ModelVersion modelVersion = Sdcb.SparkDesk.ModelVersion.V3_5;
+                    Sdcb.SparkDesk.ModelVersion modelVersion = Sdcb.SparkDesk.ModelVersion.Lite;
 
                     switch (chatModel.ModelName)
                     {
-                        case "V3_5":
-                            modelVersion = Sdcb.SparkDesk.ModelVersion.V3_5;
+                        case "Max":
+                            modelVersion = Sdcb.SparkDesk.ModelVersion.Max;
                             break;
-                        case "V3":
-                            modelVersion = Sdcb.SparkDesk.ModelVersion.V3;
+                        case "Pro":
+                            modelVersion = Sdcb.SparkDesk.ModelVersion.Pro;
                             break;
                         case "V2":
-                            modelVersion = Sdcb.SparkDesk.ModelVersion.V2;
+                            modelVersion = Sdcb.SparkDesk.ModelVersion.V2_0;
                             break;
-                        case "V1_5":
-                            modelVersion = Sdcb.SparkDesk.ModelVersion.V1_5;
+                        case "Lite":
+                            modelVersion = Sdcb.SparkDesk.ModelVersion.Lite;
                             break;
                     }
 
