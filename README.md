@@ -1,6 +1,6 @@
 中文|[English](./README.en.md) 
 # AntSK
-## 使用.Net8+Blazor+SemanticKernel 打造的AI知识库/智能体
+## 使用.Net9 + Blazor+SemanticKernel 打造的AI知识库/智能体
 
 ## ⭐核心功能
 

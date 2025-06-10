@@ -1,6 +1,6 @@
 [简体中文](./README.md) | English
 # AntSK
-## AI Knowledge Base/Intelligent Agent built on .Net8+AntBlazor+SemanticKernel
+## AI Knowledge Base/Intelligent Agent built on .Net9 + AntBlazor+SemanticKernel
 
 ## ⭐Core Features
 
