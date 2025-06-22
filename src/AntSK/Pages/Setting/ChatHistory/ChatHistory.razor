@@ -1,4 +1,4 @@
-﻿@namespace AntSK.Pages.Setting.AIModel
+@namespace AntSK.Pages.Setting.ChatHistory
 @page "/setting/chathistory"
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
@@ -9,53 +9,260 @@
 @using AntSK.Domain.Common.Map
 @attribute [Authorize(Roles = "AntSKAdmin")]
 
-<Table @ref="table"
-       TItem="ChatsDto"
-       DataSource="@chatDtoList"
-       Total="_total"
-       @bind-PageIndex="_pageIndex"
-       @bind-PageSize="_pageSize"
-       OnChange="OnChange"
-       Size="TableSize.Small"
-       RowKey="x=>x.Id">
-    <TitleTemplate>
-        <GridRow>
-            <GridCol Span="4">
-                <Title Level="3">聊天记录</Title>
-            </GridCol>
-            <GridCol Span="8" Offset="12">
-                <Search Placeholder="搜索" @bind-Value="searchString" OnSearch="Search" />
-            </GridCol>
-        </GridRow>
-    </TitleTemplate>
-    <ColumnDefinitions>
-        <PropertyColumn Property="c=>c.Id" />
-        <PropertyColumn Title="用户名" Property="c=>c.UserName" />
-        <PropertyColumn Title="应用名称" Property="c=>c.AppName" />
-        <PropertyColumn Title="发送/接收" Property="c=>c.SendReveice" />
-        <ActionColumn Title="消息内容" Width="30%">
-            <Space>
-                <SpaceItem>
-                    @((MarkupString)(context.Context))
-                </SpaceItem>
-            </Space>
-        </ActionColumn>
-        <PropertyColumn Title="时间" Property="c=>c.CreateTime" Format="yyyy-MM-dd HH:mm:ss" />
-    </ColumnDefinitions>
-</Table>
+<div class="chat-history-container">
+    <Card>
+        <TitleTemplate>
+            <div class="page-header">
+                <div class="header-left">
+                    <Icon Type="message" Theme="outline" />
+                    <Title Level="2" style="margin-bottom: 0; margin-left: 8px;">聊天记录</Title>
+                </div>
+                <div class="header-right">
+                    <Search 
+                        Placeholder="搜索用户名或消息内容" 
+                        @bind-Value="searchString" 
+                        OnSearch="Search"
+                        EnterButton="true"
+                        Size="@InputSize.Large"
+                        style="width: 300px;" />
+                </div>
+            </div>
+        </TitleTemplate>
+        <Body>
+            <Table @ref="table"
+                   TItem="ChatsDto"
+                   DataSource="@chatDtoList"
+                   Total="_total"
+                   @bind-PageIndex="_pageIndex"
+                   @bind-PageSize="_pageSize"
+                   OnChange="OnChange"
+                   Size="TableSize.Middle"
+                   RowKey="x=>x.Id"
+                   Bordered="true"
+                   Loading="_loading">
+                <ColumnDefinitions>
+                    <PropertyColumn Property="c=>c.Id" Width="80px">
+                        <TitleTemplate>
+                            <strong>ID</strong>
+                        </TitleTemplate>
+                    </PropertyColumn>
+                    
+                    <PropertyColumn Title="用户" Property="c=>c.UserName" Width="120px">
+                        <TitleTemplate>
+                            <strong><Icon Type="user" /> 用户</strong>
+                        </TitleTemplate>
+                    </PropertyColumn>
+                    
+                    <PropertyColumn Title="应用" Property="c=>c.AppName" Width="150px">
+                        <TitleTemplate>
+                            <strong><Icon Type="appstore" /> 应用</strong>
+                        </TitleTemplate>
+                    </PropertyColumn>
+                    
+                    <PropertyColumn Title="类型" Property="c=>c.SendReveice" Width="100px">
+                        <TitleTemplate>
+                            <strong><Icon Type="swap" /> 类型</strong>
+                        </TitleTemplate>
+                    </PropertyColumn>
+                    
+                    <PropertyColumn Title="消息内容" Property="c=>c.Context" Width="40%">
+                        <TitleTemplate>
+                            <strong><Icon Type="message" /> 消息内容</strong>
+                        </TitleTemplate>
+                    </PropertyColumn>
+                    
+                    <PropertyColumn Title="时间" Property="c=>c.CreateTime" Format="yyyy-MM-dd HH:mm:ss" Width="180px">
+                        <TitleTemplate>
+                            <strong><Icon Type="clock-circle" /> 时间</strong>
+                        </TitleTemplate>
+                    </PropertyColumn>
+                </ColumnDefinitions>
+            </Table>
+        </Body>
+    </Card>
+</div>
+
+<style>
+    .chat-history-container {
+        padding: 24px;
+        min-height: 100vh;
+    }
+
+    .ant-card {
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 20px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+    }
+
+    .header-left .anticon {
+        font-size: 24px;
+        color: #1890ff;
+        margin-right: 12px;
+    }
+
+    .header-left .ant-typography {
+        background: linear-gradient(45deg, #1890ff, #722ed1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+    }
+
+    .ant-input-search-large {
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .ant-table {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .ant-table-thead > tr > th {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        font-weight: 600;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .ant-table-tbody > tr {
+        transition: all 0.3s ease;
+    }
+
+    .ant-table-tbody > tr:hover > td {
+        background: linear-gradient(135deg, #f0f8ff 0%, #e6f7ff 100%);
+    }
+
+    .message-content {
+        max-width: 400px;
+    }
+
+    .message-content .ant-typography {
+        background: #fafafa;
+        padding: 12px;
+        border-radius: 8px;
+        border-left: 4px solid #1890ff;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .time-cell {
+        text-align: center;
+        background: #fafafa;
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #e8e8e8;
+    }
+
+    .time-cell .date {
+        font-size: 13px;
+        color: #595959;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .time-cell .time {
+        font-size: 11px;
+        color: #8c8c8c;
+        font-family: 'Courier New', monospace;
+    }
+
+    .ant-tag {
+        margin: 0;
+        border-radius: 6px;
+        font-weight: 500;
+        padding: 4px 8px;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    /* 响应式设计 */
+    @@media (max-width: 1200px) {
+        .message-content {
+            max-width: 300px;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .chat-history-container {
+            padding: 12px;
+        }
+        
+        .page-header {
+            flex-direction: column;
+            gap: 16px;
+            padding: 16px 0;
+        }
+        
+        .header-left .ant-typography {
+            font-size: 20px;
+        }
+        
+        .header-right {
+            width: 100%;
+        }
+        
+        .header-right .ant-input-search {
+            width: 100% !important;
+        }
+
+        .message-content {
+            max-width: 200px;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .message-content {
+            max-width: 150px;
+        }
+        
+        .time-cell {
+            padding: 4px;
+        }
+        
+        .time-cell .date {
+            font-size: 11px;
+        }
+        
+        .time-cell .time {
+            font-size: 10px;
+        }
+    }
+</style>
 
 @using System.Text.Json;
 @code {
     [Inject] IChats_Repositories _chats_Repositories { get; set; }
 
-    ChatsDto[] chatDtoList;
-
+    ChatsDto[] chatDtoList = Array.Empty<ChatsDto>();
     ITable table;
+    bool _loading = false;
 
     int _pageIndex = 1;
     int _pageSize = 10;
     int _total = 0;
-    string searchString;
+    string searchString = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,58 +271,77 @@
 
     public async Task OnChange(QueryModel<ChatsDto> queryModel)
     {
+        _loading = true;
+        StateHasChanged();
         await InitData();
+        _loading = false;
+        StateHasChanged();
     }
 
     private async Task InitData()
     {
-        if (string.IsNullOrEmpty(searchString))
+        try
         {
-            _total = _chats_Repositories.Count(p => true);
-            var chatList = _chats_Repositories.GetDB().Queryable<Chats, Apps>((c, a) => new object[] {
-            SqlSugar.JoinType.Left,c.AppId==a.Id
-    }).Select((c, a) => new ChatsDto
-        {
-            Id = c.Id,
-            UserName = c.UserName,
-            AppId = c.AppId,
-            IsSend = c.IsSend,
-            SendReveice = c.IsSend ? "发送" : "接收",
-            Context = c.Context,
-            CreateTime = c.CreateTime,
-            AppName = a.Name
-        }).ToPageList(_pageIndex, _pageSize);
-            chatDtoList = chatList.ToArray();
-        }
-        else
-        {
-            _total = _chats_Repositories.Count(p => p.UserName.Contains(searchString) || p.Context.Contains(searchString));
-            var chatList = _chats_Repositories.GetDB().Queryable<Chats, Apps>((c, a) => new object[] {
-            SqlSugar.JoinType.Left,c.AppId==a.Id
-        }).Select((c, a) => new ChatsDto
+            if (string.IsNullOrEmpty(searchString))
             {
-                Id = c.Id,
-                UserName = c.UserName,
-                AppId = c.AppId,
-                IsSend = c.IsSend,
-                SendReveice = c.IsSend ? "发送" : "接收",
-                Context = c.Context,
-                CreateTime = c.CreateTime,
-                AppName = a.Name
-        }).Where(c => c.UserName.Contains(searchString) || c.Context.Contains(searchString)).ToPageList(_pageIndex, _pageSize);
-            chatDtoList = chatList.ToArray();
+                _total = _chats_Repositories.Count(p => true);
+                var chatList = _chats_Repositories.GetDB().Queryable<Chats, Apps>((c, a) => new object[] {
+                    SqlSugar.JoinType.Left, c.AppId == a.Id
+                }).Select((c, a) => new ChatsDto
+                {
+                    Id = c.Id,
+                    UserName = c.UserName,
+                    AppId = c.AppId,
+                    IsSend = c.IsSend,
+                    SendReveice = c.IsSend ? "发送" : "接收",
+                    Context = c.Context,
+                    CreateTime = c.CreateTime,
+                    AppName = a.Name ?? "未知应用"
+                }).OrderByDescending(c => c.CreateTime).ToPageList(_pageIndex, _pageSize);
+                
+                chatDtoList = chatList.ToArray();
+            }
+            else
+            {
+                _total = _chats_Repositories.Count(p => p.UserName.Contains(searchString) || p.Context.Contains(searchString));
+                var chatList = _chats_Repositories.GetDB().Queryable<Chats, Apps>((c, a) => new object[] {
+                    SqlSugar.JoinType.Left, c.AppId == a.Id
+                }).Select((c, a) => new ChatsDto
+                {
+                    Id = c.Id,
+                    UserName = c.UserName,
+                    AppId = c.AppId,
+                    IsSend = c.IsSend,
+                    SendReveice = c.IsSend ? "发送" : "接收",
+                    Context = c.Context,
+                    CreateTime = c.CreateTime,
+                    AppName = a.Name ?? "未知应用"
+                }).Where(c => c.UserName.Contains(searchString) || c.Context.Contains(searchString))
+                .OrderByDescending(c => c.CreateTime).ToPageList(_pageIndex, _pageSize);
+                
+                chatDtoList = chatList.ToArray();
+            }
+        }
+        catch
+        {
+            // 处理异常，可以添加日志记录
+            chatDtoList = Array.Empty<ChatsDto>();
         }
     }
 
     private async Task Search(string searchKey)
     {
+        _pageIndex = 1; // 重置到第一页
+        _loading = true;
+        StateHasChanged();
         await InitData();
+        _loading = false;
+        StateHasChanged();
     }
 
     public class ChatsDto : Chats
     {
-        public string AppName { get; set; }
-        public string SendReveice { get; set; }
+        public string AppName { get; set; } = string.Empty;
+        public string SendReveice { get; set; } = string.Empty;
     }
-
-}
+} 
