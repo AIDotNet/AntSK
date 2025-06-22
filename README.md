@@ -2,6 +2,30 @@
 # AntSK
 ## 使用.Net9 + Blazor+SemanticKernel 打造的AI知识库/智能体
 
+![GitHub stars](https://img.shields.io/github/stars/AIDotNet/AntSK?style=social)
+![GitHub forks](https://img.shields.io/github/forks/AIDotNet/AntSK?style=social)
+![GitHub license](https://img.shields.io/github/license/AIDotNet/AntSK)
+![.NET version](https://img.shields.io/badge/.NET-9.0-blue)
+
+AntSK 是一个基于 .NET 9 和 Blazor 技术栈构建的企业级AI知识库和智能体平台，集成了 Semantic Kernel 和 Kernel Memory，提供完整的AI应用开发解决方案。
+
+## 📋 目录
+
+- [⭐ 核心功能](#核心功能)
+- [🏗️ 技术架构](#技术架构)
+- [🔄 系统工作流程](#系统工作流程)
+- [🛠️ 技术栈](#技术栈)
+- [📁 项目结构](#项目结构)
+- [🚀 特色功能](#特色功能)
+- [⛪ 应用场景](#应用场景)
+- [✏️ 功能示例](#功能示例)
+- [❓ 如何开始](#如何开始)
+- [🔧 开发指南](#开发指南)
+- [📊 性能优化建议](#性能优化建议)
+- [💕 贡献者](#贡献者)
+- [🚨 使用协议](#使用协议)
+- [☎️ 联系我](#联系我)
+
 ## ⭐核心功能
 
 - **语义内核 (Semantic Kernel)**：采用领先的自然语言处理技术，准确理解、处理和响应复杂的语义查询，为用户提供精确的信息检索和推荐服务。
@@ -27,7 +51,210 @@
 - **国产信创**：AntSK支持国产模型，和国产数据库，可以在信创条件下运行
 
 - **模型微调**：规划中，基于llamafactory进行模型微调
-  
+
+## 🏗️ 技术架构
+
+```mermaid
+graph TB
+    subgraph "用户界面层"
+        UI[Blazor前端界面]
+        API[Web API接口]
+    end
+    
+    subgraph "应用服务层"
+        Chat[聊天服务]
+        KMS[知识库服务]
+        Plugin[插件服务]
+        Model[模型管理服务]
+        Auth[认证服务]
+    end
+    
+    subgraph "领域核心层"
+        SK[Semantic Kernel]
+        KM[Kernel Memory]
+        Embedding[向量嵌入]
+        Function[函数调用]
+    end
+    
+    subgraph "基础设施层"
+        DB[(数据库)]
+        Vector[(向量数据库)]
+        File[文件存储]
+        OCR[OCR服务]
+        SD[StableDiffusion]
+    end
+    
+    subgraph "AI模型层"
+        OpenAI[OpenAI]
+        Local[本地模型]
+        LlamaFactory[LlamaFactory]
+        Ollama[Ollama]
+        Spark[讯飞星火]
+    end
+    
+    subgraph "插件系统"
+        NetPlugin[.NET插件]
+        APIPlugin[API插件]
+        FuncPlugin[函数插件]
+    end
+    
+    UI --> Chat
+    UI --> KMS
+    UI --> Plugin
+    UI --> Model
+    API --> Auth
+    
+    Chat --> SK
+    KMS --> KM
+    Plugin --> Function
+    
+    SK --> OpenAI
+    SK --> Local
+    SK --> LlamaFactory
+    SK --> Ollama
+    SK --> Spark
+    
+    KM --> Vector
+    KM --> Embedding
+    
+    Chat --> NetPlugin
+    Chat --> APIPlugin
+    Chat --> FuncPlugin
+    
+    KMS --> DB
+    KMS --> File
+    Model --> DB
+    
+    OCR --> SD
+    
+    style SK fill:#e1f5fe
+    style KM fill:#e8f5e8
+    style UI fill:#fff3e0
+    style API fill:#fff3e0
+```
+
+## 🔄 系统工作流程
+
+```mermaid
+graph TD
+    A[用户输入] --> B{输入类型}
+    
+    B -->|文档上传| C[文档解析]
+    B -->|聊天对话| D[对话处理]
+    B -->|API调用| E[API处理]
+    
+    C --> F[文档分块]
+    F --> G[向量化处理]
+    G --> H[存储到知识库]
+    
+    D --> I{是否需要知识库}
+    I -->|是| J[知识库检索]
+    I -->|否| K[直接调用LLM]
+    
+    J --> L[向量搜索]
+    L --> M[相关性排序]
+    M --> N[构建Prompt]
+    
+    K --> O[LLM推理]
+    N --> O
+    
+    O --> P{是否需要插件}
+    P -->|是| Q[插件调用]
+    P -->|否| R[生成回复]
+    
+    Q --> S[执行函数]
+    S --> T[合并结果]
+    T --> R
+    
+    E --> U[权限验证]
+    U --> V[业务逻辑]
+    V --> W[返回结果]
+    
+    R --> X[用户界面展示]
+    W --> X
+    
+    style A fill:#e1f5fe
+    style O fill:#e8f5e8
+    style H fill:#fff3e0
+    style X fill:#f3e5f5
+```
+
+## 🛠️ 技术栈
+
+### 后端技术
+- **.NET 9**: 最新的 .NET 框架，提供高性能和现代化开发体验
+- **Blazor Server**: 基于服务器端渲染的现代Web UI框架
+- **Semantic Kernel**: 微软开源的AI编排框架
+- **Kernel Memory**: 知识库和向量存储管理
+- **SqlSugar**: 高性能 ORM 框架，支持多种数据库
+- **AutoMapper**: 对象映射框架
+
+### AI & ML 技术
+- **OpenAI GPT**: 支持 GPT-3.5/GPT-4 系列模型
+- **Azure OpenAI**: 企业级 OpenAI 服务
+- **讯飞星火**: 科大讯飞大语言模型
+- **阿里云积**: 阿里云大语言模型
+- **LlamaFactory**: 本地模型微调和推理
+- **Ollama**: 本地模型运行环境
+- **Stable Diffusion**: 文生图模型
+- **BGE Embedding**: 中文向量嵌入模型
+- **BGE Rerank**: 重排序模型
+
+### 存储技术
+- **PostgreSQL**: 主数据库存储
+- **SQLite**: 轻量级数据库支持
+- **Qdrant**: 向量数据库
+- **Redis**: 缓存和向量存储
+- **Disk/Memory**: 本地存储方案
+
+### 前端技术
+- **Ant Design Blazor**: 企业级UI组件库
+- **Chart.js**: 数据可视化
+- **Prism.js**: 代码高亮
+
+## 📁 项目结构
+
+```
+AntSK/
+├── src/
+│   ├── AntSK/                          # 主应用（Blazor Server）
+│   │   ├── Components/                 # 自定义组件
+│   │   ├── Controllers/                # Web API控制器
+│   │   ├── Pages/                      # Blazor页面
+│   │   │   ├── ChatPage/              # 聊天相关页面
+│   │   │   ├── KmsPage/               # 知识库管理页面
+│   │   │   ├── Plugin/                # 插件管理页面
+│   │   │   ├── Setting/               # 系统设置页面
+│   │   │   └── User/                  # 用户管理页面
+│   │   ├── Services/                  # 应用服务
+│   │   └── wwwroot/                   # 静态资源
+│   ├── AntSK.Domain/                  # 领域层
+│   │   ├── Domain/                    # 领域模型和接口
+│   │   ├── Repositories/              # 数据仓储
+│   │   ├── Services/                  # 领域服务
+│   │   └── Common/                    # 通用组件
+│   ├── AntSK.LLM/                     # LLM集成层
+│   │   ├── SparkDesk/                 # 讯飞星火集成
+│   │   ├── StableDiffusion/           # SD文生图集成
+│   │   └── Mock/                      # 模拟服务
+│   ├── AntSK.LLamaFactory/            # LlamaFactory集成
+│   ├── AntSK.OCR/                     # OCR服务
+│   ├── AntSK.BackgroundTask/          # 后台任务处理
+│   └── AntSK.ServiceDefaults/         # 服务默认配置
+├── docs/                              # 文档
+└── docker-compose.yml                 # Docker部署文件
+```
+
+### 核心模块说明
+
+| 模块 | 功能描述 |
+|------|---------|
+| **AntSK** | 主应用程序，包含Blazor UI和Web API |
+| **AntSK.Domain** | 领域层，包含业务逻辑、数据模型和仓储接口 |
+| **AntSK.LLM** | 大语言模型集成层，支持多种AI模型 |
+| **AntSK.LLamaFactory** | LlamaFactory集成，支持本地模型微调和推理 |
+| **AntSK.OCR** | 光学字符识别服务 |
+| **AntSK.BackgroundTask** | 后台任务处理，如知识库导入 |
 
 ## ⛪应用场景
 
@@ -63,9 +290,59 @@ AntSK 适用于多种业务场景，例如：
 
 [在线文档：http://antsk.cn](http://antsk.cn)
 
+## 🚀 特色功能
+
+### 🤖 多模型支持
+- **云端模型**: OpenAI GPT、Azure OpenAI、讯飞星火、阿里云积灵等
+- **本地模型**: 支持 Ollama 和Llamafactory运行离线模型
+- **LlamaFactory**: 支持主流开源模型的微调和推理
+- **Ollama**: 本地模型管理和运行
+- **一键切换**: 支持在不同模型间无缝切换
+
+### 📚 智能知识库
+- **多格式支持**: Word、PDF、Excel、TXT、Markdown、JSON、PPT
+- **向量化存储**: BGE-embedding 中文优化向量模型
+- **智能检索**: BGE-rerank 重排序提升检索精度
+- **实时同步**: 知识库内容实时更新和同步
+
+### 🔌 开放插件系统
+- **.NET 插件**: 支持 DLL 格式的原生插件
+- **API 插件**: 通过 HTTP API 集成外部服务
+- **函数插件**: 基于 Semantic Kernel 的函数调用
+- **热插拔**: 插件动态加载，无需重启系统
+
+### 🎨 文生图能力
+- **Stable Diffusion**: 集成本地 SD 模型
+- **多种后端**: 支持 CPU、CUDA、ROCm 等不同计算后端
+- **参数调节**: 丰富的生成参数配置
+- **批量生成**: 支持批量图片生成
+
+### 🔍 OCR 文字识别
+- **图片转文字**: 支持多种图片格式的文字提取
+- **多语言支持**: 中英文等多语言识别
+- **高精度**: 优化的 OCR 引擎，识别准确率高
+
 ## ❓如何开始？
 
-在这里我使用的是Postgres 作为数据存储和向量存储，因为Semantic Kernel和Kernel Memory都支持他，当然你也可以换成其他的。
+### 🛠️ 环境要求
+- **.NET 9 SDK**: [下载地址](https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0)
+- **Docker** (可选): 用于容器化部署
+- **Python 3.8+** (可选): 使用 LlamaFactory 时需要
+
+### 💾 数据库支持
+AntSK 支持多种数据库，通过 SqlSugar ORM 实现：
+- **PostgreSQL** (推荐): 同时支持关系型数据和向量存储
+- **SQLite**: 轻量级，适合开发和测试
+- **MySQL**: 广泛使用的开源数据库
+- **SQL Server**: 微软企业级数据库
+- **Oracle**: 企业级数据库解决方案
+
+### 🔧 向量数据库选择
+- **PostgreSQL**: 使用 pgvector 扩展
+- **Qdrant**: 专业向量数据库
+- **Redis**: 内存向量存储
+- **Disk**: 本地文件存储
+- **Memory**: 内存存储 (不持久化)
 
 模型默认支持openai、azure openai、讯飞星火、阿里云积、 和llama支持的gguf本地模型 以及llamafactory的本地模型,如果需要使用其他模型，可以使用one-api进行集成。
 
@@ -198,6 +475,74 @@ dotnet AntSK.dll
 
 DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是自动创建的
 
+## 🔧 开发指南
+
+### 本地开发环境搭建
+
+1. **克隆项目**
+```bash
+git clone https://github.com/AIDotNet/AntSK.git
+cd AntSK
+```
+
+2. **安装依赖**
+```bash
+# 确保已安装 .NET 9 SDK
+dotnet restore
+```
+
+3. **配置数据库**
+- 修改 `src/AntSK/appsettings.json` 中的数据库连接字符串
+- 首次运行会自动创建数据库表结构 (CodeFirst 模式)
+
+4. **启动项目**
+```bash
+cd src/AntSK
+dotnet run
+```
+访问 `https://localhost:5001` 或 `http://localhost:5000`
+
+### 插件开发
+
+#### .NET 插件开发
+```csharp
+[AntSKFunction("插件描述")]
+public class MyPlugin
+{
+    [AntSKFunction("函数描述")]
+    public async Task<string> MyFunction(string input)
+    {
+        // 您的业务逻辑
+        return "处理结果";
+    }
+}
+```
+
+#### API 插件开发
+创建符合 OpenAPI 规范的 HTTP 接口，AntSK 会自动解析并集成。
+
+### 自定义模型集成
+
+1. **实现 IChatCompletion 接口**
+```csharp
+public class CustomChatCompletion : IChatCompletion
+{
+    public async Task<IReadOnlyList<ChatMessage>> GetChatMessageContentsAsync(
+        ChatHistory chatHistory, 
+        PromptExecutionSettings? executionSettings = null, 
+        Kernel? kernel = null, 
+        CancellationToken cancellationToken = default)
+    {
+        // 实现您的模型调用逻辑
+    }
+}
+```
+
+2. **注册服务**
+```csharp
+services.AddSingleton<IChatCompletion, CustomChatCompletion>();
+```
+
 ## ✔️使用llamafactory
 ```
 1、首先需要确保你的环境已经安装了python和pip，如果使用镜像，例如p0.2.4版本已经包含了 python全套环境则无需此步骤
@@ -209,6 +554,23 @@ DB我使用的是CodeFirst模式，只要配置好数据库链接，表结构是
 7、点击保存，然后就可以开始聊天了
 8、很多人会问 LLamaSharp与llamafactory有什么区别？其实这两者LLamaSharp是llama.cpp的 dotnet实现，但是只支持本地gguf模型，  而llamafactory 支持的模型种类更多，但使用的是python的实现，其主要差异在这里，另外llamafactory具有模型微调的能力，这也是我们下一步需要重点集成的部分。
 ```
+
+## 📊 性能优化建议
+
+### 硬件配置推荐
+
+| 用途 | CPU | 内存 | 存储 | GPU |
+|------|-----|------|------|-----|
+| 开发测试 | 4核+ | 8GB+ | SSD 50GB+ | 可选 |
+| 小型部署 | 8核+ | 16GB+ | SSD 100GB+ | 可选 |
+| 生产环境 | 16核+ | 32GB+ | SSD 500GB+ | RTX 3080+ |
+| 大规模部署 | 32核+ | 64GB+ | SSD 1TB+ | RTX 4090+ |
+
+### 性能调优
+- **数据库连接池**: 根据并发量调整连接池大小
+- **向量维度**: 根据精度需求选择合适的向量维度
+- **缓存策略**: 合理使用 Redis 缓存热点数据
+- **模型选择**: 根据场景选择合适的模型大小
 ﻿
 ## 💕 贡献者
 
