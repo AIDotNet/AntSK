@@ -611,5 +611,3 @@ services.AddSingleton<IChatCompletion, CustomChatCompletion>();
 如有任何问题或建议，请通过以下方式关注我的公众号《许泽宇的技术分享》，发消息与我联系，我们也有AIDotnet交流群，可以发送进群等消息，然后我会拉你进交流群
 
 另外您也可以通过邮箱与我联系：antskpro@qq.com
-
-![公众号](https://github.com/AIDotNet/AntSK/blob/main/images/gzh.jpg)
