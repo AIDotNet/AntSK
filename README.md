@@ -603,9 +603,6 @@ services.AddSingleton<IChatCompletion, CustomChatCompletion>();
 
 3. 满足以上要求
 
-## 💕 特别感谢
-助力企业级AI应用开发，推荐使用 [AntBlazor](https://antblazor.com)
-
 
 ## ☎️联系我
 如有任何问题或建议，请通过以下方式关注我的公众号《许泽宇的技术分享》，发消息与我联系，我们也有AIDotnet交流群，可以发送进群等消息，然后我会拉你进交流群
