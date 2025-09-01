@@ -11,7 +11,7 @@
     {
         <PageHeader Class="site-page-header" Title="@app.Name" Subtitle="@app.Describe" />
     }
-    <div id="scrollDiv" style="flex:1; width:100%; overflow-y:auto; overflow-x:hidden;padding:10px;">
+    <div id="scrollDiv" style="flex:1; width:100%; overflow-y:auto; overflow-x:hidden; padding:16px;">
         <Virtualize Items="@(MessageList.OrderBy(o => o.CreateTime).ToList())" Context="item">
             @if (item.IsSend)
             {
@@ -27,15 +27,16 @@
                                                 <Upload DefaultFileList="[new(){ FileName= item.FileName }]" />
                                             </p>
                                         }
-                                        <p>@(item.Context)</p>
+                                        <p class="bubble-text">@(item.Context)</p>
                                     </Flex>
                                 </Unbound>
                             </Popover>
                         </div>
+                        <div class="message-meta meta-right">@item.CreateTime.ToString("HH:mm")</div>
                         <Icon Style="float:right;margin-top:10px;" Type="copy" Theme="outline" OnClick="async () =>await OnCopyAsync(item)" />
                     </GridCol>
                     <GridCol Span="1">
-                        <Image Width="25px" Height="25px" Style="margin-top:10px;" Src="./assets/KDpgvguMpGfqaHPjicRK.svg" />
+                        <Image Class="avatar" Width="28px" Height="28px" Src="./assets/KDpgvguMpGfqaHPjicRK.svg" />
                     </GridCol>
                 </GridRow>
             }
@@ -43,13 +44,13 @@
             {
                 <GridRow>
                     <GridCol Span="1">
-                        <Image Width="25px" Height="25px" Style="margin-top:10px;" Src="./assets/method-draw-image.svg" />
+                        <Image Class="avatar" Width="28px" Height="28px" Style="margin-top:10px;" Src="./assets/method-draw-image.svg" />
                     </GridCol>
                     <GridCol Span="23">
                         <div class="chat-bubble received">
                             @((MarkupString)(item.Context))
                         </div>
-
+                        <div class="message-meta meta-left">@item.CreateTime.ToString("HH:mm")</div>
                     </GridCol>
                 </GridRow>
             }
@@ -62,8 +63,7 @@
             <Upload DefaultFileList="fileList" OnRemove="HandleFileRemove" />
         </Flex>
     }
-    <Flex Justify="end">
-
+    <Flex Class="input-bar" Justify="end">
         <AntDesign.Input @bind-Value="@(_messageInput)" DebounceMilliseconds="@(-1)" Placeholder="输入消息回车发送" OnPressEnter="@(async () => await OnSendAsync())" Disabled="@Sendding"></AntDesign.Input>
         @if (app.EmbeddingModelID != null)
         {
@@ -77,55 +77,123 @@
             </Upload>
         }
         <Button Icon="clear" Type="@(ButtonType.Link)" OnClick="@(async () => await OnClearAsync())" Disabled="@Sendding"></Button>
-        <Button Icon="send" Type="@(ButtonType.Link)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
+        <Button Icon="send" Type="@(ButtonType.Primary)" OnClick="@(async () => await OnSendAsync())" Disabled="@Sendding"></Button>
     </Flex>
 </div>
 
 <style>
-
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        justify-content: center;
-        align-items: flex-start;
-        height: 100vh;
+    :root {
+        --bg-start: #f7f9fc;
+        --bg-end: #eef2f7;
+        --bubble-recv: #ffffff;
+        --bubble-sent: #daf8cb;
+        --bubble-border: rgba(0,0,0,0.06);
+        --text-secondary: #8a8f98;
     }
 
-    .chat-container {
-        width: 350px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        overflow: hidden;
+    #chat {
         display: flex;
         flex-direction: column;
-        background-color: #fff;
-        padding-bottom: 15px;
+        gap: 8px;
+        height: 100%;
+        min-height: 65vh;
+        background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
+        border-radius: 8px;
+        padding: 8px 8px 0 8px;
+        box-sizing: border-box;
     }
+
+    #scrollDiv {
+        background: transparent;
+        border-radius: 8px;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+    }
+    /* custom scrollbar */
+    #scrollDiv::-webkit-scrollbar { height: 8px; width: 8px; }
+    #scrollDiv::-webkit-scrollbar-thumb { background: #c7cbd1; border-radius: 8px; }
+    #scrollDiv::-webkit-scrollbar-track { background: transparent; }
 
     .chat-bubble {
-        padding: 10px;
-        margin: 10px;
-        margin-bottom: 0;
-        border-radius: 5px;
-        max-width: 70%;
+        padding: 12px 14px;
+        margin: 6px 10px;
+        border-radius: 14px;
+        max-width: 78%;
         position: relative;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        border: 1px solid var(--bubble-border);
+        word-break: break-word;
+        line-height: 1.6;
+        animation: pop .18s ease-out;
     }
 
+    .chat-bubble .bubble-text { margin: 0; white-space: pre-wrap; }
+
     .received {
-        background-color: #f0f0f0;
+        background-color: var(--bubble-recv);
         align-self: flex-start;
         float: left;
     }
 
     .sent {
-        background-color: #daf8cb;
+        background-color: var(--bubble-sent);
         align-self: flex-end;
         float: right;
     }
 
-    .ant-card-body {
-        height: 90% !important;
+    /* bubble tails */
+    .chat-bubble.received::after {
+        content: "";
+        position: absolute; left: -6px; bottom: 10px;
+        width: 10px; height: 10px; background: var(--bubble-recv);
+        border-left: 1px solid var(--bubble-border);
+        border-bottom: 1px solid var(--bubble-border);
+        transform: rotate(45deg);
+        border-bottom-left-radius: 2px;
     }
+    .chat-bubble.sent::after {
+        content: "";
+        position: absolute; right: -6px; bottom: 10px;
+        width: 10px; height: 10px; background: var(--bubble-sent);
+        border-right: 1px solid var(--bubble-border);
+        border-bottom: 1px solid var(--bubble-border);
+        transform: rotate(45deg);
+        border-bottom-right-radius: 2px;
+    }
+
+    .message-meta {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin: 2px 12px 4px;
+        clear: both;
+    }
+    @@keyframes pop {
+        from { transform: translateY(4px); opacity: .65; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    .meta-right { text-align: right; }
+    .meta-left { text-align: left; }
+
+    .avatar { border-radius: 50%; box-shadow: 0 0 0 1px #e6e8eb inset; }
+
+    .input-bar {
+        gap: 8px;
+        padding: 8px 8px 12px;
+        border-top: 1px solid #e6e8eb;
+        background: rgba(255,255,255,0.6);
+        backdrop-filter: blur(4px);
+        position: sticky;
+        bottom: 0;
+    }
+
+    /* markdown & code inside bubbles */
+    .chat-bubble pre { background:#0b1021; color:#e6e6e6; padding:12px; border-radius:10px; overflow:auto; }
+    .chat-bubble code { background: rgba(27,31,35,0.06); padding: .15rem .35rem; border-radius: 6px; }
+    .chat-bubble pre code { background: transparent; padding: 0; }
+    .chat-bubble table { width: 100%; border-collapse: collapse; }
+    .chat-bubble table td, .chat-bubble table th { border: 1px solid #e6e8eb; padding: 6px 8px; }
+
+    .ant-card-body { height: 90% !important; }
 
     .think {
         color: gray;
@@ -137,6 +205,8 @@
         padding-left: 8px;
         border-left: 2px solid #7F7FFF;
     }
+
+    .message-file { margin: 0 0 6px 0; }
 </style>
 
 @code {
