@@ -25,6 +25,7 @@
                         EnterButton="true"
                         Size="@InputSize.Large"
                         style="width: 300px;" />
+                    <span class="total-text">共 @_total 条</span>
                 </div>
             </div>
         </TitleTemplate>
@@ -47,7 +48,7 @@
                         </TitleTemplate>
                     </PropertyColumn>
                     
-                    <PropertyColumn Title="用户" Property="c=>c.UserName" Width="120px">
+                    <PropertyColumn Title="用户" Property="c=>c.UserName" Width="160px">
                         <TitleTemplate>
                             <strong><Icon Type="user" /> 用户</strong>
                         </TitleTemplate>
@@ -59,7 +60,7 @@
                         </TitleTemplate>
                     </PropertyColumn>
                     
-                    <PropertyColumn Title="类型" Property="c=>c.SendReveice" Width="100px">
+                    <PropertyColumn Title="类型" Property="c=>c.SendReveice" Width="120px">
                         <TitleTemplate>
                             <strong><Icon Type="swap" /> 类型</strong>
                         </TitleTemplate>
@@ -71,7 +72,7 @@
                         </TitleTemplate>
                     </PropertyColumn>
                     
-                    <PropertyColumn Title="时间" Property="c=>c.CreateTime" Format="yyyy-MM-dd HH:mm:ss" Width="180px">
+                    <PropertyColumn Title="时间" Property="c=>c.CreateTime" Format="yyyy-MM-dd HH:mm:ss" Width="200px">
                         <TitleTemplate>
                             <strong><Icon Type="clock-circle" /> 时间</strong>
                         </TitleTemplate>
@@ -89,17 +90,17 @@
     }
 
     .ant-card {
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .page-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
-        padding: 20px 0;
+        margin-bottom: 8px;
+        padding: 12px 0 16px 0;
         border-bottom: 1px solid #f0f0f0;
     }
 
@@ -109,8 +110,8 @@
     }
 
     .header-left .anticon {
-        font-size: 24px;
-        color: #1890ff;
+        font-size: 26px;
+        color: #1677ff;
         margin-right: 12px;
     }
 
@@ -125,21 +126,35 @@
         align-items: center;
     }
 
+    .total-text {
+        margin-left: 12px;
+        color: rgba(0,0,0,.45);
+        font-size: 12px;
+    }
+
     .ant-input-search-large {
-        border-radius: 6px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(22, 119, 255, 0.12);
         transition: all 0.3s ease;
     }
 
+    .ant-input-affix-wrapper-focused {
+        box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.12);
+        border-color: #1677ff !important;
+    }
+
     .ant-table {
-        border-radius: 6px;
+        border-radius: 8px;
         overflow: hidden;
+        background: #fff;
     }
 
     .ant-table-thead > tr > th {
         background-color: #fafafa;
         font-weight: 600;
         border-bottom: 1px solid #f0f0f0;
+        color: rgba(0,0,0,.85);
+        letter-spacing: .2px;
     }
 
     .ant-table-tbody > tr {
@@ -150,24 +165,64 @@
         background-color: #f5f5f5;
     }
 
+    .ant-table-tbody > tr > td {
+        padding: 12px 16px;
+        vertical-align: top;
+    }
+
     .message-content {
-        max-width: 400px;
+        max-width: 600px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        white-space: normal;
     }
 
     .message-content .ant-typography {
-        background: #fafafa;
-        padding: 12px;
-        border-radius: 6px;
-        border-left: 4px solid #1890ff;
         margin: 0;
         line-height: 1.6;
     }
 
+    .bubble {
+        background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid #f0f0f0;
+        position: relative;
+    }
+
+    .bubble::before {
+        content: '';
+        position: absolute;
+        left: -6px;
+        top: 14px;
+        width: 0;
+        height: 0;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        border-right: 6px solid #f0f0f0;
+    }
+
+    .bubble::after {
+        content: '';
+        position: absolute;
+        left: -5px;
+        top: 14px;
+        width: 0;
+        height: 0;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        border-right: 6px solid #fff;
+    }
+
     .time-cell {
-        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         background: #fafafa;
-        padding: 8px;
-        border-radius: 6px;
+        padding: 6px 10px;
+        border-radius: 8px;
         border: 1px solid #e8e8e8;
     }
 
@@ -184,19 +239,63 @@
         font-family: 'Courier New', monospace;
     }
 
+    .time-text {
+        font-size: 12px;
+        color: #595959;
+        letter-spacing: 0.2px;
+    }
+
     .ant-tag {
         margin: 0;
-        border-radius: 4px;
+        border-radius: 6px;
         font-weight: 500;
-        padding: 4px 8px;
+        padding: 4px 10px;
         border: 1px solid rgba(0, 0, 0, 0.06);
         transition: all 0.3s ease;
+    }
+
+    .type-tag {
+        box-shadow: 0 2px 6px rgba(0,0,0,.06);
+    }
+
+    .app-tag {
+        background: #f0f5ff;
+        color: #2f54eb;
+        border-color: #adc6ff;
+    }
+
+    .user-cell {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .user-name {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .avatar-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #e6f4ff;
+        color: #1677ff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        box-sizing: border-box;
     }
 
     /* 响应式设计 */
     @@media (max-width: 1200px) {
         .message-content {
-            max-width: 300px;
+            max-width: 420px;
         }
     }
 
@@ -224,13 +323,15 @@
         }
 
         .message-content {
-            max-width: 200px;
+            max-width: 100%;
         }
+
+        .user-name { max-width: 160px; }
     }
 
     @@media (max-width: 480px) {
         .message-content {
-            max-width: 150px;
+            max-width: 100%;
         }
         
         .time-cell {
@@ -244,15 +345,17 @@
         .time-cell .time {
             font-size: 10px;
         }
+
+        .user-name { max-width: 120px; }
     }
 </style>
 
 @using System.Text.Json;
 @code {
-    [Inject] IChats_Repositories _chats_Repositories { get; set; }
+    [Inject] IChats_Repositories _chats_Repositories { get; set; } = default!;
 
     ChatsDto[] chatDtoList = Array.Empty<ChatsDto>();
-    ITable table;
+    ITable? table;
     bool _loading = false;
 
     int _pageIndex = 1;
@@ -274,7 +377,7 @@
         StateHasChanged();
     }
 
-    private async Task InitData()
+    private Task InitData()
     {
         try
         {
@@ -323,6 +426,7 @@
             // 处理异常，可以添加日志记录
             chatDtoList = Array.Empty<ChatsDto>();
         }
+        return Task.CompletedTask;
     }
 
     private async Task Search(string searchKey)
