@@ -3,7 +3,6 @@
 @using AntSK.Domain.Domain.Model.Enum
 @using AntSK.Domain.Domain.Model.Fun
 @page "/plugins/funlist"
-@inject NavigationManager NavigationManager
 @using AntSK.Services.Auth
 @inherits AuthComponentBase
 
@@ -26,16 +25,20 @@
                 <ListItem NoFlex>
                     @if (string.IsNullOrEmpty(context.Name))
                     {
-                        <Button Type="dashed" class="newButton" @onclick="AddFun">
-                            <Icon Type="plus" Theme="outline" /> 创建函数
-                        </Button>
-                        <Button Type="dashed" class="newButton" @onclick="ClearFun">
-                            <Icon Type="clear" Theme="outline" /> 清空导入函数
-                        </Button>
+                        <Card Hoverable Bordered Class="card" Style="height:160px; display:flex; align-items:center; justify-content:center;">
+                            <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+                                <Button Type="dashed" class="newButton" @onclick="AddFun">
+                                    <Icon Type="plus" Theme="outline" /> 创建函数
+                                </Button>
+                                <Button Type="dashed" class="newButton" @onclick="ClearFun">
+                                    <Icon Type="clear" Theme="outline" /> 清空导入函数
+                                </Button>
+                            </div>
+                        </Card>
                     }
                     else
                     {
-                        <Card Hoverable Bordered Class="card"  Style="max-height:247px;">
+                        <Card Hoverable Bordered Class="card" Style="height:160px; overflow:hidden;">
                              <CardMeta>
                                  <AvatarTemplate>
 
@@ -44,10 +47,29 @@
                                      <a>@context.Name</a>
                                 </TitleTemplate>
                                 <DescriptionTemplate>
-                                    <Paragraph class="item" Ellipsis>
+                                    <Paragraph class="item" Ellipsis Style="margin-bottom:8px;">
                                      <!--todo: Ellipsis not working-->
                                      @context.Description
                                     </Paragraph>
+                                    @if (context.Parameters?.Count > 0)
+                                    {
+                                        <div style="margin-top:8px; max-height:140px; overflow:auto; padding-right:4px;">
+                                            <span style="font-weight:600;">参数：</span>
+                                            <ul style="margin: 6px 0 0 18px; padding:0;">
+                                                @foreach (var p in context.Parameters)
+                                                {
+                                                    <li style="list-style: disc;">
+                                                        <span style="color:#3b3b3b">@p.Name</span>
+                                                        <span style="color:#999"> (@p.Type)</span>
+                                                        @if (!string.IsNullOrWhiteSpace(p.Description))
+                                                        {
+                                                            <span style="color:#666"> - @p.Description</span>
+                                                        }
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
                                 </DescriptionTemplate>
                             </CardMeta>
                         </Card>

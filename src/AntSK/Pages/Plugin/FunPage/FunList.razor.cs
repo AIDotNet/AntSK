@@ -17,18 +17,18 @@ namespace AntSK.Pages.FunPage
     {
         private FunDto[] _data = { };
 
-        [Inject]
-        FunctionService _functionService { get; set; }
-        [Inject]
-        IServiceProvider _serviceProvider { get; set; }
-        [Inject]
-        IConfirmService _confirmService { get; set; }
-        [Inject]
-        IFuns_Repositories _funs_Repositories { get; set; }
+    [Inject]
+    FunctionService _functionService { get; set; } = default!;
+    [Inject]
+    IServiceProvider _serviceProvider { get; set; } = default!;
+    [Inject]
+    IConfirmService _confirmService { get; set; } = default!;
+    [Inject]
+    IFuns_Repositories _funs_Repositories { get; set; } = default!;
 
         [Inject]
         protected MessageService? _message { get; set; }
-        [Inject] protected ILogger<FunDto> _logger { get; set; }
+    [Inject] protected ILogger<FunDto> _logger { get; set; } = default!;
 
         bool _fileVisible = false;
         bool _fileConfirmLoading = false;
@@ -56,7 +56,19 @@ namespace AntSK.Pages.FunPage
             foreach (var func in funList)
             {
                 var methodInfo = _functionService.MethodInfos[func.Key];
-                list.Add(new FunDto() { Name = func.Key, Description = methodInfo.Description });
+                    var paramDtos = methodInfo.Parameters?.Select(p => new FunParameterDto
+                    {
+                        Name = p.ParameterName ?? string.Empty,
+                        Type = (p.ParameterType?.IsClass ?? false) ? "object" : (p.ParameterType?.Name ?? "string"),
+                        Description = p.Description ?? string.Empty
+                    }).ToList() ?? new List<FunParameterDto>();
+
+                    list.Add(new FunDto()
+                    {
+                        Name = func.Key,
+                        Description = methodInfo.Description,
+                        Parameters = paramDtos
+                    });
             }
             _data = list.ToArray();
             await InvokeAsync(StateHasChanged);
@@ -72,9 +84,7 @@ namespace AntSK.Pages.FunPage
             await InitData(searchKey);
         }
 
-        private async Task AddFun() {
-            _fileVisible = true;
-        }
+    private Task AddFun() { _fileVisible = true; return Task.CompletedTask; }
         private async Task ClearFun()
         {
             var content = "清空自定义函数将会删除全部导入函数，并且需要程序重启后下次生效，如不是DLL冲突等原因不建议清空，是否要清空？";
@@ -97,7 +107,10 @@ namespace AntSK.Pages.FunPage
                     _funs_Repositories.Insert(new Funs() { Id = Guid.NewGuid().ToString(), Path = file.FilePath });
                     _functionService.FuncLoad(file.FilePath);
                 }
-                _message.Info("上传成功");
+                if (_message is not null)
+                {
+                    await _message.Info("上传成功");
+                }
                 await InitData("");
                 _fileVisible = false;
             }
@@ -119,12 +132,12 @@ namespace AntSK.Pages.FunPage
         {
             if (file.Ext != ".dll")
             {
-                _message.Error("请上传dll文件!");
+                _message?.Error("请上传dll文件!");
             }
             var IsLt500K = file.Size < 1024 * 1024 * 100;
             if (!IsLt500K)
             {
-                _message.Error("文件需不大于100MB!");
+                _message?.Error("文件需不大于100MB!");
             }
 
             return  IsLt500K;
