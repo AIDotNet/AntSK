@@ -242,8 +242,9 @@
     .chat-bubble.sent::after {
         content: "";
         position: absolute;
-        bottom: 16px;
-        width: 16px;
+        top: 16px;
+        bottom: auto;
+        width: 18px;
         height: 18px;
         transform: none;
         border-radius: 0;
@@ -252,15 +253,15 @@
     }
 
     .chat-bubble.received::after {
-        left: -12px;
+        left: -14px;
         background: var(--bubble-recv);
-        clip-path: polygon(100% 0, 0 50%, 100% 100%);
+        clip-path: polygon(100% 0, 0 0, 100% 100%);
     }
 
     .chat-bubble.sent::after {
-        right: -12px;
+        right: -14px;
         background: var(--bubble-sent);
-        clip-path: polygon(0 0, 100% 50%, 0 100%);
+        clip-path: polygon(0 0, 100% 0, 0 100%);
     }
 
     .message-meta {
