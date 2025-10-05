@@ -11,7 +11,7 @@
     {
         <PageHeader Class="site-page-header" Title="@app.Name" Subtitle="@app.Describe" />
     }
-    <div id="scrollDiv" style="flex:1; width:100%; overflow-y:auto; overflow-x:hidden; padding:16px;">
+    <div id="scrollDiv" class="chat-scroll">
         <Virtualize Items="@(MessageList.OrderBy(o => o.CreateTime).ToList())" Context="item">
             @if (item.IsSend)
             {
@@ -100,7 +100,6 @@
         --primary-color: var(--ant-primary-color, #1677ff);
         --primary-soft: rgba(22, 119, 255, 0.12);
         --bubble-recv: #ffffff;
-    --bubble-sent: #dce8ff;
         --bubble-border-sent: rgba(22, 119, 255, 0.25);
         --text-primary: #1f2329;
         --text-secondary: #7a808a;
@@ -113,32 +112,66 @@
     }
 
     #chat {
+        position: relative;
+        isolation: isolate;
+        z-index: 0;
         display: flex;
         flex-direction: column;
         gap: 8px;
+        flex: 1;
         height: 100%;
-        min-height: 65vh;
+        width: 100%;
+        min-height: min(65vh, 100%);
+        max-height: 100%;
         background: var(--surface-base);
-        border-radius: 16px;
+        border-radius: 16px 16px 16px 16px;
         padding: 12px 12px 0 12px;
         box-sizing: border-box;
         border: 1px solid var(--border-subtle);
-        box-shadow: var(--shadow-soft);
-        overflow: hidden;
     }
 
-    #scrollDiv {
+    #chat::after {
+        content: "";
+        position: absolute;
+        left: 32px;
+        right: 32px;
+        bottom: -18px;
+        height: 40px;
+        background: rgba(15, 23, 42, 0.22);
+        filter: blur(24px);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .chat-scroll {
+        flex: 1;
+        width: 100%;
+        min-height: 0;
+        max-height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 12px 16px 20px;
         background: var(--surface-base);
-        border-radius: 12px;
+        border-radius: 16px;
         box-sizing: border-box;
         scroll-behavior: smooth;
-        padding: 6px 8px 18px;
+        scrollbar-gutter: stable both-edges;
     }
 
-    /* custom scrollbar */
-    #scrollDiv::-webkit-scrollbar { height: 8px; width: 8px; }
-    #scrollDiv::-webkit-scrollbar-thumb { background: rgba(22, 119, 255, 0.22); border-radius: 8px; }
-    #scrollDiv::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.03); }
+    .chat-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .chat-scroll::-webkit-scrollbar-thumb {
+        background: rgba(22, 119, 255, 0.24);
+        border-radius: 8px;
+    }
+
+    .chat-scroll::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.05);
+        border-radius: 8px;
+    }
 
     .message-row {
         margin-bottom: 4px;
@@ -281,7 +314,7 @@
         background: var(--surface-base);
         position: sticky;
         bottom: 0;
-        box-shadow: none;
+        box-shadow: 0 -12px 24px rgba(15, 23, 42, 0.06);
         border-radius: 16px;
     }
 
@@ -391,9 +424,14 @@
 
         #chat {
             background: var(--surface-elevated);
+            box-shadow: 0 28px 48px -24px rgba(0, 0, 0, 0.68);
         }
 
-        #scrollDiv {
+        #chat::after {
+            background: rgba(15, 23, 42, 0.55);
+        }
+
+        .chat-scroll {
             background: transparent;
         }
 
