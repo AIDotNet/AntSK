@@ -60,6 +60,11 @@
         "key": "setting.user"
       },
       {
+        "path": "/setting/rolelist",
+        "name": "角色管理",
+        "key": "setting.role"
+      },
+      {
         "path": "/setting/chathistory",
         "name": "聊天记录",
         "key": "setting.chathistory"

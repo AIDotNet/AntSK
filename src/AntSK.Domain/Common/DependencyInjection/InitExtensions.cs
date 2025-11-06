@@ -136,6 +136,7 @@ namespace AntSK.Domain.Common.DependencyInjection
                 new Permissions { Id = Guid.NewGuid().ToString(), Name = "函数管理", Code = "plugins.funlist", Type = "Menu", Description = "函数管理权限" },
                 new Permissions { Id = Guid.NewGuid().ToString(), Name = "模型管理", Code = "modelmanager.modellist", Type = "Menu", Description = "模型管理权限" },
                 new Permissions { Id = Guid.NewGuid().ToString(), Name = "用户管理", Code = "setting.user", Type = "Menu", Description = "用户管理权限" },
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "角色管理", Code = "setting.role", Type = "Menu", Description = "角色管理权限" },
                 new Permissions { Id = Guid.NewGuid().ToString(), Name = "聊天记录", Code = "setting.chathistory", Type = "Menu", Description = "聊天记录权限" },
                 new Permissions { Id = Guid.NewGuid().ToString(), Name = "删除向量表", Code = "setting.delkms", Type = "Menu", Description = "删除向量表权限" }
             };
