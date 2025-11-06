@@ -43,6 +43,22 @@
                     </Select>
                 </FormItem>
 
+                <FormItem Label="角色分配" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Select Mode="multiple"
+                            @bind-Values="_roleIds"
+                            Placeholder="选择角色"
+                            TItemValue="string"
+                            TItem="string"
+                            Size="@AntSizeLDSType.Default">
+                        <SelectOptions>
+                            @foreach (var role in _allRoles)
+                            {
+                                <SelectOption TItem="string" TItemValue="string" Value="@role.Id" Label="@role.Name" />
+                            }
+                        </SelectOptions>
+                    </Select>
+                </FormItem>
+
                 <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
                     <Button Type="primary" OnClick="HandleSubmit">
                         保存

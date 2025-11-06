@@ -836,6 +836,126 @@
             部署名，azure需要使用
             </summary>
         </member>
+        <member name="T:AntSK.Domain.Repositories.Permissions">
+            <summary>
+            权限表
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Permissions.Id">
+            <summary>
+            权限ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Permissions.Name">
+            <summary>
+            权限名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Permissions.Code">
+            <summary>
+            权限编码
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Permissions.Type">
+            <summary>
+            权限类型（Menu-菜单权限, Operation-操作权限）
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Permissions.Description">
+            <summary>
+            权限描述
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Permissions.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:AntSK.Domain.Repositories.RolePermissions">
+            <summary>
+            角色权限关联表
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.RolePermissions.Id">
+            <summary>
+            关联ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.RolePermissions.RoleId">
+            <summary>
+            角色ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.RolePermissions.PermissionId">
+            <summary>
+            权限ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.RolePermissions.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:AntSK.Domain.Repositories.Roles">
+            <summary>
+            角色表
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Roles.Id">
+            <summary>
+            角色ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Roles.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Roles.Code">
+            <summary>
+            角色编码
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Roles.Description">
+            <summary>
+            角色描述
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Roles.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.Roles.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:AntSK.Domain.Repositories.UserRoles">
+            <summary>
+            用户角色关联表
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.UserRoles.Id">
+            <summary>
+            关联ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.UserRoles.UserId">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.UserRoles.RoleId">
+            <summary>
+            角色ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.UserRoles.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Users.No">
             <summary>
             工号，用于登陆

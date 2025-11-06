@@ -81,9 +81,97 @@ namespace AntSK.Domain.Common.DependencyInjection
                     llamafactoryStart.Value = "false";
                     _dic_Repository.Insert(llamafactoryStart);
                 }
+
+                // 初始化角色和权限
+                InitRolesAndPermissions(scope.ServiceProvider);
+
                 _logger.LogInformation("初始化数据库初始数据完成");
             }
             return app;
+        }
+
+        private static void InitRolesAndPermissions(IServiceProvider serviceProvider)
+        {
+            var _roles_Repository = serviceProvider.GetRequiredService<IRoles_Repositories>();
+            var _permissions_Repository = serviceProvider.GetRequiredService<IPermissions_Repositories>();
+            var _rolePermissions_Repository = serviceProvider.GetRequiredService<IRolePermissions_Repositories>();
+
+            // 检查是否已经初始化
+            if (_roles_Repository.IsAny(r => r.Code == "AntSKAdmin"))
+            {
+                return;
+            }
+
+            // 创建管理员角色
+            var adminRole = new Roles
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "管理员",
+                Code = "AntSKAdmin",
+                Description = "系统管理员，拥有所有权限",
+                IsEnabled = true,
+                CreateTime = DateTime.Now
+            };
+            _roles_Repository.Insert(adminRole);
+
+            // 创建普通用户角色
+            var userRole = new Roles
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "普通用户",
+                Code = "AntSKUser",
+                Description = "普通用户，拥有基本功能权限",
+                IsEnabled = true,
+                CreateTime = DateTime.Now
+            };
+            _roles_Repository.Insert(userRole);
+
+            // 创建菜单权限
+            var menuPermissions = new List<Permissions>
+            {
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "聊天", Code = "chat", Type = "Menu", Description = "聊天功能权限" },
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "应用", Code = "app", Type = "Menu", Description = "应用管理权限" },
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "知识库", Code = "kms", Type = "Menu", Description = "知识库管理权限" },
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "API管理", Code = "plugins.apilist", Type = "Menu", Description = "API管理权限" },
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "函数管理", Code = "plugins.funlist", Type = "Menu", Description = "函数管理权限" },
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "模型管理", Code = "modelmanager.modellist", Type = "Menu", Description = "模型管理权限" },
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "用户管理", Code = "setting.user", Type = "Menu", Description = "用户管理权限" },
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "角色管理", Code = "setting.role", Type = "Menu", Description = "角色管理权限" },
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "聊天记录", Code = "setting.chathistory", Type = "Menu", Description = "聊天记录权限" },
+                new Permissions { Id = Guid.NewGuid().ToString(), Name = "删除向量表", Code = "setting.delkms", Type = "Menu", Description = "删除向量表权限" }
+            };
+
+            foreach (var permission in menuPermissions)
+            {
+                _permissions_Repository.Insert(permission);
+            }
+
+            // 为管理员角色分配所有权限
+            foreach (var permission in menuPermissions)
+            {
+                _rolePermissions_Repository.Insert(new RolePermissions
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    RoleId = adminRole.Id,
+                    PermissionId = permission.Id,
+                    CreateTime = DateTime.Now
+                });
+            }
+
+            // 为普通用户角色分配基本权限（聊天、应用、知识库）
+            var basicPermissions = menuPermissions.Where(p => p.Code == "chat" || p.Code == "app" || p.Code == "kms").ToList();
+            foreach (var permission in basicPermissions)
+            {
+                _rolePermissions_Repository.Insert(new RolePermissions
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    RoleId = userRole.Id,
+                    PermissionId = permission.Id,
+                    CreateTime = DateTime.Now
+                });
+            }
+
+            _logger.LogInformation("初始化角色和权限完成");
         }
         /// <summary>
         /// 加载数据库的插件

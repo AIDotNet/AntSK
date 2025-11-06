@@ -1,0 +1,72 @@
+@namespace AntSK.Pages.Setting.Role
+@using AntSK.Domain.Repositories
+@page "/setting/rolelist"
+@inject NavigationManager NavigationManager
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "AntSKAdmin")]
+
+<div>
+    <PageContainer Title="角色管理">
+        <ChildContent>
+            <div class="standardList">
+
+                <Card Class="listCard"
+                      Title="角色列表"
+                      Style="margin-top: 24px;"
+                      BodyStyle="padding: 0 32px 40px 32px">
+                    <Extra>
+                        <div class="extraContent">
+
+                            <Search Class="extraContentSearch" Placeholder="查询" @bind-Value="_searchKeyword" OnSearch="OnSearch" />
+                        </div>
+                    </Extra>
+                    <ChildContent>
+                        <Button Type="dashed"
+                                Style="width: 100%; margin-bottom: 8px;"
+                                OnClick="AddRole">
+                            <Icon Type="plus" Theme="outline" />
+                            新增角色
+                        </Button>
+
+                        <AntList TItem="Roles"
+                                 DataSource="_data"
+                                 ItemLayout="ListItemLayout.Horizontal">
+                            <ListItem Actions="new[] {
+                            edit(()=> Edit(context.Id)),
+                            delete(async ()=>await Delete(context.Id))
+                             }" Style="width:100%">
+                                <div class="listContent" style="width:100%">
+                                    <div class="listContentItem" style="width:20%">
+                                        <b>角色名称</b>
+                                        <p>@context.Name</p>
+                                    </div>
+                                    <div class="listContentItem" style="width:20%">
+                                        <b>角色编码</b>
+                                        <p>@context.Code</p>
+                                    </div>
+                                    <div class="listContentItem" style="width:30%">
+                                        <b>描述</b>
+                                        <p>@context.Description</p>
+                                    </div>
+                                    <div class="listContentItem" style="width:15%">
+                                        <b>状态</b>
+                                        <p>@(context.IsEnabled ? "启用" : "禁用")</p>
+                                    </div>
+                                </div>
+                            </ListItem>
+                        </AntList>
+                    </ChildContent>
+                </Card>
+            </div>
+        </ChildContent>
+    </PageContainer>
+</div>
+
+@code
+{
+    RenderFragment edit(Action clickAction) =>@<a key="edit" @onclick="@clickAction">修改</a>;
+    RenderFragment delete(Action clickAction) =>@<a key="delete" @onclick="@clickAction">删除</a>;
+   
+}

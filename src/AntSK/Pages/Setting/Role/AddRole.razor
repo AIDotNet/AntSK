@@ -1,0 +1,61 @@
+@namespace AntSK.Pages.Setting.Role
+@using AntSK.Domain.Repositories
+@using AntSK.Models
+@page "/setting/role/add"
+@page "/setting/role/add/{RoleId}"
+@using AntSK.Services.Auth
+@inherits AuthComponentBase
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "AntSKAdmin")]
+
+<PageContainer Title="新增角色">
+    <ChildContent>
+        <Card>
+            <Form Model="@_roleModel"
+                  Style="margin-top: 8px;"
+                  OnFinish="HandleSubmit">
+                <FormItem Label="角色名称" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入角色名称" @bind-Value="@context.Name" />
+                </FormItem>
+                <FormItem Label="角色编码" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入角色编码" @bind-Value="@context.Code" />
+                </FormItem>
+                <FormItem Label="角色描述" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Input Placeholder="请输入角色描述" @bind-Value="@context.Description" />
+                </FormItem>
+                <FormItem Label="是否启用" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Switch @bind-Checked="@context.IsEnabled" />
+                </FormItem>
+
+                <FormItem Label="权限分配" LabelCol="LayoutModel._formItemLayout.LabelCol" WrapperCol="LayoutModel._formItemLayout.WrapperCol">
+                    <Select Mode="multiple"
+                            @bind-Values="_permissionIds"
+                            Placeholder="选择权限"
+                            TItemValue="string"
+                            TItem="string"
+                            Size="@AntSizeLDSType.Default">
+                        <SelectOptions>
+                            @foreach (var permission in _allPermissions)
+                            {
+                                <SelectOption TItem="string" TItemValue="string" Value="@permission.Id" Label="@permission.Name" />
+                            }
+                        </SelectOptions>
+                    </Select>
+                </FormItem>
+
+                <FormItem Label=" " Style="margin-top:32px" WrapperCol="LayoutModel._submitFormLayout.WrapperCol">
+                    <Button Type="primary" OnClick="HandleSubmit">
+                        保存
+                    </Button>
+                    <Button OnClick="Back">
+                        返回
+                    </Button>
+                </FormItem>
+            </Form>
+        </Card>
+    </ChildContent>
+</PageContainer>
+
+@code {
+
+}
