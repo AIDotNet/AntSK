@@ -479,6 +479,36 @@
             接口描述
             </summary>
         </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.FileName">
+            <summary>
+            文件名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Url">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Type">
+            <summary>
+            类型 file，url
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.DataCount">
+            <summary>
+            数据数量
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
         <member name="P:AntSK.Domain.Repositories.Kmss.Icon">
             <summary>
             图标
@@ -517,36 +547,6 @@
         <member name="P:AntSK.Domain.Repositories.Kmss.OverlappingTokens">
             <summary>
             段落之间重叠标记的数量。
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.FileName">
-            <summary>
-            文件名称
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.Url">
-            <summary>
-            地址
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.Type">
-            <summary>
-            类型 file，url
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.DataCount">
-            <summary>
-            数据数量
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.CreateTime">
-            <summary>
-            创建时间
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.Status">
-            <summary>
-            状态
             </summary>
         </member>
         <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetList">
@@ -871,6 +871,31 @@
             创建时间
             </summary>
         </member>
+        <member name="T:AntSK.Domain.Repositories.RolePermissions">
+            <summary>
+            角色权限关联表
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.RolePermissions.Id">
+            <summary>
+            关联ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.RolePermissions.RoleId">
+            <summary>
+            角色ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.RolePermissions.PermissionId">
+            <summary>
+            权限ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.RolePermissions.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
         <member name="T:AntSK.Domain.Repositories.Roles">
             <summary>
             角色表
@@ -906,27 +931,27 @@
             创建时间
             </summary>
         </member>
-        <member name="T:AntSK.Domain.Repositories.RolePermissions">
+        <member name="T:AntSK.Domain.Repositories.UserRoles">
             <summary>
-            角色权限关联表
+            用户角色关联表
             </summary>
         </member>
-        <member name="P:AntSK.Domain.Repositories.RolePermissions.Id">
+        <member name="P:AntSK.Domain.Repositories.UserRoles.Id">
             <summary>
             关联ID
             </summary>
         </member>
-        <member name="P:AntSK.Domain.Repositories.RolePermissions.RoleId">
+        <member name="P:AntSK.Domain.Repositories.UserRoles.UserId">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.UserRoles.RoleId">
             <summary>
             角色ID
             </summary>
         </member>
-        <member name="P:AntSK.Domain.Repositories.RolePermissions.PermissionId">
-            <summary>
-            权限ID
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.RolePermissions.CreateTime">
+        <member name="P:AntSK.Domain.Repositories.UserRoles.CreateTime">
             <summary>
             创建时间
             </summary>
@@ -954,31 +979,6 @@
         <member name="P:AntSK.Domain.Repositories.Users.MenuRole">
             <summary>
             菜单权限
-            </summary>
-        </member>
-        <member name="T:AntSK.Domain.Repositories.UserRoles">
-            <summary>
-            用户角色关联表
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.UserRoles.Id">
-            <summary>
-            关联ID
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.UserRoles.UserId">
-            <summary>
-            用户ID
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.UserRoles.RoleId">
-            <summary>
-            角色ID
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.UserRoles.CreateTime">
-            <summary>
-            创建时间
             </summary>
         </member>
         <member name="M:AntSK.Domain.Utils.ConvertUtils.IsNull(System.Object)">
