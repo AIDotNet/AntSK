@@ -479,36 +479,6 @@
             接口描述
             </summary>
         </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.FileName">
-            <summary>
-            文件名称
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.Url">
-            <summary>
-            地址
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.Type">
-            <summary>
-            类型 file，url
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.DataCount">
-            <summary>
-            数据数量
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.CreateTime">
-            <summary>
-            创建时间
-            </summary>
-        </member>
-        <member name="P:AntSK.Domain.Repositories.KmsDetails.Status">
-            <summary>
-            状态
-            </summary>
-        </member>
         <member name="P:AntSK.Domain.Repositories.Kmss.Icon">
             <summary>
             图标
@@ -547,6 +517,36 @@
         <member name="P:AntSK.Domain.Repositories.Kmss.OverlappingTokens">
             <summary>
             段落之间重叠标记的数量。
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.FileName">
+            <summary>
+            文件名称
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Url">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Type">
+            <summary>
+            类型 file，url
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.DataCount">
+            <summary>
+            数据数量
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:AntSK.Domain.Repositories.KmsDetails.Status">
+            <summary>
+            状态
             </summary>
         </member>
         <member name="M:AntSK.Domain.Repositories.Base.Repository`1.GetList">
