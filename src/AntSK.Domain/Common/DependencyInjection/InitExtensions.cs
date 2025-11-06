@@ -97,7 +97,7 @@ namespace AntSK.Domain.Common.DependencyInjection
             var _rolePermissions_Repository = serviceProvider.GetRequiredService<IRolePermissions_Repositories>();
 
             // 检查是否已经初始化
-            if (_roles_Repository.IsAny(r => r.Code == "Admin"))
+            if (_roles_Repository.IsAny(r => r.Code == "AntSKAdmin"))
             {
                 return;
             }
@@ -107,7 +107,7 @@ namespace AntSK.Domain.Common.DependencyInjection
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = "管理员",
-                Code = "Admin",
+                Code = "AntSKAdmin",
                 Description = "系统管理员，拥有所有权限",
                 IsEnabled = true,
                 CreateTime = DateTime.Now
@@ -119,7 +119,7 @@ namespace AntSK.Domain.Common.DependencyInjection
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = "普通用户",
-                Code = "User",
+                Code = "AntSKUser",
                 Description = "普通用户，拥有基本功能权限",
                 IsEnabled = true,
                 CreateTime = DateTime.Now
